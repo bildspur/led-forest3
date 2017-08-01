@@ -78,28 +78,19 @@ class Sketch : PApplet() {
     }
 
     override fun draw() {
-        background(255)
+        background(0)
 
-        // skip first two frames
-        if (frameCount < 2) {
-            peasy.hud {
-                textAlign(CENTER, CENTER)
-                fill(0)
-                textSize(20f)
-                text("${Sketch.NAME} is loading...", width / 2f, height / 2f)
-            }
+        if (skipFirstFrames())
             return
-        }
 
         // setup long loading controllers
-        if (initControllers()) {
+        if (initControllers())
             return
-        }
 
         timer.update()
 
         canvas.draw {
-            it.background(255f)
+            it.background(0)
 
             // render 3d
 
@@ -116,6 +107,21 @@ class Sketch : PApplet() {
 
             drawFPS(g)
         }
+    }
+
+    fun skipFirstFrames(): Boolean {
+        // skip first two frames
+        if (frameCount < 2) {
+            peasy.hud {
+                textAlign(CENTER, CENTER)
+                fill(255)
+                textSize(20f)
+                text("${Sketch.NAME} is loading...", width / 2f, height / 2f)
+            }
+            return true
+        }
+
+        return false
     }
 
     fun initControllers(): Boolean {
