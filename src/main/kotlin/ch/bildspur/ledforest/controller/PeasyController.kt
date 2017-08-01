@@ -1,4 +1,4 @@
-package ch.bildspur.floje.controller
+package ch.bildspur.ledforest.controller
 
 import peasy.PeasyCam
 import processing.core.PApplet

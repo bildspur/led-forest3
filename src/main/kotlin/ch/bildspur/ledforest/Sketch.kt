@@ -1,9 +1,9 @@
-package ch.bildspur.floje
+package ch.bildspur.ledforest
 
-import ch.bildspur.floje.controller.*
-import ch.bildspur.floje.model.DataModel
-import ch.bildspur.floje.util.draw
-import ch.bildspur.floje.util.format
+import ch.bildspur.ledforest.controller.*
+import ch.bildspur.ledforest.model.DataModel
+import ch.bildspur.ledforest.util.draw
+import ch.bildspur.ledforest.util.format
 import org.opencv.core.Core
 import processing.core.PApplet
 import processing.core.PConstants

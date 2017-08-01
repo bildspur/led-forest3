@@ -1,6 +1,6 @@
-package ch.bildspur.floje.model
+package ch.bildspur.ledforest.model
 
-import ch.bildspur.floje.event.Event
+import ch.bildspur.ledforest.event.Event
 
 
 /**

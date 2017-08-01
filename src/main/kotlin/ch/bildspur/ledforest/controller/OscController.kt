@@ -1,7 +1,7 @@
-package ch.bildspur.floje.controller
+package ch.bildspur.ledforest.controller
 
-import ch.bildspur.floje.Sketch
-import ch.bildspur.floje.util.toFloat
+import ch.bildspur.ledforest.Sketch
+import ch.bildspur.ledforest.util.toFloat
 import netP5.NetAddress
 import oscP5.OscMessage
 import oscP5.OscP5
@@ -61,7 +61,7 @@ class OscController(internal var sketch: Sketch) {
 
     fun oscEvent(msg: OscMessage) {
         when (msg.addrPattern()) {
-            "/floje/remote/interaction" -> {
+            "/ledforest/remote/interaction" -> {
                 sketch.remote.processCommand('x')
             }
         }
@@ -70,7 +70,7 @@ class OscController(internal var sketch: Sketch) {
     }
 
     fun updateOSCApp() {
-        sendMessage("/floje/remote/interaction", sketch.isInteractionOn.value.toFloat())
+        sendMessage("/ledforest/remote/interaction", sketch.isInteractionOn.value.toFloat())
     }
 
     fun sendMessage(ip: NetAddress, address: String, value: Float) {

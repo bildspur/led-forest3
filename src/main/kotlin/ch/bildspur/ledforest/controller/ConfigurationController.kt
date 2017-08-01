@@ -1,6 +1,6 @@
-package ch.bildspur.floje.controller
+package ch.bildspur.ledforest.controller
 
-import ch.bildspur.floje.data.Settings
+import ch.bildspur.ledforest.data.Settings
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

@@ -1,4 +1,4 @@
-package ch.bildspur.floje.util
+package ch.bildspur.ledforest.util
 
 import javafx.scene.image.Image
 import org.opencv.core.*

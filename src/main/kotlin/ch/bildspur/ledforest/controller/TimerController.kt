@@ -1,6 +1,6 @@
-package ch.bildspur.floje.controller
+package ch.bildspur.ledforest.controller
 
-import ch.bildspur.floje.controller.timer.TimerTask
+import ch.bildspur.ledforest.controller.timer.TimerTask
 import processing.core.PApplet
 
 /**

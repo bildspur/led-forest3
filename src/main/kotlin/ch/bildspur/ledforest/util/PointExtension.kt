@@ -1,6 +1,6 @@
-package ch.bildspur.floje.util
+package ch.bildspur.ledforest.util
 
-import ch.bildspur.floje.Sketch
+import ch.bildspur.ledforest.Sketch
 
 /**
  * Created by cansik on 06.01.17.

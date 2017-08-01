@@ -1,6 +1,6 @@
-package ch.bildspur.floje.controller
+package ch.bildspur.ledforest.controller
 
-import ch.bildspur.floje.Sketch
+import ch.bildspur.ledforest.Sketch
 
 class RemoteController(internal var sketch: Sketch) {
 

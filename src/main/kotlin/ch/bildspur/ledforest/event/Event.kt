@@ -1,4 +1,4 @@
-package ch.bildspur.floje.event
+package ch.bildspur.ledforest.event
 
 /**
  * Created by cansik on 09.06.17.
