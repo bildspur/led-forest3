@@ -34,6 +34,13 @@ dependencies {
 
     compile files('lib/plugins/controlP5/controlP5.jar')
 
+    compile files('lib/artnet/artnet4j.jar')
+
+    compile files('lib/glvideo/library/glvideo.jar')
+
+    compile files('lib/LeapMotion/library/LeapJava.jar')
+    compile files('lib/LeapMotion/library/LeapMotion.jar')
+
     compile files('lib/plugins/jmdns/jmdns-3.5.1.jar')
     compile files('lib/plugins/jmdns/slf4j-api-1.7.21.jar')
     compile files('lib/plugins/jmdns/slf4j-simple-1.7.21.jar')
