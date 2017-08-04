@@ -1,6 +1,6 @@
 package ch.bildspur.ledforest.controller
 
-import ch.bildspur.ledforest.data.Project
+import ch.bildspur.ledforest.model.Project
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

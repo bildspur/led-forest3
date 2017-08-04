@@ -1,4 +1,4 @@
-package ch.bildspur.ledforest.data
+package ch.bildspur.ledforest.model
 
 import com.google.gson.annotations.Expose
 

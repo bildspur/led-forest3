@@ -3,8 +3,8 @@ package ch.bildspur.ledforest
 import ch.bildspur.ledforest.artnet.ArtNetClient
 import ch.bildspur.ledforest.controller.*
 import ch.bildspur.ledforest.controller.timer.TimerTask
-import ch.bildspur.ledforest.data.Project
 import ch.bildspur.ledforest.model.DataModel
+import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.util.draw
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.view.ArtNetRenderer

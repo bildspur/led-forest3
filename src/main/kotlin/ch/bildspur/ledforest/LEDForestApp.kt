@@ -1,7 +1,7 @@
 package ch.bildspur.ledforest
 
 import ch.bildspur.ledforest.artnet.DmxNode
-import ch.bildspur.ledforest.data.Project
+import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
 import ch.bildspur.ledforest.ui.PrimaryView

@@ -1,4 +1,4 @@
-package ch.bildspur.ledforest.data
+package ch.bildspur.ledforest.model
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.artnet.DmxNode
