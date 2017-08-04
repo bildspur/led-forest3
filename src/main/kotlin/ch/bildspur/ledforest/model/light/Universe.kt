@@ -1,11 +1,12 @@
 package ch.bildspur.ledforest.model.light
 
+import com.google.gson.annotations.Expose
 import java.awt.Color
 
 class Universe(id: Int) {
     internal val maxLuminance = 255
 
-    var id: Int = 0
+    @Expose var id: Int = 0
         internal set
     var dmxData: ByteArray
         internal set

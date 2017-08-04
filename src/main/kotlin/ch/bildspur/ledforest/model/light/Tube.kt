@@ -1,12 +1,13 @@
 package ch.bildspur.ledforest.model.light
 
+import com.google.gson.annotations.Expose
 import processing.core.PGraphics
 import processing.core.PVector
 
 
-class Tube(var universe: Int, ledCount: Int = 0, addressStart: Int = 0, val g: PGraphics, var position: PVector = PVector(), var rotation: PVector = PVector()) {
-    var name = "Tube $ledCount"
-    var inverted = false
+class Tube(@Expose var universe: Int, ledCount: Int = 0, addressStart: Int = 0, val g: PGraphics, @Expose var position: PVector = PVector(), @Expose var rotation: PVector = PVector()) {
+    @Expose var name = "Tube $ledCount"
+    @Expose var inverted = false
 
     val startAddress: Int
         get() = if (leds.isNotEmpty()) leds[0].address else 0

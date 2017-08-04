@@ -3,7 +3,19 @@ package ch.bildspur.ledforest.view
 import ch.bildspur.ledforest.model.light.Tube
 import processing.core.PGraphics
 
-class SceneRenderer(val g: PGraphics, val tubes: List<Tube>) {
+class SceneRenderer(val g: PGraphics, val tubes: List<Tube>) : IRenderer {
+
+    override fun setup() {
+
+    }
+
+    override fun render() {
+
+    }
+
+    private fun renderTube(tube: Tube) {
+
+    }
 
     /*
     fun initShapes(ledLength: Float, rodWidth: Float, rodDetail: Int) {

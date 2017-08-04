@@ -1,11 +1,15 @@
 package ch.bildspur.ledforest
 
+import ch.bildspur.ledforest.artnet.ArtNetClient
 import ch.bildspur.ledforest.controller.*
 import ch.bildspur.ledforest.controller.timer.TimerTask
+import ch.bildspur.ledforest.data.Project
 import ch.bildspur.ledforest.model.DataModel
-import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.util.draw
 import ch.bildspur.ledforest.util.format
+import ch.bildspur.ledforest.view.ArtNetRenderer
+import ch.bildspur.ledforest.view.IRenderer
+import ch.bildspur.ledforest.view.SceneRenderer
 import org.opencv.core.Core
 import processing.core.PApplet
 import processing.core.PConstants
@@ -16,7 +20,7 @@ import processing.opengl.PJOGL
 /**
  * Created by cansik on 04.02.17.
  */
-class Sketch : PApplet() {
+class Sketch() : PApplet() {
     companion object {
         @JvmStatic val FRAME_RATE = 30f
 
@@ -54,11 +58,15 @@ class Sketch : PApplet() {
 
     val remote = RemoteController(this)
 
+    val artnet = ArtNetClient()
+
     lateinit var canvas: PGraphics
 
     var lastCursorMoveTime = 0
 
-    val tubes = mutableListOf<Tube>()
+    val renderer = mutableListOf<IRenderer>()
+
+    var project = Project()
 
     init {
     }
@@ -77,9 +85,13 @@ class Sketch : PApplet() {
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 
-        surface.setTitle(NAME)
+        surface.setTitle("$NAME - ${project.name}")
 
         peasy.setup()
+
+        // add renderer
+        renderer.add(SceneRenderer(this.g, project.tubes))
+        renderer.add(ArtNetRenderer(artnet, project.nodes, project.tubes))
 
         // timer for cursor hiding
         timer.addTask(TimerTask(CURSOR_HIDING_TIME, {
@@ -104,7 +116,8 @@ class Sketch : PApplet() {
         canvas.draw {
             it.background(0)
 
-            // render 3d
+            // render
+            renderer.forEach { it.render() }
 
             peasy.applyTo(canvas)
         }
@@ -113,10 +126,6 @@ class Sketch : PApplet() {
         peasy.hud {
             // output image
             image(canvas, 0f, 0f)
-
-            //if (isUIShown)
-            // render ui
-
             drawFPS(g)
         }
     }
@@ -147,6 +156,9 @@ class Sketch : PApplet() {
             config.loadConfiguration()
 
             timer.setup()
+
+            // setup renderer
+            renderer.forEach { it.setup() }
 
             prepareExitHandler()
 

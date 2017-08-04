@@ -12,6 +12,9 @@ class ArtNetClient {
     private var artnet = ArtNet()
     private var receiver: ArtNetNode? = null
 
+    var running = false
+        internal set
+
     fun open() {
         open(null)
     }
@@ -20,6 +23,7 @@ class ArtNetClient {
         try {
             artnet.start()
             setReceiver(address)
+            running = true
         } catch (e: SocketException) {
             e.printStackTrace()
         } catch (e: ArtNetException) {
@@ -49,6 +53,7 @@ class ArtNetClient {
 
     fun close() {
         artnet.stop()
+        running = false
     }
 
     fun send(universe: Int, data: ByteArray) {

@@ -1,6 +1,6 @@
 package ch.bildspur.ledforest.controller
 
-import ch.bildspur.ledforest.data.Settings
+import ch.bildspur.ledforest.data.Project
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -19,19 +19,19 @@ class ConfigurationController(internal var sketch: PApplet) {
 
     lateinit var gson: Gson
 
-    lateinit var settings: Settings
+    lateinit var settings: Project
 
     fun setup() {
         gson = GsonBuilder()
                 .setPrettyPrinting()
                 .excludeFieldsWithoutExposeAnnotation()
                 .create()
-        settings = Settings()
+        settings = Project()
     }
 
     fun loadConfiguration() {
         val content = String(Files.readAllBytes(Paths.get(sketch.dataPath(CONFIGURATION_FILE))))
-        settings = gson.fromJson<Settings>(content)
+        settings = gson.fromJson<Project>(content)
     }
 
     fun saveConfiguration() {

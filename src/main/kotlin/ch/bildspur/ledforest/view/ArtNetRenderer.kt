@@ -1,21 +1,39 @@
 package ch.bildspur.ledforest.view
 
+import artnet4j.ArtNetNode
 import ch.bildspur.ledforest.artnet.ArtNetClient
+import ch.bildspur.ledforest.artnet.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
 
-class ArtNetRenderer(val artnet: ArtNetClient, val unvierses: List<Universe>, val tubes: List<Tube>) {
+class ArtNetRenderer(val artnet: ArtNetClient, val nodes: List<DmxNode>, val tubes: List<Tube>) : IRenderer {
 
     var luminosity = 1f
     var response = 0.5f
     var trace = 0f
 
-    fun render() {
-        tubes.groupBy { it.universe }.forEach {
-            val universe = unvierses.single { u -> u.id == it.key }
-            universe.stageDmx(it.value, luminosity, response, trace)
+    lateinit var universesToNodes: Map<Universe, ArtNetNode>
+    lateinit var indexToUniverses: Map<Int, Universe>
 
-            artnet.send(universe.id, universe.dmxData)
+    override fun setup() {
+        buildUniverseIndex()
+    }
+
+    override fun render() {
+        tubes.groupBy { it.universe }.forEach {
+            val universe = indexToUniverses[it.key]!!
+            val node = universesToNodes[universe]!!
+
+            universe.stageDmx(it.value, luminosity, response, trace)
+            artnet.send(node, universe.id, universe.dmxData)
         }
+    }
+
+    fun buildUniverseIndex() {
+        universesToNodes = nodes
+                .flatMap { n -> n.universes.map { u -> Pair(u, n) } }
+                .associate { it.first to artnet.createNode(it.second.address)!! }
+
+        indexToUniverses = universesToNodes.keys.associate { it.id to it }
     }
 }
