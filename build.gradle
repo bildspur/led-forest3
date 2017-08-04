@@ -1,12 +1,12 @@
 group 'ch.bildspur.ledforest'
 version '1.0-SNAPSHOT'
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-
 buildscript {
     ext.kotlin_version = '1.0.6'
+
+    compileKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
 
     repositories {
         mavenCentral()
