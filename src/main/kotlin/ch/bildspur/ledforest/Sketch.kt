@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest
 
 import ch.bildspur.ledforest.controller.*
+import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.util.draw
 import ch.bildspur.ledforest.util.format
@@ -21,6 +22,8 @@ class Sketch : PApplet() {
         @JvmStatic val WINDOW_WIDTH = 768
         @JvmStatic val WINDOW_HEIGHT = 576
 
+        @JvmStatic val CURSOR_HIDING_TIME = 5000
+
         @JvmStatic val NAME = "LED Forest 3"
 
         @JvmStatic lateinit var instance: PApplet
@@ -38,10 +41,6 @@ class Sketch : PApplet() {
 
     var isStatusViewShown = false
 
-    var isUIShown = true
-
-    var enableLights = false
-
     var isInteractionOn = DataModel(true)
 
     val peasy = PeasyController(this)
@@ -56,6 +55,8 @@ class Sketch : PApplet() {
 
     lateinit var canvas: PGraphics
 
+    var lastCursorMoveTime = 0
+
     init {
     }
 
@@ -69,12 +70,20 @@ class Sketch : PApplet() {
         smooth()
 
         frameRate(FRAME_RATE)
+        colorMode(HSB, 360f, 100f, 100f)
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 
         surface.setTitle(NAME)
 
         peasy.setup()
+
+        // timer for cursor hiding
+        timer.addTask(TimerTask(CURSOR_HIDING_TIME, {
+            val current = millis()
+            if (current - lastCursorMoveTime > CURSOR_HIDING_TIME)
+                noCursor()
+        }))
     }
 
     override fun draw() {
@@ -164,5 +173,11 @@ class Sketch : PApplet() {
 
     override fun keyPressed() {
         remote.processCommand(key)
+    }
+
+    override fun mouseMoved() {
+        super.mouseMoved()
+        cursor()
+        lastCursorMoveTime = millis()
     }
 }
