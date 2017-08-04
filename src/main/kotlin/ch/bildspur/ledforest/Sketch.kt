@@ -3,6 +3,7 @@ package ch.bildspur.ledforest
 import ch.bildspur.ledforest.controller.*
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.DataModel
+import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.util.draw
 import ch.bildspur.ledforest.util.format
 import org.opencv.core.Core
@@ -56,6 +57,8 @@ class Sketch : PApplet() {
     lateinit var canvas: PGraphics
 
     var lastCursorMoveTime = 0
+
+    val tubes = mutableListOf<Tube>()
 
     init {
     }

@@ -5,8 +5,10 @@ import org.opencv.core.*
 import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.imgproc.Imgproc
 import processing.core.PApplet
+import processing.core.PConstants.QUAD_STRIP
 import processing.core.PGraphics
 import processing.core.PImage
+import processing.core.PShape
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferInt
 import java.io.ByteArrayInputStream
@@ -59,6 +61,23 @@ fun PGraphics.shape(block: (g: PGraphics) -> Unit) {
     this.beginShape()
     block(this)
     this.endShape(PApplet.CLOSE)
+}
+
+fun PGraphics.createRod(r: Float, h: Float, detail: Int): PShape {
+    textureMode(PApplet.NORMAL)
+    val sh = createShape()
+    sh.beginShape(QUAD_STRIP)
+    for (i in 0..detail) {
+        val angle = PApplet.TWO_PI / detail
+        val x = Math.sin((i * angle).toDouble()).toFloat()
+        val z = Math.cos((i * angle).toDouble()).toFloat()
+        val u = i.toFloat() / detail
+        sh.normal(x, 0f, z)
+        sh.vertex(x * r, -h / 2, z * r, u, 0f)
+        sh.vertex(x * r, +h / 2, z * r, u, 1f)
+    }
+    sh.endShape()
+    return sh
 }
 
 fun PGraphics.cross(x: Float, y: Float, size: Float) {
