@@ -15,16 +15,25 @@ class LEDForestApp : App() {
 
     lateinit var sketch: Sketch
 
+    lateinit var processinThread: Thread
+
     init {
     }
 
     override fun start(stage: Stage) {
         super.start(stage)
 
+        // exit on main window closed
+        stage.setOnCloseRequest {
+            sketch.stop()
+            processinThread.join(5000)
+            System.exit(0)
+        }
+
         sketch = Sketch()
         sketch.project = createTestConfig()
 
-        thread {
+        processinThread = thread {
             // run processing app
             PApplet.runSketch(arrayOf("Sketch "), sketch)
         }
