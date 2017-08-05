@@ -1,9 +1,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="600.0" prefWidth="800.0" stylesheets="style/main.css" xmlns="http://javafx.com/javafx/8.0.111"
+            prefHeight="600.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/8.0.111"
             xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <AnchorPane prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #333333;"
@@ -50,10 +50,7 @@
         </FlowPane>
     </bottom>
     <center>
-        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"
-                   BorderPane.alignment="CENTER"/>
     </center>
     <right>
-
     </right>
 </BorderPane>

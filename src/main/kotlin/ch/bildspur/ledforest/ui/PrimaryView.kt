@@ -2,10 +2,9 @@ package ch.bildspur.ledforest.ui
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
-import ch.bildspur.ledforest.ui.control.tubemap.tool.ViewTool
+import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
 import ch.bildspur.ledforest.ui.util.TagItem
 import ch.bildspur.ledforest.ui.util.UITask
-import javafx.beans.property.SimpleObjectProperty
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.scene.control.Label
@@ -18,11 +17,9 @@ import tornadofx.*
 class PrimaryView : View(Sketch.NAME) {
     override val root: BorderPane by fxml()
 
-    val statusText = SimpleObjectProperty<String>("Status")
-
     val tubeMap = TubeMap()
 
-    val viewTool = ViewTool()
+    val viewTool = MoveTool()
 
     @FXML lateinit var elementTreeView: TreeView<TagItem>
 
@@ -33,6 +30,7 @@ class PrimaryView : View(Sketch.NAME) {
     init {
         // setup on shown event
         primaryStage.setOnShown { setupView() }
+        root.center = tubeMap
     }
 
     fun setupView() {
@@ -46,7 +44,8 @@ class PrimaryView : View(Sketch.NAME) {
             tubeMap.prefWidth(100.0)
             tubeMap.prefWidth(100.0)
 
-            root.center = tubeMap
+            tubeMap.setupMap(300.0, 300.0)
+            tubeMap.activeTool = viewTool
 
             // setup treeview
             elementTreeView.selectionModel.selectedItemProperty().addListener { o -> }

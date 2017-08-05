@@ -15,6 +15,7 @@ import javafx.scene.image.Image
 import javafx.scene.input.ScrollEvent
 import javafx.scene.input.ZoomEvent
 import javafx.scene.layout.Pane
+import javafx.scene.paint.Color
 import javafx.scene.paint.ImagePattern
 import javafx.scene.shape.Rectangle
 
@@ -29,10 +30,10 @@ class TubeMap : Pane() {
         val DRAW_LAYER_NAME = "draw"
 
         @JvmStatic
-        val IMAGE_LAYER_NAME = "image"
+        val BACKGROUND_LAYER = "background"
     }
 
-    var canvas = ResizableCanvas(600.0, 400.0)
+    var canvas = ResizableCanvas(500.0, 500.0)
     val outputClip = Rectangle()
 
     private val activeToolProperty = SimpleObjectProperty<IEditorTool>(ViewTool())
@@ -43,7 +44,7 @@ class TubeMap : Pane() {
 
     val layers = mutableListOf<Layer>()
 
-    var activeLayer = Layer("Background")
+    var activeLayer = Layer(BACKGROUND_LAYER)
 
     // calculated value
     private var relationScale = 1.0
@@ -190,11 +191,36 @@ class TubeMap : Pane() {
         }
     }
 
+    fun setupMap(width: Double, height: Double) {
+        resizeCanvas(width, height)
+
+        // set layer
+        val backgroundLayer = Layer(BACKGROUND_LAYER)
+        val drawLayer = Layer(DRAW_LAYER_NAME)
+
+        layers.clear()
+        layers.add(backgroundLayer)
+        layers.add(drawLayer)
+        activeLayer = drawLayer
+
+        // add background rect
+        val backgroundRect = RectangleShape(Point2D(0.0, 0.0), Dimension2D(width, height))
+        backgroundRect.stroke = Color.WHITE
+        backgroundRect.fill = Color.BLACK
+        addShape(backgroundRect)
+
+        resetZoom()
+        resize()
+        redraw()
+
+        println("Canvas: ${canvas.width} / ${canvas.height}")
+    }
+
     fun displayImage(image: Image) {
         resizeCanvas(image.width, image.height)
 
         // set layer
-        val imageLayer = Layer(IMAGE_LAYER_NAME)
+        val imageLayer = Layer(BACKGROUND_LAYER)
         val drawLayer = Layer(DRAW_LAYER_NAME)
 
         addImage(imageLayer, image)
