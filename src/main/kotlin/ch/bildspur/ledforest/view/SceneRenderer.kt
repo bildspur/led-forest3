@@ -3,6 +3,7 @@ package ch.bildspur.ledforest.view
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.util.createRod
 import ch.bildspur.ledforest.util.stackMatrix
+import processing.core.PApplet
 import processing.core.PGraphics
 import processing.core.PShape
 
@@ -18,6 +19,7 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>) : IRenderer {
 
     override fun setup() {
         rodShape = g.createRod(rodWidth, ledLength, rodDetail)
+        rodShape.disableStyle()
     }
 
     override fun render() {
@@ -38,6 +40,7 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>) : IRenderer {
             // translate position
             g.translate(tube.position.x, tube.position.y, tube.position.z)
 
+            // global rotation
             g.rotateX(tube.rotation.x)
             g.rotateY(tube.rotation.y)
             g.rotateZ(tube.rotation.z)
@@ -45,12 +48,12 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>) : IRenderer {
             // translate height
             g.translate(0f, 0f, (if (tube.inverted) -1 else 1) * (i * ledLength))
 
-            g.stroke(255)
+            // rotate shape
+            g.rotateX(PApplet.radians(90f))
+
+            g.noStroke()
             g.fill(tube.leds[i].color.color)
 
-            g.box(20f, 20f, 20f)
-
-            //rodShape.disableStyle()
             g.shape(rodShape)
             g.popMatrix()
         }
