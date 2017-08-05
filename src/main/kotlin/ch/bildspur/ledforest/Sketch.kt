@@ -10,6 +10,7 @@ import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.view.ArtNetRenderer
 import ch.bildspur.ledforest.view.IRenderer
 import ch.bildspur.ledforest.view.SceneRenderer
+import ch.bildspur.postfx.builder.PostFX
 import org.opencv.core.Core
 import processing.core.PApplet
 import processing.core.PConstants
@@ -68,6 +69,8 @@ class Sketch() : PApplet() {
 
     var project = Project()
 
+    lateinit var fx: PostFX
+
     init {
     }
 
@@ -86,6 +89,8 @@ class Sketch() : PApplet() {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 
         surface.setTitle("$NAME - ${project.name}")
+
+        fx = PostFX(this)
 
         peasy.setup()
         artnet.open()
@@ -126,7 +131,10 @@ class Sketch() : PApplet() {
         // add hud
         peasy.hud {
             // output image
-            image(canvas, 0f, 0f)
+            fx.render(canvas)
+                    .bloom(0.1f, 20, 40f)
+                    .rgbSplit(100f)
+                    .compose()
             drawFPS(g)
         }
     }

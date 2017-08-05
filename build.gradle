@@ -3,11 +3,7 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     ext.kotlin_version = '1.0.6'
-
-    compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-
+    
     repositories {
         mavenCentral()
     }
@@ -31,6 +27,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     compile files('lib/opencv/opencv-310.jar')
+
+    compile files('lib/postfx/PostFX.jar')
 
     compile files('lib/processing/core/library/core.jar')
     compile files('lib/processing/core/library/gluegen-rt-natives-macosx-universal.jar')
