@@ -23,7 +23,7 @@ import processing.opengl.PJOGL
  */
 class Sketch() : PApplet() {
     companion object {
-        @JvmStatic val FRAME_RATE = 30f
+        @JvmStatic val FRAME_RATE = 60f
 
         @JvmStatic val WINDOW_WIDTH = 768
         @JvmStatic val WINDOW_HEIGHT = 576
@@ -117,7 +117,9 @@ class Sketch() : PApplet() {
         if (initControllers())
             return
 
+        // update timer and tubes
         timer.update()
+        project.tubes.forEach { it.leds.forEach { it.color.update() } }
 
         canvas.draw {
             it.background(0)
