@@ -41,9 +41,6 @@ class PrimaryView : View(Sketch.NAME) {
         // setup ui
         UITask.run({
             // init canvas
-            tubeMap.prefWidth(100.0)
-            tubeMap.prefWidth(100.0)
-
             tubeMap.setupMap(300.0, 300.0)
             tubeMap.activeTool = viewTool
 
@@ -73,6 +70,10 @@ class PrimaryView : View(Sketch.NAME) {
     }
 
     fun removeTube(e: ActionEvent) {
+
+    }
+
+    fun loadProject(file: String) {
 
     }
 }
