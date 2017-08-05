@@ -5,7 +5,6 @@ import ch.bildspur.ledforest.controller.*
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
-import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.draw
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.view.ArtNetRenderer
@@ -83,7 +82,6 @@ class Sketch() : PApplet() {
 
         frameRate(FRAME_RATE)
         colorMode(HSB, 360f, 100f, 100f)
-        ColorMode.style(g.style)
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 
