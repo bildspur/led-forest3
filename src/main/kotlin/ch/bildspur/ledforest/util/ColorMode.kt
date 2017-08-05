@@ -3,7 +3,7 @@ package ch.bildspur.ledforest.util
 import processing.core.PApplet
 import java.awt.Color
 
-object ProcessingColor {
+object ColorMode {
     var colorMode: Int = 0
     var colorModeX: Float = 0.toFloat()
     var colorModeY: Float = 0.toFloat()

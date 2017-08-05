@@ -1,11 +1,11 @@
 package ch.bildspur.ledforest.model
 
-import processing.core.PGraphics
+import ch.bildspur.ledforest.util.ColorMode
 import processing.core.PVector
 import java.awt.Color
 
 
-class FadeColor(g: PGraphics) {
+class FadeColor() {
     /* Importent: This is for HSB only! */
 
     internal val minimumDistance = 0.001f
@@ -18,14 +18,7 @@ class FadeColor(g: PGraphics) {
     internal var target = PVector()
     internal var easingVector = PVector()
 
-    var graphics: PGraphics
-        internal set
-
-    init {
-        this.graphics = g
-    }
-
-    constructor(g: PGraphics, c: Int) : this(g) {
+    constructor(c: Int) : this() {
         current = colorToVector(c)
         target = colorToVector(c)
     }
@@ -82,10 +75,10 @@ class FadeColor(g: PGraphics) {
         get() = Color.HSBtoRGB(current.x / hmax, current.y / smax, current.z / bmax)
 
     private fun colorToVector(c: Int): PVector {
-        return PVector(graphics.hue(c), graphics.saturation(c), graphics.brightness(c))
+        return PVector(ColorMode.hue(c), ColorMode.saturation(c), ColorMode.brightness(c))
     }
 
     private fun vectorToColor(v: PVector): Int {
-        return graphics.color(Math.round(v.x), Math.round(v.y), Math.round(v.z))
+        return ColorMode.color(Math.round(v.x), Math.round(v.y), Math.round(v.z))
     }
 }
