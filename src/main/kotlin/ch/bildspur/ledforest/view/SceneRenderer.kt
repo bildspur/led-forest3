@@ -48,7 +48,9 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>) : IRenderer {
             g.stroke(255)
             g.fill(tube.leds[i].color.color)
 
-            rodShape.disableStyle()
+            g.box(20f, 20f, 20f)
+
+            //rodShape.disableStyle()
             g.shape(rodShape)
             g.popMatrix()
         }

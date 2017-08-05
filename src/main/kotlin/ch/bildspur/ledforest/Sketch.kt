@@ -82,8 +82,8 @@ class Sketch() : PApplet() {
         smooth()
 
         frameRate(FRAME_RATE)
-        ColorMode.colorMode(HSB, 360f, 100f, 100f)
         colorMode(HSB, 360f, 100f, 100f)
+        ColorMode.style(g.style)
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 

@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.util
 
 import processing.core.PApplet
+import processing.core.PStyle
 import java.awt.Color
 
 object ColorMode {
@@ -27,6 +28,11 @@ object ColorMode {
 
     internal var lerpColorHSB1: FloatArray? = null
     internal lateinit var lerpColorHSB2: FloatArray
+
+    fun style(s: PStyle) {
+        this.colorMode(1, 1.0f)
+        this.colorMode(s.colorMode, s.colorModeX, s.colorModeY, s.colorModeZ, s.colorModeA)
+    }
 
     fun colorMode(mode: Int) {
         this.colorMode(mode, this.colorModeX, this.colorModeY, this.colorModeZ, this.colorModeA)
