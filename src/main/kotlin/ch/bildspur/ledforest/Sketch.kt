@@ -177,7 +177,7 @@ class Sketch() : PApplet() {
         val averageFPS = fpsOverTime / frameCount.toFloat()
 
         pg.textAlign(PApplet.LEFT, PApplet.BOTTOM)
-        pg.fill(0)
+        pg.fill(255)
         pg.textSize(12f)
         pg.text("FPS: ${frameRate.format(2)}\nFOT: ${averageFPS.format(2)}", 10f, height - 5f)
     }

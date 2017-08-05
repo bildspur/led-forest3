@@ -33,10 +33,12 @@ class ArtNetClient {
     }
 
     fun setReceiver(address: String?) {
-        if (null == address)
+        if (null == address) {
             receiver = null
+            return
+        }
 
-        receiver = createNode(address!!)
+        receiver = createNode(address)
     }
 
     fun createNode(address: String): ArtNetNode? {
@@ -64,14 +66,12 @@ class ArtNetClient {
         val dmx = ArtDmxPacket()
 
         dmx.setUniverse(0, universe)
-        dmx.sequenceID = sequenceId % 256
+        dmx.sequenceID = sequenceId++ % 256
         dmx.setDMX(data, data.size)
 
         if (node != null)
             artnet.unicastPacket(dmx, node)
         else
             artnet.broadcastPacket(dmx)
-
-        sequenceId++
     }
 }
