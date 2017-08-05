@@ -77,6 +77,7 @@ fun PGraphics.createRod(r: Float, h: Float, detail: Int): PShape {
         sh.vertex(x * r, +h / 2, z * r, u, 1f)
     }
     sh.endShape()
+    sh.disableStyle()
     return sh
 }
 
