@@ -46,6 +46,9 @@ class Sketch() : PApplet() {
         }
     }
 
+
+    @Volatile var isInitialised = false
+
     var fpsOverTime = 0f
 
     var isStatusViewShown = false
@@ -171,6 +174,7 @@ class Sketch() : PApplet() {
 
             prepareExitHandler()
 
+            isInitialised = true
             return true
         }
 

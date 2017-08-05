@@ -19,6 +19,8 @@ import javafx.scene.control.TreeView
 import javafx.scene.layout.BorderPane
 import processing.core.PApplet
 import tornadofx.*
+import java.nio.file.Files
+import java.nio.file.Paths
 import kotlin.concurrent.thread
 
 
@@ -32,6 +34,8 @@ class PrimaryView : View(Sketch.NAME) {
     val configuration = ConfigurationController()
 
     lateinit var appConfig: AppConfig
+
+    lateinit var project: Project
 
     lateinit var sketch: Sketch
 
@@ -73,6 +77,12 @@ class PrimaryView : View(Sketch.NAME) {
             // load app config
             appConfig = configuration.loadAppConfig()
 
+            // create or load configuration
+            if (Files.exists(Paths.get(appConfig.projectFile)))
+                project = configuration.loadProject(appConfig.projectFile)
+            else
+                project = createTestConfig()
+
             // start processing
             startProcessing()
         }, { updateUI() }, "startup")
@@ -80,7 +90,7 @@ class PrimaryView : View(Sketch.NAME) {
 
     fun startProcessing() {
         sketch = Sketch()
-        sketch.project = createTestConfig()
+        sketch.project = project
 
         processingThread = thread {
             // run processing app
@@ -101,7 +111,7 @@ class PrimaryView : View(Sketch.NAME) {
     }
 
     fun newProject(e: ActionEvent) {
-
+        
     }
 
     fun loadProject(e: ActionEvent) {
