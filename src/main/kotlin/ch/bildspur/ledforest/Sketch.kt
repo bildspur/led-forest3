@@ -90,6 +90,7 @@ class Sketch() : PApplet() {
         surface.setTitle("$NAME - ${project.name}")
 
         peasy.setup()
+        artnet.open()
 
         // add renderer
         renderer.add(SceneRenderer(this.g, project.tubes))
@@ -185,6 +186,7 @@ class Sketch() : PApplet() {
         Runtime.getRuntime().addShutdownHook(Thread {
             println("shutting down...")
             osc.osc.stop()
+            artnet.close()
         })
     }
 

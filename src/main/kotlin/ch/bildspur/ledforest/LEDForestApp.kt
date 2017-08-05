@@ -34,7 +34,7 @@ class LEDForestApp : App() {
         val p = Project()
         p.name = "Test Project"
         p.nodes.add(DmxNode("127.0.0.1", listOf(Universe(0), Universe(1))))
-        p.tubes.add(Tube(0, 10, 0, sketch.g))
+        p.tubes.add(Tube(0, 10, 0))
         return p
     }
 }

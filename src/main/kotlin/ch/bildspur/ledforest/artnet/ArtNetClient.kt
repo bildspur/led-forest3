@@ -67,7 +67,7 @@ class ArtNetClient {
         dmx.sequenceID = sequenceId % 256
         dmx.setDMX(data, data.size)
 
-        if (receiver != null)
+        if (node != null)
             artnet.unicastPacket(dmx, node)
         else
             artnet.broadcastPacket(dmx)
