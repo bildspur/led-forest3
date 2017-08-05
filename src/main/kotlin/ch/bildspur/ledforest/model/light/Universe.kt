@@ -4,7 +4,9 @@ import com.google.gson.annotations.Expose
 import java.awt.Color
 
 class Universe(id: Int) {
-    internal val maxLuminance = 255
+    companion object {
+        @JvmStatic val MAX_LUMINANCE = 255
+    }
 
     @Expose var id: Int = 0
         internal set
@@ -47,8 +49,8 @@ class Universe(id: Int) {
 
     private fun calculateValue(value: Float, last: Int, luminosity: Float, response: Float, trace: Float): Byte {
         // normalize value
-        var normValue = value / maxLuminance.toFloat()
-        val normLast = last / maxLuminance.toFloat()
+        var normValue = value / MAX_LUMINANCE.toFloat()
+        val normLast = last / MAX_LUMINANCE.toFloat()
 
         // add response
         normValue = normalisedTunableSigmoid(normValue, response)
@@ -59,7 +61,7 @@ class Universe(id: Int) {
         // add trace
         normValue = Math.min(1f, normLast * trace + normValue)
 
-        return (normValue * maxLuminance).toByte()
+        return (normValue * MAX_LUMINANCE).toByte()
     }
 
     /**
