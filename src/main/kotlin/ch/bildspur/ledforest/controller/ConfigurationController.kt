@@ -5,7 +5,6 @@ import ch.bildspur.ledforest.model.Project
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import processing.core.PApplet
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -14,26 +13,22 @@ import java.nio.file.Paths
 /**
  * Created by cansik on 11.07.17.
  */
-class ConfigurationController(internal var sketch: PApplet) {
+class ConfigurationController() {
     companion object {
-        @JvmStatic val CONFIGURATION_FILE = "ledforest.json"
+        @JvmStatic val CONFIGURATION_FILE = "config/ledforest.json"
     }
 
-    lateinit var gson: Gson
-
-    fun setup() {
-        gson = GsonBuilder()
-                .setPrettyPrinting()
-                .excludeFieldsWithoutExposeAnnotation()
-                .create()
-    }
+    val gson: Gson = GsonBuilder()
+            .setPrettyPrinting()
+            .excludeFieldsWithoutExposeAnnotation()
+            .create()
 
     fun loadAppConfig(): AppConfig {
-        return loadConfiguration(Paths.get(sketch.dataPath(CONFIGURATION_FILE)))
+        return loadConfiguration(Paths.get(CONFIGURATION_FILE))
     }
 
     fun saveAppConfig(config: AppConfig) {
-        saveConfiguration(Paths.get(sketch.dataPath(CONFIGURATION_FILE)), config)
+        saveConfiguration(Paths.get(CONFIGURATION_FILE), config)
     }
 
     fun loadProject(projectFile: String): Project {

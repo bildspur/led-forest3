@@ -1,7 +1,10 @@
 package ch.bildspur.ledforest
 
 import ch.bildspur.ledforest.artnet.ArtNetClient
-import ch.bildspur.ledforest.controller.*
+import ch.bildspur.ledforest.controller.OscController
+import ch.bildspur.ledforest.controller.PeasyController
+import ch.bildspur.ledforest.controller.RemoteController
+import ch.bildspur.ledforest.controller.TimerController
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
@@ -52,8 +55,6 @@ class Sketch() : PApplet() {
     val peasy = PeasyController(this)
 
     val osc = OscController(this)
-
-    val config = ConfigurationController(this)
 
     val timer = TimerController(this)
 
@@ -162,9 +163,6 @@ class Sketch() : PApplet() {
 
             canvas = createGraphics(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
             canvas.smooth(8)
-
-            config.setup()
-            config.loadConfiguration()
 
             timer.setup()
 
