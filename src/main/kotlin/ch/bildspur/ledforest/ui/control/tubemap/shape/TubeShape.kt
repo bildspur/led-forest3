@@ -12,7 +12,7 @@ import javafx.scene.text.Font
 import javafx.scene.text.TextAlignment
 import processing.core.PVector
 
-class TubeShape(val tube: Tube) : OvalShape() {
+class TubeShape(val tube: Tube, val transform: PVector = PVector()) : OvalShape() {
     val universeColors = arrayOf(
             ColorMode.color(208, 100, 85),
             ColorMode.color(127, 77, 80),
@@ -57,10 +57,10 @@ class TubeShape(val tube: Tube) : OvalShape() {
     }
 
     private fun PVector.project(): Point2D {
-        return Point2D(this.x.toDouble(), this.y.toDouble())
+        return Point2D(this.x.toDouble() + transform.x, this.y.toDouble() + transform.y)
     }
 
     private fun Point2D.project(): PVector {
-        return PVector(this.x.toFloat(), this.y.toFloat(), tube.position.z)
+        return PVector(this.x.toFloat() - transform.x, this.y.toFloat() - transform.y, tube.position.z)
     }
 }

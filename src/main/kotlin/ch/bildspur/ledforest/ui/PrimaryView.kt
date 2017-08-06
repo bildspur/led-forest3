@@ -22,6 +22,7 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
 import processing.core.PApplet
+import processing.core.PVector
 import tornadofx.*
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -96,6 +97,19 @@ class PrimaryView : View(Sketch.NAME) {
             // init canvas
             tubeMap.setupMap(300.0, 300.0)
             tubeMap.activeTool = moveTool
+            moveTool.shapesSelected += {
+                it.filterIsInstance<TubeShape>().map { it.tube }.forEach { t ->
+                    elementTreeView.root.children.forEach { a ->
+                        a.children.forEach { u ->
+                            u.children.forEach { n ->
+                                if (n.value!!.item as Tube == t) {
+                                    elementTreeView.selectionModel.select(n)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             // for updating the property view
             propertiesControl.propertyChanged += {
@@ -258,9 +272,12 @@ class PrimaryView : View(Sketch.NAME) {
     fun updateTubeMap() {
         tubeMap.activeLayer.shapes.clear()
 
+        // transform
+        val transform = PVector(tubeMap.canvas.width.toFloat() / 2f, tubeMap.canvas.height.toFloat() / 2f)
+
         // add all tubes
         project.tubes.forEach {
-            tubeMap.activeLayer.shapes.add(TubeShape(it))
+            tubeMap.activeLayer.shapes.add(TubeShape(it, transform))
         }
 
         tubeMap.redraw()
