@@ -8,6 +8,7 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
+import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
 import ch.bildspur.ledforest.ui.properties.PropertiesControl
 import ch.bildspur.ledforest.ui.util.TagItem
@@ -165,6 +166,7 @@ class PrimaryView : View(Sketch.NAME) {
         }
 
         elementTreeView.root = rootItem
+        updateTubeMap()
     }
 
     fun newProject(e: ActionEvent) {
@@ -251,5 +253,16 @@ class PrimaryView : View(Sketch.NAME) {
             resetupRenderer()
             updateUI()
         }
+    }
+
+    fun updateTubeMap() {
+        tubeMap.activeLayer.shapes.clear()
+
+        // add all tubes
+        project.tubes.forEach {
+            tubeMap.activeLayer.shapes.add(TubeShape(it))
+        }
+
+        tubeMap.redraw()
     }
 }

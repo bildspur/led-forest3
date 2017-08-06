@@ -207,7 +207,7 @@ class TubeMap : Pane() {
         val backgroundRect = RectangleShape(Point2D(0.0, 0.0), Dimension2D(width, height))
         backgroundRect.stroke = Color.WHITE
         backgroundRect.fill = Color.BLACK
-        addShape(backgroundRect)
+        backgroundLayer.shapes.add(backgroundRect)
 
         resetZoom()
         resize()

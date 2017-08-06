@@ -12,6 +12,7 @@ class Tube(@IntParameter("Universe") @Expose var universe: Int,
            @Expose var addressStart: Int = 0,
            @PVectorParameter("Position") @Expose var position: PVector = PVector(),
            @PVectorParameter("Rotation") @Expose var rotation: PVector = PVector()) {
+
     @BooleanParameter("Inverted") @Expose var inverted = false
 
     @Expose
