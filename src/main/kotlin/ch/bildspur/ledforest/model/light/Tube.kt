@@ -3,7 +3,6 @@ package ch.bildspur.ledforest.model.light
 import ch.bildspur.ledforest.ui.properties.BooleanParameter
 import ch.bildspur.ledforest.ui.properties.IntParameter
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
-import ch.bildspur.ledforest.ui.properties.StringParameter
 import ch.bildspur.ledforest.util.ColorMode
 import com.google.gson.annotations.Expose
 import processing.core.PVector
@@ -13,8 +12,6 @@ class Tube(@IntParameter("Universe") @Expose var universe: Int,
            @Expose var addressStart: Int = 0,
            @PVectorParameter("Position") @Expose var position: PVector = PVector(),
            @PVectorParameter("Rotation") @Expose var rotation: PVector = PVector()) {
-
-    @StringParameter("Name") @Expose var name = "Tube"
     @BooleanParameter("Inverted") @Expose var inverted = false
 
     @Expose
@@ -42,6 +39,6 @@ class Tube(@IntParameter("Universe") @Expose var universe: Int,
     }
 
     override fun toString(): String {
-        return "$name ($ledCount)"
+        return "$universe.$startAddress-$endAddress ($ledCount)"
     }
 }
