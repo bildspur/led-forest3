@@ -1,0 +1,35 @@
+{
+  "name": "Test Project",
+  "nodes": [
+    {
+      "address": "127.0.0.1",
+      "universes": [
+        {
+          "id": 0
+        },
+        {
+          "id": 1
+        }
+      ]
+    }
+  ],
+  "tubes": [
+    {
+      "name": "Tube 10",
+      "inverted": false,
+      "universe": 0,
+      "ledCount": 10,
+      "addressStart": 0,
+      "position": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    }
+  ]
+}

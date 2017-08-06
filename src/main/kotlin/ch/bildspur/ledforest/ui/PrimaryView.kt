@@ -1,12 +1,9 @@
 package ch.bildspur.ledforest.ui
 
 import ch.bildspur.ledforest.Sketch
-import ch.bildspur.ledforest.artnet.DmxNode
 import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
-import ch.bildspur.ledforest.model.light.Tube
-import ch.bildspur.ledforest.model.light.Universe
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
 import ch.bildspur.ledforest.ui.util.TagItem
@@ -82,7 +79,7 @@ class PrimaryView : View(Sketch.NAME) {
             if (Files.exists(Paths.get(appConfig.projectFile)) && !Files.isDirectory(Paths.get(appConfig.projectFile)))
                 project = configuration.loadProject(appConfig.projectFile)
             else
-                project = createTestConfig()
+                project = Project()
 
             // start processing
             startProcessing()
@@ -97,14 +94,6 @@ class PrimaryView : View(Sketch.NAME) {
             // run processing app
             PApplet.runSketch(arrayOf("Sketch "), sketch)
         }
-    }
-
-    fun createTestConfig(): Project {
-        val p = Project()
-        p.name = "Test Project"
-        p.nodes.add(DmxNode("127.0.0.1", listOf(Universe(0), Universe(1))))
-        p.tubes.add(Tube(0, 10, 0))
-        return p
     }
 
     fun updateUI() {
