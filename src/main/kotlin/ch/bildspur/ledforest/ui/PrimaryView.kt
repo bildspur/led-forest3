@@ -10,6 +10,7 @@ import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
 import ch.bildspur.ledforest.ui.properties.PropertiesControl
 import ch.bildspur.ledforest.ui.util.TagItem
 import ch.bildspur.ledforest.ui.util.UITask
+import javafx.application.Platform
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.scene.control.*
@@ -74,16 +75,24 @@ class PrimaryView : View(Sketch.NAME) {
         UITask.status.addListener { o -> statusLabel.text = UITask.status.value }
         UITask.running.addListener { o -> progressIndicator.isVisible = UITask.running.value }
 
+        // setup treeview
+        elementTreeView.selectionModel.selectedItemProperty().addListener { o ->
+            val item = elementTreeView.selectionModel.selectedItem
+            Platform.runLater {
+                if (item != null)
+                    propertiesControl.initView(item.value!!.item!!)
+            }
+        }
+
         // setup ui
         UITask.run({
             // init canvas
             tubeMap.setupMap(300.0, 300.0)
             tubeMap.activeTool = moveTool
 
-            // setup treeview
-            elementTreeView.selectionModel.selectedItemProperty().addListener { o ->
-                val item = elementTreeView.selectionModel.selectedItem
-                propertiesControl.initView(item.value!!.item!!)
+            // for updating the property view
+            propertiesControl.propertyChanged += {
+                updateUI()
             }
 
             // load app config
