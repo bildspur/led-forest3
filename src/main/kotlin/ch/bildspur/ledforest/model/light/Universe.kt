@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.model.light
 
+import ch.bildspur.ledforest.ui.properties.NumberParameter
 import com.google.gson.annotations.Expose
 import java.awt.Color
 
@@ -8,7 +9,9 @@ class Universe(id: Int) {
         @JvmStatic val MAX_LUMINANCE = 255
     }
 
-    @Expose var id: Int = 0
+    @NumberParameter("Id")
+    @Expose
+    var id: Int = 0
         internal set
 
     var dmxData: ByteArray

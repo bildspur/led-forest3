@@ -7,7 +7,7 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
-import ch.bildspur.ledforest.ui.parameter.PropertiesControl
+import ch.bildspur.ledforest.ui.properties.PropertiesControl
 import ch.bildspur.ledforest.ui.util.TagItem
 import ch.bildspur.ledforest.ui.util.UITask
 import javafx.event.ActionEvent
@@ -83,7 +83,7 @@ class PrimaryView : View(Sketch.NAME) {
             // setup treeview
             elementTreeView.selectionModel.selectedItemProperty().addListener { o ->
                 val item = elementTreeView.selectionModel.selectedItem
-                propertiesControl.initView(item.value!!)
+                propertiesControl.initView(item.value!!.item!!)
             }
 
             // load app config

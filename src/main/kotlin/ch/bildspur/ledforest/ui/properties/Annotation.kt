@@ -1,4 +1,8 @@
-package ch.bildspur.ledforest.ui.parameter
+package ch.bildspur.ledforest.ui.properties
+
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class StringParameter(val name: String)
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
@@ -10,4 +14,4 @@ annotation class NumberParameter(val name: String)
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class TextParameter(val name: String)
+annotation class BooleanParameter(val name: String)
