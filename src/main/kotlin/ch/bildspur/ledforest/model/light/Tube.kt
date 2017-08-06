@@ -5,7 +5,12 @@ import com.google.gson.annotations.Expose
 import processing.core.PVector
 
 
-class Tube(@Expose var universe: Int, ledCount: Int = 0, addressStart: Int = 0, @Expose var position: PVector = PVector(), @Expose var rotation: PVector = PVector()) {
+class Tube(@Expose var universe: Int,
+           @Expose var ledCount: Int = 0,
+           @Expose var addressStart: Int = 0,
+           @Expose var position: PVector = PVector(),
+           @Expose var rotation: PVector = PVector()) {
+
     @Expose var name = "Tube $ledCount"
     @Expose var inverted = false
 

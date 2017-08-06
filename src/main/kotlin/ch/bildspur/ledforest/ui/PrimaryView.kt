@@ -17,6 +17,7 @@ import javafx.scene.control.Label
 import javafx.scene.control.ProgressIndicator
 import javafx.scene.control.TreeView
 import javafx.scene.layout.BorderPane
+import javafx.stage.FileChooser
 import processing.core.PApplet
 import tornadofx.*
 import java.nio.file.Files
@@ -78,7 +79,7 @@ class PrimaryView : View(Sketch.NAME) {
             appConfig = configuration.loadAppConfig()
 
             // create or load configuration
-            if (Files.exists(Paths.get(appConfig.projectFile)))
+            if (Files.exists(Paths.get(appConfig.projectFile)) && !Files.isDirectory(Paths.get(appConfig.projectFile)))
                 project = configuration.loadProject(appConfig.projectFile)
             else
                 project = createTestConfig()
@@ -111,15 +112,49 @@ class PrimaryView : View(Sketch.NAME) {
     }
 
     fun newProject(e: ActionEvent) {
-        
+        UITask.run({
+            appConfig.projectFile = ""
+            project = Project()
+        }, { updateUI() }, "new project")
     }
 
     fun loadProject(e: ActionEvent) {
+        val fileChooser = FileChooser()
+        fileChooser.title = "Select project to load"
+        fileChooser.initialFileName = ""
+        fileChooser.extensionFilters.addAll(
+                FileChooser.ExtensionFilter("JSON", "*.json")
+        )
 
+        val result = fileChooser.showOpenDialog(primaryStage)
+
+        if (result != null) {
+            UITask.run({
+                project = configuration.loadProject(result.path)
+                appConfig.projectFile = result.path
+                configuration.saveAppConfig(appConfig)
+
+                // re init renderer
+                sketch.renderer.forEach { it.setup() }
+            }, { updateUI() }, "load project")
+        }
     }
 
     fun saveProject(e: ActionEvent) {
+        val fileChooser = FileChooser()
+        fileChooser.initialFileName = ""
+        fileChooser.title = "Save project..."
+        fileChooser.extensionFilters.addAll(FileChooser.ExtensionFilter("JSON", "*.json"))
 
+        val result = fileChooser.showSaveDialog(primaryStage)
+
+        if (result != null) {
+            UITask.run({
+                configuration.saveProject(result.path, project)
+                appConfig.projectFile = result.path
+                configuration.saveAppConfig(appConfig)
+            }, { updateUI() }, "save project")
+        }
     }
 
     fun addTube(e: ActionEvent) {
