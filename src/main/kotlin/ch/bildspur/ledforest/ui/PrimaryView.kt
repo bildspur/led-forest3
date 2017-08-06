@@ -7,14 +7,12 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
+import ch.bildspur.ledforest.ui.parameter.PropertiesControl
 import ch.bildspur.ledforest.ui.util.TagItem
 import ch.bildspur.ledforest.ui.util.UITask
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
-import javafx.scene.control.Label
-import javafx.scene.control.ProgressIndicator
-import javafx.scene.control.TreeItem
-import javafx.scene.control.TreeView
+import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
@@ -35,6 +33,8 @@ class PrimaryView : View(Sketch.NAME) {
 
     val configuration = ConfigurationController()
 
+    val propertiesControl = PropertiesControl()
+
     lateinit var appConfig: AppConfig
 
     lateinit var project: Project
@@ -42,6 +42,8 @@ class PrimaryView : View(Sketch.NAME) {
     lateinit var sketch: Sketch
 
     lateinit var processingThread: Thread
+
+    @FXML lateinit var propertiesPane: TitledPane
 
     @FXML lateinit var elementTreeView: TreeView<TagItem>
 
@@ -57,6 +59,7 @@ class PrimaryView : View(Sketch.NAME) {
         // setup on shown event
         primaryStage.setOnShown { setupView() }
         root.center = tubeMap
+        propertiesPane.content = propertiesControl
 
         // exit on main window closed
         primaryStage.setOnCloseRequest {
@@ -78,7 +81,10 @@ class PrimaryView : View(Sketch.NAME) {
             tubeMap.activeTool = moveTool
 
             // setup treeview
-            elementTreeView.selectionModel.selectedItemProperty().addListener { o -> }
+            elementTreeView.selectionModel.selectedItemProperty().addListener { o ->
+                val item = elementTreeView.selectionModel.selectedItem
+                propertiesControl.initView(item.value!!)
+            }
 
             // load app config
             appConfig = configuration.loadAppConfig()
