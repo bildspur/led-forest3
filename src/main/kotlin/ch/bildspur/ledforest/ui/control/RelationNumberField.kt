@@ -16,7 +16,6 @@ import javafx.scene.paint.Paint
 import javafx.scene.shape.Rectangle
 import javafx.util.Duration
 import javafx.util.StringConverter
-import javafx.util.converter.DoubleStringConverter
 import javafx.util.converter.NumberStringConverter
 import java.text.NumberFormat
 import java.util.*
@@ -24,11 +23,10 @@ import java.util.*
 /**
  * Created by cansik on 06.01.17.
  */
-class RelationNumberField @JvmOverloads constructor(value: Double = 0.0, minimum: Double = 0.0, maximum: Double = 100.0) : TextField() {
+class RelationNumberField<T> @JvmOverloads constructor(var formatter: TextFormatter<T>, value: Double = 0.0, minimum: Double = 0.0, maximum: Double = 100.0) : TextField() {
 
 
     // value specific
-    private val formatter: TextFormatter<Double>
     private val converter: StringConverter<Number>
 
     private val value: DoubleProperty
@@ -65,7 +63,6 @@ class RelationNumberField @JvmOverloads constructor(value: Double = 0.0, minimum
         maximumLabel = Label()
         minimumLabel = Label()
 
-        formatter = TextFormatter(DoubleStringConverter())
         converter = NumberStringConverter(NumberFormat.getInstance(Locale.ENGLISH))
 
         initializeNumberField()

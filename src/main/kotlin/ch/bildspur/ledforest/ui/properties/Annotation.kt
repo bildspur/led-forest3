@@ -10,7 +10,11 @@ annotation class SliderParameter(val name: String, val minValue: Double = 0.0, v
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class NumberParameter(val name: String)
+annotation class IntParameter(val name: String)
+
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DoubleParameter(val name: String)
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
