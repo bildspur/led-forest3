@@ -15,14 +15,29 @@
   ],
   "tubes": [
     {
-      "name": "Tube 10",
       "inverted": false,
-      "universe": 0,
       "ledCount": 10,
+      "universe": 1,
       "addressStart": 0,
       "position": {
+        "x": -0.72288513,
+        "y": 48.915665,
+        "z": 0.0
+      },
+      "rotation": {
         "x": 0.0,
         "y": 0.0,
+        "z": 0.0
+      }
+    },
+    {
+      "inverted": false,
+      "ledCount": 20,
+      "universe": 0,
+      "addressStart": 0,
+      "position": {
+        "x": -30.120483,
+        "y": -80.12048,
         "z": 0.0
       },
       "rotation": {

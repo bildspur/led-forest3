@@ -53,6 +53,8 @@ class Sketch() : PApplet() {
 
     var isStatusViewShown = false
 
+    @Volatile var isResetRendererProposed = false
+
     var isInteractionOn = DataModel(true)
 
     val peasy = PeasyController(this)
@@ -99,9 +101,7 @@ class Sketch() : PApplet() {
         peasy.setup()
         artnet.open()
 
-        // add renderer
-        renderer.add(SceneRenderer(this.g, project.tubes))
-        renderer.add(ArtNetRenderer(artnet, project.nodes, project.tubes))
+        resetRenderer()
 
         // timer for cursor hiding
         timer.addTask(TimerTask(CURSOR_HIDING_TIME, {
@@ -120,6 +120,10 @@ class Sketch() : PApplet() {
         // setup long loading controllers
         if (initControllers())
             return
+
+        // reset renderer if needed
+        if (isResetRendererProposed)
+            resetRenderer()
 
         // update timer and tubes
         timer.update()
@@ -143,6 +147,19 @@ class Sketch() : PApplet() {
                     .compose()
             drawFPS(g)
         }
+    }
+
+    fun resetRenderer() {
+        renderer.clear()
+
+        // add renderer
+        renderer.add(SceneRenderer(this.g, project.tubes))
+        renderer.add(ArtNetRenderer(artnet, project.nodes, project.tubes))
+
+        isResetRendererProposed = false
+
+        // rebuild
+        renderer.forEach { it.setup() }
     }
 
     fun skipFirstFrames(): Boolean {

@@ -1,10 +1,10 @@
 package ch.bildspur.ledforest.ui
 
 import ch.bildspur.ledforest.Sketch
-import ch.bildspur.ledforest.artnet.DmxNode
 import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
@@ -120,7 +120,6 @@ class PrimaryView : View(Sketch.NAME) {
                     // check if led has to be reinitialised
                     if (tube.ledCount != tube.leds.size) {
                         tube.initLEDs()
-                        println("had to reinit")
                     }
                 }
 
@@ -187,6 +186,7 @@ class PrimaryView : View(Sketch.NAME) {
         UITask.run({
             appConfig.projectFile = ""
             project = Project()
+            resetRenderer()
         }, { updateUI() }, "new project")
     }
 
@@ -206,12 +206,19 @@ class PrimaryView : View(Sketch.NAME) {
                 appConfig.projectFile = result.path
                 configuration.saveAppConfig(appConfig)
 
-                resetupRenderer()
+                resetRenderer()
             }, { updateUI() }, "load project")
         }
     }
 
-    fun resetupRenderer() {
+    fun resetRenderer() {
+        if (sketch.isInitialised) {
+            sketch.project = project
+            sketch.isResetRendererProposed = true
+        }
+    }
+
+    fun rebuildRenderer() {
         sketch.renderer.forEach { it.setup() }
     }
 
@@ -248,7 +255,7 @@ class PrimaryView : View(Sketch.NAME) {
                 "Node" -> project.nodes.add(DmxNode("127.0.0.1", mutableListOf()))
             }
 
-            resetupRenderer()
+            rebuildRenderer()
             updateUI()
         })
     }
@@ -264,7 +271,7 @@ class PrimaryView : View(Sketch.NAME) {
                 is Tube -> project.tubes.remove(selectedItem as Tube)
             }
 
-            resetupRenderer()
+            rebuildRenderer()
             updateUI()
         }
     }

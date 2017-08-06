@@ -2,7 +2,7 @@ package ch.bildspur.ledforest.view
 
 import artnet4j.ArtNetNode
 import ch.bildspur.ledforest.artnet.ArtNetClient
-import ch.bildspur.ledforest.artnet.DmxNode
+import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
 
