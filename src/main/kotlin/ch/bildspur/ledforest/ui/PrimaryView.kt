@@ -196,11 +196,11 @@ class PrimaryView : View(Sketch.NAME) {
         }
     }
 
-    fun addTube(e: ActionEvent) {
+    fun addElement(e: ActionEvent) {
 
     }
 
-    fun removeTube(e: ActionEvent) {
+    fun removeElement(e: ActionEvent) {
 
     }
 }

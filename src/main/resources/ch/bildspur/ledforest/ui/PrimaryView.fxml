@@ -31,8 +31,8 @@
                     <padding>
                         <Insets left="10.0" top="10.0"/>
                     </padding>
-                    <Button mnemonicParsing="false" onAction="#addTube" text="Add"/>
-                    <Button mnemonicParsing="false" onAction="#removeTube" text="Remove"/>
+                    <Button mnemonicParsing="false" onAction="#addElement" text="Add"/>
+                    <Button mnemonicParsing="false" onAction="#removeElement" text="Remove"/>
                 </HBox>
             </VBox>
         </TitledPane>
