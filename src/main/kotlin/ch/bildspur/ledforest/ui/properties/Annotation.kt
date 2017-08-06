@@ -19,3 +19,7 @@ annotation class DoubleParameter(val name: String)
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class BooleanParameter(val name: String)
+
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class PVectorParameter(val name: String)

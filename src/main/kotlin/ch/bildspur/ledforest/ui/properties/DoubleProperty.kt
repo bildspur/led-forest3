@@ -5,7 +5,7 @@ import javafx.scene.control.TextFormatter
 import javafx.util.converter.DoubleStringConverter
 import java.lang.reflect.Field
 
-class DoubleProperty(field: Field, obj: Any, val annotation: DoubleParameter) : BaseProperty(field, obj) {
+class DoubleProperty(field: Field, obj: Any, val annotation: DoubleParameter?) : BaseProperty(field, obj) {
     val numberField = RelationNumberField<Double>(TextFormatter(DoubleStringConverter()))
 
     init {

@@ -45,6 +45,11 @@ class PropertiesControl : VBox() {
                 val annotation = it.getAnnotation(BooleanParameter::class.java)
                 addProperty(annotation.name, BooleanProperty(it, obj, annotation))
             }
+
+            if (it.isAnnotationPresent(PVectorParameter::class.java)) {
+                val annotation = it.getAnnotation(PVectorParameter::class.java)
+                addProperty(annotation.name, PVectorProperty(it, obj, annotation))
+            }
         }
     }
 
@@ -74,7 +79,8 @@ class PropertiesControl : VBox() {
                     it.isAnnotationPresent(DoubleParameter::class.java) ||
                     it.isAnnotationPresent(StringParameter::class.java) ||
                     it.isAnnotationPresent(BooleanParameter::class.java) ||
-                    it.isAnnotationPresent(IntParameter::class.java)
+                    it.isAnnotationPresent(IntParameter::class.java) ||
+                    it.isAnnotationPresent(PVectorParameter::class.java)
         }
         fields.forEach { it.isAccessible = true }
         return fields
