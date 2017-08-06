@@ -8,6 +8,8 @@ import javafx.geometry.Dimension2D
 import javafx.geometry.Point2D
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
+import javafx.scene.text.Font
+import javafx.scene.text.TextAlignment
 import processing.core.PVector
 
 class TubeShape(val tube: Tube) : OvalShape() {
@@ -24,10 +26,12 @@ class TubeShape(val tube: Tube) : OvalShape() {
             ColorMode.color(0, 0, 87)
     )
 
+    val font = Font("PT Mono", 8.0)
+
     init {
         location = tube.position.project()
         size = Dimension2D(10.0, 10.0)
-        stroke = Color.BEIGE
+        stroke = Color.DARKGRAY
     }
 
     fun updateLocation() {
@@ -41,6 +45,11 @@ class TubeShape(val tube: Tube) : OvalShape() {
         val exact = Point2D(location.x - (size.width / 2.0), location.y - (size.height / 2.0))
         gc.fillOval(exact.x, exact.y, size.width, size.height)
         gc.strokeOval(exact.x, exact.y, size.width, size.height)
+
+        gc.fill = Color.DARKGRAY
+        gc.textAlign = TextAlignment.LEFT
+        gc.font = font
+        gc.fillText("$tube", exact.x + 10.0, exact.y + 15.0)
     }
 
     override fun toString(): String {
