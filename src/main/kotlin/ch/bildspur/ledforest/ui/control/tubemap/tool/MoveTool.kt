@@ -34,7 +34,7 @@ class MoveTool : BaseEditorTool() {
             return
         }
 
-        val dragStart = Point2D(event.x, event.y)
+        dragStart = Point2D(event.x, event.y)
         shapes = tubeMap.activeLayer.shapes
                 .filterIsInstance<TubeShape>()
                 .filter { it.visible }
@@ -52,6 +52,7 @@ class MoveTool : BaseEditorTool() {
         shapes.forEach {
             // update shape location
             it.location = Point2D(it.location.x + delta.x, it.location.y + delta.y)
+            it.updateLocation()
         }
 
         dragStart = point
@@ -60,6 +61,9 @@ class MoveTool : BaseEditorTool() {
 
     override fun onCanvasMouseReleased(tubeMap: TubeMap, event: MouseEvent) {
         shapes.forEach { it.marked = false }
+
+        dragStart = Point2D.ZERO!!
+
         tubeMap.redraw()
     }
 

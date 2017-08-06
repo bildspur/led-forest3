@@ -6,25 +6,34 @@ import ch.fhnw.afpars.ui.control.editor.shapes.OvalShape
 import javafx.geometry.Dimension2D
 import javafx.geometry.Point2D
 import javafx.scene.canvas.GraphicsContext
+import processing.core.PVector
 
 class TubeShape(val tube: Tube) : OvalShape() {
 
     init {
-        location = Point2D(tube.position.x.toDouble(), tube.position.y.toDouble())
+        location = tube.position.project()
         size = Dimension2D(20.0, 20.0)
     }
 
-    fun locationChanged() {
-
+    fun updateLocation() {
+        tube.position = location.project()
     }
 
     override fun render(gc: GraphicsContext) {
-        val exact = Point2D(location.x - (size.width / 2f), location.y - (size.height / 2f))
+        val exact = Point2D(location.x - (size.width / 2.0), location.y - (size.height / 2.0))
         gc.fillOval(exact.x, exact.y, size.width, size.height)
         gc.strokeOval(exact.x, exact.y, size.width, size.height)
     }
 
     override fun toString(): String {
         return "Tube (${location.x.format(1)} | ${location.y.format(1)}, w: ${size.width.format(1)}, h: ${size.height.format(1)})"
+    }
+
+    private fun PVector.project(): Point2D {
+        return Point2D(this.x.toDouble(), this.y.toDouble())
+    }
+
+    private fun Point2D.project(): PVector {
+        return PVector(this.x.toFloat(), this.y.toFloat(), tube.position.z)
     }
 }
