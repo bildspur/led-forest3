@@ -10,6 +10,10 @@ class PropertiesControl : VBox() {
 
     val propertyChanged = Event<BaseProperty>()
 
+    init {
+        spacing = 10.0
+    }
+
     fun initView(obj: Any) {
         clearView()
 
@@ -58,7 +62,7 @@ class PropertiesControl : VBox() {
 
         val box = HBox(nameLabel, propertyView)
         box.spacing = 10.0
-        box.prefHeight = 20.0
+        box.prefHeight = propertyView.prefHeight
         children.add(box)
     }
 

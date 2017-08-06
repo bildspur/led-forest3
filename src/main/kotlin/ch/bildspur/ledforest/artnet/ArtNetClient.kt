@@ -5,7 +5,6 @@ import artnet4j.ArtNetException
 import artnet4j.ArtNetNode
 import artnet4j.packets.ArtDmxPacket
 import java.net.InetAddress
-import java.net.SocketException
 
 class ArtNetClient {
     private var sequenceId: Int = 0
@@ -24,8 +23,6 @@ class ArtNetClient {
             artnet.start()
             setReceiver(address)
             running = true
-        } catch (e: SocketException) {
-            e.printStackTrace()
         } catch (e: ArtNetException) {
             e.printStackTrace()
         }
