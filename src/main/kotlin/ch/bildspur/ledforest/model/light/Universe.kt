@@ -77,4 +77,8 @@ class Universe(id: Int) {
     private fun normalisedTunableSigmoid(x: Float, k: Float): Float {
         return (x - x * k) / (k - Math.abs(x) * 2f * k + 1)
     }
+
+    override fun toString(): String {
+        return "Universe ($id)"
+    }
 }

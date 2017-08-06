@@ -4,6 +4,7 @@ import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
 import ch.bildspur.ledforest.ui.util.TagItem
@@ -12,7 +13,10 @@ import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.scene.control.Label
 import javafx.scene.control.ProgressIndicator
+import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
+import javafx.scene.image.Image
+import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
 import processing.core.PApplet
@@ -44,6 +48,10 @@ class PrimaryView : View(Sketch.NAME) {
     @FXML lateinit var statusLabel: Label
 
     @FXML lateinit var progressIndicator: ProgressIndicator
+
+    private val nodeIcon = Image(javaClass.getResourceAsStream("images/ArtnetIcon32.png"))
+    private val dmxIcon = Image(javaClass.getResourceAsStream("images/DmxFront16.png"))
+    private val tubeIcon = Image(javaClass.getResourceAsStream("images/SimpleTube16.png"))
 
     init {
         // setup on shown event
@@ -97,7 +105,34 @@ class PrimaryView : View(Sketch.NAME) {
     }
 
     fun updateUI() {
+        // update treeview
+        val rootItem = TreeItem(TagItem("elements"))
+        rootItem.isExpanded = true
 
+        elementTreeView.isShowRoot = false
+        elementTreeView.isEditable = true
+
+        // add nodes
+        val tubes = project.tubes.groupBy { it.universe }
+        project.nodes.forEach { n ->
+            val nodeItem = TreeItem(TagItem(n), ImageView(nodeIcon))
+            nodeItem.isExpanded = true
+            rootItem.children.add(nodeItem)
+
+            n.universes.forEach { u ->
+                val universeItem = TreeItem(TagItem(u), ImageView(dmxIcon))
+                universeItem.isExpanded = true
+                nodeItem.children.add(universeItem)
+
+                tubes.getOrElse(u.id, { emptyList<Tube>() }).forEach { t ->
+                    val tubeItem = TreeItem(TagItem(t), ImageView(tubeIcon))
+                    tubeItem.isExpanded = true
+                    universeItem.children.add(tubeItem)
+                }
+            }
+        }
+
+        elementTreeView.root = rootItem
     }
 
     fun newProject(e: ActionEvent) {
@@ -151,10 +186,6 @@ class PrimaryView : View(Sketch.NAME) {
     }
 
     fun removeTube(e: ActionEvent) {
-
-    }
-
-    fun loadProject(file: String) {
 
     }
 }
