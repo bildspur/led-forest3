@@ -10,11 +10,13 @@ class Universe(id: Int) {
 
     @Expose var id: Int = 0
         internal set
-    var dmxData: ByteArray = ByteArray(512)
+
+    var dmxData: ByteArray
         internal set
 
     init {
         this.id = id
+        this.dmxData = ByteArray(512)
     }
 
     fun stageDmx(tubes: List<Tube>, luminosity: Float, response: Float, trace: Float): ByteArray {
