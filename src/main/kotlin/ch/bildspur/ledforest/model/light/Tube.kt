@@ -10,7 +10,6 @@ import processing.core.PVector
 
 
 class Tube(@IntParameter("Universe") @Expose var universe: Int,
-           @Expose var ledCount: Int = 0,
            @Expose var addressStart: Int = 0,
            @PVectorParameter("Position") @Expose var position: PVector = PVector(),
            @PVectorParameter("Rotation") @Expose var rotation: PVector = PVector()) {
@@ -18,13 +17,29 @@ class Tube(@IntParameter("Universe") @Expose var universe: Int,
     @StringParameter("Name") @Expose var name = "Tube"
     @BooleanParameter("Inverted") @Expose var inverted = false
 
+    @Expose
+    @IntParameter("LED Count")
+    var ledCount: Int = 0
+        set(value) {
+            field = value
+            initLEDs()
+        }
+
     val startAddress: Int
         get() = if (leds.isNotEmpty()) leds[0].address else 0
 
     val endAddress: Int
         get() = if (leds.isNotEmpty()) leds[leds.size - 1].address else 0
 
-    val leds = (0..ledCount).map { LED(addressStart + it * LED.LED_ADDRESS_SIZE, ColorMode.color(0, 100, 100)) }
+    var leds: List<LED> = emptyList()
+
+    init {
+        initLEDs()
+    }
+
+    fun initLEDs() {
+        leds = (0..ledCount).map { LED(addressStart + it * LED.LED_ADDRESS_SIZE, ColorMode.color(0, 100, 100)) }
+    }
 
     override fun toString(): String {
         return "$name ($ledCount)"

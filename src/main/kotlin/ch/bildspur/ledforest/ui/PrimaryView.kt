@@ -1,10 +1,12 @@
 package ch.bildspur.ledforest.ui
 
 import ch.bildspur.ledforest.Sketch
+import ch.bildspur.ledforest.artnet.DmxNode
 import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.model.light.Universe
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
 import ch.bildspur.ledforest.ui.properties.PropertiesControl
@@ -35,6 +37,8 @@ class PrimaryView : View(Sketch.NAME) {
     val configuration = ConfigurationController()
 
     val propertiesControl = PropertiesControl()
+
+    var selectedItem: Any? = null
 
     lateinit var appConfig: AppConfig
 
@@ -79,8 +83,10 @@ class PrimaryView : View(Sketch.NAME) {
         elementTreeView.selectionModel.selectedItemProperty().addListener { o ->
             val item = elementTreeView.selectionModel.selectedItem
             Platform.runLater {
-                if (item != null)
+                if (item != null) {
+                    selectedItem = item.value!!.item!!
                     propertiesControl.initView(item.value!!.item!!)
+                }
             }
         }
 
@@ -92,6 +98,17 @@ class PrimaryView : View(Sketch.NAME) {
 
             // for updating the property view
             propertiesControl.propertyChanged += {
+                // special fix for led tube
+                if (selectedItem != null && selectedItem is Tube) {
+                    val tube = selectedItem as Tube
+
+                    // check if led has to be reinitialised
+                    if (tube.ledCount != tube.leds.size) {
+                        tube.initLEDs()
+                        println("had to reinit")
+                    }
+                }
+
                 updateUI()
             }
 
@@ -173,10 +190,13 @@ class PrimaryView : View(Sketch.NAME) {
                 appConfig.projectFile = result.path
                 configuration.saveAppConfig(appConfig)
 
-                // re init renderer
-                sketch.renderer.forEach { it.setup() }
+                resetupRenderer()
             }, { updateUI() }, "load project")
         }
+    }
+
+    fun resetupRenderer() {
+        sketch.renderer.forEach { it.setup() }
     }
 
     fun saveProject(e: ActionEvent) {
@@ -197,10 +217,39 @@ class PrimaryView : View(Sketch.NAME) {
     }
 
     fun addElement(e: ActionEvent) {
+        // show selection dialog
+        val dialog = ChoiceDialog("Tube", listOf("Tube", "Universe", "Node"))
+        dialog.title = "Add Element"
+        dialog.headerText = "Add a new element to the scene."
+        dialog.contentText = "Choose an element to add:"
 
+        val result = dialog.showAndWait()
+
+        result.ifPresent({ elementName ->
+            when (elementName) {
+                "Tube" -> project.tubes.add(Tube(0, 0))
+                "Universe" -> project.nodes.first().universes.add(Universe(0))
+                "Node" -> project.nodes.add(DmxNode("127.0.0.1", mutableListOf()))
+            }
+
+            resetupRenderer()
+            updateUI()
+        })
     }
 
     fun removeElement(e: ActionEvent) {
+        if (selectedItem != null) {
+            when (selectedItem) {
+                is DmxNode -> project.nodes.remove(selectedItem as DmxNode)
+                is Universe -> project.nodes.forEach {
+                    if (it.universes.contains(selectedItem as Universe))
+                        it.universes.remove(selectedItem as Universe)
+                }
+                is Tube -> project.tubes.remove(selectedItem as Tube)
+            }
 
+            resetupRenderer()
+            updateUI()
+        }
     }
 }

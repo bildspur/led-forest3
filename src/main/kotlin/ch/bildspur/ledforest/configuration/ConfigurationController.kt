@@ -85,8 +85,10 @@ class ConfigurationController() {
             val addressStart = json["addressStart"].asInt
             val position = vectorDeserializer.deserialize(json["position"], typeOfT, context)
             val rotation = vectorDeserializer.deserialize(json["rotation"], typeOfT, context)
+            val tube = Tube(universe, addressStart, position, rotation)
+            tube.ledCount = ledCount
 
-            return Tube(universe, ledCount, addressStart, position, rotation)
+            return tube
         }
     }
 
