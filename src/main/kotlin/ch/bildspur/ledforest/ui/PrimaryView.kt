@@ -26,6 +26,7 @@ import processing.core.PVector
 import tornadofx.*
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.concurrent.thread
 
 
@@ -57,6 +58,10 @@ class PrimaryView : View(Sketch.NAME) {
     @FXML lateinit var statusLabel: Label
 
     @FXML lateinit var progressIndicator: ProgressIndicator
+
+    @FXML lateinit var isRenderingCheck: CheckBox
+
+    @FXML lateinit var isInteractionOnCheck: CheckBox
 
     private val nodeIcon = Image(javaClass.getResourceAsStream("images/ArtnetIcon32.png"))
     private val dmxIcon = Image(javaClass.getResourceAsStream("images/DmxFront16.png"))
@@ -97,6 +102,8 @@ class PrimaryView : View(Sketch.NAME) {
             // init canvas
             tubeMap.setupMap(300.0, 300.0)
             tubeMap.activeTool = moveTool
+
+            // on map select
             moveTool.shapesSelected += {
                 it.filterIsInstance<TubeShape>().map { it.tube }.forEach { t ->
                     elementTreeView.root.children.forEach { a ->
@@ -148,6 +155,15 @@ class PrimaryView : View(Sketch.NAME) {
             // run processing app
             PApplet.runSketch(arrayOf("Sketch "), sketch)
         }
+
+        // setup processing specific variables
+        sketch.isInteractionOn.onChanged += { isInteractionOnCheck.isSelected = it }
+        isInteractionOnCheck.setOnAction { sketch.isInteractionOn.value = isInteractionOnCheck.isSelected }
+        sketch.isInteractionOn.fire()
+
+        sketch.isRendering.onChanged += { isRenderingCheck.isSelected = it }
+        isRenderingCheck.setOnAction { sketch.isRendering.value = isRenderingCheck.isSelected }
+        sketch.isRendering.fire()
     }
 
     fun updateUI() {
@@ -252,7 +268,7 @@ class PrimaryView : View(Sketch.NAME) {
             when (elementName) {
                 "Tube" -> project.tubes.add(Tube(0, 0))
                 "Universe" -> project.nodes.first().universes.add(Universe(0))
-                "Node" -> project.nodes.add(DmxNode("127.0.0.1", mutableListOf()))
+                "Node" -> project.nodes.add(DmxNode("127.0.0.1", CopyOnWriteArrayList()))
             }
 
             rebuildRenderer()

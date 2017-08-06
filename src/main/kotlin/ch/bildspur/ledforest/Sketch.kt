@@ -55,6 +55,8 @@ class Sketch() : PApplet() {
 
     @Volatile var isResetRendererProposed = false
 
+    var isRendering = DataModel(true)
+
     var isInteractionOn = DataModel(true)
 
     val peasy = PeasyController(this)
@@ -133,7 +135,8 @@ class Sketch() : PApplet() {
             it.background(0)
 
             // render
-            renderer.forEach { it.render() }
+            if (isRendering.value)
+                renderer.forEach { it.render() }
 
             peasy.applyTo(canvas)
         }
