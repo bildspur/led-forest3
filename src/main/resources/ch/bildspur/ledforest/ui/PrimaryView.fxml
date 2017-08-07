@@ -17,6 +17,8 @@
             <Separator orientation="VERTICAL"/>
             <CheckBox fx:id="isRenderingCheck" text="Is Rendering" textFill="WHITE"/>
             <CheckBox fx:id="isInteractionOnCheck" text="Is Interacting" textFill="WHITE"/>
+            <Separator orientation="VERTICAL"/>
+            <Button mnemonicParsing="false" onAction="#restartSketch" text="Restart"/>
 
             <ProgressIndicator fx:id="progressIndicator" prefHeight="25.0"
                                prefWidth="25.0"/>

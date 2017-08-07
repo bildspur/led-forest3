@@ -154,6 +154,7 @@ class PrimaryView : View(Sketch.NAME) {
         processingThread = thread {
             // run processing app
             PApplet.runSketch(arrayOf("Sketch "), sketch)
+            println("processing quit")
         }
 
         // setup processing specific variables
@@ -289,6 +290,13 @@ class PrimaryView : View(Sketch.NAME) {
 
             rebuildRenderer()
             updateUI()
+        }
+    }
+
+    fun restartSketch(e: ActionEvent) {
+        if (sketch.isInitialised) {
+            sketch.surface.pauseThread()
+            sketch.dispose()
         }
     }
 

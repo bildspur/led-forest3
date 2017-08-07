@@ -85,11 +85,14 @@ class Sketch() : PApplet() {
     override fun settings() {
         size(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
         PJOGL.profile = 1
+        smooth()
+
+        // retina screen
+        pixelDensity = 2
     }
 
     override fun setup() {
         Sketch.instance = this
-        smooth()
 
         frameRate(FRAME_RATE)
         colorMode(HSB, 360f, 100f, 100f)
