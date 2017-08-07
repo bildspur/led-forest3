@@ -148,7 +148,7 @@ class Sketch() : PApplet() {
         peasy.hud {
             // output image
             fx.render(canvas)
-                    .bloom(0.1f, 20, 40f)
+                    .bloom(0.0f, 20, 40f)
                     .compose()
             drawFPS(g)
         }
