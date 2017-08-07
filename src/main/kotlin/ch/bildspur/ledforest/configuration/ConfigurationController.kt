@@ -3,7 +3,6 @@ package ch.bildspur.ledforest.configuration
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
-import ch.bildspur.ledforest.model.light.Tube
 import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.get
 import com.google.gson.*
@@ -22,8 +21,6 @@ class ConfigurationController {
     companion object {
         @JvmStatic val CONFIGURATION_FILE = "config/ledforest.json"
     }
-
-    private val vectorDeserializer = PVectorDeserializer()
 
     val gson: Gson = GsonBuilder()
             .setPrettyPrinting()
@@ -75,20 +72,6 @@ class ConfigurationController {
             obj.addProperty("y", src.y)
             obj.addProperty("z", src.z)
             return obj
-        }
-    }
-
-    private inner class TubeDeserializer : JsonDeserializer<Tube> {
-        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Tube {
-            val universe = json["universe"].asInt
-            val ledCount = json["ledCount"].asInt
-            val addressStart = json["addressStart"].asInt
-            val position = vectorDeserializer.deserialize(json["position"], typeOfT, context)
-            val rotation = vectorDeserializer.deserialize(json["rotation"], typeOfT, context)
-            val tube = Tube()
-            tube.ledCount.value = ledCount
-
-            return tube
         }
     }
 
