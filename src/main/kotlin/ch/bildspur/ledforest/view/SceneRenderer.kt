@@ -46,7 +46,7 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>) : IRenderer {
             g.rotateZ(tube.rotation.z)
 
             // translate height
-            g.translate(0f, 0f, (if (tube.inverted) -1 else 1) * (i * ledLength))
+            g.translate(0f, 0f, (if (tube.inverted.value) -1 else 1) * (i * ledLength))
 
             // rotate shape
             g.rotateX(PApplet.radians(90f))

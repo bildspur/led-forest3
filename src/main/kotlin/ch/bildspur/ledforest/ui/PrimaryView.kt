@@ -13,7 +13,6 @@ import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
 import ch.bildspur.ledforest.ui.properties.PropertiesControl
 import ch.bildspur.ledforest.ui.util.TagItem
 import ch.bildspur.ledforest.ui.util.UITask
-import com.jogamp.newt.opengl.GLWindow
 import javafx.application.Platform
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
@@ -302,12 +301,18 @@ class PrimaryView : View(Sketch.NAME) {
     }
 
     fun restartSketch(e: ActionEvent) {
+
+        project.tubes.forEach {
+            it.inverted.value = !it.inverted.value
+        }
+
+        /*
         if (sketch.isInitialised) {
             sketch.surface.pauseThread()
             sketch.surface.stopThread()
             val window = sketch.surface.native as GLWindow
             window.destroy()
-        }
+        }*/
     }
 
     fun updateTubeMap() {

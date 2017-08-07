@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.ui.properties
 
+import ch.bildspur.ledforest.model.DataModel
 import javafx.scene.control.CheckBox
 import java.lang.reflect.Field
 
@@ -9,10 +10,17 @@ class BooleanProperty(field: Field, obj: Any, val annoation: BooleanParameter) :
 
     init {
         children.add(checkBox)
-        checkBox.isSelected = field.get(obj) as Boolean
+
+        val model = field.get(obj) as DataModel<Boolean>
+        model.onChanged += {
+            checkBox.isSelected = model.value
+        }
+
+        // set value
+        model.fire()
 
         checkBox.setOnAction {
-            field.set(obj, checkBox.isSelected)
+            model.value = checkBox.isSelected
             propertyChanged(this)
         }
     }

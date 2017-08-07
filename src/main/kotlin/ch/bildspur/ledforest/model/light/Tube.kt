@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.model.light
 
+import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.ui.properties.ActionParameter
 import ch.bildspur.ledforest.ui.properties.BooleanParameter
 import ch.bildspur.ledforest.ui.properties.IntParameter
@@ -14,7 +15,7 @@ class Tube(@IntParameter("Universe") @Expose var universe: Int,
            @PVectorParameter("Position") @Expose var position: PVector = PVector(),
            @PVectorParameter("Rotation") @Expose var rotation: PVector = PVector()) {
 
-    @BooleanParameter("Inverted") @Expose var inverted = false
+    @BooleanParameter("Inverted") @Expose var inverted = DataModel(false)
 
     @Expose
     @IntParameter("LED Count")
