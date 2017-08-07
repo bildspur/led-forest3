@@ -100,7 +100,6 @@ class Sketch() : PApplet() {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 
         surface.setTitle("$NAME - ${project.name}")
-        surface.setIcon(loadImage(sketchPath("LEDForestIcon.png")))
 
         fx = PostFX(this)
 

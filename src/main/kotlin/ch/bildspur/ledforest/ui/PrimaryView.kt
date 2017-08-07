@@ -64,6 +64,9 @@ class PrimaryView : View(Sketch.NAME) {
 
     @FXML lateinit var isInteractionOnCheck: CheckBox
 
+    @FXML lateinit var iconView: ImageView
+
+    private val appIcon = Image(javaClass.getResourceAsStream("images/LEDForestIcon.png"))
     private val nodeIcon = Image(javaClass.getResourceAsStream("images/ArtnetIcon32.png"))
     private val dmxIcon = Image(javaClass.getResourceAsStream("images/DmxFront16.png"))
     private val tubeIcon = Image(javaClass.getResourceAsStream("images/SimpleTube16.png"))
@@ -71,6 +74,7 @@ class PrimaryView : View(Sketch.NAME) {
     init {
         // setup on shown event
         primaryStage.setOnShown { setupView() }
+        primaryStage.isResizable = false
         root.center = tubeMap
         propertiesPane.content = propertiesControl
 
@@ -118,6 +122,9 @@ class PrimaryView : View(Sketch.NAME) {
                     }
                 }
             }
+
+            // set app icon
+            iconView.image = appIcon
 
             // for updating the property view
             propertiesControl.propertyChanged += {

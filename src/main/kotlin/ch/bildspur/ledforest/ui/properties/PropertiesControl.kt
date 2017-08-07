@@ -1,6 +1,8 @@
 package ch.bildspur.ledforest.ui.properties
 
 import ch.bildspur.ledforest.event.Event
+import javafx.geometry.Insets
+import javafx.geometry.Pos
 import javafx.scene.control.Label
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
@@ -12,6 +14,8 @@ class PropertiesControl : VBox() {
 
     init {
         spacing = 10.0
+        alignment = Pos.TOP_CENTER
+        padding = Insets(10.0, 20.0, 10.0, 10.0)
     }
 
     fun initView(obj: Any) {
