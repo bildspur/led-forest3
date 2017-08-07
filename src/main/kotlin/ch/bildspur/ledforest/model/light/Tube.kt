@@ -24,7 +24,7 @@ class Tube(@IntParameter("Universe") @Expose var universe: Int,
             initLEDs()
         }
 
-    @ActionParameter("All LEDs:", "Mark")
+    @ActionParameter("All LEDs", "Mark")
     val markLEDs = {
         leds.forEach {
             it.color.fadeH(255f, 0.1f)

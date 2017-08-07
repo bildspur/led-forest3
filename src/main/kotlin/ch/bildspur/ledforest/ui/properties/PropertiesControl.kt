@@ -77,6 +77,7 @@ class PropertiesControl : VBox() {
         val box = HBox(nameLabel, propertyView)
         box.spacing = 10.0
         box.prefHeight = propertyView.prefHeight
+        box.alignment = Pos.CENTER_LEFT
         children.add(box)
     }
 
