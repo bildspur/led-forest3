@@ -23,3 +23,7 @@ annotation class BooleanParameter(val name: String)
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class PVectorParameter(val name: String)
+
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ActionParameter(val name: String, val caption: String)
