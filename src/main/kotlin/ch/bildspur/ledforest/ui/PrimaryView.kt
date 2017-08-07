@@ -3,6 +3,7 @@ package ch.bildspur.ledforest.ui
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.AppConfig
+import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
@@ -44,7 +45,7 @@ class PrimaryView : View(Sketch.NAME) {
 
     lateinit var appConfig: AppConfig
 
-    lateinit var project: Project
+    val project = DataModel(Project())
 
     lateinit var sketch: Sketch
 
@@ -134,9 +135,9 @@ class PrimaryView : View(Sketch.NAME) {
 
             // create or load configuration
             if (Files.exists(Paths.get(appConfig.projectFile)) && !Files.isDirectory(Paths.get(appConfig.projectFile)))
-                project = configuration.loadProject(appConfig.projectFile)
+                project.value = configuration.loadProject(appConfig.projectFile)
             else
-                project = Project()
+                project.value = Project()
 
             // start processing
             startProcessing()
@@ -145,7 +146,11 @@ class PrimaryView : View(Sketch.NAME) {
 
     fun startProcessing() {
         sketch = Sketch()
-        sketch.project = project
+
+        project.onChanged += {
+            sketch.project.value = project.value
+        }
+        project.fire()
 
         processingThread = thread {
             // run processing app
@@ -172,8 +177,8 @@ class PrimaryView : View(Sketch.NAME) {
         elementTreeView.isEditable = true
 
         // add nodes
-        val tubes = project.tubes.groupBy { it.universe }
-        project.nodes.forEach { n ->
+        val tubes = project.value.tubes.groupBy { it.universe.value }
+        project.value.nodes.forEach { n ->
             val nodeItem = TreeItem(TagItem(n), ImageView(nodeIcon))
             nodeItem.isExpanded = true
             rootItem.children.add(nodeItem)
@@ -183,7 +188,7 @@ class PrimaryView : View(Sketch.NAME) {
                 universeItem.isExpanded = true
                 nodeItem.children.add(universeItem)
 
-                tubes.getOrElse(u.id, { emptyList<Tube>() }).forEach { t ->
+                tubes.getOrElse(u.id.value, { emptyList<Tube>() }).forEach { t ->
                     val tubeItem = TreeItem(TagItem(t), ImageView(tubeIcon))
                     tubeItem.isExpanded = true
                     universeItem.children.add(tubeItem)
@@ -198,7 +203,7 @@ class PrimaryView : View(Sketch.NAME) {
     fun newProject(e: ActionEvent) {
         UITask.run({
             appConfig.projectFile = ""
-            project = Project()
+            project.value = Project()
             resetRenderer()
         }, { updateUI() }, "new project")
     }
@@ -215,7 +220,7 @@ class PrimaryView : View(Sketch.NAME) {
 
         if (result != null) {
             UITask.run({
-                project = configuration.loadProject(result.path)
+                project.value = configuration.loadProject(result.path)
                 appConfig.projectFile = result.path
                 configuration.saveAppConfig(appConfig)
 
@@ -226,7 +231,6 @@ class PrimaryView : View(Sketch.NAME) {
 
     fun resetRenderer() {
         if (sketch.isInitialised) {
-            sketch.project = project
             sketch.isResetRendererProposed = true
         }
     }
@@ -245,7 +249,7 @@ class PrimaryView : View(Sketch.NAME) {
 
         if (result != null) {
             UITask.run({
-                configuration.saveProject(result.path, project)
+                configuration.saveProject(result.path, project.value)
                 appConfig.projectFile = result.path
                 configuration.saveAppConfig(appConfig)
             }, { updateUI() }, "save project")
@@ -263,9 +267,9 @@ class PrimaryView : View(Sketch.NAME) {
 
         result.ifPresent({ elementName ->
             when (elementName) {
-                "Tube" -> project.tubes.add(Tube())
-                "Universe" -> project.nodes.first().universes.add(Universe())
-                "Node" -> project.nodes.add(DmxNode())
+                "Tube" -> project.value.tubes.add(Tube())
+                "Universe" -> project.value.nodes.first().universes.add(Universe())
+                "Node" -> project.value.nodes.add(DmxNode())
             }
 
             rebuildRenderer()
@@ -276,12 +280,12 @@ class PrimaryView : View(Sketch.NAME) {
     fun removeElement(e: ActionEvent) {
         if (selectedItem != null) {
             when (selectedItem) {
-                is DmxNode -> project.nodes.remove(selectedItem as DmxNode)
-                is Universe -> project.nodes.forEach {
+                is DmxNode -> project.value.nodes.remove(selectedItem as DmxNode)
+                is Universe -> project.value.nodes.forEach {
                     if (it.universes.contains(selectedItem as Universe))
                         it.universes.remove(selectedItem as Universe)
                 }
-                is Tube -> project.tubes.remove(selectedItem as Tube)
+                is Tube -> project.value.tubes.remove(selectedItem as Tube)
             }
 
             rebuildRenderer()
@@ -291,7 +295,7 @@ class PrimaryView : View(Sketch.NAME) {
 
     fun restartSketch(e: ActionEvent) {
 
-        project.tubes.forEach {
+        project.value.tubes.forEach {
             it.inverted.value = !it.inverted.value
         }
 
@@ -311,7 +315,7 @@ class PrimaryView : View(Sketch.NAME) {
         val transform = PVector(tubeMap.canvas.width.toFloat() / 2f, tubeMap.canvas.height.toFloat() / 2f)
 
         // add all tubes
-        project.tubes.forEach {
+        project.value.tubes.forEach {
             tubeMap.activeLayer.shapes.add(TubeShape(it, transform))
         }
 

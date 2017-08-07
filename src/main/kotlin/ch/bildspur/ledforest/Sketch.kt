@@ -75,7 +75,7 @@ class Sketch() : PApplet() {
 
     val renderer = mutableListOf<IRenderer>()
 
-    var project = Project()
+    val project = DataModel(Project())
 
     lateinit var fx: PostFX
 
@@ -99,7 +99,10 @@ class Sketch() : PApplet() {
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 
-        surface.setTitle("$NAME - ${project.name}")
+        project.onChanged += {
+            surface.setTitle("$NAME - ${project.value.name.value}")
+        }
+        project.fire()
 
         fx = PostFX(this)
 
@@ -155,7 +158,7 @@ class Sketch() : PApplet() {
     }
 
     fun updateLEDColors() {
-        project.tubes.forEach { t ->
+        project.value.tubes.forEach { t ->
             t.leds.forEach { l ->
                 l.color.update()
             }
@@ -166,8 +169,8 @@ class Sketch() : PApplet() {
         renderer.clear()
 
         // add renderer
-        renderer.add(SceneRenderer(this.g, project.tubes))
-        renderer.add(ArtNetRenderer(artnet, project.nodes, project.tubes))
+        renderer.add(SceneRenderer(this.g, project.value.tubes))
+        renderer.add(ArtNetRenderer(artnet, project.value.nodes, project.value.tubes))
 
         isResetRendererProposed = false
 
