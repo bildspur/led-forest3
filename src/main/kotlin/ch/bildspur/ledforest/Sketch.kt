@@ -100,6 +100,7 @@ class Sketch() : PApplet() {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 
         surface.setTitle("$NAME - ${project.name}")
+        surface.setIcon(loadImage(sketchPath("LEDForestIcon.png")))
 
         fx = PostFX(this)
 
@@ -188,7 +189,7 @@ class Sketch() : PApplet() {
             osc.setup()
 
             canvas = createGraphics(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
-            canvas.smooth(8)
+            canvas.pixelDensity = 2
 
             timer.setup()
 
