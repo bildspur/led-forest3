@@ -10,5 +10,6 @@ class ActionProperty(field: Field, obj: Any, val annotation: ActionParameter) : 
         button.text = annotation.caption
         val block = field.get(obj) as (() -> Unit)
         button.setOnAction { block() }
+        children.add(button)
     }
 }

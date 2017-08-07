@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.model.light
 
+import ch.bildspur.ledforest.ui.properties.ActionParameter
 import ch.bildspur.ledforest.ui.properties.BooleanParameter
 import ch.bildspur.ledforest.ui.properties.IntParameter
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
@@ -22,6 +23,13 @@ class Tube(@IntParameter("Universe") @Expose var universe: Int,
             field = value
             initLEDs()
         }
+
+    @ActionParameter("All LEDs:", "Mark")
+    val markLEDs = {
+        leds.forEach {
+            it.color.fadeH(255f, 0.1f)
+        }
+    }
 
     val startAddress: Int
         get() = if (leds.isNotEmpty()) leds[0].address else 0

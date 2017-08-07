@@ -132,7 +132,7 @@ class Sketch() : PApplet() {
 
         // update timer and tubes
         timer.update()
-        project.tubes.forEach { it.leds.forEach { it.color.update() } }
+        updateLEDColors()
 
         canvas.draw {
             it.background(0)
@@ -152,6 +152,14 @@ class Sketch() : PApplet() {
                     .rgbSplit(100f)
                     .compose()
             drawFPS(g)
+        }
+    }
+
+    fun updateLEDColors() {
+        project.tubes.forEach { t ->
+            t.leds.forEach { l ->
+                l.color.update()
+            }
         }
     }
 
