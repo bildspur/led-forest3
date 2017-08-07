@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.model.light
 
+import ch.bildspur.ledforest.configuration.PostProcessable
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.ui.properties.ActionParameter
 import ch.bildspur.ledforest.ui.properties.BooleanParameter
@@ -13,7 +14,8 @@ import processing.core.PVector
 class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = DataModel(0),
            @Expose val addressStart: DataModel<Int> = DataModel(0),
            @PVectorParameter("Position") @Expose val position: DataModel<PVector> = DataModel(PVector()),
-           @PVectorParameter("Rotation", true) @Expose val rotation: DataModel<PVector> = DataModel(PVector())) {
+           @PVectorParameter("Rotation", true) @Expose val rotation: DataModel<PVector> = DataModel(PVector()))
+    : PostProcessable {
 
     @BooleanParameter("Inverted") @Expose var inverted = DataModel(false)
 
@@ -37,6 +39,10 @@ class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = Data
     var leds: List<LED> = emptyList()
 
     init {
+        hookListener()
+    }
+
+    fun hookListener() {
         ledCount.onChanged += {
             initLEDs()
         }
@@ -49,5 +55,9 @@ class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = Data
 
     override fun toString(): String {
         return "${universe.value}.$startAddress-$endAddress (${ledCount.value})"
+    }
+
+    override fun gsonPostProcess() {
+        hookListener()
     }
 }

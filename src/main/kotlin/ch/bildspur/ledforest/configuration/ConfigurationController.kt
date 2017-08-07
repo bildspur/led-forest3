@@ -3,6 +3,7 @@ package ch.bildspur.ledforest.configuration
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.model.light.Tube
 import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.get
 import com.google.gson.*
@@ -28,6 +29,8 @@ class ConfigurationController {
             .registerTypeAdapter(DataModel::class.java, DataModelInstanceCreator())
             .registerTypeAdapter(PVector::class.java, PVectorSerializer())
             .registerTypeAdapter(PVector::class.java, PVectorDeserializer())
+            .registerTypeAdapter(Tube::class.java, TubeInstanceCreator())
+            .registerTypeAdapterFactory(PostProcessingEnabler())
             .create()
 
     fun loadAppConfig(): AppConfig {
@@ -75,11 +78,17 @@ class ConfigurationController {
         }
     }
 
-    internal inner class DataModelInstanceCreator : InstanceCreator<DataModel<*>> {
+    private inner class DataModelInstanceCreator : InstanceCreator<DataModel<*>> {
         override fun createInstance(type: Type): DataModel<*> {
             val typeParameters = (type as ParameterizedType).actualTypeArguments
             val defaultValue = typeParameters[0]
             return DataModel(defaultValue as Class<*>)
+        }
+    }
+
+    private inner class TubeInstanceCreator : InstanceCreator<Tube> {
+        override fun createInstance(type: Type): Tube {
+            return Tube()
         }
     }
 }
