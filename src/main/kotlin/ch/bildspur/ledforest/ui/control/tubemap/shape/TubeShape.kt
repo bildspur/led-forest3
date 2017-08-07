@@ -52,6 +52,10 @@ class TubeShape(val tube: Tube, val transform: PVector = PVector()) : OvalShape(
         gc.fillText("$tube", exact.x + 10.0, exact.y + 15.0)
     }
 
+    override fun contains(point: Point2D): Boolean {
+        return location.distance(point) <= size.width
+    }
+
     override fun toString(): String {
         return "Tube (${location.x.format(1)} | ${location.y.format(1)}, w: ${size.width.format(1)}, h: ${size.height.format(1)})"
     }
