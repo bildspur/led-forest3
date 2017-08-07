@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.ui.properties
 
+import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.ui.control.RelationNumberField
 import javafx.scene.control.TextFormatter
 import javafx.util.converter.IntegerStringConverter
@@ -13,11 +14,14 @@ class IntProperty(field: Field, obj: Any, val annotation: IntParameter) : BasePr
         children.add(numberField)
         numberField.setValue(10.0)
 
-        // set value
-        numberField.setValue((field.get(obj) as Int).toDouble())
+        val model = field.get(obj) as DataModel<Int>
+        model.onChanged += {
+            numberField.setValue(model.value.toDouble())
+        }
+        model.fire()
 
         numberField.setOnAction {
-            field.set(obj, numberField.getValue().toInt())
+            model.value = numberField.getValue().toInt()
             propertyChanged(this)
         }
     }

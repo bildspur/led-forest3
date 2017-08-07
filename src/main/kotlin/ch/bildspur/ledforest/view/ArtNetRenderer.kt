@@ -20,20 +20,20 @@ class ArtNetRenderer(val artnet: ArtNetClient, val nodes: List<DmxNode>, val tub
     }
 
     override fun render() {
-        tubes.groupBy { it.universe }.forEach {
+        tubes.groupBy { it.universe.value }.forEach {
             val universe = indexToUniverses[it.key]!!
             val node = universesToNodes[universe]!!
 
             universe.stageDmx(it.value, luminosity, response, trace)
-            artnet.send(node, universe.id, universe.dmxData)
+            artnet.send(node, universe.id.value, universe.dmxData)
         }
     }
 
     fun buildUniverseIndex() {
         universesToNodes = nodes
                 .flatMap { n -> n.universes.map { u -> Pair(u, n) } }
-                .associate { it.first to artnet.createNode(it.second.address)!! }
+                .associate { it.first to artnet.createNode(it.second.address.value)!! }
 
-        indexToUniverses = universesToNodes.keys.associate { it.id to it }
+        indexToUniverses = universesToNodes.keys.associate { it.id.value to it }
     }
 }

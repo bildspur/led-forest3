@@ -29,17 +29,17 @@ class TubeShape(val tube: Tube, val transform: PVector = PVector()) : OvalShape(
     val font = Font("PT Mono", 8.0)
 
     init {
-        location = tube.position.project()
+        location = tube.position.value.project()
         size = Dimension2D(10.0, 10.0)
         stroke = Color.DARKGRAY
     }
 
     fun updateLocation() {
-        tube.position = location.project()
+        tube.position.value = location.project()
     }
 
     override fun render(gc: GraphicsContext) {
-        val color = universeColors [tube.universe % universeColors.size]
+        val color = universeColors [tube.universe.value % universeColors.size]
         gc.fill = Color.rgb(ColorMode.red(color).toInt(), ColorMode.green(color).toInt(), ColorMode.blue(color).toInt())
 
         val exact = Point2D(location.x - (size.width / 2.0), location.y - (size.height / 2.0))
@@ -61,6 +61,6 @@ class TubeShape(val tube: Tube, val transform: PVector = PVector()) : OvalShape(
     }
 
     private fun Point2D.project(): PVector {
-        return PVector(this.x.toFloat() - transform.x, this.y.toFloat() - transform.y, tube.position.z)
+        return PVector(this.x.toFloat() - transform.x, this.y.toFloat() - transform.y, tube.position.value.z)
     }
 }

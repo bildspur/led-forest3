@@ -14,6 +14,10 @@ annotation class IntParameter(val name: String)
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
+annotation class FloatParameter(val name: String)
+
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
 annotation class DoubleParameter(val name: String)
 
 @Target(AnnotationTarget.FIELD)
@@ -22,7 +26,7 @@ annotation class BooleanParameter(val name: String)
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class PVectorParameter(val name: String)
+annotation class PVectorParameter(val name: String, val convertRadians: Boolean = false)
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)

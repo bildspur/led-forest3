@@ -15,8 +15,6 @@ class BooleanProperty(field: Field, obj: Any, val annoation: BooleanParameter) :
         model.onChanged += {
             checkBox.isSelected = model.value
         }
-
-        // set value
         model.fire()
 
         checkBox.setOnAction {

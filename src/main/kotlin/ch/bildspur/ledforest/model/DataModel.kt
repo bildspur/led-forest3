@@ -1,12 +1,13 @@
 package ch.bildspur.ledforest.model
 
 import ch.bildspur.ledforest.event.Event
+import com.google.gson.annotations.Expose
 
 
 /**
  * Created by cansik on 09.06.17.
  */
-class DataModel<T>(@Volatile private var dataValue: T) {
+class DataModel<T>(@Expose @Volatile private var dataValue: T) {
     val onChanged = Event<T>()
 
     var value: T

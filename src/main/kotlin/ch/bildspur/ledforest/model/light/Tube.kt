@@ -10,20 +10,16 @@ import com.google.gson.annotations.Expose
 import processing.core.PVector
 
 
-class Tube(@IntParameter("Universe") @Expose var universe: Int,
-           @Expose var addressStart: Int = 0,
-           @PVectorParameter("Position") @Expose var position: PVector = PVector(),
-           @PVectorParameter("Rotation") @Expose var rotation: PVector = PVector()) {
+class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = DataModel(0),
+           @Expose val addressStart: DataModel<Int> = DataModel(0),
+           @PVectorParameter("Position") @Expose val position: DataModel<PVector> = DataModel(PVector()),
+           @PVectorParameter("Rotation", true) @Expose val rotation: DataModel<PVector> = DataModel(PVector())) {
 
     @BooleanParameter("Inverted") @Expose var inverted = DataModel(false)
 
     @Expose
     @IntParameter("LED Count")
-    var ledCount: Int = 0
-        set(value) {
-            field = value
-            initLEDs()
-        }
+    val ledCount = DataModel(0)
 
     @ActionParameter("All LEDs", "Mark")
     val markLEDs = {
@@ -41,14 +37,17 @@ class Tube(@IntParameter("Universe") @Expose var universe: Int,
     var leds: List<LED> = emptyList()
 
     init {
-        initLEDs()
+        ledCount.onChanged += {
+            initLEDs()
+        }
+        ledCount.fire()
     }
 
     fun initLEDs() {
-        leds = (0..ledCount).map { LED(addressStart + it * LED.LED_ADDRESS_SIZE, ColorMode.color(0, 100, 100)) }
+        leds = (0..ledCount.value).map { LED(addressStart.value + it * LED.LED_ADDRESS_SIZE, ColorMode.color(0, 100, 100)) }
     }
 
     override fun toString(): String {
-        return "$universe.$startAddress-$endAddress ($ledCount)"
+        return "${universe.value}.$startAddress-$endAddress (${ledCount.value})"
     }
 }

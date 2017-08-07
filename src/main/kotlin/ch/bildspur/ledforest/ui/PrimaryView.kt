@@ -26,7 +26,6 @@ import processing.core.PVector
 import tornadofx.*
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.concurrent.thread
 
 
@@ -127,16 +126,6 @@ class PrimaryView : View(Sketch.NAME) {
 
             // for updating the property view
             propertiesControl.propertyChanged += {
-                // special fix for led tube
-                if (selectedItem != null && selectedItem is Tube) {
-                    val tube = selectedItem as Tube
-
-                    // check if led has to be reinitialised
-                    if (tube.ledCount != tube.leds.size) {
-                        tube.initLEDs()
-                    }
-                }
-
                 updateUI()
             }
 
@@ -274,9 +263,9 @@ class PrimaryView : View(Sketch.NAME) {
 
         result.ifPresent({ elementName ->
             when (elementName) {
-                "Tube" -> project.tubes.add(Tube(0, 0))
-                "Universe" -> project.nodes.first().universes.add(Universe(0))
-                "Node" -> project.nodes.add(DmxNode("127.0.0.1", CopyOnWriteArrayList()))
+                "Tube" -> project.tubes.add(Tube())
+                "Universe" -> project.nodes.first().universes.add(Universe())
+                "Node" -> project.nodes.add(DmxNode())
             }
 
             rebuildRenderer()

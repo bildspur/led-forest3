@@ -27,8 +27,8 @@ class ConfigurationController() {
     val gson: Gson = GsonBuilder()
             .setPrettyPrinting()
             .excludeFieldsWithoutExposeAnnotation()
-            .registerTypeAdapter(Tube::class.java, TubeDeserializer())
-            .registerTypeAdapter(Universe::class.java, UniverseDeserializer())
+            //.registerTypeAdapter(Tube::class.java, TubeDeserializer())
+            //.registerTypeAdapter(Universe::class.java, UniverseDeserializer())
             .registerTypeAdapter(PVector::class.java, PVectorSerializer())
             .registerTypeAdapter(PVector::class.java, PVectorDeserializer())
             .create()
@@ -85,8 +85,8 @@ class ConfigurationController() {
             val addressStart = json["addressStart"].asInt
             val position = vectorDeserializer.deserialize(json["position"], typeOfT, context)
             val rotation = vectorDeserializer.deserialize(json["rotation"], typeOfT, context)
-            val tube = Tube(universe, addressStart, position, rotation)
-            tube.ledCount = ledCount
+            val tube = Tube()
+            tube.ledCount.value = ledCount
 
             return tube
         }

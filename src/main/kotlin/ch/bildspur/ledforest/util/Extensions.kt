@@ -65,6 +65,15 @@ fun PGraphics.shape(block: (g: PGraphics) -> Unit) {
     this.endShape(PApplet.CLOSE)
 }
 
+
+fun Float.toRadians(): Float {
+    return PApplet.radians(this)
+}
+
+fun Float.toDegrees(): Float {
+    return PApplet.degrees(this)
+}
+
 fun PGraphics.createRod(r: Float, h: Float, detail: Int): PShape {
     textureMode(PApplet.NORMAL)
     val sh = createShape()

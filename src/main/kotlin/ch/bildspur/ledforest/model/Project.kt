@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList
  * Created by cansik on 11.07.17.
  */
 class Project {
-    @Expose var name = "${Sketch.NAME} Project"
+    @Expose var name = DataModel("${Sketch.NAME} Project")
 
     @Expose var nodes = CopyOnWriteArrayList<DmxNode>()
 
