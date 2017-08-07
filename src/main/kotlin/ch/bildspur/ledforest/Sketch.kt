@@ -101,6 +101,7 @@ class Sketch() : PApplet() {
 
         project.onChanged += {
             surface.setTitle("$NAME - ${project.value.name.value}")
+            println("Project has been set!")
         }
         project.fire()
 

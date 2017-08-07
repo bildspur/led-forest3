@@ -10,6 +10,7 @@ class Event<T> {
     }
 
     operator fun invoke(value: T) {
-        for (handler in handlers) handler(value)
+        for (handler in handlers)
+            handler(value)
     }
 }

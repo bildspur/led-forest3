@@ -13,7 +13,7 @@ class DataModel<T>(@Expose @Volatile private var dataValue: T) {
     var value: T
         get() = this.dataValue
         set(value) {
-            var oldValue = dataValue
+            val oldValue = dataValue
             dataValue = value
 
             // fire event if changed
@@ -22,6 +22,6 @@ class DataModel<T>(@Expose @Volatile private var dataValue: T) {
         }
 
     fun fire() {
-        onChanged.invoke(dataValue)
+        onChanged(dataValue)
     }
 }

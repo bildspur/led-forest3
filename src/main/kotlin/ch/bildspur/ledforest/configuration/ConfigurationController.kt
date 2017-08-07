@@ -1,13 +1,14 @@
 package ch.bildspur.ledforest.configuration
 
 import ch.bildspur.ledforest.model.AppConfig
+import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
-import ch.bildspur.ledforest.model.light.Universe
 import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.get
 import com.google.gson.*
 import processing.core.PVector
+import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.nio.file.Files
 import java.nio.file.Path
@@ -17,7 +18,7 @@ import java.nio.file.Paths
 /**
  * Created by cansik on 11.07.17.
  */
-class ConfigurationController() {
+class ConfigurationController {
     companion object {
         @JvmStatic val CONFIGURATION_FILE = "config/ledforest.json"
     }
@@ -27,8 +28,7 @@ class ConfigurationController() {
     val gson: Gson = GsonBuilder()
             .setPrettyPrinting()
             .excludeFieldsWithoutExposeAnnotation()
-            //.registerTypeAdapter(Tube::class.java, TubeDeserializer())
-            //.registerTypeAdapter(Universe::class.java, UniverseDeserializer())
+            .registerTypeAdapter(DataModel::class.java, DataModelInstanceCreator())
             .registerTypeAdapter(PVector::class.java, PVectorSerializer())
             .registerTypeAdapter(PVector::class.java, PVectorDeserializer())
             .create()
@@ -92,10 +92,11 @@ class ConfigurationController() {
         }
     }
 
-    private inner class UniverseDeserializer : JsonDeserializer<Universe> {
-        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Universe {
-            val id = json["id"].asInt
-            return Universe(id)
+    internal inner class DataModelInstanceCreator : InstanceCreator<DataModel<*>> {
+        override fun createInstance(type: Type): DataModel<*> {
+            val typeParameters = (type as ParameterizedType).actualTypeArguments
+            val defaultValue = typeParameters[0]
+            return DataModel(defaultValue as Class<*>)
         }
     }
 }
