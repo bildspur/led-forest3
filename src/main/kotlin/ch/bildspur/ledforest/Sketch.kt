@@ -149,7 +149,6 @@ class Sketch() : PApplet() {
             // output image
             fx.render(canvas)
                     .bloom(0.1f, 20, 40f)
-                    .rgbSplit(100f)
                     .compose()
             drawFPS(g)
         }
