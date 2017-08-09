@@ -31,3 +31,8 @@ annotation class PVectorParameter(val name: String, val convertRadians: Boolean 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ActionParameter(val name: String, val caption: String)
+
+
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ArrayParameter(val name: String, val values: Array<String>)

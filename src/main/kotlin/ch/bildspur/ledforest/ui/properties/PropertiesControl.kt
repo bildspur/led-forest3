@@ -64,6 +64,11 @@ class PropertiesControl : VBox() {
                 val annotation = it.getAnnotation(FloatParameter::class.java)
                 addProperty(annotation.name, FloatProperty(it, obj, annotation))
             }
+
+            if (it.isAnnotationPresent(ArrayParameter::class.java)) {
+                val annotation = it.getAnnotation(ArrayParameter::class.java)
+                addProperty(annotation.name, ArrayProperty(it, obj, annotation))
+            }
         }
     }
 
@@ -97,7 +102,9 @@ class PropertiesControl : VBox() {
                     it.isAnnotationPresent(IntParameter::class.java) ||
                     it.isAnnotationPresent(PVectorParameter::class.java) ||
                     it.isAnnotationPresent(ActionParameter::class.java) ||
-                    it.isAnnotationPresent(FloatParameter::class.java)
+                    it.isAnnotationPresent(FloatParameter::class.java) ||
+                    it.isAnnotationPresent(ArrayParameter::class.java)
+
         }
         fields.forEach { it.isAccessible = true }
         return fields
