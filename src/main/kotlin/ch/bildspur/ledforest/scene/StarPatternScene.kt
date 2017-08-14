@@ -10,7 +10,7 @@ import ch.bildspur.ledforest.util.forEachLED
 class StarPatternScene(tubes: List<Tube>) : BaseScene(tubes) {
     internal var randomOnFactor = 0.95f
     internal var randomOffFactor = 0.8f
-    internal var fadeSpeed = 30f
+    internal var fadeSpeed = 0.01f
 
     override val name: String
         get() = "StarPattern Scene"
@@ -20,13 +20,11 @@ class StarPatternScene(tubes: List<Tube>) : BaseScene(tubes) {
 
     override fun setup() {
         tubes.forEachLED {
-            //it.color.fadeB(0f, 0.01f)
+            it.color.fadeB(0f, 0.05f)
         }
     }
 
     override fun update() {
-        println("${Sketch.instance.millis()}: update")
-
         tubes.forEachLED {
             val ledBrightness = ColorMode.brightness(it.color.color)
 
