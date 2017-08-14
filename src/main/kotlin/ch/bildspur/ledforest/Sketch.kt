@@ -4,10 +4,11 @@ import ch.bildspur.ledforest.artnet.ArtNetClient
 import ch.bildspur.ledforest.controller.OscController
 import ch.bildspur.ledforest.controller.PeasyController
 import ch.bildspur.ledforest.controller.RemoteController
-import ch.bildspur.ledforest.controller.TimerController
+import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.scene.SceneManager
 import ch.bildspur.ledforest.util.draw
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.view.ArtNetRenderer
@@ -64,7 +65,7 @@ class Sketch() : PApplet() {
 
     val osc = OscController(this)
 
-    val timer = TimerController(this)
+    val timer = Timer(this)
 
     val remote = RemoteController(this)
 
@@ -136,16 +137,15 @@ class Sketch() : PApplet() {
         if (isResetRendererProposed)
             resetRenderer()
 
-        // update timer and tubes
-        timer.update()
+        // update tubes
         updateLEDColors()
 
         canvas.draw {
             it.background(0)
 
-            // render
+            // render (update timer)
             if (isRendering.value)
-                renderer.forEach { it.render() }
+                timer.update()
 
             peasy.applyTo(canvas)
         }
@@ -172,16 +172,26 @@ class Sketch() : PApplet() {
     }
 
     fun resetRenderer() {
+        renderer.forEach {
+            timer.taskList.remove(it.timerTask)
+            it.dispose()
+        }
+
         renderer.clear()
 
         // add renderer
         renderer.add(SceneRenderer(this.g, project.value.tubes))
         renderer.add(ArtNetRenderer(artnet, project.value.nodes, project.value.tubes))
+        renderer.add(SceneManager(project.value.tubes))
 
         isResetRendererProposed = false
 
         // rebuild
-        renderer.forEach { it.setup() }
+        // setup renderer
+        renderer.forEach {
+            it.setup()
+            timer.addTask(it.timerTask)
+        }
     }
 
     fun skipFirstFrames(): Boolean {
@@ -209,7 +219,10 @@ class Sketch() : PApplet() {
             timer.setup()
 
             // setup renderer
-            renderer.forEach { it.setup() }
+            renderer.forEach {
+                it.setup()
+                timer.addTask(it.timerTask)
+            }
 
             prepareExitHandler()
 
@@ -234,6 +247,7 @@ class Sketch() : PApplet() {
     fun prepareExitHandler() {
         Runtime.getRuntime().addShutdownHook(Thread {
             println("shutting down...")
+            renderer.forEach { it.dispose() }
             osc.osc.stop()
             artnet.close()
         })

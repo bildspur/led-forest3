@@ -1,12 +1,11 @@
-package ch.bildspur.ledforest.controller
+package ch.bildspur.ledforest.controller.timer
 
-import ch.bildspur.ledforest.controller.timer.TimerTask
 import processing.core.PApplet
 
 /**
  * Created by cansik on 12.07.17.
  */
-class TimerController(internal var sketch: PApplet) {
+class Timer(internal var sketch: PApplet) {
 
     var taskList = mutableListOf<TimerTask>()
 

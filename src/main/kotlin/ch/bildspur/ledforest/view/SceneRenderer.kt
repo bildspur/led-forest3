@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.view
 
+import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.util.createRod
 import ch.bildspur.ledforest.util.stackMatrix
@@ -8,6 +9,8 @@ import processing.core.PGraphics
 import processing.core.PShape
 
 class SceneRenderer(val g: PGraphics, val tubes: List<Tube>) : IRenderer {
+    override val timerTask: TimerTask
+        get() = TimerTask(0, { render() })
 
     lateinit var rodShape: PShape
 
@@ -57,5 +60,8 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>) : IRenderer {
             g.shape(rodShape)
             g.popMatrix()
         }
+    }
+
+    override fun dispose() {
     }
 }
