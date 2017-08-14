@@ -6,6 +6,7 @@ import ch.bildspur.ledforest.controller.PeasyController
 import ch.bildspur.ledforest.controller.RemoteController
 import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
+import ch.bildspur.ledforest.interaction.LeapMotionDataProvider
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.scene.SceneManager
@@ -69,6 +70,8 @@ class Sketch() : PApplet() {
 
     val remote = RemoteController(this)
 
+    val leapMotion = LeapMotionDataProvider()
+
     val artnet = ArtNetClient()
 
     lateinit var canvas: PGraphics
@@ -112,6 +115,8 @@ class Sketch() : PApplet() {
 
         peasy.setup()
         artnet.open()
+
+        leapMotion.start()
 
         resetRenderer()
 
@@ -248,6 +253,7 @@ class Sketch() : PApplet() {
         Runtime.getRuntime().addShutdownHook(Thread {
             println("shutting down...")
             renderer.forEach { it.dispose() }
+            leapMotion.stop()
             osc.osc.stop()
             artnet.close()
         })
