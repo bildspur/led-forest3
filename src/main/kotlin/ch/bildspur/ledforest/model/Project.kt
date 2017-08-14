@@ -15,4 +15,6 @@ class Project {
     @Expose var nodes = CopyOnWriteArrayList<DmxNode>()
 
     @Expose var tubes = CopyOnWriteArrayList<Tube>()
+
+    @Expose var highResMode = DataModel(true)
 }

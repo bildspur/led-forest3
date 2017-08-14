@@ -239,7 +239,7 @@ class PrimaryView : View(Sketch.NAME) {
         sketch.renderer.forEach { it.setup() }
     }
 
-    fun saveProject(e: ActionEvent) {
+    fun saveProjectAs(e: ActionEvent) {
         val fileChooser = FileChooser()
         fileChooser.initialFileName = ""
         fileChooser.title = "Save project..."
@@ -251,6 +251,15 @@ class PrimaryView : View(Sketch.NAME) {
             UITask.run({
                 configuration.saveProject(result.path, project.value)
                 appConfig.projectFile = result.path
+                configuration.saveAppConfig(appConfig)
+            }, { updateUI() }, "save project")
+        }
+    }
+
+    fun saveProject(e: ActionEvent) {
+        if (Files.exists(Paths.get(appConfig.projectFile)) && !Files.isDirectory(Paths.get(appConfig.projectFile))) {
+            UITask.run({
+                configuration.saveProject(appConfig.projectFile, project.value)
                 configuration.saveAppConfig(appConfig)
             }, { updateUI() }, "save project")
         }

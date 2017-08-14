@@ -45,5 +45,8 @@
         }
       }
     }
-  ]
+  ],
+  "highResMode": {
+    "dataValue": true
+  }
 }

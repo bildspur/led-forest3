@@ -18,6 +18,7 @@
             <Button mnemonicParsing="false" onAction="#newProject" alignment="CENTER_RIGHT" text="New"/>
             <Button mnemonicParsing="false" onAction="#loadProject" text="Load"/>
             <Button mnemonicParsing="false" onAction="#saveProject" text="Save"/>
+            <Button mnemonicParsing="false" onAction="#saveProjectAs" text="Save As"/>
             <Separator orientation="VERTICAL"/>
             <CheckBox fx:id="isRenderingCheck" text="Is Rendering" textFill="WHITE"/>
             <CheckBox fx:id="isInteractionOnCheck" text="Is Interacting" textFill="WHITE"/>

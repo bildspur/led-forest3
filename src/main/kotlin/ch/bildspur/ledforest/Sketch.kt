@@ -26,7 +26,8 @@ import processing.opengl.PJOGL
  */
 class Sketch() : PApplet() {
     companion object {
-        @JvmStatic val FRAME_RATE = 60f
+        @JvmStatic val HIGH_RES_FRAME_RATE = 60f
+        @JvmStatic val LOW_RES_FRAME_RATE = 30f
 
         @JvmStatic val WINDOW_WIDTH = 768
         @JvmStatic val WINDOW_HEIGHT = 576
@@ -88,13 +89,14 @@ class Sketch() : PApplet() {
         smooth()
 
         // retina screen
-        pixelDensity = 2
+        if (project.value.highResMode.value)
+            pixelDensity = 2
     }
 
     override fun setup() {
         Sketch.instance = this
 
-        frameRate(FRAME_RATE)
+        frameRate(if (project.value.highResMode.value) HIGH_RES_FRAME_RATE else LOW_RES_FRAME_RATE)
         colorMode(HSB, 360f, 100f, 100f)
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
@@ -151,9 +153,12 @@ class Sketch() : PApplet() {
         // add hud
         peasy.hud {
             // output image
-            fx.render(canvas)
-                    .bloom(0.0f, 20, 40f)
-                    .compose()
+            if (project.value.highResMode.value)
+                fx.render(canvas)
+                        .bloom(0.0f, 20, 40f)
+                        .compose()
+            else
+                image(canvas, 0f, 0f)
             drawFPS(g)
         }
     }
