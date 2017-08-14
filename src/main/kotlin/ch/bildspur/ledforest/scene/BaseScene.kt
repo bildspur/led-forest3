@@ -10,5 +10,6 @@ abstract class BaseScene(val tubes: List<Tube>) {
 
     abstract fun setup()
     abstract fun update()
+    abstract fun stop()
     abstract fun dispose()
 }

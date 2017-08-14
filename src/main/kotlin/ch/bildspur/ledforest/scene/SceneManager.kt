@@ -10,7 +10,7 @@ class SceneManager(val tubes: List<Tube>) : IRenderer {
     val starScene = StarPatternScene(tubes)
     val leapMotionScene = LeapMotionScene(tubes)
 
-    lateinit var activeScene: BaseScene
+    var activeScene: BaseScene = starScene
 
     override val timerTask: TimerTask
         get() = TimerTask(0, { render() })
@@ -18,11 +18,7 @@ class SceneManager(val tubes: List<Tube>) : IRenderer {
     val timer = Timer(Sketch.instance)
 
     override fun setup() {
-        starScene.setup()
-        leapMotionScene.setup()
-
         timer.setup()
-
         initScene(starScene)
     }
 
@@ -36,8 +32,11 @@ class SceneManager(val tubes: List<Tube>) : IRenderer {
     }
 
     internal fun initScene(scene: BaseScene) {
-        timer.taskList.clear()
+        activeScene.stop()
+        timer.taskList.remove(activeScene.timerTask)
+
         activeScene = scene
+        activeScene.setup()
         timer.addTask(activeScene.timerTask)
     }
 }

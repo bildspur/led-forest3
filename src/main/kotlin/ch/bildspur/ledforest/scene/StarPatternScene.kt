@@ -16,7 +16,7 @@ class StarPatternScene(tubes: List<Tube>) : BaseScene(tubes) {
         get() = "StarPattern Scene"
 
     override val timerTask: TimerTask
-        get() = TimerTask(100, { update() })
+        get() = TimerTask(500, { update() })
 
     override fun setup() {
         tubes.forEachLED {
@@ -40,6 +40,10 @@ class StarPatternScene(tubes: List<Tube>) : BaseScene(tubes) {
                 }
             }
         }
+    }
+
+    override fun stop() {
+
     }
 
     override fun dispose() {

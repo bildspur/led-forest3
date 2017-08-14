@@ -19,6 +19,10 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
 
     }
 
+    override fun stop() {
+
+    }
+
     override fun dispose() {
 
     }
