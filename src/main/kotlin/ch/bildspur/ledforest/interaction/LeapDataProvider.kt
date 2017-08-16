@@ -1,18 +1,30 @@
 package ch.bildspur.ledforest.interaction
 
+import ch.bildspur.ledforest.controller.timer.Timer
+import ch.bildspur.ledforest.controller.timer.TimerTask
 import com.leapmotion.leap.Controller
 import com.leapmotion.leap.Frame
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
 
 class LeapDataProvider {
+    private val updateTime = 100L
+
     var isRunning = false
         private set
 
     private lateinit var leapThread: Thread
     private lateinit var controller: Controller
 
+    private val timer = Timer()
+
     val hands = ConcurrentHashMap<Int, InteractionHand>()
+
+    init {
+        timer.addTask(TimerTask(updateTime, {
+            readSensor()
+        }))
+    }
 
     fun start() {
         leapThread = thread {
@@ -20,10 +32,8 @@ class LeapDataProvider {
 
             isRunning = true
             while (isRunning) {
-                readSensor()
-
-                // todo: remove sleep, but is needed for performance
-                Thread.sleep(100)
+                timer.update()
+                Thread.sleep(updateTime)
             }
         }
     }

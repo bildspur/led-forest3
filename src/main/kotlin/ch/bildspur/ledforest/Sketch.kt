@@ -28,35 +28,45 @@ import processing.opengl.PJOGL
  */
 class Sketch() : PApplet() {
     companion object {
-        @JvmStatic val HIGH_RES_FRAME_RATE = 60f
-        @JvmStatic val LOW_RES_FRAME_RATE = 30f
+        @JvmStatic
+        val HIGH_RES_FRAME_RATE = 60f
+        @JvmStatic
+        val LOW_RES_FRAME_RATE = 30f
 
-        @JvmStatic val WINDOW_WIDTH = 768
-        @JvmStatic val WINDOW_HEIGHT = 576
+        @JvmStatic
+        val WINDOW_WIDTH = 768
+        @JvmStatic
+        val WINDOW_HEIGHT = 576
 
-        @JvmStatic val CURSOR_HIDING_TIME = 5000
+        @JvmStatic
+        val CURSOR_HIDING_TIME = 5000L
 
-        @JvmStatic val NAME = "LED Forest 3"
+        @JvmStatic
+        val NAME = "LED Forest 3"
 
         @JvmStatic lateinit var instance: PApplet
 
-        @JvmStatic fun map(value: Double, start1: Double, stop1: Double, start2: Double, stop2: Double): Double {
+        @JvmStatic
+        fun map(value: Double, start1: Double, stop1: Double, start2: Double, stop2: Double): Double {
             return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1))
         }
 
-        @JvmStatic fun currentMillis(): Int {
+        @JvmStatic
+        fun currentMillis(): Int {
             return instance.millis()
         }
     }
 
 
-    @Volatile var isInitialised = false
+    @Volatile
+    var isInitialised = false
 
     var fpsOverTime = 0f
 
     var isStatusViewShown = false
 
-    @Volatile var isResetRendererProposed = false
+    @Volatile
+    var isResetRendererProposed = false
 
     var isRendering = DataModel(true)
 
@@ -66,7 +76,7 @@ class Sketch() : PApplet() {
 
     val osc = OscController(this)
 
-    val timer = Timer(this)
+    val timer = Timer()
 
     val remote = RemoteController(this)
 

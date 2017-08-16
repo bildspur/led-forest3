@@ -1,12 +1,9 @@
 package ch.bildspur.ledforest.controller.timer
 
-import processing.core.PApplet
-
 /**
  * Created by cansik on 12.07.17.
  */
-class Timer(internal var sketch: PApplet) {
-
+class Timer {
     var taskList = mutableListOf<TimerTask>()
 
     fun setup() {
@@ -15,7 +12,7 @@ class Timer(internal var sketch: PApplet) {
 
     fun update() {
         taskList.forEach {
-            val time = sketch.millis()
+            val time = millis()
             if (time - it.lastMillis > it.interval) {
                 it.lastMillis = time
                 it.block(it)
@@ -26,5 +23,9 @@ class Timer(internal var sketch: PApplet) {
 
     fun addTask(task: TimerTask) {
         taskList.add(task)
+    }
+
+    private fun millis(): Long {
+        return System.currentTimeMillis()
     }
 }
