@@ -6,7 +6,7 @@ import ch.bildspur.ledforest.controller.PeasyController
 import ch.bildspur.ledforest.controller.RemoteController
 import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
-import ch.bildspur.ledforest.interaction.LeapMotionDataProvider
+import ch.bildspur.ledforest.interaction.LeapDataProvider
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.scene.SceneManager
@@ -70,7 +70,7 @@ class Sketch() : PApplet() {
 
     val remote = RemoteController(this)
 
-    val leapMotion = LeapMotionDataProvider()
+    val leapMotion = LeapDataProvider()
 
     val artnet = ArtNetClient()
 
