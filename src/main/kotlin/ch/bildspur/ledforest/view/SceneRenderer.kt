@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.view
 
 import ch.bildspur.ledforest.controller.timer.TimerTask
+import ch.bildspur.ledforest.interaction.LeapDataProvider
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.util.createRod
 import ch.bildspur.ledforest.util.stackMatrix
@@ -8,7 +9,7 @@ import processing.core.PApplet
 import processing.core.PGraphics
 import processing.core.PShape
 
-class SceneRenderer(val g: PGraphics, val tubes: List<Tube>) : IRenderer {
+class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataProvider) : IRenderer {
     override val timerTask: TimerTask
         get() = TimerTask(0, { render() })
 

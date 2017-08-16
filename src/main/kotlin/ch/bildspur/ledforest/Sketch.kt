@@ -44,6 +44,9 @@ class Sketch() : PApplet() {
         @JvmStatic
         val NAME = "LED Forest 3"
 
+        @JvmStatic
+        val VERSION = "0.1"
+
         @JvmStatic lateinit var instance: PApplet
 
         @JvmStatic
@@ -116,7 +119,7 @@ class Sketch() : PApplet() {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 
         project.onChanged += {
-            surface.setTitle("$NAME - ${project.value.name.value}")
+            surface.setTitle("$NAME ($VERSION) - ${project.value.name.value}")
             println("Project has been set!")
         }
         project.fire()
@@ -195,7 +198,7 @@ class Sketch() : PApplet() {
         renderer.clear()
 
         // add renderer
-        renderer.add(SceneRenderer(this.g, project.value.tubes))
+        renderer.add(SceneRenderer(this.g, project.value.tubes, leapMotion))
         renderer.add(ArtNetRenderer(artnet, project.value.nodes, project.value.tubes))
         renderer.add(SceneManager(project.value.tubes))
 
