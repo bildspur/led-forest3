@@ -1,25 +1,34 @@
 package ch.bildspur.ledforest.interaction
 
+import ch.bildspur.ledforest.model.EasingVector
 import com.leapmotion.leap.Hand
 import processing.core.PVector
 
-class InteractionHand(val hand: Hand) {
-    var easing = 0.1f
+class InteractionHand(var hand: Hand) {
+    val interactionBox = PVector(100f, 100f, 100f)
 
-    var position: PVector = projectedPosition()
-    var target: PVector = projectedPosition()
+    var position = EasingVector(0.1f)
+    var rotation = EasingVector(0.05f)
 
     fun update() {
         // easing
-        if (hand.isValid) {
-            target = projectedPosition()
-            position.add(PVector.sub(target, position).mult(easing))
-        }
+        position.target = projectedPosition()
+        position.update()
+
+        rotation.target = projectedRotation()
+        rotation.update()
     }
 
-    internal fun projectedPosition(): PVector {
-        val pos = hand.palmPosition()
-        return PVector(pos.x, pos.y, pos.z)
+    private fun projectedPosition(): PVector {
+        val np = hand.palmPosition().normalized()
+        return PVector(np.x * interactionBox.x,
+                np.z * interactionBox.y,
+                (np.y * interactionBox.z) - interactionBox.z)
+    }
+
+    private fun projectedRotation(): PVector {
+        val normal = hand.palmNormal()
+        return PVector(normal.pitch(), -normal.roll(), -normal.yaw())
     }
 
     override fun equals(other: Any?): Boolean {
@@ -36,6 +45,4 @@ class InteractionHand(val hand: Hand) {
     override fun hashCode(): Int {
         return hand.hashCode()
     }
-
-
 }

@@ -1,10 +1,10 @@
 package ch.bildspur.ledforest.view
 
 import ch.bildspur.ledforest.controller.timer.TimerTask
+import ch.bildspur.ledforest.interaction.InteractionHand
 import ch.bildspur.ledforest.interaction.LeapDataProvider
 import ch.bildspur.ledforest.model.light.Tube
-import ch.bildspur.ledforest.util.createRod
-import ch.bildspur.ledforest.util.stackMatrix
+import ch.bildspur.ledforest.util.*
 import processing.core.PApplet
 import processing.core.PGraphics
 import processing.core.PShape
@@ -16,9 +16,9 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
     lateinit var rodShape: PShape
 
     // view variables
-    internal var rodWidth = 1f
-    internal var ledLength = 2f
-    internal var rodDetail = 5
+    private var rodWidth = 1f
+    private var ledLength = 2f
+    private var rodDetail = 5
 
 
     override fun setup() {
@@ -34,6 +34,13 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
                 renderTube(t)
             }
         }
+
+        // render hands
+        if (leap.isRunning) {
+            leap.hands.forEach {
+                renderHand(it)
+            }
+        }
     }
 
     private fun renderTube(tube: Tube) {
@@ -42,7 +49,7 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
             g.pushMatrix()
 
             // translate position
-            g.translate(tube.position.value.x, tube.position.value.y, tube.position.value.z)
+            g.translate(tube.position.value)
 
             // global rotation
             g.rotateX(tube.rotation.value.x)
@@ -61,6 +68,17 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
             g.shape(rodShape)
             g.popMatrix()
         }
+    }
+
+    private fun renderHand(hand: InteractionHand) {
+        g.pushMatrix()
+        g.translate(hand.position)
+        g.rotate(hand.rotation)
+        g.noFill()
+        g.stroke(ColorMode.color(255))
+        g.sphereDetail(5)
+        g.sphere(10f)
+        g.popMatrix()
     }
 
     override fun dispose() {

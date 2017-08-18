@@ -4,11 +4,8 @@ import javafx.scene.image.Image
 import org.opencv.core.*
 import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.imgproc.Imgproc
-import processing.core.PApplet
+import processing.core.*
 import processing.core.PConstants.QUAD_STRIP
-import processing.core.PGraphics
-import processing.core.PImage
-import processing.core.PShape
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferInt
 import java.io.ByteArrayInputStream
@@ -63,6 +60,16 @@ fun PGraphics.shape(block: (g: PGraphics) -> Unit) {
     this.beginShape()
     block(this)
     this.endShape(PApplet.CLOSE)
+}
+
+fun PGraphics.translate(vector: PVector) {
+    this.translate(vector.x, vector.y, vector.z)
+}
+
+fun PGraphics.rotate(vector: PVector) {
+    this.rotateX(vector.x)
+    this.rotateY(vector.y)
+    this.rotateZ(vector.z)
 }
 
 

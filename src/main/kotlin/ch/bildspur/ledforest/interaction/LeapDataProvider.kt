@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
 
 class LeapDataProvider {
-    private val updateTime = 100L
+    private val updateTime = 15L
 
     var isRunning = false
         private set
@@ -18,7 +18,10 @@ class LeapDataProvider {
 
     private val timer = Timer()
 
-    val hands = ConcurrentHashMap<Int, InteractionHand>()
+    private val handCache = ConcurrentHashMap<Int, InteractionHand>()
+
+    val hands: MutableCollection<InteractionHand>
+        get() = handCache.values
 
     init {
         timer.addTask(TimerTask(updateTime, {
@@ -57,11 +60,12 @@ class LeapDataProvider {
         // add new hands and update known
         frame.hands().forEach {
             // add if not already in cache
-            if (!hands.containsKey(it.id()))
-                hands.put(it.id(), InteractionHand(it))
+            if (!handCache.containsKey(it.id()))
+                handCache.put(it.id(), InteractionHand(it))
 
             // get hand
-            val hand = hands[it.id()]!!
+            val hand = handCache[it.id()]!!
+            hand.hand = it
             hand.update()
         }
 
@@ -69,7 +73,7 @@ class LeapDataProvider {
         val handKeys = frame.hands().map { it.id() }.toHashSet()
 
         // remove old hands
-        hands.values.filter { !handKeys.contains(it.hand.id()) }
-                .forEach { hands.remove(it.hand.id()) }
+        handCache.values.filter { !handKeys.contains(it.hand.id()) }
+                .forEach { handCache.remove(it.hand.id()) }
     }
 }

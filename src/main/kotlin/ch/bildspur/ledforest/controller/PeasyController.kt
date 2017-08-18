@@ -17,7 +17,7 @@ class PeasyController(internal var sketch: PApplet) {
         cam.setMinimumDistance(0.0)
         cam.setMaximumDistance(500.0)
 
-        cam.rotateZ(PApplet.radians(-90f).toDouble())
+        //cam.rotateZ(PApplet.radians(-90f).toDouble())
         cam.rotateX(PApplet.radians(-75f).toDouble())
     }
 
