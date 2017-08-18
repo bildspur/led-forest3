@@ -1,14 +1,16 @@
-package ch.bildspur.ledforest.interaction
+package ch.bildspur.ledforest.leap
 
-import ch.bildspur.ledforest.model.EasingVector
+import ch.bildspur.ledforest.model.easing.EasingFloat
+import ch.bildspur.ledforest.model.easing.EasingVector
 import com.leapmotion.leap.Hand
 import processing.core.PVector
 
 class InteractionHand(var hand: Hand) {
-    val box = PVector(150f, 150f, 100f)
+    private val box = PVector(150f, 150f, 100f)
 
     var position = EasingVector(0.1f)
     var rotation = EasingVector(0.05f)
+    var grabStrength = EasingFloat(0.1f)
 
     fun update() {
         // easing
@@ -17,6 +19,9 @@ class InteractionHand(var hand: Hand) {
 
         rotation.target = projectedRotation()
         rotation.update()
+
+        grabStrength.target = hand.grabStrength()
+        grabStrength.update()
     }
 
     private fun projectedPosition(): PVector {

@@ -1,8 +1,8 @@
 package ch.bildspur.ledforest.view
 
 import ch.bildspur.ledforest.controller.timer.TimerTask
-import ch.bildspur.ledforest.interaction.InteractionHand
-import ch.bildspur.ledforest.interaction.LeapDataProvider
+import ch.bildspur.ledforest.leap.InteractionHand
+import ch.bildspur.ledforest.leap.LeapDataProvider
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.util.*
 import processing.core.PApplet
@@ -76,8 +76,8 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
         g.rotate(hand.rotation)
         g.noFill()
         g.stroke(ColorMode.color(255))
-        g.sphereDetail(5)
-        g.sphere(10f)
+        g.sphereDetail(PApplet.map(hand.grabStrength.value, 0f, 1f, 5f, 20f).toInt())
+        g.sphere(20f)
         g.popMatrix()
     }
 

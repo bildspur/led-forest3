@@ -1,4 +1,4 @@
-package ch.bildspur.ledforest.interaction
+package ch.bildspur.ledforest.leap
 
 import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
