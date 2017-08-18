@@ -5,7 +5,7 @@ import com.leapmotion.leap.Hand
 import processing.core.PVector
 
 class InteractionHand(var hand: Hand) {
-    val interactionBox = PVector(100f, 100f, 100f)
+    val box = PVector(150f, 150f, 100f)
 
     var position = EasingVector(0.1f)
     var rotation = EasingVector(0.05f)
@@ -20,10 +20,10 @@ class InteractionHand(var hand: Hand) {
     }
 
     private fun projectedPosition(): PVector {
-        val np = hand.palmPosition().normalized()
-        return PVector(np.x * interactionBox.x,
-                np.z * interactionBox.y,
-                (np.y * interactionBox.z) - interactionBox.z)
+        val np = hand.frame().interactionBox().normalizePoint(hand.palmPosition(), true)
+        return PVector((np.x * box.x) - (box.x / 2f),
+                (np.z * box.y) - (box.y / 2f),
+                (np.y * box.z) - (box.z / 2f))
     }
 
     private fun projectedRotation(): PVector {
