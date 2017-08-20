@@ -119,7 +119,7 @@ class Sketch() : PApplet() {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 
         project.onChanged += {
-            surface.setTitle("$NAME [$VERSION] - ${project.value.name.value}")
+            surface.setTitle("$NAME ($VERSION) - ${project.value.name.value}")
         }
         project.fire()
 
