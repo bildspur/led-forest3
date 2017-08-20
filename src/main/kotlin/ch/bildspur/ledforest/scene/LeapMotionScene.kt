@@ -45,6 +45,11 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
     private fun interactWithLED(index: Int, led: LED, tube: Tube) {
         val ledPosition = getLEDPosition(index, tube)
 
+        //leap.hands.sortedBy { it.position.dist(ledPosition) }.last()
+
+        // todo: sort by distnace (multi hand support)
+        // todo: if now hand available -> black
+
         leap.hands.forEach {
             val distance = it.position.dist(ledPosition)
             led.color.fadeH(PApplet.map(it.rotation.y, -PApplet.PI, PApplet.PI, 180f, 360f), 0.1f)
