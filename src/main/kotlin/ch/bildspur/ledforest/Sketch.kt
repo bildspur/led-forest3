@@ -119,13 +119,11 @@ class Sketch() : PApplet() {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 
         project.onChanged += {
-            surface.setTitle("$NAME ($VERSION) - ${project.value.name.value}")
-            println("Project has been set!")
+            surface.setTitle("$NAME [$VERSION] - ${project.value.name.value}")
         }
         project.fire()
 
         fx = PostFX(this)
-
         peasy.setup()
         artnet.open()
 
