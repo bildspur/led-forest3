@@ -10,7 +10,6 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import javafx.util.converter.FloatStringConverter
 import processing.core.PVector
-import tornadofx.*
 import java.lang.reflect.Field
 
 class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) : BaseProperty(field, obj) {
@@ -50,7 +49,7 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
                             zField.getValue().toFloat())
             }
 
-            box.add(HBox(label, it.value))
+            box.children.add(HBox(label, it.value))
         }
 
         // setup binding
