@@ -18,7 +18,7 @@ class SceneManager(val tubes: List<Tube>) : IRenderer {
 
     override fun setup() {
         timer.setup()
-        initScene(starScene)
+        initScene(leapMotionScene)
     }
 
     override fun render() {

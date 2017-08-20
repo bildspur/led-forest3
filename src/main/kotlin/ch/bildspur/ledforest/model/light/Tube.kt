@@ -17,7 +17,13 @@ class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = Data
            @PVectorParameter("Rotation", true) @Expose val rotation: DataModel<PVector> = DataModel(PVector()))
     : PostProcessable {
 
-    @BooleanParameter("Inverted") @Expose var inverted = DataModel(false)
+    companion object {
+        @JvmStatic val WIDTH = 1f
+    }
+
+    @BooleanParameter("Inverted")
+    @Expose
+    var inverted = DataModel(false)
 
     @Expose
     @IntParameter("LED Count")
