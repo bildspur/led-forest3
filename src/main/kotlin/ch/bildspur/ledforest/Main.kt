@@ -1,20 +1,46 @@
 package ch.bildspur.ledforest
 
-import processing.core.PApplet
+import ch.bildspur.ledforest.ui.PrimaryView
+import javafx.application.Application
+import javafx.fxml.FXMLLoader
+import javafx.scene.Parent
+import javafx.scene.Scene
+import javafx.stage.Stage
 
 /**
  * Created by cansik on 04.02.17.
  */
-class Main {
-    val sketch = Sketch()
+class Main : Application() {
+
+    @Throws(Exception::class)
+    override fun start(primaryStage: Stage) {
+        val loader = FXMLLoader(javaClass.classLoader.getResource("ch/bildspur/ledforest/ui//PrimaryView.fxml"))
+        val root = loader.load<Any>() as Parent
+        val controller = loader.getController<Any>() as PrimaryView
+
+        controller.primaryStage = primaryStage
+
+        primaryStage.title = "LED Forest 3"
+        primaryStage.scene = Scene(root)
+
+        // setup on shown event
+        primaryStage.setOnShown { controller.setupView() }
+        primaryStage.isResizable = false
+
+        primaryStage.setOnShown { controller.setupView() }
+        primaryStage.setOnCloseRequest {
+            controller.sketch.stop()
+            controller.processingThread.join(5000)
+            System.exit(0)
+        }
+
+        primaryStage.show()
+    }
 
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            // run processing app
-            val main = Main()
-            main.sketch.args = args
-            PApplet.runSketch(arrayOf("Sketch "), main.sketch)
+            launch(Main::class.java)
         }
     }
 }

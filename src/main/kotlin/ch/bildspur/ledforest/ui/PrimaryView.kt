@@ -22,16 +22,18 @@ import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
+import javafx.stage.Stage
 import processing.core.PApplet
 import processing.core.PVector
-import tornadofx.*
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.concurrent.thread
 
 
-class PrimaryView : View(Sketch.NAME) {
-    override val root: BorderPane by fxml()
+class PrimaryView {
+    lateinit var primaryStage: Stage
+
+    @FXML lateinit var root: BorderPane
 
     val tubeMap = TubeMap()
 
@@ -71,21 +73,12 @@ class PrimaryView : View(Sketch.NAME) {
     private val tubeIcon = Image(javaClass.getResourceAsStream("images/SimpleTube16.png"))
 
     init {
-        // setup on shown event
-        primaryStage.setOnShown { setupView() }
-        primaryStage.isResizable = false
-        root.center = tubeMap
-        propertiesPane.content = propertiesControl
-
-        // exit on main window closed
-        primaryStage.setOnCloseRequest {
-            sketch.stop()
-            processingThread.join(5000)
-            System.exit(0)
-        }
     }
 
     fun setupView() {
+        root.center = tubeMap
+        propertiesPane.content = propertiesControl
+
         // setup ui task
         UITask.status.addListener { o -> statusLabel.text = UITask.status.value }
         UITask.running.addListener { o -> progressIndicator.isVisible = UITask.running.value }
