@@ -14,6 +14,10 @@ buildscript {
 
 apply plugin: 'kotlin'
 
+apply plugin: 'application'
+mainClassName = "ch.bildspur.ledforest.Main"
+applicationDefaultJvmArgs = ["-Djava.library.path=lib/opencv/mac:lib/plugins/video/library/macosx64:lib/plugins/syphon:lib/openkinect/v1/mac/libusb-1.0.0.dylib:lib/sweep/:lib/LeapMotion/library/macosx"]
+
 repositories {
     mavenCentral()
 }
