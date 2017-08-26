@@ -2,23 +2,21 @@ package ch.bildspur.ledforest.model.light
 
 import ch.bildspur.ledforest.configuration.PostProcessable
 import ch.bildspur.ledforest.model.DataModel
-import ch.bildspur.ledforest.ui.properties.ActionParameter
-import ch.bildspur.ledforest.ui.properties.BooleanParameter
-import ch.bildspur.ledforest.ui.properties.IntParameter
-import ch.bildspur.ledforest.ui.properties.PVectorParameter
+import ch.bildspur.ledforest.ui.properties.*
 import ch.bildspur.ledforest.util.ColorMode
 import com.google.gson.annotations.Expose
 import processing.core.PVector
 
 
 class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = DataModel(0),
-           @Expose val addressStart: DataModel<Int> = DataModel(0),
+           @Expose private val addressStart: DataModel<Int> = DataModel(0),
            @PVectorParameter("Position") @Expose val position: DataModel<PVector> = DataModel(PVector()),
-           @PVectorParameter("Rotation", true) @Expose val rotation: DataModel<PVector> = DataModel(PVector()))
+           @PVectorAngleParameter("Rotation") @Expose val rotation: DataModel<PVector> = DataModel(PVector()))
     : PostProcessable {
 
     companion object {
-        @JvmStatic val WIDTH = 1f
+        @JvmStatic
+        val WIDTH = 1f
     }
 
     @BooleanParameter("Inverted")

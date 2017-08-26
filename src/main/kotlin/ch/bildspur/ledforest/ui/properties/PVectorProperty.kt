@@ -2,8 +2,6 @@ package ch.bildspur.ledforest.ui.properties
 
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.ui.control.RelationNumberField
-import ch.bildspur.ledforest.util.toDegrees
-import ch.bildspur.ledforest.util.toRadians
 import javafx.scene.control.Label
 import javafx.scene.control.TextFormatter
 import javafx.scene.layout.HBox
@@ -37,16 +35,10 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
             label.prefWidth = 20.0
 
             it.value.setOnAction {
-                if (annotation.convertRadians)
-                    model.value = PVector(
-                            xField.getValue().toFloat().toRadians(),
-                            yField.getValue().toFloat().toRadians(),
-                            zField.getValue().toFloat().toRadians())
-                else
-                    model.value = PVector(
-                            xField.getValue().toFloat(),
-                            yField.getValue().toFloat(),
-                            zField.getValue().toFloat())
+                model.value = PVector(
+                        xField.getValue().toFloat(),
+                        yField.getValue().toFloat(),
+                        zField.getValue().toFloat())
             }
 
             box.children.add(HBox(label, it.value))
@@ -54,15 +46,10 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
 
         // setup binding
         model.onChanged += {
-            if (annotation.convertRadians) {
-                xField.setValue(model.value.x.toDegrees().toDouble())
-                yField.setValue(model.value.y.toDegrees().toDouble())
-                zField.setValue(model.value.z.toDegrees().toDouble())
-            } else {
-                xField.setValue(model.value.x.toDouble())
-                yField.setValue(model.value.y.toDouble())
-                zField.setValue(model.value.z.toDouble())
-            }
+            xField.setValue(model.value.x.toDouble())
+            yField.setValue(model.value.y.toDouble())
+            zField.setValue(model.value.z.toDouble())
+
         }
         model.fire()
         children.add(box)
