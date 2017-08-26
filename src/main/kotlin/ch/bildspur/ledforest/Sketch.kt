@@ -16,7 +16,6 @@ import ch.bildspur.ledforest.view.ArtNetRenderer
 import ch.bildspur.ledforest.view.IRenderer
 import ch.bildspur.ledforest.view.SceneRenderer
 import ch.bildspur.postfx.builder.PostFX
-import org.opencv.core.Core
 import processing.core.PApplet
 import processing.core.PConstants
 import processing.core.PGraphics
@@ -115,8 +114,6 @@ class Sketch() : PApplet() {
 
         frameRate(if (project.value.highResMode.value) HIGH_RES_FRAME_RATE else LOW_RES_FRAME_RATE)
         colorMode(HSB, 360f, 100f, 100f)
-
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 
         project.onChanged += {
             surface.setTitle("$NAME ($VERSION) - ${project.value.name.value}")
