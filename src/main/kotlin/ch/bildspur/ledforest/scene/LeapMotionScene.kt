@@ -11,9 +11,8 @@ import processing.core.PVector
 
 class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
     // todo: remove ugly grab of data provider
-    val leap = (Sketch.instance as Sketch).leapMotion
-
-    val interactionDistance = 75f
+    val sketch = (Sketch.instance as Sketch)
+    val leap = sketch.leapMotion
 
     var space = Sketch.instance.createGraphics(10, 10, PApplet.P3D)
 
@@ -47,14 +46,14 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
 
         //leap.hands.sortedBy { it.position.dist(ledPosition) }.last()
 
-        // todo: sort by distnace (multi hand support)
+        // todo: sort by distance (multi hand support)
         // todo: if now hand available -> black
 
         leap.hands.forEach {
             val distance = it.position.dist(ledPosition)
             led.color.fadeH(PApplet.map(it.rotation.y, -PApplet.PI, PApplet.PI, 180f, 360f), 0.1f)
             led.color.fadeS(PApplet.map(it.grabStrength.value, 1f, 0f, 0f, 100f), 0.1f)
-            led.color.fadeB(PApplet.max(0f, PApplet.map(distance, interactionDistance, 0f, 0f, 100f)), 0.1f)
+            led.color.fadeB(PApplet.max(0f, PApplet.map(distance, sketch.project.value.interaction.interactionDistance.value, 0f, 0f, 100f)), 0.1f)
         }
     }
 
