@@ -323,4 +323,12 @@ class PrimaryView {
 
         tubeMap.redraw()
     }
+
+    fun showInteractionSettings(e: ActionEvent) {
+        propertiesControl.initView(project.value.interaction)
+    }
+
+    fun showProjectSettings(e: ActionEvent) {
+        propertiesControl.initView(project.value)
+    }
 }

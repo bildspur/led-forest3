@@ -25,6 +25,10 @@
             <CheckBox fx:id="isInteractionOnCheck" text="Is Interacting" textFill="WHITE"/>
             <Separator orientation="VERTICAL"/>
             <Button mnemonicParsing="false" onAction="#restartSketch" text="Restart"/>
+            <Separator orientation="VERTICAL"/>
+            <Label text="Settings:" textFill="WHITE"/>
+            <Button mnemonicParsing="false" onAction="#showProjectSettings" text="Project"/>
+            <Button mnemonicParsing="false" onAction="#showInteractionSettings" text="Interaction"/>
 
             <ProgressIndicator fx:id="progressIndicator" prefHeight="25.0"
                                prefWidth="25.0"/>

@@ -12,9 +12,9 @@ import java.lang.reflect.Field
 
 class PVectorAngleProperty(field: Field, obj: Any, val annotation: PVectorAngleParameter) : BaseProperty(field, obj) {
 
-    val minAngle = -180.0
-    val maxAngle = 180.0
-    val initValue = 0.0
+    private val minAngle = -180.0
+    private val maxAngle = 180.0
+    private val initValue = 0.0
 
     val model = field.get(obj) as DataModel<PVector>
     val xField = Slider(minAngle, maxAngle, initValue)

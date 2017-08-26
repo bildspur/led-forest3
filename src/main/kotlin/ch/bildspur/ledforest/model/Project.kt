@@ -3,6 +3,7 @@ package ch.bildspur.ledforest.model
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -11,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList
  */
 class Project {
     @Expose
+    @StringParameter("Name")
     var name = DataModel("${Sketch.NAME} Project")
 
     @Expose
