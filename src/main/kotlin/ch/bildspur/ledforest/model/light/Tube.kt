@@ -9,7 +9,7 @@ import processing.core.PVector
 
 
 class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = DataModel(0),
-           @Expose private val addressStart: DataModel<Int> = DataModel(0),
+           @IntParameter("Start") @Expose private val addressStart: DataModel<Int> = DataModel(0),
            @PVectorParameter("Position") @Expose val position: DataModel<PVector> = DataModel(PVector()),
            @PVectorAngleParameter("Rotation") @Expose val rotation: DataModel<PVector> = DataModel(PVector()))
     : PostProcessable {
@@ -25,7 +25,7 @@ class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = Data
 
     @Expose
     @IntParameter("LED Count")
-    val ledCount = DataModel(0)
+    val ledCount = DataModel(24)
 
     @ActionParameter("All LEDs", "Mark")
     val markLEDs = {
@@ -48,6 +48,9 @@ class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = Data
 
     fun hookListener() {
         ledCount.onChanged += {
+            initLEDs()
+        }
+        addressStart.onChanged += {
             initLEDs()
         }
         ledCount.fire()
