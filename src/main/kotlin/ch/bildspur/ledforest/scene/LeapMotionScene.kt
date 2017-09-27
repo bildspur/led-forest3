@@ -41,6 +41,10 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
 
     }
 
+    fun isLeapAvailable(): Boolean {
+        return leap.isRunning && leap.hands.isNotEmpty()
+    }
+
     private fun interactWithLED(index: Int, led: LED, tube: Tube) {
         val ledPosition = getLEDPosition(index, tube)
 

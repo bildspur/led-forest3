@@ -18,10 +18,17 @@ class SceneManager(val tubes: List<Tube>) : IRenderer {
 
     override fun setup() {
         timer.setup()
-        initScene(leapMotionScene)
+        initScene(starScene)
     }
 
     override fun render() {
+        // check if hand is detected
+        if (activeScene != leapMotionScene && leapMotionScene.isLeapAvailable())
+            initScene(leapMotionScene)
+
+        if (activeScene == leapMotionScene && !leapMotionScene.isLeapAvailable())
+            initScene(starScene)
+
         timer.update()
     }
 
