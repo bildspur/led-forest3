@@ -48,17 +48,15 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
     private fun interactWithLED(index: Int, led: LED, tube: Tube) {
         val ledPosition = getLEDPosition(index, tube)
 
-        //leap.hands.sortedBy { it.position.dist(ledPosition) }.last()
+        if (leap.hands.isEmpty())
+            return
 
-        // todo: sort by distance (multi hand support)
-        // todo: if now hand available -> black
+        val h = leap.hands.sortedBy { it.position.dist(ledPosition) }.last()
 
-        leap.hands.forEach {
-            val distance = it.position.dist(ledPosition)
-            led.color.fadeH(PApplet.map(it.rotation.y, -PApplet.PI, PApplet.PI, 180f, 360f), 0.1f)
-            led.color.fadeS(PApplet.map(it.grabStrength.value, 1f, 0f, 0f, 100f), 0.1f)
-            led.color.fadeB(PApplet.max(0f, PApplet.map(distance, sketch.project.value.interaction.interactionDistance.value, 0f, 0f, 100f)), 0.1f)
-        }
+        val distance = h.position.dist(ledPosition)
+        led.color.fadeH(PApplet.map(h.rotation.y, -PApplet.PI, PApplet.PI, 180f, 360f), 0.1f)
+        led.color.fadeS(PApplet.map(h.grabStrength.value, 1f, 0f, 0f, 100f), 0.1f)
+        led.color.fadeB(PApplet.max(0f, PApplet.map(distance, sketch.project.value.interaction.interactionDistance.value, 0f, 0f, 100f)), 0.1f)
     }
 
     private fun getLEDPosition(index: Int, tube: Tube): PVector {
