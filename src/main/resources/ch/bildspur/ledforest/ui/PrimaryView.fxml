@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="600.0" prefWidth="1010.0"
-            xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns="http://javafx.com/javafx/8.0.101"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.bildspur.ledforest.ui.PrimaryView">
     <top>

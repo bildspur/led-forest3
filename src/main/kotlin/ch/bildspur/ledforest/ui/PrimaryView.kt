@@ -35,7 +35,7 @@ class PrimaryView {
 
     @FXML lateinit var root: BorderPane
 
-    val tubeMap = TubeMap()
+    var tubeMap = TubeMap()
 
     val moveTool = MoveTool()
 
