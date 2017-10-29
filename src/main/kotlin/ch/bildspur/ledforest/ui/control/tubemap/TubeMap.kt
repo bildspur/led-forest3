@@ -70,7 +70,7 @@ class TubeMap : Pane() {
         layers.add(activeLayer)
 
         // make background gray
-        style = "-fx-background-color: #696969;"
+        style = "-fx-background-color: #32CD32;"
 
         // setup resize
         widthProperty().addListener { o -> resize() }
@@ -121,6 +121,9 @@ class TubeMap : Pane() {
         } else {
             relationScale = width / canvas.width
         }
+
+        if (width == 0.0 || height == 0.0)
+            relationScale = 1.0
 
         zoom(canvas, scale, layoutX + zoomTransformation.x, layoutY + zoomTransformation.y)
 
