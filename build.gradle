@@ -48,6 +48,13 @@ dependencies {
     compile files('lib/plugins/oscP5/oscP5.jar')
 
     compile files('lib/plugins/peasycam/peasycam.jar')
+
+    compile files('lib/plugins/minim/library/minim.jar')
+    compile files('lib/plugins/minim/library/jsminim.jar')
+    compile files('lib/plugins/minim/library/jl1.0.1.jar')
+    compile files('lib/plugins/minim/library/mp3spi1.9.5.jar')
+    compile files('lib/plugins/minim/library/tritonus_aos.jar')
+    compile files('lib/plugins/minim/library/tritonus_share.jar')
 }
 
 task fatJar(type: Jar) {
