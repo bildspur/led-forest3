@@ -49,6 +49,9 @@
   "highResMode": {
     "dataValue": true
   },
+  "fullScreenMode": {
+    "dataValue": false
+  },
   "interaction": {
     "interactionDistance": {
       "dataValue": 75.0

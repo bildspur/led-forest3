@@ -101,7 +101,11 @@ class Sketch() : PApplet() {
     }
 
     override fun settings() {
-        size(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
+        if (project.value.fullScreenMode.value)
+            fullScreen(PConstants.P3D, project.value.fullScreenDisplay.value)
+        else
+            size(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
+
         PJOGL.profile = 1
         smooth()
 
