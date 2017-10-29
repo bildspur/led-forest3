@@ -296,10 +296,13 @@ class PrimaryView {
     }
 
     fun restartSketch(e: ActionEvent) {
+        root.center = tubeMap
 
+        /*
         project.value.tubes.forEach {
             it.inverted.value = !it.inverted.value
         }
+        */
 
         /*
         if (sketch.isInitialised) {

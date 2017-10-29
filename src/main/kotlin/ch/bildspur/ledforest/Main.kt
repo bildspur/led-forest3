@@ -14,7 +14,7 @@ class Main : Application() {
 
     @Throws(Exception::class)
     override fun start(primaryStage: Stage) {
-        val loader = FXMLLoader(javaClass.classLoader.getResource("ch/bildspur/ledforest/ui//PrimaryView.fxml"))
+        val loader = FXMLLoader(javaClass.classLoader.getResource("ch/bildspur/ledforest/ui/PrimaryView.fxml"))
         val root = loader.load<Any>() as Parent
         val controller = loader.getController<Any>() as PrimaryView
 
