@@ -15,6 +15,7 @@ import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.view.ArtNetRenderer
 import ch.bildspur.ledforest.view.IRenderer
 import ch.bildspur.ledforest.view.SceneRenderer
+import ch.bildspur.ledforest.view.SoundRenderer
 import ch.bildspur.postfx.builder.PostFX
 import processing.core.PApplet
 import processing.core.PConstants
@@ -196,6 +197,7 @@ class Sketch() : PApplet() {
         renderer.add(SceneRenderer(this.g, project.value.tubes, leapMotion))
         renderer.add(ArtNetRenderer(project.value, artnet, project.value.nodes, project.value.tubes))
         renderer.add(SceneManager(project.value.tubes))
+        renderer.add(SoundRenderer(project.value, leapMotion, project.value.tubes))
 
         isResetRendererProposed = false
 
