@@ -45,7 +45,7 @@ class Sketch() : PApplet() {
         val NAME = "LED Forest 3"
 
         @JvmStatic
-        val VERSION = "0.1"
+        val VERSION = "0.2"
 
         @JvmStatic lateinit var instance: PApplet
 

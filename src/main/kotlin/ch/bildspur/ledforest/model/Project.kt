@@ -3,6 +3,7 @@ package ch.bildspur.ledforest.model
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.ui.properties.BooleanParameter
 import ch.bildspur.ledforest.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
 import java.util.concurrent.CopyOnWriteArrayList
@@ -22,6 +23,7 @@ class Project {
     var tubes = CopyOnWriteArrayList<Tube>()
 
     @Expose
+    @BooleanParameter("HighRes Mode")
     var highResMode = DataModel(true)
 
     @Expose
