@@ -48,5 +48,21 @@
   ],
   "highResMode": {
     "dataValue": true
+  },
+  "interaction": {
+    "interactionDistance": {
+      "dataValue": 75.0
+    }
+  },
+  "light": {
+    "luminosity": {
+      "dataValue": 1.0
+    },
+    "response": {
+      "dataValue": 0.5
+    },
+    "trace": {
+      "dataValue": 0.0
+    }
   }
 }

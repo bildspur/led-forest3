@@ -26,4 +26,7 @@ class Project {
 
     @Expose
     var interaction = Interaction()
+
+    @Expose
+    var light = Light()
 }

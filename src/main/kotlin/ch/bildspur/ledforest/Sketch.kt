@@ -194,7 +194,7 @@ class Sketch() : PApplet() {
 
         // add renderer
         renderer.add(SceneRenderer(this.g, project.value.tubes, leapMotion))
-        renderer.add(ArtNetRenderer(artnet, project.value.nodes, project.value.tubes))
+        renderer.add(ArtNetRenderer(project.value, artnet, project.value.nodes, project.value.tubes))
         renderer.add(SceneManager(project.value.tubes))
 
         isResetRendererProposed = false

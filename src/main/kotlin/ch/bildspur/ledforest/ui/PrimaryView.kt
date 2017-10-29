@@ -295,24 +295,6 @@ class PrimaryView {
         }
     }
 
-    fun restartSketch(e: ActionEvent) {
-        root.center = tubeMap
-
-        /*
-        project.value.tubes.forEach {
-            it.inverted.value = !it.inverted.value
-        }
-        */
-
-        /*
-        if (sketch.isInitialised) {
-            sketch.surface.pauseThread()
-            sketch.surface.stopThread()
-            val window = sketch.surface.native as GLWindow
-            window.destroy()
-        }*/
-    }
-
     fun updateTubeMap() {
         tubeMap.activeLayer.shapes.clear()
 
@@ -333,5 +315,9 @@ class PrimaryView {
 
     fun showProjectSettings(e: ActionEvent) {
         propertiesControl.initView(project.value)
+    }
+
+    fun showLightSettings(e: ActionEvent) {
+        propertiesControl.initView(project.value.light)
     }
 }
