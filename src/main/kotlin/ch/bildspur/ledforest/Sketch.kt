@@ -17,6 +17,7 @@ import ch.bildspur.ledforest.view.IRenderer
 import ch.bildspur.ledforest.view.SceneRenderer
 import ch.bildspur.ledforest.view.SoundRenderer
 import ch.bildspur.postfx.builder.PostFX
+import ddf.minim.Minim
 import processing.core.PApplet
 import processing.core.PConstants
 import processing.core.PGraphics
@@ -95,6 +96,8 @@ class Sketch() : PApplet() {
 
     val project = DataModel(Project())
 
+    val minim = Minim(this)
+
     lateinit var fx: PostFX
 
     init {
@@ -130,8 +133,6 @@ class Sketch() : PApplet() {
         artnet.open()
 
         leapMotion.start()
-
-        resetRenderer()
 
         // timer for cursor hiding
         timer.addTask(TimerTask(CURSOR_HIDING_TIME, {
@@ -201,7 +202,7 @@ class Sketch() : PApplet() {
         renderer.add(SceneRenderer(this.g, project.value.tubes, leapMotion))
         renderer.add(ArtNetRenderer(project.value, artnet, project.value.nodes, project.value.tubes))
         renderer.add(SceneManager(project.value.tubes))
-        renderer.add(SoundRenderer(project.value, leapMotion, project.value.tubes))
+        renderer.add(SoundRenderer(project.value, minim, leapMotion, project.value.tubes))
 
         isResetRendererProposed = false
 
@@ -233,15 +234,15 @@ class Sketch() : PApplet() {
             osc.setup()
 
             canvas = createGraphics(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
-            canvas.pixelDensity = 2
+
+            // retina screen
+            if (project.value.highResMode.value)
+                canvas.pixelDensity = 2
 
             timer.setup()
 
-            // setup renderer
-            renderer.forEach {
-                it.setup()
-                timer.addTask(it.timerTask)
-            }
+            // setting up renderer
+            resetRenderer()
 
             prepareExitHandler()
 
