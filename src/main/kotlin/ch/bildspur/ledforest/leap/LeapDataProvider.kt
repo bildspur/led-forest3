@@ -4,10 +4,16 @@ import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import com.leapmotion.leap.Controller
 import com.leapmotion.leap.Frame
+import processing.core.PVector
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
 
 class LeapDataProvider {
+    companion object {
+        @JvmStatic
+        val BOX = PVector(150f, 150f, 100f)
+    }
+
     private val updateTime = 15L
 
     var isRunning = false

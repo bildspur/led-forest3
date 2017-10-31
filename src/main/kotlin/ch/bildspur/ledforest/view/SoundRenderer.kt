@@ -2,10 +2,13 @@ package ch.bildspur.ledforest.view
 
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.leap.LeapDataProvider
+import ch.bildspur.ledforest.leap.LeapDataProvider.Companion.BOX
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.sound.EasingAudioPlayer
+import ch.bildspur.ledforest.util.limit
 import ddf.minim.Minim
+import processing.core.PApplet
 
 class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataProvider, val tubes: List<Tube>) : IRenderer {
     override val timerTask: TimerTask
@@ -30,8 +33,16 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
 
     override fun render() {
         // check for hands
-        
+        val hands = leap.hands
+        if (hands.isEmpty()) {
+            handPlayer.volume.target = EasingAudioPlayer.MUTED_GAIN
+        } else {
+            handPlayer.volume.target = EasingAudioPlayer.DEFAULT_GAIN
+            val average = (hands.sumByDouble { it.position.x.toDouble() } / hands.size.toDouble()).toFloat()
+            handPlayer.player.pan = PApplet.map(average, 0f, BOX.x, 0f, 1f).limit(0f, 1f)
+        }
 
+        // update players
         handPlayer.update()
         backgroundPlayer.update()
     }
