@@ -10,6 +10,7 @@ import ch.bildspur.ledforest.leap.LeapDataProvider
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.scene.SceneManager
+import ch.bildspur.ledforest.util.LogBook
 import ch.bildspur.ledforest.util.draw
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.view.ArtNetRenderer
@@ -140,6 +141,8 @@ class Sketch : PApplet() {
             if (current - lastCursorMoveTime > CURSOR_HIDING_TIME)
                 noCursor()
         }, "CursorHide"))
+
+        LogBook.log("Start")
     }
 
     override fun draw() {
@@ -287,6 +290,8 @@ class Sketch : PApplet() {
             leapMotion.stop()
             osc.osc.stop()
             artnet.close()
+
+            LogBook.log("Stop", leapMotion.handCount)
         })
     }
 

@@ -21,6 +21,8 @@ class LeapDataProvider {
 
     var pauseInteraction = false
 
+    var handCount = 0
+
     private lateinit var leapThread: Thread
     private lateinit var controller: Controller
 
@@ -71,8 +73,10 @@ class LeapDataProvider {
         // add new hands and update known
         frame.hands().forEach {
             // add if not already in cache
-            if (!handCache.containsKey(it.id()))
+            if (!handCache.containsKey(it.id())) {
                 handCache.put(it.id(), InteractionHand(it))
+                handCount++
+            }
 
             // get hand
             val hand = handCache[it.id()]!!
