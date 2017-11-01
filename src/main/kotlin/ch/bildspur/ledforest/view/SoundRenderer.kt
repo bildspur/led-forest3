@@ -32,7 +32,14 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
     }
 
     override fun render() {
+        // update players
+        handPlayer.update()
+        backgroundPlayer.update()
+
         // check for hands
+        if (!leap.isRunning)
+            return
+
         val hands = leap.hands
         if (hands.isEmpty()) {
             handPlayer.volume.target = EasingAudioPlayer.MUTED_GAIN
@@ -41,10 +48,6 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
             val average = (hands.sumByDouble { it.position.x.toDouble() } / hands.size.toDouble()).toFloat()
             handPlayer.player.pan = PApplet.map(average, 0f, BOX.x, 0f, 1f).limit(0f, 1f)
         }
-
-        // update players
-        handPlayer.update()
-        backgroundPlayer.update()
     }
 
     override fun dispose() {

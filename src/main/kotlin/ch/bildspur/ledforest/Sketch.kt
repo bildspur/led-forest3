@@ -134,6 +134,9 @@ class Sketch() : PApplet() {
 
         leapMotion.start()
 
+        // needs to correctly initialise renderer (maybe a bug in processing)
+        resetRenderer()
+
         // timer for cursor hiding
         timer.addTask(TimerTask(CURSOR_HIDING_TIME, {
             val current = millis()
@@ -214,6 +217,14 @@ class Sketch() : PApplet() {
         }
     }
 
+    fun resetCanvas() {
+        canvas = createGraphics(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
+
+        // retina screen
+        if (project.value.highResMode.value)
+            canvas.pixelDensity = 2
+    }
+
     fun skipFirstFrames(): Boolean {
         // skip first two frames
         if (frameCount < 2) {
@@ -232,19 +243,14 @@ class Sketch() : PApplet() {
     fun initControllers(): Boolean {
         if (!osc.isSetup) {
             osc.setup()
-
-            canvas = createGraphics(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
-
-            // retina screen
-            if (project.value.highResMode.value)
-                canvas.pixelDensity = 2
+            resetCanvas()
 
             timer.setup()
 
+            prepareExitHandler()
+
             // setting up renderer
             resetRenderer()
-
-            prepareExitHandler()
 
             isInitialised = true
             return true

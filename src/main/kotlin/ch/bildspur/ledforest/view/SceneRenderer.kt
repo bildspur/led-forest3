@@ -75,6 +75,7 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
         g.rotate(hand.rotation)
         g.noFill()
         g.stroke(ColorMode.color(255))
+        g.strokeWeight(2f)
         g.sphereDetail(PApplet.map(hand.grabStrength.value, 0f, 1f, 5f, 20f).toInt())
         g.sphere(20f)
         g.popMatrix()
