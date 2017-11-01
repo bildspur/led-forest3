@@ -6,6 +6,7 @@ import javafx.geometry.Pos
 import javafx.scene.control.Label
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
+import javafx.scene.text.Font
 import java.lang.reflect.Field
 
 class PropertiesControl : VBox() {
@@ -88,6 +89,8 @@ class PropertiesControl : VBox() {
 
         val nameLabel = Label("$name:")
         nameLabel.prefWidth = 80.0
+        nameLabel.font = Font("Arial", 12.0)
+        nameLabel.isWrapText = true
 
         val box = HBox(nameLabel, propertyView)
         box.spacing = 10.0
