@@ -134,9 +134,6 @@ class Sketch() : PApplet() {
 
         leapMotion.start()
 
-        // needs to correctly initialise renderer (maybe a bug in processing)
-        resetRenderer()
-
         // timer for cursor hiding
         timer.addTask(TimerTask(CURSOR_HIDING_TIME, {
             val current = millis()
@@ -146,8 +143,6 @@ class Sketch() : PApplet() {
     }
 
     override fun draw() {
-        println(timer.taskList.joinToString { it.name })
-
         background(0)
 
         if (skipFirstFrames())
@@ -214,7 +209,7 @@ class Sketch() : PApplet() {
         renderer.clear()
 
         // add renderer
-        renderer.add(SceneRenderer(this.g, project.value.tubes, leapMotion))
+        renderer.add(SceneRenderer(canvas, project.value.tubes, leapMotion))
         renderer.add(ArtNetRenderer(project.value, artnet, project.value.nodes, project.value.tubes))
         renderer.add(SceneManager(project.value, project.value.tubes))
 
