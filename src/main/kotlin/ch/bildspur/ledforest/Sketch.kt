@@ -27,7 +27,7 @@ import processing.opengl.PJOGL
 /**
  * Created by cansik on 04.02.17.
  */
-class Sketch() : PApplet() {
+class Sketch : PApplet() {
     companion object {
         @JvmStatic
         val HIGH_RES_FRAME_RATE = 60f

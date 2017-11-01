@@ -20,7 +20,8 @@ import java.nio.file.Paths
  */
 class ConfigurationController {
     companion object {
-        @JvmStatic val CONFIGURATION_FILE = "config/ledforest.json"
+        @JvmStatic
+        val CONFIGURATION_FILE = "config/ledforest.json"
     }
 
     val gson: Gson = GsonBuilder()
@@ -34,27 +35,27 @@ class ConfigurationController {
             .create()
 
     fun loadAppConfig(): AppConfig {
-        return loadConfiguration(Paths.get(CONFIGURATION_FILE))
+        return loadData(Paths.get(CONFIGURATION_FILE))
     }
 
     fun saveAppConfig(config: AppConfig) {
-        saveConfiguration(Paths.get(CONFIGURATION_FILE), config)
+        saveData(Paths.get(CONFIGURATION_FILE), config)
     }
 
     fun loadProject(projectFile: String): Project {
-        return loadConfiguration(Paths.get(projectFile))
+        return loadData(Paths.get(projectFile))
     }
 
     fun saveProject(projectFile: String, project: Project) {
-        saveConfiguration(Paths.get(projectFile), project)
+        saveData(Paths.get(projectFile), project)
     }
 
-    internal inline fun <reified T : Any> loadConfiguration(configFile: Path): T {
+    inline fun <reified T : Any> loadData(configFile: Path): T {
         val content = String(Files.readAllBytes(configFile))
         return gson.fromJson(content)
     }
 
-    internal inline fun <reified T : Any> saveConfiguration(configFile: Path, config: T) {
+    inline fun <reified T : Any> saveData(configFile: Path, config: T) {
         val content = gson.toJson(config)
         Files.write(configFile, content.toByteArray())
     }
