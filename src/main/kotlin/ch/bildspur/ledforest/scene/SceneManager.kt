@@ -13,10 +13,10 @@ class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
 
     var activeScene: BaseScene = blackScene
 
-    var pauseSceneManager = false
+    private val task = TimerTask(0, { render() }, "SceneManager")
 
     override val timerTask: TimerTask
-        get() = TimerTask(0, { render() })
+        get() = task
 
     val timer = Timer()
 

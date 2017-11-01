@@ -142,10 +142,12 @@ class Sketch() : PApplet() {
             val current = millis()
             if (current - lastCursorMoveTime > CURSOR_HIDING_TIME)
                 noCursor()
-        }))
+        }, "CursorHide"))
     }
 
     override fun draw() {
+        println(timer.taskList.joinToString { it.name })
+
         background(0)
 
         if (skipFirstFrames())

@@ -11,8 +11,9 @@ import ddf.minim.Minim
 import processing.core.PApplet
 
 class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataProvider, val tubes: List<Tube>) : IRenderer {
+    private val task = TimerTask(0, { render() }, "SoundRender")
     override val timerTask: TimerTask
-        get() = TimerTask(0, { render() })
+        get() = task
 
     lateinit var backgroundPlayer: EasingAudioPlayer
     lateinit var handPlayer: EasingAudioPlayer

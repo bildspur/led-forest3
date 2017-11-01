@@ -12,8 +12,9 @@ class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: 
     lateinit var universesToNodes: Map<Universe, ArtNetNode>
     lateinit var indexToUniverses: Map<Int, Universe>
 
+    private val task = TimerTask(15, { render() }, "ArtNetRenderer")
     override val timerTask: TimerTask
-        get() = TimerTask(15, { render() })
+        get() = task
 
     override fun setup() {
         buildUniverseIndex()

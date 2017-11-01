@@ -10,7 +10,7 @@ class EasingAudioPlayer(val player: AudioPlayer,
                         easing: Float = 0.01f) : EasingObject {
     companion object {
         @JvmStatic
-        val MUTED_GAIN = -25f
+        val MUTED_GAIN = -35f
         val DEFAULT_GAIN = 0.0f
     }
 

@@ -11,8 +11,9 @@ import processing.core.PGraphics
 import processing.core.PShape
 
 class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataProvider) : IRenderer {
+    private val task = TimerTask(0, { render() }, "SceneRenderer")
     override val timerTask: TimerTask
-        get() = TimerTask(0, { render() })
+        get() = task //TimerTask(0, { render() }, "SceneRenderer")
 
     lateinit var rodShape: PShape
 
