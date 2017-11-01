@@ -19,6 +19,8 @@ class LeapDataProvider {
     var isRunning = false
         private set
 
+    var pauseInteraction = false
+
     private lateinit var leapThread: Thread
     private lateinit var controller: Controller
 
@@ -57,6 +59,9 @@ class LeapDataProvider {
             return
 
         if (controller.frame() == null)
+            return
+
+        if (pauseInteraction)
             return
 
         updateHands(controller.frame()!!)

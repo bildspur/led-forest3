@@ -104,7 +104,7 @@ class Sketch() : PApplet() {
     }
 
     override fun settings() {
-        if (project.value.fullScreenMode.value)
+        if (project.value.isFullScreenMode.value)
             fullScreen(PConstants.P3D, project.value.fullScreenDisplay.value)
         else
             size(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
@@ -124,7 +124,7 @@ class Sketch() : PApplet() {
         colorMode(HSB, 360f, 100f, 100f)
 
         project.onChanged += {
-            surface.setTitle("$NAME ($VERSION) - ${project.value.name.value}")
+            onProjectChanged()
         }
         project.fire()
 
@@ -185,6 +185,16 @@ class Sketch() : PApplet() {
         }
     }
 
+    fun onProjectChanged() {
+        surface.setTitle("$NAME ($VERSION) - ${project.value.name.value}")
+
+        // setup leap motion settings
+        project.value.isInteraction.onChanged += {
+            leapMotion.pauseInteraction = !project.value.isInteraction.value
+        }
+        project.value.isInteraction.fire()
+    }
+
     fun updateLEDColors() {
         project.value.tubes.forEach { t ->
             t.leds.forEach { l ->
@@ -204,8 +214,11 @@ class Sketch() : PApplet() {
         // add renderer
         renderer.add(SceneRenderer(this.g, project.value.tubes, leapMotion))
         renderer.add(ArtNetRenderer(project.value, artnet, project.value.nodes, project.value.tubes))
-        renderer.add(SceneManager(project.value.tubes))
-        renderer.add(SoundRenderer(project.value, minim, leapMotion, project.value.tubes))
+        renderer.add(SceneManager(project.value, project.value.tubes))
+
+        // make sound optional
+        if (project.value.isSound.value)
+            renderer.add(SoundRenderer(project.value, minim, leapMotion, project.value.tubes))
 
         isResetRendererProposed = false
 

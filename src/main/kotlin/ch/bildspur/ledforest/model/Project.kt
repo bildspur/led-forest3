@@ -29,11 +29,27 @@ class Project {
 
     @Expose
     @BooleanParameter("Fullscreen Mode")
-    var fullScreenMode = DataModel(false)
+    var isFullScreenMode = DataModel(false)
 
     @Expose
     @IntParameter("Fullscreen Display")
     var fullScreenDisplay = DataModel(0)
+
+    @Expose
+    @BooleanParameter("Sound")
+    var isSound = DataModel(true)
+
+    @Expose
+    @BooleanParameter("Scene Manager")
+    var isSceneManager = DataModel(true)
+
+    @Expose
+    @BooleanParameter("Interaction")
+    var isInteraction = DataModel(true)
+
+    @Expose
+    @BooleanParameter("ArtNet Rendering")
+    var isArtNetRendering = DataModel(true)
 
     @Expose
     var interaction = Interaction()

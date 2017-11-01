@@ -16,11 +16,13 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
 
     var space = Sketch.instance.createGraphics(10, 10, PApplet.P3D)
 
+    private val task = TimerTask(0, { update() })
+
     override val name: String
         get() = "LeapMotion Scene"
 
     override val timerTask: TimerTask
-        get() = TimerTask(0, { update() })
+        get() = task
 
     override fun setup() {
 

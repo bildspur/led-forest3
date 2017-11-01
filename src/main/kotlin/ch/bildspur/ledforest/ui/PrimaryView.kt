@@ -150,15 +150,6 @@ class PrimaryView {
             PApplet.runSketch(arrayOf("Sketch "), sketch)
             println("processing quit")
         }
-
-        // setup processing specific variables
-        sketch.isInteractionOn.onChanged += { isInteractionOnCheck.isSelected = it }
-        isInteractionOnCheck.setOnAction { sketch.isInteractionOn.value = isInteractionOnCheck.isSelected }
-        sketch.isInteractionOn.fire()
-
-        sketch.isRendering.onChanged += { isRenderingCheck.isSelected = it }
-        isRenderingCheck.setOnAction { sketch.isRendering.value = isRenderingCheck.isSelected }
-        sketch.isRendering.fire()
     }
 
     fun updateUI() {

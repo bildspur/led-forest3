@@ -21,9 +21,6 @@
             <Button mnemonicParsing="false" onAction="#saveProject" text="Save"/>
             <Button mnemonicParsing="false" onAction="#saveProjectAs" text="Save As"/>
             <Separator orientation="VERTICAL"/>
-            <CheckBox fx:id="isRenderingCheck" text="Is Rendering" textFill="WHITE"/>
-            <CheckBox fx:id="isInteractionOnCheck" text="Is Interacting" textFill="WHITE"/>
-            <Label text="Settings:" textFill="WHITE"/>
             <Button mnemonicParsing="false" onAction="#showProjectSettings" text="Project"/>
             <Button mnemonicParsing="false" onAction="#showInteractionSettings" text="Interaction"/>
             <Button mnemonicParsing="false" onAction="#showLightSettings" text="Light"/>

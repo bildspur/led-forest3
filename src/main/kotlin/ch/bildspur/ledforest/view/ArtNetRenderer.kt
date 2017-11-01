@@ -20,6 +20,10 @@ class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: 
     }
 
     override fun render() {
+        // check if artnet rendering is used
+        if (!project.isArtNetRendering.value)
+            return
+
         tubes.groupBy { it.universe.value }.forEach {
             val universe = indexToUniverses[it.key]!!
             val node = universesToNodes[universe]!!

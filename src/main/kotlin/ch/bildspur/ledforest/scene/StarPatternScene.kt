@@ -8,15 +8,17 @@ import ch.bildspur.ledforest.util.forEachLED
 
 
 class StarPatternScene(tubes: List<Tube>) : BaseScene(tubes) {
-    internal var randomOnFactor = 0.95f
-    internal var randomOffFactor = 0.8f
-    internal var fadeSpeed = 0.01f
+    private var randomOnFactor = 0.95f
+    private var randomOffFactor = 0.8f
+    private var fadeSpeed = 0.01f
+
+    private val task = TimerTask(500, { update() })
 
     override val name: String
         get() = "StarPattern Scene"
 
     override val timerTask: TimerTask
-        get() = TimerTask(500, { update() })
+        get() = task
 
     override fun setup() {
         tubes.forEachLED {
