@@ -27,10 +27,17 @@ class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = Data
     @IntParameter("LED Count")
     val ledCount = DataModel(24)
 
-    @ActionParameter("All LEDs", "Mark")
+    @ActionParameter("LEDs", "Select")
     val markLEDs = {
         leds.forEach {
             it.color.fade(ColorMode.color(250, 100, 100), 0.1f)
+        }
+    }
+
+    @ActionParameter("LEDs", "Deselect")
+    val deselectLEDs = {
+        leds.forEach {
+            it.color.fadeB(0f, 0.1f)
         }
     }
 
