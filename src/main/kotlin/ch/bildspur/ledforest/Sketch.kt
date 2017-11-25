@@ -41,13 +41,16 @@ class Sketch : PApplet() {
         val WINDOW_HEIGHT = 576
 
         @JvmStatic
-        val CURSOR_HIDING_TIME = 5000L
+        val CURSOR_HIDING_TIME = 1000L * 5L
+
+        @JvmStatic
+        val LOGBOOK_UPDATE_TIME = 1000L * 60L * 10L
 
         @JvmStatic
         val NAME = "LED Forest 3"
 
         @JvmStatic
-        val VERSION = "0.2"
+        val VERSION = "0.3"
 
         @JvmStatic lateinit var instance: PApplet
 
@@ -141,6 +144,12 @@ class Sketch : PApplet() {
             if (current - lastCursorMoveTime > CURSOR_HIDING_TIME)
                 noCursor()
         }, "CursorHide"))
+
+        // timer for logbook
+        timer.addTask(TimerTask(LOGBOOK_UPDATE_TIME, {
+            LogBook.log("Update", leapMotion.handCount)
+            leapMotion.handCount = 0
+        }))
 
         LogBook.log("Start")
     }
