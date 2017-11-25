@@ -53,12 +53,16 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
         if (leap.hands.isEmpty())
             return
 
-        val h = leap.hands.sortedBy { it.position.dist(ledPosition) }.last()
+        val h = leap.hands.sortedBy { it.position.dist(ledPosition) }.first()
 
         val distance = h.position.dist(ledPosition)
-        led.color.fadeH(PApplet.map(h.rotation.y, -PApplet.PI, PApplet.PI, 180f, 360f), 0.1f)
+        led.color.fadeH(PApplet.map(h.rotation.y, -PApplet.PI, PApplet.PI,
+                sketch.project.value.interaction.hueStart.value,
+                sketch.project.value.interaction.hueEnd.value), 0.1f)
         led.color.fadeS(PApplet.map(h.grabStrength.value, 1f, 0f, 0f, 100f), 0.1f)
-        led.color.fadeB(PApplet.max(0f, PApplet.map(distance, sketch.project.value.interaction.interactionDistance.value, 0f, 0f, 100f)), 0.1f)
+        led.color.fadeB(PApplet.max(0f,
+                PApplet.map(distance, sketch.project.value.interaction.interactionDistance.value, 0f, 0f, 100f)),
+                0.1f)
     }
 
     private fun getLEDPosition(index: Int, tube: Tube): PVector {
