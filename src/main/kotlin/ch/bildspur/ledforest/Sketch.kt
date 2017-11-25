@@ -121,7 +121,7 @@ class Sketch : PApplet() {
     override fun setup() {
         Sketch.instance = this
 
-        frameRate(if (project.value.highResMode.value) HIGH_RES_FRAME_RATE else LOW_RES_FRAME_RATE)
+        frameRate(if (project.value.highFPSMode.value) HIGH_RES_FRAME_RATE else LOW_RES_FRAME_RATE)
         colorMode(HSB, 360f, 100f, 100f)
 
         project.onChanged += {

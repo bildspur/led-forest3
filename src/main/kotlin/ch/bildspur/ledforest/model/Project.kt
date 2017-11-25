@@ -24,8 +24,12 @@ class Project {
     var tubes = CopyOnWriteArrayList<Tube>()
 
     @Expose
-    @BooleanParameter("HighRes Mode*")
+    @BooleanParameter("High Res Mode*")
     var highResMode = DataModel(true)
+
+    @Expose
+    @BooleanParameter("High FPS Mode*")
+    var highFPSMode = DataModel(true)
 
     @Expose
     @BooleanParameter("Fullscreen Mode*")

@@ -61,10 +61,6 @@ class PrimaryView {
 
     @FXML lateinit var progressIndicator: ProgressIndicator
 
-    @FXML lateinit var isRenderingCheck: CheckBox
-
-    @FXML lateinit var isInteractionOnCheck: CheckBox
-
     @FXML lateinit var iconView: ImageView
 
     private val appIcon = Image(javaClass.getResourceAsStream("images/LEDForestIcon.png"))
