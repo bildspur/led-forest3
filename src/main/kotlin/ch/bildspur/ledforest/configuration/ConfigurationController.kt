@@ -21,7 +21,13 @@ import java.nio.file.Paths
 class ConfigurationController {
     companion object {
         @JvmStatic
-        val CONFIGURATION_FILE = "config/ledforest.json"
+        val CONFIGURATION_FILE = "ledforest.json"
+
+        @JvmStatic
+        val CONFIGURATION_DIR: Path = Paths.get(System.getProperty("user.home"), ".bildspur", "ledforest")
+
+        @JvmStatic
+        val CONFIGURATION_PATH: Path = Paths.get(CONFIGURATION_DIR.toString(), CONFIGURATION_FILE)
     }
 
     val gson: Gson = GsonBuilder()
@@ -35,11 +41,16 @@ class ConfigurationController {
             .create()
 
     fun loadAppConfig(): AppConfig {
-        return loadData(Paths.get(CONFIGURATION_FILE))
+        if (!Files.exists(CONFIGURATION_DIR)) {
+            Files.createDirectories(CONFIGURATION_DIR)
+            saveAppConfig(AppConfig())
+        }
+
+        return loadData(CONFIGURATION_PATH)
     }
 
     fun saveAppConfig(config: AppConfig) {
-        saveData(Paths.get(CONFIGURATION_FILE), config)
+        saveData(CONFIGURATION_PATH, config)
     }
 
     fun loadProject(projectFile: String): Project {
