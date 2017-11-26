@@ -21,7 +21,7 @@ class SliderProperty(field: Field, obj: Any, val annotation: SliderParameter) : 
             slider.value = model.value.toDouble()
             valueLabel.text = model.value.format(2)
         }
-        model.fire()
+        model.fireLatest()
 
         slider.valueProperty().addListener { _, _, _ ->
             run {

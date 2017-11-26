@@ -51,7 +51,7 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
             zField.setValue(model.value.z.toDouble())
 
         }
-        model.fire()
+        model.fireLatest()
         children.add(box)
     }
 }

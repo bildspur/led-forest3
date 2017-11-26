@@ -18,7 +18,7 @@ class IntProperty(field: Field, obj: Any, val annotation: IntParameter) : BasePr
         model.onChanged += {
             numberField.setValue(model.value.toDouble())
         }
-        model.fire()
+        model.fireLatest()
 
         numberField.setOnAction {
             model.value = numberField.getValue().toInt()

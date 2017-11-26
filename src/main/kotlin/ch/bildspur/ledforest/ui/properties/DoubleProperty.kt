@@ -18,7 +18,7 @@ class DoubleProperty(field: Field, obj: Any, val annotation: DoubleParameter) : 
         model.onChanged += {
             numberField.setValue(model.value)
         }
-        model.fire()
+        model.fireLatest()
 
         numberField.setOnAction {
             model.value = numberField.getValue()

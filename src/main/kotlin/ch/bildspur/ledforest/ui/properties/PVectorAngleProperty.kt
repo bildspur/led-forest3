@@ -66,7 +66,7 @@ class PVectorAngleProperty(field: Field, obj: Any, val annotation: PVectorAngleP
             yField.value = model.value.y.toDegrees().toDouble()
             zField.value = model.value.z.toDegrees().toDouble()
         }
-        model.fire()
+        model.fireLatest()
         children.add(box)
     }
 }

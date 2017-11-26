@@ -24,4 +24,8 @@ class DataModel<T>(@Expose @Volatile private var dataValue: T) {
     fun fire() {
         onChanged(dataValue)
     }
+
+    fun fireLatest() {
+        onChanged.invokeLatest(dataValue)
+    }
 }

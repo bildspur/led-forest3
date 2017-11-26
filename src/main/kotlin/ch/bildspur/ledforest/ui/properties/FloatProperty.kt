@@ -17,7 +17,7 @@ class FloatProperty(field: Field, obj: Any, val annotation: FloatParameter) : Ba
         model.onChanged += {
             numberField.setValue(model.value.toDouble())
         }
-        model.fire()
+        model.fireLatest()
 
         numberField.setOnAction {
             model.value = numberField.getValue().toFloat()

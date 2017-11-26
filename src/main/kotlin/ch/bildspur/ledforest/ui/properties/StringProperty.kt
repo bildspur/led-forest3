@@ -16,7 +16,7 @@ class StringProperty(field: Field, obj: Any, val annotation: StringParameter) : 
         model.onChanged += {
             textField.text = model.value
         }
-        model.fire()
+        model.fireLatest()
 
         textField.setOnAction {
             model.value = textField.text

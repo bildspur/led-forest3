@@ -5,6 +5,7 @@ package ch.bildspur.ledforest.event
  */
 class Event<T> {
     private val handlers = arrayListOf<(Event<T>.(T) -> Unit)>()
+
     operator fun plusAssign(handler: Event<T>.(T) -> Unit) {
         handlers.add(handler)
     }
@@ -12,6 +13,10 @@ class Event<T> {
     operator fun invoke(value: T) {
         for (handler in handlers)
             handler(value)
+    }
+
+    fun invokeLatest(value: T) {
+        handlers.last()(value)
     }
 
     fun clear() {
