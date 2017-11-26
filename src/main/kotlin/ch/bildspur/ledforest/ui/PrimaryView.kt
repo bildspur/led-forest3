@@ -218,6 +218,7 @@ class PrimaryView {
             }
             "4x4 Tubes" -> {
                 val size = 24
+                val space = 60f
                 val node = DmxNode()
 
                 // add universe
@@ -228,6 +229,8 @@ class PrimaryView {
                     for (j in 0 until 4) {
                         val tube = Tube(addressStart = DataModel(j * 3 * size), universe = DataModel(i))
                         tube.ledCount.value = size
+                        tube.position.value.x = (i * space) - (1.5f * space)
+                        tube.position.value.y = (j * space) - (1.5f * space)
                         project.tubes.add(tube)
                     }
                 }
