@@ -10,7 +10,7 @@ class Interaction {
     var singleColorInteraction = DataModel(false)
 
     @Expose
-    @SliderParameter("Int. Distance", 0.0, 200.0)
+    @SliderParameter("Int. Distance", 1.0, 200.0)
     var interactionDistance = DataModel(75f)
 
     @Expose
