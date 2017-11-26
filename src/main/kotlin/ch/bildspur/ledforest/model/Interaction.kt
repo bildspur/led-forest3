@@ -1,9 +1,14 @@
 package ch.bildspur.ledforest.model
 
+import ch.bildspur.ledforest.ui.properties.BooleanParameter
 import ch.bildspur.ledforest.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose
 
 class Interaction {
+    @Expose
+    @BooleanParameter("Single Color Int.")
+    var singleColorInteraction = DataModel(false)
+
     @Expose
     @SliderParameter("Int. Distance", 0.0, 200.0)
     var interactionDistance = DataModel(75f)
