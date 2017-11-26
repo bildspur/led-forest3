@@ -291,6 +291,10 @@ object ColorMode {
         return this.calcColor
     }
 
+    fun fromRGB(red: Int, green: Int, blue: Int): Int {
+        return red and 0x0ff shl 16 or (green and 0x0ff shl 8) or (blue and 0x0ff)
+    }
+
     fun alpha(rgb: Int): Float {
         val outgoing = (rgb shr 24 and 255).toFloat()
         return if (this.colorModeA == 255.0f) outgoing else outgoing / 255.0f * this.colorModeA

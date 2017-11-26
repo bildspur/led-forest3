@@ -181,11 +181,60 @@ class PrimaryView {
     }
 
     fun newProject(e: ActionEvent) {
-        UITask.run({
-            appConfig.projectFile = ""
-            project.value = Project()
-            resetRenderer()
-        }, { updateUI() }, "new project")
+        // show selection dialog
+        val dialog = ChoiceDialog("Template", listOf("Empty", "Single", "4x4 Tubes"))
+        dialog.title = "New project"
+        dialog.headerText = "Create new project from template."
+        dialog.contentText = "Choose the project template:"
+
+        val result = dialog.showAndWait()
+
+        result.ifPresent({ templateName ->
+            UITask.run({
+                appConfig.projectFile = ""
+                project.value = Project()
+
+                createTemplate(templateName, project.value)
+
+                resetRenderer()
+            }, { updateUI() }, "new project")
+        })
+    }
+
+    private fun createTemplate(templateName: String, project: Project) {
+        when (templateName) {
+            "Empty" -> {
+                // do nothing
+            }
+            "Single" -> {
+                val node = DmxNode()
+                node.universes.add(Universe())
+
+                val tube = Tube()
+                tube.ledCount.value = 24
+
+                project.nodes.add(node)
+                project.tubes.add(tube)
+            }
+            "4x4 Tubes" -> {
+                val size = 24
+                val node = DmxNode()
+
+                // add universe
+                for (i in 0 until 4) {
+                    node.universes.add(Universe(i))
+
+                    // add tubes
+                    for (j in 0 until 4) {
+                        val tube = Tube(addressStart = DataModel(j * 3 * size), universe = DataModel(i))
+                        tube.ledCount.value = size
+                        project.tubes.add(tube)
+                    }
+                }
+
+                project.nodes.add(node)
+            }
+        }
     }
 
     fun loadProject(e: ActionEvent) {

@@ -1,7 +1,6 @@
 package ch.bildspur.ledforest.ui.control.tubemap.shape
 
 import ch.bildspur.ledforest.model.light.Tube
-import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.format
 import ch.fhnw.afpars.ui.control.editor.shapes.OvalShape
 import javafx.geometry.Dimension2D
@@ -13,18 +12,21 @@ import javafx.scene.text.TextAlignment
 import processing.core.PVector
 
 class TubeShape(val tube: Tube, val transform: PVector = PVector()) : OvalShape() {
-    val universeColors = arrayOf(
-            ColorMode.color(208, 100, 85),
-            ColorMode.color(127, 77, 80),
-            ColorMode.color(52, 100, 100),
-            ColorMode.color(28, 89, 100),
-            ColorMode.color(3, 79, 100),
-            ColorMode.color(314, 93, 94),
-            ColorMode.color(197, 50, 100),
-            ColorMode.color(146, 100, 100),
-            ColorMode.color(292, 94, 79),
-            ColorMode.color(0, 0, 87)
-    )
+    companion object {
+        @JvmStatic
+        val UNIVERSE_COLORS = arrayOf(
+                Color.rgb(230, 25, 75),
+                Color.rgb(60, 180, 75),
+                Color.rgb(255, 225, 25),
+                Color.rgb(0, 130, 200),
+                Color.rgb(245, 130, 48),
+                Color.rgb(145, 30, 180),
+                Color.rgb(70, 240, 240),
+                Color.rgb(240, 50, 230),
+                Color.rgb(210, 245, 60),
+                Color.rgb(250, 190, 190)
+        )
+    }
 
     val font = Font("PT Mono", 8.0)
 
@@ -39,8 +41,7 @@ class TubeShape(val tube: Tube, val transform: PVector = PVector()) : OvalShape(
     }
 
     override fun render(gc: GraphicsContext) {
-        val color = universeColors [tube.universe.value % universeColors.size]
-        gc.fill = Color.rgb(ColorMode.red(color).toInt(), ColorMode.green(color).toInt(), ColorMode.blue(color).toInt())
+        gc.fill = UNIVERSE_COLORS[tube.universe.value % UNIVERSE_COLORS.size]
 
         val exact = Point2D(location.x - (size.width / 2.0), location.y - (size.height / 2.0))
         gc.fillOval(exact.x, exact.y, size.width, size.height)
