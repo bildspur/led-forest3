@@ -202,6 +202,18 @@ class Sketch : PApplet() {
             leapMotion.pauseInteraction = !project.value.isInteraction.value
         }
         project.value.isInteraction.fire()
+
+        // setup hooks
+        setupHooks()
+    }
+
+    fun setupHooks() {
+        project.value.nodes.forEach {
+            it.address.onChanged.clear()
+            it.address.onChanged += {
+                proposeResetRenderer()
+            }
+        }
     }
 
     fun updateLEDColors() {
@@ -212,7 +224,15 @@ class Sketch : PApplet() {
         }
     }
 
+    fun proposeResetRenderer() {
+        if (isInitialised) {
+            isResetRendererProposed = true
+        }
+    }
+
     fun resetRenderer() {
+        println("reseting renderer...")
+
         renderer.forEach {
             timer.taskList.remove(it.timerTask)
             it.dispose()

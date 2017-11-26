@@ -13,4 +13,8 @@ class Event<T> {
         for (handler in handlers)
             handler(value)
     }
+
+    fun clear() {
+        handlers.clear()
+    }
 }

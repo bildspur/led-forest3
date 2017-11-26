@@ -210,9 +210,7 @@ class PrimaryView {
     }
 
     fun resetRenderer() {
-        if (sketch.isInitialised) {
-            sketch.isResetRendererProposed = true
-        }
+        sketch.proposeResetRenderer()
     }
 
     fun rebuildRenderer() {
@@ -261,6 +259,7 @@ class PrimaryView {
                 "Node" -> project.value.nodes.add(DmxNode())
             }
 
+            sketch.setupHooks()
             rebuildRenderer()
             updateUI()
         })
