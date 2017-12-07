@@ -53,7 +53,7 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
         if (leap.hands.isEmpty())
             return
 
-        val h = leap.hands.sortedBy { it.position.dist(ledPosition) }.first()
+        val h = leap.hands.sortedBy { it.position.dist(ledPosition) }.firstOrNull() ?: return
 
         val distance = h.position.dist(ledPosition)
 
