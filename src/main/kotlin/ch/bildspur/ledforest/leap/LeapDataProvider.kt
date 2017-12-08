@@ -30,6 +30,9 @@ class LeapDataProvider {
 
     private val handCache = ConcurrentHashMap<Int, InteractionHand>()
 
+    /**
+     * Not thread safe!!
+     */
     val hands: MutableCollection<InteractionHand>
         get() = handCache.values
 
