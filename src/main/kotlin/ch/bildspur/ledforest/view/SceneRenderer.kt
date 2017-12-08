@@ -37,8 +37,12 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
 
         // render hands
         if (leap.isRunning) {
-            leap.hands.forEach {
-                renderHand(it)
+            try {
+                leap.hands.forEach {
+                    renderHand(it)
+                }
+            } catch (ex: Exception) {
+                println("LCB 1: ${ex.message}")
             }
         }
     }

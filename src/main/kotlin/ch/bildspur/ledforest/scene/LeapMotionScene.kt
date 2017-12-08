@@ -71,8 +71,8 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
             led.color.fadeB(PApplet.max(0f,
                     PApplet.map(distance, sketch.project.value.interaction.interactionDistance.value, 0f, 0f, 100f)),
                     0.1f)
-        } catch (ex: NullPointerException) {
-            println("LCE: ${ex.message}")
+        } catch (ex: Exception) {
+            println("LCB 0: ${ex.message}")
             return
         }
     }
