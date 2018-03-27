@@ -33,7 +33,8 @@ import kotlin.concurrent.thread
 class PrimaryView {
     lateinit var primaryStage: Stage
 
-    @FXML lateinit var root: BorderPane
+    @FXML
+    lateinit var root: BorderPane
 
     var tubeMap = TubeMap()
 
@@ -53,15 +54,20 @@ class PrimaryView {
 
     lateinit var processingThread: Thread
 
-    @FXML lateinit var propertiesPane: TitledPane
+    @FXML
+    lateinit var propertiesPane: TitledPane
 
-    @FXML lateinit var elementTreeView: TreeView<TagItem>
+    @FXML
+    lateinit var elementTreeView: TreeView<TagItem>
 
-    @FXML lateinit var statusLabel: Label
+    @FXML
+    lateinit var statusLabel: Label
 
-    @FXML lateinit var progressIndicator: ProgressIndicator
+    @FXML
+    lateinit var progressIndicator: ProgressIndicator
 
-    @FXML lateinit var iconView: ImageView
+    @FXML
+    lateinit var iconView: ImageView
 
     private val appIcon = Image(javaClass.getResourceAsStream("images/LEDForestIcon.png"))
     private val nodeIcon = Image(javaClass.getResourceAsStream("images/ArtnetIcon32.png"))
@@ -182,7 +188,7 @@ class PrimaryView {
 
     fun newProject(e: ActionEvent) {
         // show selection dialog
-        val dialog = ChoiceDialog("Template", listOf("Empty", "Single", "4x4 Tubes"))
+        val dialog = ChoiceDialog("Template", listOf("Empty", "Single", "4x4 Tubes", "Performance"))
         dialog.title = "New project"
         dialog.headerText = "Create new project from template."
         dialog.contentText = "Choose the project template:"
@@ -231,6 +237,45 @@ class PrimaryView {
                         tube.ledCount.value = size
                         tube.position.value.x = (i * space) - (1.5f * space)
                         tube.position.value.y = (j * space) - (1.5f * space)
+                        project.tubes.add(tube)
+                    }
+                }
+
+                project.nodes.add(node)
+            }
+            "Performance" -> {
+                val size = 24
+                val addresses = (size * 3)
+                val space = 20f
+                val node = DmxNode()
+
+                val tubeCountX = 10
+                val tubeCountY = 10
+                val universeCount = ((tubeCountX * tubeCountY) * addresses) / 512 + 1
+
+                var currentUniverse = 0
+                var addressCount = 0
+
+                // add universes
+                for (i in 0 until universeCount)
+                    node.universes.add(Universe(i))
+
+                // add universe
+                for (y in 0 until tubeCountY) {
+
+                    // add tubes
+                    for (x in 0 until tubeCountX) {
+                        addressCount += addresses
+
+                        if (addressCount >= 512) {
+                            currentUniverse++
+                            addressCount = addresses
+                        }
+
+                        val tube = Tube(addressStart = DataModel(addressCount - addresses), universe = DataModel(currentUniverse))
+                        tube.ledCount.value = size
+                        tube.position.value.x = (x * space) - (tubeCountX * space / 2f)
+                        tube.position.value.y = (y * space) - (tubeCountY * space / 2f)
                         project.tubes.add(tube)
                     }
                 }
