@@ -249,16 +249,14 @@ class PrimaryView {
                 val space = 20f
                 val node = DmxNode()
 
-                val tubeCountX = 10
-                val tubeCountY = 10
-                val universeCount = ((tubeCountX * tubeCountY) * addresses) / 512 + 1
+                val tubeCountX = 50
+                val tubeCountY = 50
 
                 var currentUniverse = 0
                 var addressCount = 0
 
-                // add universes
-                for (i in 0 until universeCount)
-                    node.universes.add(Universe(i))
+                // add first universe
+                node.universes.add(Universe(currentUniverse))
 
                 // add universe
                 for (y in 0 until tubeCountY) {
@@ -269,6 +267,8 @@ class PrimaryView {
 
                         if (addressCount >= 512) {
                             currentUniverse++
+
+                            node.universes.add(Universe(currentUniverse))
                             addressCount = addresses
                         }
 

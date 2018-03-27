@@ -50,9 +50,10 @@ class Sketch : PApplet() {
         val NAME = "LED Forest 3"
 
         @JvmStatic
-        val VERSION = "0.3"
+        val VERSION = "0.4"
 
-        @JvmStatic lateinit var instance: PApplet
+        @JvmStatic
+        lateinit var instance: PApplet
 
         @JvmStatic
         fun map(value: Double, start1: Double, stop1: Double, start2: Double, stop2: Double): Double {
