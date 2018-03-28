@@ -45,7 +45,7 @@ class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = Data
         get() = if (leds.isNotEmpty()) leds[0].address else 0
 
     val endAddress: Int
-        get() = if (leds.isNotEmpty()) leds[leds.size - 1].address else 0
+        get() = if (leds.isNotEmpty()) leds[leds.size - 1].address + 3 else 0
 
     var leds: List<LED> = emptyList()
 
@@ -64,7 +64,7 @@ class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = Data
     }
 
     fun initLEDs() {
-        leds = (0..ledCount.value).map { LED(addressStart.value + it * LED.LED_ADDRESS_SIZE, ColorMode.color(0, 100, 100)) }
+        leds = (0 until ledCount.value).map { LED(addressStart.value + it * LED.LED_ADDRESS_SIZE, ColorMode.color(0, 100, 100)) }
     }
 
     override fun toString(): String {

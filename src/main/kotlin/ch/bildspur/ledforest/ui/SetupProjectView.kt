@@ -112,7 +112,7 @@ class SetupProjectView {
     private fun updateWindow() {
         Platform.runLater({
             val c = runPreCalculation()
-            statusLabel.text = "Will create LED: ${c.ledCount} Tube: ${c.tubeCount} Universe: ${c.universeCount} Node: ${c.nodeCount}"
+            statusLabel.text = "Add: ${c.ledCount * 3} LED: ${c.ledCount} T: ${c.tubeCount} U: ${c.universeCount} N: ${c.nodeCount}"
         })
     }
 
@@ -122,10 +122,10 @@ class SetupProjectView {
         info.clonePattern.create(tempProject, info)
 
         // create output
-        result.ledCount = project.tubes.sumBy { it.leds.count() }
-        result.tubeCount = project.tubes.count()
-        result.universeCount = project.nodes.sumBy { it.universes.count() }
-        result.nodeCount = project.nodes.count()
+        result.ledCount = tempProject.tubes.sumBy { it.leds.size }
+        result.tubeCount = tempProject.tubes.size
+        result.universeCount = tempProject.nodes.sumBy { it.universes.size }
+        result.nodeCount = tempProject.nodes.size
 
         return result
     }
