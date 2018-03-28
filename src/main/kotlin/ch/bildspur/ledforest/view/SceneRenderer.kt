@@ -10,7 +10,7 @@ import processing.core.PApplet
 import processing.core.PGraphics
 import processing.core.PShape
 
-class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataProvider) : IRenderer {
+class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataProvider, val highDetail: Boolean) : IRenderer {
     private val task = TimerTask(0, { render() }, "SceneRenderer")
     override val timerTask: TimerTask
         get() = task
@@ -69,8 +69,11 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
             g.noStroke()
             g.fill(tube.leds[i].color.color)
 
-            g.box(LED.SIZE)
-            //g.shape(rodShape)
+            if (highDetail)
+                g.shape(rodShape)
+            else
+                g.box(LED.SIZE)
+
             g.popMatrix()
         }
     }

@@ -32,6 +32,10 @@ class Project {
     var highFPSMode = DataModel(true)
 
     @Expose
+    @BooleanParameter("High Detail Mode")
+    var highDetail = DataModel(true)
+
+    @Expose
     @BooleanParameter("Fullscreen Mode*")
     var isFullScreenMode = DataModel(false)
 
