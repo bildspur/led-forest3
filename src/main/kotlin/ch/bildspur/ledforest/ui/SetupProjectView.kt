@@ -2,7 +2,9 @@ package ch.bildspur.ledforest.ui
 
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.setup.SetupInformation
+import ch.bildspur.ledforest.setup.pattern.CircularPattern
 import ch.bildspur.ledforest.setup.pattern.ClonePattern
+import ch.bildspur.ledforest.setup.pattern.LinearPattern
 import ch.bildspur.ledforest.setup.pattern.SquarePattern
 import javafx.application.Platform
 import javafx.event.ActionEvent
@@ -29,7 +31,7 @@ class SetupProjectView {
     lateinit var flipXY: CheckBox
     lateinit var clonePattern: ComboBox<ClonePattern>
 
-    val clonePatterns = listOf(SquarePattern())
+    val clonePatterns = listOf(LinearPattern(), SquarePattern(), CircularPattern())
 
     data class PreCalculation(var ledCount: Int = 0, var tubeCount: Int = 0, var universeCount: Int = 0, var nodeCount: Int = 0)
 

@@ -12,6 +12,6 @@ class SetupInformation {
     var isUniverseAutoFill = false
     var universesPerNode = 4
     var clonePattern: ClonePattern = SquarePattern()
-    var space = 50
-    var flipXY = false
+    var space = 60
+    var flipXY = true
 }
