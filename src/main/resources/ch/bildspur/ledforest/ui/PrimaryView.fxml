@@ -3,7 +3,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="600.0" prefWidth="1010.0"
+            prefHeight="600.0" prefWidth="1078.0"
             xmlns="http://javafx.com/javafx/8.0.101"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.bildspur.ledforest.ui.PrimaryView">
@@ -30,10 +30,10 @@
         </HBox>
     </top>
     <left>
-        <TitledPane text="Scene" collapsible="false">
+        <TitledPane text="Scene" collapsible="false" prefWidth="260">
             <VBox prefWidth="200.0" BorderPane.alignment="CENTER"
                   style="-fx-border-style: none;">
-                <TreeView fx:id="elementTreeView" prefWidth="260.0"/>
+                <TreeView fx:id="elementTreeView" prefWidth="300.0"/>
                 <HBox prefWidth="200.0" spacing="10.0">
                     <padding>
                         <Insets top="10.0"/>
@@ -57,7 +57,7 @@
     <center>
     </center>
     <right>
-        <TitledPane fx:id="propertiesPane" text="Properties" collapsible="false" prefWidth="300.0">
+        <TitledPane fx:id="propertiesPane" text="Properties" collapsible="false" prefWidth="310.0">
         </TitledPane>
     </right>
 </BorderPane>
