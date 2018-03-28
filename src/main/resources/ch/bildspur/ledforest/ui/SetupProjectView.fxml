@@ -36,6 +36,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
                 <Label text="Name">
@@ -47,7 +48,7 @@
                 <Label text="LEDs per Tube" GridPane.rowIndex="2"/>
                 <Label text="Tubes per Universe" GridPane.rowIndex="3"/>
                 <Label text="Universe per Node" GridPane.rowIndex="4"/>
-                <Label text="Clone Pattern" GridPane.rowIndex="5"/>
+                <Label text="Clone Pattern" GridPane.rowIndex="6"/>
                 <TextField fx:id="projectName" promptText="Project Name" GridPane.columnIndex="1"/>
                 <CheckBox fx:id="areTubesInverted" mnemonicParsing="false" text="Invert" GridPane.columnIndex="2"
                           GridPane.rowIndex="1">
@@ -77,13 +78,19 @@
                     </valueFactory>
                 </Spinner>
                 <ComboBox fx:id="clonePattern" prefWidth="150.0" promptText="Select Pattern" GridPane.columnIndex="1"
-                          GridPane.rowIndex="5"/>
+                          GridPane.rowIndex="6"/>
                 <CheckBox fx:id="isUniverseAutoFill" mnemonicParsing="false" text="Auto Fill" GridPane.columnIndex="2"
                           GridPane.rowIndex="3">
                     <GridPane.margin>
                         <Insets left="20.0"/>
                     </GridPane.margin>
                 </CheckBox>
+                <Spinner fx:id="space" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                    <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory max="1024" min="0"/>
+                    </valueFactory>
+                </Spinner>
+                <Label text="Space (px)" GridPane.rowIndex="5"/>
             </children>
             <BorderPane.margin>
                 <Insets left="20.0" right="20.0"/>

@@ -12,4 +12,5 @@ class SetupInformation {
     var isUniverseAutoFill = true
     var universesPerNode = 128
     var clonePattern: ClonePattern = SquarePattern()
+    var space = 50
 }

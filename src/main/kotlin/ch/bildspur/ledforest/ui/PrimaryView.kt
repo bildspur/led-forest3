@@ -214,6 +214,10 @@ class PrimaryView {
         // reset current project
         UITask.run({
             appConfig.projectFile = ""
+
+            // create project
+            controller.info.clonePattern.create(controller.project, controller.info)
+
             project.value = controller.project
             resetRenderer()
         }, { updateUI() }, "new project")

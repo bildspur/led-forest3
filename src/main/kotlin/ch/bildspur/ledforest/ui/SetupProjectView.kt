@@ -25,6 +25,7 @@ class SetupProjectView {
     lateinit var tubesPerUniverseCount: Spinner<Int>
     lateinit var isUniverseAutoFill: CheckBox
     lateinit var universesPerNode: Spinner<Int>
+    lateinit var space: Spinner<Int>
     lateinit var clonePattern: ComboBox<ClonePattern>
 
     val clonePatterns = listOf(SquarePattern())
@@ -77,6 +78,11 @@ class SetupProjectView {
             updateWindow()
         }
 
+        space.valueProperty().addListener { observable, oldValue, newValue ->
+            info.space = newValue
+            updateWindow()
+        }
+
         // set initial values
         projectName.text = info.projectName
         tubeCount.valueFactory.value = info.tubeCount
@@ -86,6 +92,7 @@ class SetupProjectView {
         isUniverseAutoFill.isSelected = info.isUniverseAutoFill
         universesPerNode.valueFactory.value = info.universesPerNode
         clonePattern.selectionModel.select(info.clonePattern)
+        space.valueFactory.value = info.space
 
         // set special unit values
         tubesPerUniverseCount.isDisable = isUniverseAutoFill.isSelected
