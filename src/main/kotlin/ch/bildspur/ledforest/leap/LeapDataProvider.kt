@@ -31,10 +31,10 @@ class LeapDataProvider {
     private val handCache = ConcurrentHashMap<Int, InteractionHand>()
 
     /**
-     * Not thread safe!!
+     * Not thread safe -> Maybe using entry to make it concurrency safe
      */
     val hands: MutableCollection<InteractionHand>
-        get() = handCache.values
+        get() = handCache.values //entries.map { it -> it.value }.toMutableList()
 
     init {
         timer.addTask(TimerTask(updateTime, {
@@ -77,7 +77,7 @@ class LeapDataProvider {
         frame.hands().forEach {
             // add if not already in cache
             if (!handCache.containsKey(it.id())) {
-                handCache.put(it.id(), InteractionHand(it))
+                handCache[it.id()] = InteractionHand(it)
                 handCount++
             }
 

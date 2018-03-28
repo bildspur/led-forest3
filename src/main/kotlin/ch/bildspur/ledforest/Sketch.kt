@@ -59,11 +59,6 @@ class Sketch : PApplet() {
         fun map(value: Double, start1: Double, stop1: Double, start2: Double, stop2: Double): Double {
             return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1))
         }
-
-        @JvmStatic
-        fun currentMillis(): Int {
-            return instance.millis()
-        }
     }
 
 
