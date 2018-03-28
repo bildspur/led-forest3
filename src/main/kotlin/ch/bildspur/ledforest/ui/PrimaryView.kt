@@ -17,12 +17,17 @@ import ch.bildspur.ledforest.ui.util.UITask
 import javafx.application.Platform
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
+import javafx.fxml.FXMLLoader
+import javafx.scene.Parent
+import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
+import javafx.stage.Modality
 import javafx.stage.Stage
+import javafx.stage.StageStyle
 import processing.core.PApplet
 import processing.core.PVector
 import java.nio.file.Files
@@ -187,24 +192,29 @@ class PrimaryView {
     }
 
     fun newProject(e: ActionEvent) {
-        // show selection dialog
-        val dialog = ChoiceDialog("Template", listOf("Empty", "Single", "4x4 Tubes", "Performance"))
-        dialog.title = "New project"
-        dialog.headerText = "Create new project from template."
-        dialog.contentText = "Choose the project template:"
 
-        val result = dialog.showAndWait()
+        val loader = FXMLLoader(javaClass.getResource("SetupProjectView.fxml"))
+        val root1 = loader.load<Any>() as Parent
+        val controller = loader.getController<Any>() as SetupProjectView
+        val stage = Stage()
 
-        result.ifPresent({ templateName ->
-            UITask.run({
-                appConfig.projectFile = ""
-                project.value = Project()
+        controller.primaryStage = stage
+        controller.project = Project()
+        stage.initModality(Modality.APPLICATION_MODAL)
+        stage.initStyle(StageStyle.DECORATED)
+        stage.title = "Create new project"
+        stage.scene = Scene(root1)
+        stage.showAndWait()
 
-                createTemplate(templateName, project.value)
+        if (!controller.initNewProject)
+            return
 
-                resetRenderer()
-            }, { updateUI() }, "new project")
-        })
+        // reset current project
+        UITask.run({
+            appConfig.projectFile = ""
+            project.value = controller.project
+            resetRenderer()
+        }, { updateUI() }, "new project")
     }
 
     private fun createTemplate(templateName: String, project: Project) {
