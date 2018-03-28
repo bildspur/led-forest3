@@ -85,6 +85,12 @@
                         <Insets left="20.0"/>
                     </GridPane.margin>
                 </CheckBox>
+                <CheckBox fx:id="flipXY" mnemonicParsing="false" text="Flip XY" GridPane.columnIndex="2"
+                          GridPane.rowIndex="5">
+                    <GridPane.margin>
+                        <Insets left="20.0"/>
+                    </GridPane.margin>
+                </CheckBox>
                 <Spinner fx:id="space" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <valueFactory>
                         <SpinnerValueFactory.IntegerSpinnerValueFactory max="1024" min="0"/>

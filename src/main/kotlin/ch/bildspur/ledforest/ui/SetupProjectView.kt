@@ -26,6 +26,7 @@ class SetupProjectView {
     lateinit var isUniverseAutoFill: CheckBox
     lateinit var universesPerNode: Spinner<Int>
     lateinit var space: Spinner<Int>
+    lateinit var flipXY: CheckBox
     lateinit var clonePattern: ComboBox<ClonePattern>
 
     val clonePatterns = listOf(SquarePattern())
@@ -42,7 +43,7 @@ class SetupProjectView {
             updateWindow()
         }
 
-        tubeCount.valueProperty().addListener { observable, oldValue, newValue ->
+        tubeCount.valueProperty().addListener { _, _, newValue ->
             info.tubeCount = newValue
             updateWindow()
         }
@@ -52,12 +53,12 @@ class SetupProjectView {
             updateWindow()
         }
 
-        ledsPerTubeCount.valueProperty().addListener { observable, oldValue, newValue ->
+        ledsPerTubeCount.valueProperty().addListener { _, _, newValue ->
             info.ledsPerTubeCount = newValue
             updateWindow()
         }
 
-        tubesPerUniverseCount.valueProperty().addListener { observable, oldValue, newValue ->
+        tubesPerUniverseCount.valueProperty().addListener { _, _, newValue ->
             info.tubesPerUniverseCount = newValue
             updateWindow()
         }
@@ -68,7 +69,7 @@ class SetupProjectView {
             updateWindow()
         }
 
-        universesPerNode.valueProperty().addListener { observable, oldValue, newValue ->
+        universesPerNode.valueProperty().addListener { _, _, newValue ->
             info.universesPerNode = newValue
             updateWindow()
         }
@@ -78,8 +79,13 @@ class SetupProjectView {
             updateWindow()
         }
 
-        space.valueProperty().addListener { observable, oldValue, newValue ->
+        space.valueProperty().addListener { _, _, newValue ->
             info.space = newValue
+            updateWindow()
+        }
+
+        flipXY.setOnAction {
+            info.flipXY = flipXY.isSelected
             updateWindow()
         }
 
@@ -93,6 +99,7 @@ class SetupProjectView {
         universesPerNode.valueFactory.value = info.universesPerNode
         clonePattern.selectionModel.select(info.clonePattern)
         space.valueFactory.value = info.space
+        flipXY.isSelected = info.flipXY
 
         // set special unit values
         tubesPerUniverseCount.isDisable = isUniverseAutoFill.isSelected
@@ -112,7 +119,7 @@ class SetupProjectView {
     private fun updateWindow() {
         Platform.runLater({
             val c = runPreCalculation()
-            statusLabel.text = "Add: ${c.ledCount * 3} LED: ${c.ledCount} T: ${c.tubeCount} U: ${c.universeCount} N: ${c.nodeCount}"
+            statusLabel.text = "A: ${c.ledCount * 3} | LED: ${c.ledCount} | T: ${c.tubeCount} | U: ${c.universeCount} | N: ${c.nodeCount}"
         })
     }
 
