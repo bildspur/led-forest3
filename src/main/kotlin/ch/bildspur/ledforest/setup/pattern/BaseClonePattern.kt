@@ -41,13 +41,14 @@ abstract class BaseClonePattern(val name: String) : ClonePattern {
         }
 
         var currentNode = DmxNode()
-        var universeInNodeCount = 0
+        var universeInNodeCount = 1
         project.nodes.add(currentNode)
 
         // create universes and nodes
         for (i in 0 until universeCount + 1) {
             if (universeInNodeCount > info.universesPerNode) {
-                universeInNodeCount = 0
+                universeInNodeCount = 1
+
                 currentNode = DmxNode()
                 project.nodes.add(currentNode)
             }

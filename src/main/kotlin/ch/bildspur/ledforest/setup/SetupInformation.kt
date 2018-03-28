@@ -10,7 +10,7 @@ class SetupInformation {
     var ledsPerTubeCount = 24
     var tubesPerUniverseCount = 4
     var isUniverseAutoFill = false
-    var universesPerNode = 128
+    var universesPerNode = 4
     var clonePattern: ClonePattern = SquarePattern()
     var space = 50
 }
