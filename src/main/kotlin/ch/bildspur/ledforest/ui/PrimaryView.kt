@@ -200,9 +200,11 @@ class PrimaryView {
 
         controller.primaryStage = stage
         controller.project = Project()
+
+        stage.setOnShown { controller.setupView() }
         stage.initModality(Modality.APPLICATION_MODAL)
         stage.initStyle(StageStyle.DECORATED)
-        stage.title = "Create new project"
+        stage.title = Sketch.NAME
         stage.scene = Scene(root1)
         stage.showAndWait()
 
