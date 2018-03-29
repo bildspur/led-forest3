@@ -9,11 +9,6 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
 
 class LeapDataProvider {
-    companion object {
-        @JvmStatic
-        val BOX = PVector(150f, 150f, 100f)
-    }
-
     private val updateTime = 15L
 
     var isRunning = false
@@ -22,6 +17,8 @@ class LeapDataProvider {
     var pauseInteraction = false
 
     var handCount = 0
+
+    var interactionBox = PVector(150f, 150f, 100f)
 
     private lateinit var leapThread: Thread
     private lateinit var controller: Controller
@@ -77,7 +74,7 @@ class LeapDataProvider {
         frame.hands().forEach {
             // add if not already in cache
             if (!handCache.containsKey(it.id())) {
-                handCache[it.id()] = InteractionHand(it)
+                handCache[it.id()] = InteractionHand(it, interactionBox)
                 handCount++
             }
 

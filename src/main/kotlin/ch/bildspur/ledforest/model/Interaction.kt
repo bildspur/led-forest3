@@ -20,4 +20,8 @@ class Interaction {
     @Expose
     @SliderParameter("Hue End", 0.0, 360.0)
     var hueEnd = DataModel(360f)
+
+    @Expose
+    @BooleanParameter("Show Interaction Info")
+    var showInteractionInfo = DataModel(false)
 }

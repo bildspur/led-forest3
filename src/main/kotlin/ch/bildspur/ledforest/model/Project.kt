@@ -5,6 +5,7 @@ import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.ui.properties.BooleanParameter
 import ch.bildspur.ledforest.ui.properties.IntParameter
+import ch.bildspur.ledforest.ui.properties.SliderParameter
 import ch.bildspur.ledforest.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
 import java.util.concurrent.CopyOnWriteArrayList
@@ -42,6 +43,10 @@ class Project {
     @Expose
     @IntParameter("Fullscreen Display*")
     var fullScreenDisplay = DataModel(0)
+
+    @Expose
+    @SliderParameter("Tube Detail", 2.0, 10.0, 1.0)
+    var tubeDetail = DataModel(5.0)
 
     @Expose
     @BooleanParameter("Sound*")

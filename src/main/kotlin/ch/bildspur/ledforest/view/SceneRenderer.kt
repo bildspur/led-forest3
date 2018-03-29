@@ -3,6 +3,7 @@ package ch.bildspur.ledforest.view
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.leap.InteractionHand
 import ch.bildspur.ledforest.leap.LeapDataProvider
+import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.util.*
@@ -10,20 +11,19 @@ import processing.core.PApplet
 import processing.core.PGraphics
 import processing.core.PShape
 
-class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataProvider, val highDetail: Boolean) : IRenderer {
+class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataProvider, val project: Project) : IRenderer {
     private val task = TimerTask(0, { render() }, "SceneRenderer")
     override val timerTask: TimerTask
         get() = task
 
     lateinit var rodShape: PShape
 
-    // view variables
-    private var rodDetail = 5
-
 
     override fun setup() {
-        rodShape = g.createRod(Tube.WIDTH, LED.SIZE, rodDetail)
-        rodShape.disableStyle()
+        project.tubeDetail.onChanged += {
+            setupRod()
+        }
+        project.tubeDetail.fireLatest()
     }
 
     override fun render() {
@@ -45,6 +45,10 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
                 println("LCB 1: ${ex.message}")
             }
         }
+
+        // render interaction box
+        if (project.interaction.showInteractionInfo.value)
+            renderInteractionInfo()
     }
 
     private fun renderTube(tube: Tube) {
@@ -69,13 +73,18 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
             g.noStroke()
             g.fill(tube.leds[i].color.color)
 
-            if (highDetail)
+            if (project.highDetail.value)
                 g.shape(rodShape)
             else
                 g.box(LED.SIZE)
 
             g.popMatrix()
         }
+    }
+
+    private fun setupRod() {
+        rodShape = g.createRod(Tube.WIDTH, LED.SIZE, project.tubeDetail.value.toInt())
+        rodShape.disableStyle()
     }
 
     private fun renderHand(hand: InteractionHand) {
@@ -87,6 +96,14 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
         g.strokeWeight(2f)
         g.sphereDetail(PApplet.map(hand.grabStrength.value, 0f, 1f, 5f, 20f).toInt())
         g.sphere(20f)
+        g.popMatrix()
+    }
+
+    private fun renderInteractionInfo() {
+        g.pushMatrix()
+        g.noFill()
+        g.stroke(255)
+        g.box(2 * leap.interactionBox.x, 2 * leap.interactionBox.y, 2 * leap.interactionBox.z)
         g.popMatrix()
     }
 

@@ -2,7 +2,6 @@ package ch.bildspur.ledforest.view
 
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.leap.LeapDataProvider
-import ch.bildspur.ledforest.leap.LeapDataProvider.Companion.BOX
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.sound.EasingAudioPlayer
@@ -48,7 +47,7 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
             } else {
                 handPlayer.volume.target = EasingAudioPlayer.DEFAULT_GAIN
                 val average = (hands.sumByDouble { it.position.x.toDouble() } / hands.size.toDouble()).toFloat()
-                handPlayer.player.pan = PApplet.map(average, 0f, BOX.x, 0f, 1f).limit(-1f, 1f)
+                handPlayer.player.pan = PApplet.map(average, 0f, leap.interactionBox.x, 0f, 1f).limit(-1f, 1f)
             }
         } catch (ex: Exception) {
             println("LCB 2: ${ex.message}")

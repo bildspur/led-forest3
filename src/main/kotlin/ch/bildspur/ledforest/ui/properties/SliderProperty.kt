@@ -12,6 +12,10 @@ class SliderProperty(field: Field, obj: Any, val annotation: SliderParameter) : 
     private val valueLabel = Label()
 
     init {
+        slider.majorTickUnit = annotation.majorTick
+        slider.minorTickCount = 0
+        slider.isSnapToTicks = annotation.snap
+
         val box = HBox(slider, valueLabel)
         box.spacing = 10.0
         children.add(box)
