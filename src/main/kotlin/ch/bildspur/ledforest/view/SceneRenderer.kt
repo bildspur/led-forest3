@@ -103,7 +103,7 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
         g.pushMatrix()
         g.noFill()
         g.stroke(255)
-        g.box(2 * leap.interactionBox.x, 2 * leap.interactionBox.y, 2 * leap.interactionBox.z)
+        g.box(leap.interactionBox.x, leap.interactionBox.y, leap.interactionBox.z)
         g.popMatrix()
     }
 
