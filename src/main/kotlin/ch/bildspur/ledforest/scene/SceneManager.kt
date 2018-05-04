@@ -10,6 +10,7 @@ class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
     val starScene = StarPatternScene(tubes)
     val leapMotionScene = LeapMotionScene(tubes)
     val blackScene = BlackScene(tubes)
+    val strobeScene = StrobeScene(tubes)
 
     var activeScene: BaseScene = blackScene
 
@@ -36,6 +37,9 @@ class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
         if (activeScene != blackScene && !project.isSceneManager.value)
             initScene(blackScene)
 
+        if (activeScene != strobeScene && project.isStrobeEnabled.value)
+            initScene(strobeScene)
+
         timer.update()
     }
 
@@ -43,6 +47,7 @@ class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
         starScene.dispose()
         leapMotionScene.dispose()
         blackScene.dispose()
+        strobeScene.dispose()
     }
 
     internal fun initScene(scene: BaseScene) {

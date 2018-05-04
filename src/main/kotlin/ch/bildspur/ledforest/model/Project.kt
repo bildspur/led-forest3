@@ -57,6 +57,10 @@ class Project {
     var isSceneManager = DataModel(true)
 
     @Expose
+    @BooleanParameter("Enable Strobe")
+    var isStrobeEnabled = DataModel(false)
+
+    @Expose
     @BooleanParameter("Interaction")
     var isInteraction = DataModel(true)
 
