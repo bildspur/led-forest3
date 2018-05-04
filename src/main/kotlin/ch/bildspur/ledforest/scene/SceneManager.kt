@@ -43,7 +43,7 @@ class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
             if (activeScene != strobeScene
                     && project.isStrobeEnabled.value
                     && leapMotionScene.isLeapAvailable()
-                    && leapMotionScene.leap.hands.map { it.grabStrength.value > easterEggGrabStrength }.any())
+                    && leapMotionScene.leap.hands.map { it.grabStrength.value > easterEggGrabStrength }.contains(true))
                 initScene(strobeScene)
         } catch (ex: Exception) {
             println("NPE: 05")
