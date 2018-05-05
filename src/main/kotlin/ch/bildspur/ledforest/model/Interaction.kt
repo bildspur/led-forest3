@@ -10,6 +10,14 @@ class Interaction {
     var singleColorInteraction = DataModel(false)
 
     @Expose
+    @BooleanParameter("Enable Strobe")
+    var isStrobeEnabled = DataModel(false)
+
+    @Expose
+    @SliderParameter("Strobe Threshold", 0.0, 1.0)
+    var strobeThreshold = DataModel(0.8f)
+
+    @Expose
     @SliderParameter("Int. Distance", 1.0, 200.0)
     var interactionDistance = DataModel(75f)
 

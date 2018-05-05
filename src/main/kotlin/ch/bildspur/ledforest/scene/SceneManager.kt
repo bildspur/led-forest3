@@ -14,8 +14,6 @@ class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
 
     var activeScene: BaseScene = blackScene
 
-    val easterEggGrabStrength = 0.8f
-
     private val task = TimerTask(0, { render() }, "SceneManager")
 
     override val timerTask: TimerTask
@@ -41,9 +39,9 @@ class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
 
         try {
             if (activeScene != strobeScene
-                    && project.isStrobeEnabled.value
+                    && project.interaction.isStrobeEnabled.value
                     && leapMotionScene.isLeapAvailable()
-                    && leapMotionScene.leap.hands.map { it.grabStrength.value > easterEggGrabStrength }.contains(true))
+                    && leapMotionScene.leap.hands.map { it.grabStrength.value >= project.interaction.strobeThreshold.value }.contains(true))
                 initScene(strobeScene)
         } catch (ex: Exception) {
             println("NPE: 05")
