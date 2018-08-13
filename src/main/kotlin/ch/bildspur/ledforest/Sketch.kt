@@ -201,7 +201,6 @@ class Sketch : PApplet() {
                 image(canvas, 0f, 0f)
 
             showDebugInformation()
-
             drawFPS(g)
         }
     }

@@ -50,4 +50,12 @@ class RealSenseInteraction {
     @Expose
     @SliderParameter("Min Area Size", 1.0, 500.0, 1.0, snap = true, roundInt = true)
     var minAreaSize = DataModel(125.0)
+
+    @Expose
+    @SliderParameter("Area Sparsing", 0.0, 500.0, 1.0, snap = true, roundInt = true)
+    var sparsing = DataModel(0.0)
+
+    @Expose
+    @SliderParameter("Max Delta", 0.0, 500.0, 1.0, snap = true, roundInt = true)
+    var maxDelta = DataModel(100.0)
 }

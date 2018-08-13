@@ -3,10 +3,12 @@ package ch.bildspur.ledforest.realsense.util
 import ch.bildspur.ledforest.realsense.vision.ConnectedComponentsResult
 import org.opencv.core.*
 import org.opencv.core.Core.FONT_HERSHEY_SCRIPT_SIMPLEX
+import org.opencv.highgui.HighGui
 import org.opencv.imgproc.Imgproc
 import processing.core.PApplet
 import processing.core.PGraphics
 import processing.core.PImage
+import java.awt.Rectangle
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferInt
 import java.nio.ByteBuffer
@@ -113,14 +115,6 @@ fun Mat.toBGRA(bgra: Mat) {
 
     Core.merge(reordered, bgra)
 }
-
-/*
-fun Mat.toImage(): Image {
-    val byteMat = MatOfByte()
-    Imgcodecs.imencode(".bmp", this, byteMat)
-    return Image(ByteArrayInputStream(byteMat.toArray()))
-}
-*/
 
 fun Mat.zeros(): Mat {
     return this.zeros(this.type())
@@ -274,4 +268,85 @@ fun Mat.connectedComponentsWithStats(connectivity: Int = 8, ltype: Int = CvType.
 
     Imgproc.connectedComponentsWithStats(this, labeled, rectComponents, centComponents)
     return ConnectedComponentsResult(labeled, rectComponents, centComponents)
+}
+
+fun Mat.drawRect(rect: Rect, color: Scalar, thickness: Int = 1) {
+    this.drawRect(rect.tl(), rect.size(), color, thickness)
+}
+
+fun Mat.drawRect(origin: Point, size: Size, color: Scalar, thickness: Int = 1) {
+    Imgproc.rectangle(this, origin, origin.transform(size.width, size.height), color, thickness)
+}
+
+fun Mat.drawLine(pt1: Point, pt2: Point, color: Scalar, thickness: Int = 1) {
+    Imgproc.line(this, pt1, pt2, color, thickness)
+}
+
+fun Mat.drawMarker(position: Point, color: Scalar, markerType: Int = Imgproc.MARKER_CROSS, markerSize: Int = 20, thickness: Int = 1, lineType: Int = Imgproc.LINE_8) {
+    Imgproc.drawMarker(this, position, color, markerType, markerSize, thickness, lineType)
+}
+
+fun Mat.drawRotatedRect(rect: RotatedRect, color: Scalar, thickness: Int = 1) {
+    val points = Array(4) { _ -> Point() }
+    rect.points(points)
+
+    points.forEachIndexed { i, point ->
+        this.drawLine(point, points[(i + 1) % points.size], color, thickness)
+    }
+}
+
+fun Rect.padding(value: Int): Rect {
+    return Rect(this.x - value, this.y - value, this.width + (2 * value), this.height + (2 * value))
+}
+
+fun Rect.zoom(scale: Double): Rect {
+    return this.zoom(scale, scale)
+}
+
+fun Rect.zoom(widthScale: Double, heightScale: Double): Rect {
+    val wd = this.width * widthScale / 2.0
+    val hd = this.height * heightScale / 2.0
+
+    return Rect(Point(this.tl().x + wd, this.tl().y + hd), Point(this.br().x - wd, this.br().y - hd))
+}
+
+fun Rect.toRectangle(): Rectangle {
+    return Rectangle(this.x, this.y, this.width, this.height)
+}
+
+fun Rect.translateRelative(scaleX: Double, scaleY: Double): Rect {
+    val dx = this.width * scaleX
+    val dy = this.height * scaleY
+    return Rect(Point(this.tl().x + dx, this.tl().y + dy), this.br())
+}
+
+fun Rect.translate(dx: Int, dy: Int): Rect {
+    return Rect(Point(this.tl().x + dx, this.tl().y + dy), Point(this.br().x + dx, this.br().y + dy))
+}
+
+fun Mat.display(title: String, waitKey: Boolean = false) {
+    HighGui.imshow(title, this)
+
+    if (waitKey)
+        HighGui.waitKey()
+}
+
+fun Mat.display(waitKey: Boolean = false) {
+    this.display("$this", waitKey)
+}
+
+fun Mat.rect(): Rect {
+    return Rect(0, 0, this.width(), this.height())
+}
+
+fun MatOfPoint.boundingRect(): Rect {
+    return Imgproc.boundingRect(this)
+}
+
+fun MatOfPoint.to2f(): MatOfPoint2f {
+    return MatOfPoint2f(*this.toArray())
+}
+
+fun MatOfPoint.minAreaRect(): RotatedRect {
+    return Imgproc.minAreaRect(this.to2f())
 }
