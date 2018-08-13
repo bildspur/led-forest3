@@ -11,6 +11,8 @@ class SliderProperty(field: Field, obj: Any, val annotation: SliderParameter) : 
     private val slider = Slider(annotation.minValue, annotation.maxValue, 0.0)
     private val valueLabel = Label()
 
+    val digits = if (annotation.roundInt) 0 else 2
+
     init {
         slider.majorTickUnit = annotation.majorTick
         slider.minorTickCount = 0
@@ -23,7 +25,7 @@ class SliderProperty(field: Field, obj: Any, val annotation: SliderParameter) : 
         val model = field.get(obj) as DataModel<Number>
         model.onChanged += {
             slider.value = model.value.toDouble()
-            valueLabel.text = model.value.format(2)
+            valueLabel.text = model.value.format(digits)
         }
         model.fireLatest()
 

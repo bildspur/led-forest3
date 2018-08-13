@@ -75,6 +75,11 @@ class PropertiesControl : VBox() {
                 val annotation = it.getAnnotation(PVectorAngleParameter::class.java)
                 addProperty(annotation.name, PVectorAngleProperty(it, obj, annotation))
             }
+
+            if (it.isAnnotationPresent(RangeSliderParameter::class.java)) {
+                val annotation = it.getAnnotation(RangeSliderParameter::class.java)
+                addProperty(annotation.name, RangeSliderProperty(it, obj, annotation))
+            }
         }
     }
 
@@ -112,7 +117,8 @@ class PropertiesControl : VBox() {
                     it.isAnnotationPresent(ActionParameter::class.java) ||
                     it.isAnnotationPresent(FloatParameter::class.java) ||
                     it.isAnnotationPresent(ArrayParameter::class.java) ||
-                    it.isAnnotationPresent(PVectorAngleParameter::class.java)
+                    it.isAnnotationPresent(PVectorAngleParameter::class.java) ||
+                    it.isAnnotationPresent(RangeSliderParameter::class.java)
 
         }
         fields.forEach { it.isAccessible = true }

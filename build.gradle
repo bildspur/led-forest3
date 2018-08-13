@@ -37,6 +37,8 @@ dependencies {
 
     compile files('lib/artnet/artnet4j.jar')
 
+    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'
+
     compile files('lib/LeapMotion/library/LeapJava.jar')
     compile files('lib/LeapMotion/library/LeapMotion.jar')
 

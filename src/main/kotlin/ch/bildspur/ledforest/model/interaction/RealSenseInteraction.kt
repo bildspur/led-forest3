@@ -5,6 +5,7 @@ import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.NumberRange
 import ch.bildspur.ledforest.ui.properties.ActionParameter
 import ch.bildspur.ledforest.ui.properties.FloatParameter
+import ch.bildspur.ledforest.ui.properties.RangeSliderParameter
 import com.google.gson.annotations.Expose
 
 class RealSenseInteraction {
@@ -34,5 +35,6 @@ class RealSenseInteraction {
     var inputFPS = DataModel(30)
 
     @Expose
-    var depthRange = NumberRange(0, 4096)
+    @RangeSliderParameter("Depth Range", 0.0, 65536.0, 1.0, snap = true, roundInt = true)
+    var depthRange = DataModel(NumberRange(0.0, 4096.0))
 }
