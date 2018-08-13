@@ -1,4 +1,4 @@
-package ch.bildspur.ledforest.realsense
+package ch.bildspur.ledforest.realsense.io
 
 import ch.bildspur.ledforest.Sketch
 import org.librealsense.*
@@ -7,7 +7,7 @@ import processing.core.PConstants
 import processing.core.PImage
 
 class RealSenseCamera(val applet: PApplet, val width: Int = 640, val height: Int = 480, val fps: Int = 30) {
-    private lateinit var context: Context
+    private var context: Context = Context.create()
     private lateinit var pipeline: Pipeline
 
     // parameters
@@ -17,7 +17,8 @@ class RealSenseCamera(val applet: PApplet, val width: Int = 640, val height: Int
     val depthImage = PImage(width, height, PConstants.RGB)
     val colorImage = PImage(width, height, PConstants.RGB)
 
-    var depthLevel = 50
+    var depthLevelLow = 0
+    var depthLevelHigh = 65536
 
     fun checkIfDeviceIsAvailable(): Boolean {
         val deviceList = context.queryDevices()
@@ -27,10 +28,6 @@ class RealSenseCamera(val applet: PApplet, val width: Int = 640, val height: Int
     }
 
     fun setup() {
-        context = Context.create()
-    }
-
-    fun start() {
         // find device
         val deviceList = context.queryDevices()
         val devices = deviceList.devices
@@ -45,7 +42,7 @@ class RealSenseCamera(val applet: PApplet, val width: Int = 640, val height: Int
         val config = Config.create()
         config.enableDevice(device)
         config.enableStream(Native.Stream.RS2_STREAM_DEPTH, depthStreamIndex, width, height, Native.Format.RS2_FORMAT_Z16, fps)
-        config.enableStream(Native.Stream.RS2_STREAM_COLOR, colorStreamIndex, width, height, Native.Format.RS2_FORMAT_RGB8, fps)
+        //config.enableStream(Native.Stream.RS2_STREAM_COLOR, colorStreamIndex, width, height, Native.Format.RS2_FORMAT_RGB8, fps)
 
         Thread.sleep(1000) // CONCURRENCY BUG SOMEWHERE!
 
@@ -77,7 +74,7 @@ class RealSenseCamera(val applet: PApplet, val width: Int = 640, val height: Int
         depthImage.loadPixels()
         (0 until width * height).forEach { i ->
             val depth = buffer[i].toInt() and 0xFFFF
-            val grayScale = Sketch.map(depth, 0, 65536 / depthLevel, 255, 0).clamp(0, 255)
+            val grayScale = Sketch.map(depth, depthLevelLow, depthLevelHigh, 255, 0).clamp(0, 255)
 
             if (depth > 0)
                 depthImage.pixels[i] = applet.color(grayScale)

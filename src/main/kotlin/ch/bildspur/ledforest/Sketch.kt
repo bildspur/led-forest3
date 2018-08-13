@@ -98,7 +98,7 @@ class Sketch : PApplet() {
 
     val leapMotion = LeapDataProvider(this.project)
 
-    val realSense = RealSenseDataProvider(this.project)
+    val realSense = RealSenseDataProvider(this, this.project)
 
     val artnet = ArtNetClient()
 

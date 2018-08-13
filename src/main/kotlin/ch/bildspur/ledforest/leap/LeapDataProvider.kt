@@ -50,7 +50,9 @@ class LeapDataProvider(val project: DataModel<Project>) {
 
     fun stop() {
         isRunning = false
-        leapThread.join(5000)
+
+        if (::leapThread.isInitialized)
+            leapThread.join(5000)
     }
 
     private fun readSensor() {
