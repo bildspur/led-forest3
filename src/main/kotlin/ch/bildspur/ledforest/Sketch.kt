@@ -9,6 +9,7 @@ import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.leap.LeapDataProvider
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.realsense.RealSenseDataProvider
 import ch.bildspur.ledforest.scene.SceneManager
 import ch.bildspur.ledforest.util.LogBook
 import ch.bildspur.ledforest.util.draw
@@ -23,6 +24,7 @@ import processing.core.PApplet
 import processing.core.PConstants
 import processing.core.PGraphics
 import processing.opengl.PJOGL
+import kotlin.math.roundToInt
 
 
 /**
@@ -59,6 +61,11 @@ class Sketch : PApplet() {
         fun map(value: Double, start1: Double, stop1: Double, start2: Double, stop2: Double): Double {
             return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1))
         }
+
+        @JvmStatic
+        fun map(value: Int, start1: Int, stop1: Int, start2: Int, stop2: Int): Int {
+            return map(value.toDouble(), start1.toDouble(), stop1.toDouble(), start2.toDouble(), stop2.toDouble()).roundToInt()
+        }
     }
 
 
@@ -84,7 +91,11 @@ class Sketch : PApplet() {
 
     val remote = RemoteController(this)
 
-    val leapMotion = LeapDataProvider()
+    val project = DataModel(Project())
+
+    val leapMotion = LeapDataProvider(this.project)
+
+    val realSense = RealSenseDataProvider(this.project)
 
     val artnet = ArtNetClient()
 
@@ -93,8 +104,6 @@ class Sketch : PApplet() {
     var lastCursorMoveTime = 0
 
     val renderer = mutableListOf<IRenderer>()
-
-    val project = DataModel(Project())
 
     val minim = Minim(this)
 
@@ -133,6 +142,7 @@ class Sketch : PApplet() {
         artnet.open()
 
         leapMotion.start()
+        realSense.start()
 
         // timer for cursor hiding
         timer.addTask(TimerTask(CURSOR_HIDING_TIME, {
@@ -192,12 +202,6 @@ class Sketch : PApplet() {
 
     fun onProjectChanged() {
         surface.setTitle("$NAME ($VERSION) - ${project.value.name.value}")
-
-        // setup leap motion settings
-        project.value.isLeapInteraction.onChanged += {
-            leapMotion.pauseInteraction = !project.value.isLeapInteraction.value
-        }
-        project.value.isLeapInteraction.fire()
 
         // setup hooks
         setupHooks()
@@ -313,6 +317,7 @@ class Sketch : PApplet() {
             println("shutting down...")
             renderer.forEach { it.dispose() }
             leapMotion.stop()
+            realSense.stop()
             osc.osc.stop()
             artnet.close()
 

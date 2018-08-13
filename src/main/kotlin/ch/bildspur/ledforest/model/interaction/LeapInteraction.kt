@@ -29,8 +29,4 @@ class LeapInteraction {
     @Expose
     @SliderParameter("Hue End", 0.0, 360.0)
     var hueEnd = DataModel(360f)
-
-    @Expose
-    @BooleanParameter("Show LeapInteraction Info")
-    var showInteractionInfo = DataModel(false)
 }

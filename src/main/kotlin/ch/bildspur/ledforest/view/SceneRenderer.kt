@@ -47,8 +47,8 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
         }
 
         // render leapInteraction box
-        if (project.leapInteraction.showInteractionInfo.value)
-            renderInteractionInfo()
+        if (project.showInteractionInfo.value)
+            renderInteractionBox()
     }
 
     private fun renderTube(tube: Tube) {
@@ -99,11 +99,11 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
         g.popMatrix()
     }
 
-    private fun renderInteractionInfo() {
+    private fun renderInteractionBox() {
         g.pushMatrix()
         g.noFill()
         g.stroke(255)
-        g.box(leap.interactionBox.x, leap.interactionBox.y, leap.interactionBox.z)
+        g.box(project.interactionBox.value.x, project.interactionBox.value.y, project.interactionBox.value.z)
         g.popMatrix()
     }
 

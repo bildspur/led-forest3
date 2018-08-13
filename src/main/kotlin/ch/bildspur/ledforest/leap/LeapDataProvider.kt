@@ -2,23 +2,20 @@ package ch.bildspur.ledforest.leap
 
 import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
+import ch.bildspur.ledforest.model.DataModel
+import ch.bildspur.ledforest.model.Project
 import com.leapmotion.leap.Controller
 import com.leapmotion.leap.Frame
-import processing.core.PVector
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
 
-class LeapDataProvider {
+class LeapDataProvider(val project: DataModel<Project>) {
     private val updateTime = 15L
 
     var isRunning = false
         private set
 
-    var pauseInteraction = false
-
     var handCount = 0
-
-    var interactionBox = PVector(150f, 150f, 100f)
 
     private lateinit var leapThread: Thread
     private lateinit var controller: Controller
@@ -63,18 +60,18 @@ class LeapDataProvider {
         if (controller.frame() == null)
             return
 
-        if (pauseInteraction)
+        if (!project.value.isInteractionOn.value)
             return
 
         updateHands(controller.frame()!!)
     }
 
     private fun updateHands(frame: Frame) {
-        // add new hands and update known
+        // add new hand and update known
         frame.hands().forEach {
             // add if not already in cache
             if (!handCache.containsKey(it.id())) {
-                handCache[it.id()] = InteractionHand(it, interactionBox)
+                handCache[it.id()] = InteractionHand(it, project.value.interactionBox.value)
                 handCount++
             }
 
