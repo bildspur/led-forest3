@@ -12,6 +12,7 @@ import ch.bildspur.ledforest.realsense.vision.ActiveRegionDetector
 import ch.bildspur.ledforest.realsense.vision.DepthImage
 import ch.bildspur.ledforest.util.Synchronize
 import org.opencv.core.Core
+import org.opencv.core.Core.FONT_HERSHEY_SIMPLEX
 import org.opencv.core.CvType.CV_8UC3
 import org.opencv.core.Point
 import org.opencv.core.Scalar
@@ -137,8 +138,11 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
             val position = Point(it.x, it.y)
             val color = Scalar(0.0, 255.0, 0.0)
 
-            debugImage.drawMarker(position, color, markerSize = 50, thickness = 3)
-            debugImage.drawText("A$i (${it.lifeTime})", position.transform(10.0, 30.0), color, thickness = 2, scale = 1.2)
+            debugImage.drawMarker(position, color, markerSize = 50, thickness = 2)
+            debugImage.drawText("A.$i (${it.lifeTime})", position.transform(20.0, 40.0), color,
+                    thickness = 2,
+                    scale = 1.0,
+                    fontFace = FONT_HERSHEY_SIMPLEX)
         }
 
         // show debug pictures
