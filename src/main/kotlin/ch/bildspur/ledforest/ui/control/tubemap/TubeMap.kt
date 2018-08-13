@@ -79,10 +79,10 @@ class TubeMap : Pane() {
         // setup clipping
         clip = outputClip
 
-        layoutBoundsProperty().addListener({ ov, oldValue, newValue ->
+        layoutBoundsProperty().addListener { _, _, newValue ->
             outputClip.width = newValue.width
             outputClip.height = newValue.height
-        })
+        }
 
         // set cursor
         cursor = activeTool.cursor

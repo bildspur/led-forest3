@@ -9,7 +9,10 @@ class ActionProperty(field: Field, obj: Any, val annotation: ActionParameter) : 
     init {
         button.text = annotation.caption
         val block = field.get(obj) as (() -> Unit)
-        button.setOnAction { block() }
+        button.setOnAction {
+            block()
+            propertyChanged.invoke(this)
+        }
         children.add(button)
     }
 }
