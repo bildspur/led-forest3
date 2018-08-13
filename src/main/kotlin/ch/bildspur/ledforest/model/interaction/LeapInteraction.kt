@@ -1,5 +1,6 @@
-package ch.bildspur.ledforest.model
+package ch.bildspur.ledforest.model.interaction
 
+import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.ui.properties.BooleanParameter
 import ch.bildspur.ledforest.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose

@@ -334,6 +334,10 @@ class PrimaryView {
         propertiesControl.initView(project.value.leapInteraction)
     }
 
+    fun showDepthInteractionSettings(e: ActionEvent) {
+        propertiesControl.initView(project.value.depthInteraction)
+    }
+
     fun showProjectSettings(e: ActionEvent) {
         propertiesControl.initView(project.value)
     }

@@ -1,6 +1,8 @@
 package ch.bildspur.ledforest.model
 
 import ch.bildspur.ledforest.Sketch
+import ch.bildspur.ledforest.model.interaction.DepthInteraction
+import ch.bildspur.ledforest.model.interaction.LeapInteraction
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.ui.properties.BooleanParameter
@@ -61,11 +63,18 @@ class Project {
     var isLeapInteraction = DataModel(true)
 
     @Expose
+    @BooleanParameter("Depth Interaction")
+    var isDepthInteraction = DataModel(false)
+
+    @Expose
     @BooleanParameter("ArtNet Rendering")
     var isArtNetRendering = DataModel(true)
 
     @Expose
     var leapInteraction = LeapInteraction()
+
+    @Expose
+    var depthInteraction = DepthInteraction()
 
     @Expose
     var light = Light()
