@@ -33,7 +33,7 @@ class TubeMap : Pane() {
         val BACKGROUND_LAYER = "background"
     }
 
-    var canvas = ResizableCanvas(500.0, 500.0)
+    var canvas = ResizableCanvas(1000.0, 1000.0)
     val outputClip = Rectangle()
 
     private val activeToolProperty = SimpleObjectProperty<IEditorTool>(ViewTool())
