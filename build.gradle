@@ -2,7 +2,7 @@ group 'ch.bildspur.ledforest'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.1.61'
+    ext.kotlin_version = '1.2.60'
 
     repositories {
         mavenCentral()
@@ -16,7 +16,7 @@ apply plugin: 'kotlin'
 
 apply plugin: 'application'
 mainClassName = "ch.bildspur.ledforest.Main"
-applicationDefaultJvmArgs = ["-Djava.library.path=lib/LeapMotion/library/macosx"]
+applicationDefaultJvmArgs = ["-Djava.library.path=lib/LeapMotion/library/macosx:lib/opencv"]
 
 repositories {
     mavenCentral()
@@ -30,11 +30,10 @@ dependencies {
 
     compile files('lib/postfx/PostFX.jar')
 
-    compile files('lib/processing/core/library/core.jar')
-    compile files('lib/processing/core/library/gluegen-rt-natives-macosx-universal.jar')
-    compile files('lib/processing/core/library/gluegen-rt.jar')
-    compile files('lib/processing/core/library/jogl-all-natives-macosx-universal.jar')
-    compile files('lib/processing/core/library/jogl-all.jar')
+    // processing
+    compile group: 'org.processing', name: 'core', version: '3.3.7'
+    compile group: 'org.jogamp.jogl', name: 'jogl-all-main', version: '2.3.2'
+    compile group: 'org.jogamp.gluegen', name: 'gluegen-rt-main', version: '2.3.2'
 
     compile files('lib/artnet/artnet4j.jar')
 
@@ -55,6 +54,10 @@ dependencies {
     compile files('lib/plugins/minim/library/mp3spi1.9.5.jar')
     compile files('lib/plugins/minim/library/tritonus_aos.jar')
     compile files('lib/plugins/minim/library/tritonus_share.jar')
+
+    compile files('lib/realsense/realsense.jar')
+
+    compile files('lib/opencv/opencv-341.jar')
 }
 
 task fatJar(type: Jar) {
