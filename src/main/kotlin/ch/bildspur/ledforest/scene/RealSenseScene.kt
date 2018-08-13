@@ -54,26 +54,22 @@ class RealSenseScene(tubes: List<Tube>) : BaseScene(tubes) {
 
     private fun interactWithLED(index: Int, led: LED, tube: Tube) {
         val ledPosition = getLEDPosition(index, tube)
+
         val nearestRegion = realSense.activeRegions.sortedBy { it.interactionPosition.dist(ledPosition) }.firstOrNull()
                 ?: return
 
         val distance = nearestRegion.interactionPosition.dist(ledPosition)
 
         // change color / saturation only if it is in reach
-        /*
-        if (distance <= sketch.project.value.leapInteraction.interactionDistance.value
-                || sketch.project.value.leapInteraction.singleColorInteraction.value) {
-            led.color.fadeH(PApplet.map(h.rotation.y, -PApplet.PI, PApplet.PI,
-                    sketch.project.value.leapInteraction.hueSpectrum.value.lowValue.toFloat(),
-                    sketch.project.value.leapInteraction.hueSpectrum.value.highValue.toFloat()), 0.1f)
-            led.color.fadeS(PApplet.map(h.grabStrength.value, 1f, 0f, 0f, 100f), 0.1f)
+        if (distance <= sketch.project.value.realSenseInteraction.interactionDistance.value) {
+            led.color.fadeH(200f, 0.1f)
+            led.color.fadeS(100f, 0.1f)
         }
 
         // always change brightness
         led.color.fadeB(PApplet.max(0f,
-                PApplet.map(distance, sketch.project.value.leapInteraction.interactionDistance.value, 0f, 0f, 100f)),
+                PApplet.map(distance, sketch.project.value.realSenseInteraction.interactionDistance.value, 0f, 0f, 100f)),
                 0.1f)
-        */
     }
 
     private fun getLEDPosition(index: Int, tube: Tube): PVector {

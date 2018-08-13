@@ -62,7 +62,7 @@ class LeapDataProvider(val project: DataModel<Project>) {
         if (controller.frame() == null)
             return
 
-        if (!project.value.interaction.isInteractionOn.value)
+        if (!project.value.interaction.isInteractionDataEnabled.value)
             return
 
         updateHands(controller.frame()!!)

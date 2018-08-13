@@ -42,7 +42,7 @@ class SceneRenderer(val g: PGraphics,
         }
 
         // render hands
-        if (leap.isRunning && project.interaction.isLeapInteraction.value) {
+        if (leap.isRunning && project.interaction.isLeapInteractionEnabled.value) {
             try {
                 leap.hands.forEach {
                     renderHand(it)
@@ -53,7 +53,7 @@ class SceneRenderer(val g: PGraphics,
         }
 
         // render active regions
-        if (realSense.isRunning && project.interaction.isRealSenseInteraction.value) {
+        if (realSense.isRunning && project.interaction.isRealSenseInteractionEnabled.value) {
             realSense.activeRegions.forEach { renderActiveRegion(it) }
         }
 
@@ -102,7 +102,7 @@ class SceneRenderer(val g: PGraphics,
         // render
         g.pushMatrix()
         g.translate(region.interactionPosition)
-        g.fill(0f, 255f, 0f)
+        g.fill(255f)
         g.noStroke()
         g.box(10f)
         g.popMatrix()

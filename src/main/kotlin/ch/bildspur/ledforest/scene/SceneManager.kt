@@ -9,6 +9,7 @@ import ch.bildspur.ledforest.view.IRenderer
 class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
     val starScene = StarPatternScene(tubes)
     val leapMotionScene = LeapMotionScene(tubes)
+    val realSenseScene = RealSenseScene(tubes)
     val blackScene = BlackScene(tubes)
     val strobeScene = StrobeScene(tubes)
 
@@ -28,13 +29,25 @@ class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
 
     override fun render() {
         // check if hand is detected
-        if (activeScene != leapMotionScene && leapMotionScene.isLeapAvailable() && project.isSceneManager.value)
+        if (activeScene != leapMotionScene
+                && leapMotionScene.isLeapAvailable()
+                && project.isSceneManagerEnabled.value
+                && project.interaction.isLeapInteractionEnabled.value)
             initScene(leapMotionScene)
 
-        if (activeScene != starScene && !leapMotionScene.isLeapAvailable() && project.isSceneManager.value)
+        if (activeScene != realSenseScene
+                && realSenseScene.isTrackingAvailable()
+                && project.isSceneManagerEnabled.value
+                && project.interaction.isRealSenseInteractionEnabled.value)
+            initScene(realSenseScene)
+
+        if (activeScene != starScene
+                && !leapMotionScene.isLeapAvailable()
+                && !realSenseScene.isTrackingAvailable()
+                && project.isSceneManagerEnabled.value)
             initScene(starScene)
 
-        if (activeScene != blackScene && !project.isSceneManager.value)
+        if (activeScene != blackScene && !project.isSceneManagerEnabled.value)
             initScene(blackScene)
 
         try {
@@ -47,6 +60,8 @@ class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
             println("NPE: 05")
         }
 
+        project.activeScene.value = activeScene.name
+
         timer.update()
     }
 
@@ -55,6 +70,7 @@ class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
         leapMotionScene.dispose()
         blackScene.dispose()
         strobeScene.dispose()
+        realSenseScene.dispose()
     }
 
     internal fun initScene(scene: BaseScene) {

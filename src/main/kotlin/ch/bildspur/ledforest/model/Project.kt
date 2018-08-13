@@ -27,6 +27,9 @@ class Project {
     @Expose
     var tubes = CopyOnWriteArrayList<Tube>()
 
+    @StringParameter("Active Scene", isEditable = false)
+    var activeScene = DataModel("-")
+
     @Expose
     @BooleanParameter("High Res Mode*")
     var highResMode = DataModel(true)
@@ -56,8 +59,8 @@ class Project {
     var isSound = DataModel(true)
 
     @Expose
-    @BooleanParameter("Scene Manager")
-    var isSceneManager = DataModel(true)
+    @BooleanParameter("Scene Manager Enabled")
+    var isSceneManagerEnabled = DataModel(true)
 
     @Expose
     @BooleanParameter("ArtNet Rendering")

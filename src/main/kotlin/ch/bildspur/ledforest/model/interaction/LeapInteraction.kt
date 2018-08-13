@@ -21,7 +21,7 @@ class LeapInteraction {
     var strobeThreshold = DataModel(0.8f)
 
     @Expose
-    @SliderParameter("Int. Distance", 1.0, 200.0, 1.0, snap = true, roundInt = true)
+    @SliderParameter("Interaction Distance", 1.0, 200.0, 1.0, snap = true, roundInt = true)
     var interactionDistance = DataModel(75f)
 
     @Expose

@@ -87,7 +87,7 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
     }
 
     private fun readSensor(isDebugger: Boolean = false) {
-        if (!project.value.interaction.isInteractionOn.value)
+        if (!project.value.interaction.isInteractionDataEnabled.value)
             return
 
         if (project.value.realSenseInteraction.isDebug.value && !isDebugger)

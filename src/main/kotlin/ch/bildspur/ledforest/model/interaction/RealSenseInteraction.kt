@@ -27,7 +27,6 @@ class RealSenseInteraction {
     @BooleanParameter("Enable Color Sream")
     var enableColorStream = DataModel(true)
 
-    @Expose
     @StringParameter("Active Region Count", isEditable = false)
     var activeRegionCount = DataModel("-")
 
@@ -82,4 +81,8 @@ class RealSenseInteraction {
     @Expose
     @BooleanParameter("Flip Z")
     var flipZ = DataModel(false)
+
+    @Expose
+    @SliderParameter("Interaction Distance", 1.0, 200.0, 1.0, snap = true, roundInt = true)
+    var interactionDistance = DataModel(75f)
 }

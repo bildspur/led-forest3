@@ -8,16 +8,16 @@ import processing.core.PVector
 
 class Interaction {
     @Expose
-    @BooleanParameter("Interaction On")
-    var isInteractionOn = DataModel(true)
+    @BooleanParameter("Interaction Data Enabled")
+    var isInteractionDataEnabled = DataModel(true)
 
     @Expose
-    @BooleanParameter("Leap Interaction")
-    var isLeapInteraction = DataModel(true)
+    @BooleanParameter("Leap Interaction Enabled")
+    var isLeapInteractionEnabled = DataModel(false)
 
     @Expose
-    @BooleanParameter("Real Sense Interaction")
-    var isRealSenseInteraction = DataModel(false)
+    @BooleanParameter("Real Sense Interaction Enabled")
+    var isRealSenseInteractionEnabled = DataModel(false)
 
     @Expose
     @PVectorParameter("Interaction Box")
