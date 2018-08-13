@@ -30,7 +30,7 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
         fields.forEach {
             val label = Label("${it.key}:")
 
-            it.value.prefWidth = 200.0 - 20.0
+            it.value.prefWidth = RelationNumberField.PREFERRED_WIDTH - 20.0
             it.value.isShowRange = false
             label.prefWidth = 20.0
 

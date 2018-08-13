@@ -240,7 +240,7 @@ class RelationNumberField<T> @JvmOverloads constructor(var formatter: TextFormat
     }
 
     companion object {
-        private val PREFERRED_WIDTH = 200.0
+        public val PREFERRED_WIDTH = 180.0
         private val MINIMUM_WIDTH = 30.0
         private val MAXIMUM_WIDTH = 800.0
 
