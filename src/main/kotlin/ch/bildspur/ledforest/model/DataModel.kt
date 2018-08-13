@@ -28,4 +28,8 @@ class DataModel<T>(@Expose @Volatile private var dataValue: T) {
     fun fireLatest() {
         onChanged.invokeLatest(dataValue)
     }
+
+    override fun toString(): String {
+        return "DataModel ($value)"
+    }
 }

@@ -2,10 +2,7 @@ package ch.bildspur.ledforest.ui
 
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.setup.SetupInformation
-import ch.bildspur.ledforest.setup.pattern.CircularPattern
-import ch.bildspur.ledforest.setup.pattern.ClonePattern
-import ch.bildspur.ledforest.setup.pattern.LinearPattern
-import ch.bildspur.ledforest.setup.pattern.SquarePattern
+import ch.bildspur.ledforest.setup.pattern.*
 import javafx.application.Platform
 import javafx.event.ActionEvent
 import javafx.scene.control.*
@@ -31,7 +28,7 @@ class SetupProjectView {
     lateinit var flipXY: CheckBox
     lateinit var clonePattern: ComboBox<ClonePattern>
 
-    val clonePatterns = listOf(LinearPattern(), SquarePattern(), CircularPattern())
+    val clonePatterns = listOf(LinearPattern(), SquarePattern(), CircularPattern(), CubePattern())
 
     data class PreCalculation(var ledCount: Int = 0, var tubeCount: Int = 0, var universeCount: Int = 0, var nodeCount: Int = 0)
 
@@ -119,10 +116,10 @@ class SetupProjectView {
     }
 
     private fun updateWindow() {
-        Platform.runLater({
+        Platform.runLater {
             val c = runPreCalculation()
             statusLabel.text = "A: ${c.ledCount * 3} | LED: ${c.ledCount} | T: ${c.tubeCount} | U: ${c.universeCount} | N: ${c.nodeCount}"
-        })
+        }
     }
 
     private fun runPreCalculation(): PreCalculation {
