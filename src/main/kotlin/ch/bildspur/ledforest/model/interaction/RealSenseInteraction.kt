@@ -24,18 +24,30 @@ class RealSenseInteraction {
     var activeRegionCount = DataModel("-")
 
     @Expose
-    @FloatParameter("Input Width")
+    @IntParameter("Input Width")
     var inputWidth = DataModel(640)
 
     @Expose
-    @FloatParameter("Input Height")
+    @IntParameter("Input Height")
     var inputHeight = DataModel(480)
 
     @Expose
-    @FloatParameter("Input FPS")
+    @IntParameter("Input FPS")
     var inputFPS = DataModel(30)
 
     @Expose
     @RangeSliderParameter("Depth Range", 0.0, 65536.0, 1.0, snap = true, roundInt = true)
     var depthRange = DataModel(NumberRange(0.0, 4096.0))
+
+    @Expose
+    @SliderParameter("Binary Threshold", 0.0, 255.0, 1.0, snap = true, roundInt = true)
+    var threshold = DataModel(200.0)
+
+    @Expose
+    @SliderParameter("MT Element Size", 1.0, 10.0, 1.0, snap = true, roundInt = true)
+    var elementSize = DataModel(5.0)
+
+    @Expose
+    @SliderParameter("Min Area Size", 1.0, 500.0, 1.0, snap = true, roundInt = true)
+    var minAreaSize = DataModel(125.0)
 }

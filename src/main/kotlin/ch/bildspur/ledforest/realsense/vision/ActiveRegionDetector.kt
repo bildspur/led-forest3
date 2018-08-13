@@ -9,7 +9,6 @@ import org.opencv.core.Mat
  * Created by cansik on 04.02.17.
  */
 class ActiveRegionDetector {
-
     var threshold = 200.0
     var elementSize = 5
     var minAreaSize = 125
@@ -39,9 +38,9 @@ class ActiveRegionDetector {
         val components = nativeComponents.getConnectedComponents().filter { it.area >= minAreaSize && it.label != 0 }
 
         depthImage.components.addAll(components)
+        depthImage.gray = gray
 
         // free memory
-        gray.release()
         image.release()
         nativeComponents.release()
     }

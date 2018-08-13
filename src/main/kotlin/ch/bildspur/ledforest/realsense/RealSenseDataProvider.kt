@@ -7,6 +7,7 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.realsense.io.RealSenseCamera
 import ch.bildspur.ledforest.realsense.tracking.ActiveRegion
 import ch.bildspur.ledforest.realsense.tracking.ActiveRegionTracker
+import ch.bildspur.ledforest.realsense.util.toPImage
 import ch.bildspur.ledforest.realsense.vision.ActiveRegionDetector
 import ch.bildspur.ledforest.realsense.vision.DepthImage
 import ch.bildspur.ledforest.util.Synchronize
@@ -31,6 +32,8 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
     private lateinit var tracker: ActiveRegionTracker
 
     private lateinit var camera: RealSenseCamera
+
+    private lateinit var depthImage: DepthImage
 
     var activeRegions by Synchronize(mutableListOf<ActiveRegion>())
 
@@ -74,35 +77,46 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
             thread.join(5000)
     }
 
-    private fun readSensor() {
+    private fun readSensor(isDebugger: Boolean = false) {
         if (!project.value.interaction.isInteractionOn.value)
             return
 
-        if (!project.value.realSenseInteraction.isDebug.value)
+        if (project.value.realSenseInteraction.isDebug.value && !isDebugger)
             return
 
-        // set settings and read streams
+        // set settings
         camera.depthLevelLow = project.value.realSenseInteraction.depthRange.value.lowValue.roundToInt()
         camera.depthLevelHigh = project.value.realSenseInteraction.depthRange.value.highValue.roundToInt()
 
+        detector.threshold = project.value.realSenseInteraction.threshold.value
+        detector.elementSize = project.value.realSenseInteraction.elementSize.value.roundToInt()
+        detector.minAreaSize = project.value.realSenseInteraction.minAreaSize.value.roundToInt()
+
+        // read streams
         camera.readStreams()
 
         // detect
-        val image = DepthImage(camera.depthImage)
-        detector.detect(image)
+        depthImage = DepthImage(camera.depthImage)
+        detector.detect(depthImage)
 
         // track regions
-        tracker.track(image.components)
+        tracker.track(depthImage.components)
 
         // update regions synchronized
         activeRegions = tracker.regions.toMutableList()
-    }
-
-    fun renderDebug(g: PGraphics) {
-        readSensor()
 
         project.value.realSenseInteraction.activeRegionCount.value = "${tracker.regions.size}"
 
-        g.image(camera.depthImage, 0f, 0f)
+        if (!isDebugger)
+            depthImage.release()
+    }
+
+    fun renderDebug(g: PGraphics) {
+        readSensor(isDebugger = true)
+
+        g.image(camera.depthImage, 0f, 0f, 320f, 240f)
+        g.image(depthImage.gray.toPImage(), 0f, 240f, 320f, 240f)
+
+        depthImage.release()
     }
 }
