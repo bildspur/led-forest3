@@ -3,9 +3,7 @@ package ch.bildspur.ledforest.model.interaction
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.NumberRange
-import ch.bildspur.ledforest.ui.properties.ActionParameter
-import ch.bildspur.ledforest.ui.properties.FloatParameter
-import ch.bildspur.ledforest.ui.properties.RangeSliderParameter
+import ch.bildspur.ledforest.ui.properties.*
 import com.google.gson.annotations.Expose
 
 class RealSenseInteraction {
@@ -17,10 +15,13 @@ class RealSenseInteraction {
         rs.start()
     }
 
-    @ActionParameter("Camera", "Show Range")
-    val showRange = {
-        println("Range: $depthRange")
-    }
+    @Expose
+    @BooleanParameter("Debug")
+    var isDebug = DataModel(false)
+
+    @Expose
+    @StringParameter("Active Region Count", isEditable = false)
+    var activeRegionCount = DataModel("-")
 
     @Expose
     @FloatParameter("Input Width")

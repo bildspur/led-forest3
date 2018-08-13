@@ -199,8 +199,17 @@ class Sketch : PApplet() {
                         .compose()
             else
                 image(canvas, 0f, 0f)
+
+            showDebugInformation()
+
             drawFPS(g)
         }
+    }
+
+    fun showDebugInformation() {
+        // render realsense information
+        if (project.value.realSenseInteraction.isDebug.value)
+            Sketch.instance.realSense.renderDebug(g)
     }
 
     fun onProjectChanged() {

@@ -12,6 +12,7 @@ import ch.bildspur.ledforest.realsense.vision.DepthImage
 import ch.bildspur.ledforest.util.Synchronize
 import org.opencv.core.Core
 import processing.core.PApplet
+import processing.core.PGraphics
 import kotlin.concurrent.thread
 import kotlin.math.roundToInt
 
@@ -77,6 +78,9 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
         if (!project.value.interaction.isInteractionOn.value)
             return
 
+        if (!project.value.realSenseInteraction.isDebug.value)
+            return
+
         // set settings and read streams
         camera.depthLevelLow = project.value.realSenseInteraction.depthRange.value.lowValue.roundToInt()
         camera.depthLevelHigh = project.value.realSenseInteraction.depthRange.value.highValue.roundToInt()
@@ -92,7 +96,13 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
 
         // update regions synchronized
         activeRegions = tracker.regions.toMutableList()
+    }
 
-        println("Current Active Regions: ${tracker.regions.size}")
+    fun renderDebug(g: PGraphics) {
+        readSensor()
+
+        project.value.realSenseInteraction.activeRegionCount.value = "${tracker.regions.size}"
+
+        g.image(camera.depthImage, 0f, 0f)
     }
 }
