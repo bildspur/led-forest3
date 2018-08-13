@@ -12,7 +12,7 @@ import processing.core.PVector
 
 class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
     // todo: remove ugly grab of data provider
-    val sketch = (Sketch.instance as Sketch)
+    val sketch = Sketch.instance
     val leap = sketch.leapMotion
 
     var space = Sketch.instance.createGraphics(10, 10, PApplet.P3D)

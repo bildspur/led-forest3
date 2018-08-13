@@ -24,7 +24,16 @@ class TubeShape(val tube: Tube, val transform: PVector = PVector()) : OvalShape(
                 Color.rgb(70, 240, 240),
                 Color.rgb(240, 50, 230),
                 Color.rgb(210, 245, 60),
-                Color.rgb(250, 190, 190)
+                Color.rgb(250, 190, 190),
+                Color.rgb(0, 128, 128),
+                Color.rgb(230, 190, 255),
+                Color.rgb(170, 110, 40),
+                Color.rgb(255, 250, 200),
+                Color.rgb(128, 0, 0),
+                Color.rgb(170, 255, 195),
+                Color.rgb(128, 128, 0),
+                Color.rgb(255, 215, 180),
+                Color.rgb(0, 0, 128)
         )
     }
 
