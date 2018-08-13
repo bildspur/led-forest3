@@ -58,7 +58,7 @@ class Sketch : PApplet() {
         val URI_NAME = "ledforest"
 
         @JvmStatic
-        lateinit var instance: PApplet
+        lateinit var instance: Sketch
 
         @JvmStatic
         fun map(value: Double, start1: Double, stop1: Double, start2: Double, stop2: Double): Double {

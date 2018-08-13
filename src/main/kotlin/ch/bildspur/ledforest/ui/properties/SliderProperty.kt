@@ -20,7 +20,7 @@ class SliderProperty(field: Field, obj: Any, val annotation: SliderParameter) : 
         box.spacing = 10.0
         children.add(box)
 
-        val model = field.get(obj) as DataModel<Float>
+        val model = field.get(obj) as DataModel<Number>
         model.onChanged += {
             slider.value = model.value.toDouble()
             valueLabel.text = model.value.format(2)
@@ -29,7 +29,7 @@ class SliderProperty(field: Field, obj: Any, val annotation: SliderParameter) : 
 
         slider.valueProperty().addListener { _, _, _ ->
             run {
-                model.value = slider.value.toFloat()
+                model.value = slider.value
                 propertyChanged(this)
             }
         }

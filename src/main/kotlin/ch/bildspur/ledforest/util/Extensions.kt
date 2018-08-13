@@ -8,9 +8,7 @@ import java.util.*
 /**
  * Created by cansik on 04.02.17.
  */
-fun Double.format(digits: Int) = java.lang.String.format("%.${digits}f", this)
-
-fun Float.format(digits: Int) = java.lang.String.format("%.${digits}f", this)
+fun Number.format(digits: Int) = java.lang.String.format("%.${digits}f", this)
 
 fun Float.isApproximate(value: Double, error: Double): Boolean {
     return (Math.abs(Math.abs(this) - Math.abs(value)) < error)
