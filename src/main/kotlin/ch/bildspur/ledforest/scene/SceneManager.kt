@@ -39,9 +39,9 @@ class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
 
         try {
             if (activeScene != strobeScene
-                    && project.interaction.isStrobeEnabled.value
+                    && project.leapInteraction.isStrobeEnabled.value
                     && leapMotionScene.isLeapAvailable()
-                    && leapMotionScene.leap.hands.map { it.grabStrength.value >= project.interaction.strobeThreshold.value }.contains(true))
+                    && leapMotionScene.leap.hands.map { it.grabStrength.value >= project.leapInteraction.strobeThreshold.value }.contains(true))
                 initScene(strobeScene)
         } catch (ex: Exception) {
             println("NPE: 05")

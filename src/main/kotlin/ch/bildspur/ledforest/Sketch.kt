@@ -50,7 +50,7 @@ class Sketch : PApplet() {
         val NAME = "LED Forest 3"
 
         @JvmStatic
-        val VERSION = "0.4"
+        val VERSION = "0.5"
 
         @JvmStatic
         lateinit var instance: PApplet
@@ -194,10 +194,10 @@ class Sketch : PApplet() {
         surface.setTitle("$NAME ($VERSION) - ${project.value.name.value}")
 
         // setup leap motion settings
-        project.value.isInteraction.onChanged += {
-            leapMotion.pauseInteraction = !project.value.isInteraction.value
+        project.value.isLeapInteraction.onChanged += {
+            leapMotion.pauseInteraction = !project.value.isLeapInteraction.value
         }
-        project.value.isInteraction.fire()
+        project.value.isLeapInteraction.fire()
 
         // setup hooks
         setupHooks()

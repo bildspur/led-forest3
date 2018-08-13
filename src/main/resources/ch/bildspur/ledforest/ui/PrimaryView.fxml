@@ -22,7 +22,7 @@
             <Button mnemonicParsing="false" onAction="#saveProjectAs" text="Save As"/>
             <Separator orientation="VERTICAL"/>
             <Button mnemonicParsing="false" onAction="#showProjectSettings" text="Project"/>
-            <Button mnemonicParsing="false" onAction="#showInteractionSettings" text="Interaction"/>
+            <Button mnemonicParsing="false" onAction="#showLeapInteractionSettings" text="Leap Interaction"/>
             <Button mnemonicParsing="false" onAction="#showLightSettings" text="Light"/>
 
             <ProgressIndicator fx:id="progressIndicator" prefHeight="25.0"

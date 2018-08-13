@@ -17,9 +17,12 @@ import kotlin.concurrent.thread
  */
 class OscController(internal var sketch: Sketch) {
     companion object {
-        @JvmStatic val INCOMING_PORT = 9000
-        @JvmStatic val OUTGOING_PORT = 8000
-        @JvmStatic val VEZER_PORT = 1234
+        @JvmStatic
+        val INCOMING_PORT = 9000
+        @JvmStatic
+        val OUTGOING_PORT = 8000
+        @JvmStatic
+        val VEZER_PORT = 1234
     }
 
     @Volatile
@@ -61,7 +64,7 @@ class OscController(internal var sketch: Sketch) {
 
     fun oscEvent(msg: OscMessage) {
         when (msg.addrPattern()) {
-            "/ledforest/remote/interaction" -> {
+            "/ledforest/remote/leapInteraction" -> {
                 sketch.remote.processCommand('x')
             }
         }
@@ -70,7 +73,7 @@ class OscController(internal var sketch: Sketch) {
     }
 
     fun updateOSCApp() {
-        sendMessage("/ledforest/remote/interaction", sketch.isInteractionOn.value.toFloat())
+        sendMessage("/ledforest/remote/leapInteraction", sketch.isInteractionOn.value.toFloat())
     }
 
     fun sendMessage(ip: NetAddress, address: String, value: Float) {

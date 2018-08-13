@@ -57,15 +57,15 @@ class Project {
     var isSceneManager = DataModel(true)
 
     @Expose
-    @BooleanParameter("Interaction")
-    var isInteraction = DataModel(true)
+    @BooleanParameter("Leap Interaction")
+    var isLeapInteraction = DataModel(true)
 
     @Expose
     @BooleanParameter("ArtNet Rendering")
     var isArtNetRendering = DataModel(true)
 
     @Expose
-    var interaction = Interaction()
+    var leapInteraction = LeapInteraction()
 
     @Expose
     var light = Light()

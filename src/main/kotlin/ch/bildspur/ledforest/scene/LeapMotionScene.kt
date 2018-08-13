@@ -62,17 +62,17 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
             val distance = h.position.dist(ledPosition)
 
             // change color / saturation only if it is in reach
-            if (distance <= sketch.project.value.interaction.interactionDistance.value
-                    || sketch.project.value.interaction.singleColorInteraction.value) {
+            if (distance <= sketch.project.value.leapInteraction.interactionDistance.value
+                    || sketch.project.value.leapInteraction.singleColorInteraction.value) {
                 led.color.fadeH(PApplet.map(h.rotation.y, -PApplet.PI, PApplet.PI,
-                        sketch.project.value.interaction.hueStart.value,
-                        sketch.project.value.interaction.hueEnd.value), 0.1f)
+                        sketch.project.value.leapInteraction.hueStart.value,
+                        sketch.project.value.leapInteraction.hueEnd.value), 0.1f)
                 led.color.fadeS(PApplet.map(h.grabStrength.value, 1f, 0f, 0f, 100f), 0.1f)
             }
 
             // always change brightness
             led.color.fadeB(PApplet.max(0f,
-                    PApplet.map(distance, sketch.project.value.interaction.interactionDistance.value, 0f, 0f, 100f)),
+                    PApplet.map(distance, sketch.project.value.leapInteraction.interactionDistance.value, 0f, 0f, 100f)),
                     0.1f)
         } catch (ex: Exception) {
             println("LCB 0: ${ex.message}")

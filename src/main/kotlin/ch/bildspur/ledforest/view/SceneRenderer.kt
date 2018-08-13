@@ -46,8 +46,8 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
             }
         }
 
-        // render interaction box
-        if (project.interaction.showInteractionInfo.value)
+        // render leapInteraction box
+        if (project.leapInteraction.showInteractionInfo.value)
             renderInteractionInfo()
     }
 

@@ -4,7 +4,7 @@ import ch.bildspur.ledforest.ui.properties.BooleanParameter
 import ch.bildspur.ledforest.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose
 
-class Interaction {
+class LeapInteraction {
     @Expose
     @BooleanParameter("Single Color Int.")
     var singleColorInteraction = DataModel(false)
@@ -30,6 +30,6 @@ class Interaction {
     var hueEnd = DataModel(360f)
 
     @Expose
-    @BooleanParameter("Show Interaction Info")
+    @BooleanParameter("Show LeapInteraction Info")
     var showInteractionInfo = DataModel(false)
 }
