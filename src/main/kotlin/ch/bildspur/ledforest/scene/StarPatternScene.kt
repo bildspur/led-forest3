@@ -3,6 +3,7 @@ package ch.bildspur.ledforest.scene
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
 
@@ -20,14 +21,18 @@ class StarPatternScene(tubes: List<Tube>) : BaseScene(tubes) {
     override val timerTask: TimerTask
         get() = task
 
+    var iaTubes = emptyList<Tube>()
+
     override fun setup() {
+        iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction.name }.toList()
+
         tubes.forEachLED {
             it.color.fadeB(0f, 0.05f)
         }
     }
 
     override fun update() {
-        tubes.forEachLED {
+        iaTubes.forEachLED {
             val ledBrightness = ColorMode.brightness(it.color.color)
 
             if (ledBrightness > 10) {

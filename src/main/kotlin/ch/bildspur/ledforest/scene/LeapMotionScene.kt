@@ -4,6 +4,7 @@ import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.util.stackMatrix
 import ch.bildspur.ledforest.util.translate
 import processing.core.PApplet
@@ -24,13 +25,15 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
     override val timerTask: TimerTask
         get() = task
 
-    override fun setup() {
+    var iaTubes = emptyList<Tube>()
 
+    override fun setup() {
+        iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction.name }.toList()
     }
 
     override fun update() {
         if (leap.isRunning)
-            tubes.forEach {
+            iaTubes.forEach {
                 it.leds.forEachIndexed { i, led -> interactWithLED(i, led, it) }
             }
     }
