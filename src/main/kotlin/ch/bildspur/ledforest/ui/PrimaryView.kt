@@ -24,6 +24,8 @@ import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
+import javafx.scene.layout.HBox
+import javafx.scene.shape.Rectangle
 import javafx.stage.FileChooser
 import javafx.stage.Modality
 import javafx.stage.Stage
@@ -166,7 +168,10 @@ class PrimaryView {
             rootItem.children.add(nodeItem)
 
             n.universes.forEach { u ->
-                val universeItem = TreeItem(TagItem(u), ImageView(dmxIcon))
+                val colorRect = Rectangle(4.0, 16.0, TubeShape.UNIVERSE_COLORS[u.id.value % TubeShape.UNIVERSE_COLORS.size])
+                val graphic = HBox(ImageView(dmxIcon), colorRect)
+                graphic.spacing = 4.0
+                val universeItem = TreeItem(TagItem(u), graphic)
                 universeItem.isExpanded = true
                 nodeItem.children.add(universeItem)
 
