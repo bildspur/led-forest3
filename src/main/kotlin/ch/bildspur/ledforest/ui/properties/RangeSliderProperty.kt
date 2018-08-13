@@ -4,7 +4,8 @@ import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.NumberRange
 import ch.bildspur.ledforest.util.format
 import javafx.scene.control.Label
-import javafx.scene.layout.HBox
+import javafx.scene.layout.VBox
+import javafx.scene.text.TextAlignment
 import org.controlsfx.control.RangeSlider
 import java.lang.reflect.Field
 
@@ -18,8 +19,12 @@ class RangeSliderProperty(field: Field, obj: Any, val annotation: RangeSliderPar
         slider.majorTickUnit = annotation.majorTick
         slider.minorTickCount = 0
         slider.isSnapToTicks = annotation.snap
+        slider.prefWidth = 180.0
 
-        val box = HBox(slider, valueLabel)
+        valueLabel.prefWidth = 180.0
+        valueLabel.textAlignment = TextAlignment.CENTER
+
+        val box = VBox(slider, valueLabel)
         box.spacing = 10.0
         children.add(box)
 
