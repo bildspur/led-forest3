@@ -65,8 +65,8 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
             if (distance <= sketch.project.value.leapInteraction.interactionDistance.value
                     || sketch.project.value.leapInteraction.singleColorInteraction.value) {
                 led.color.fadeH(PApplet.map(h.rotation.y, -PApplet.PI, PApplet.PI,
-                        sketch.project.value.leapInteraction.hueStart.value,
-                        sketch.project.value.leapInteraction.hueEnd.value), 0.1f)
+                        sketch.project.value.leapInteraction.hueSpectrum.value.lowValue.toFloat(),
+                        sketch.project.value.leapInteraction.hueSpectrum.value.highValue.toFloat()), 0.1f)
                 led.color.fadeS(PApplet.map(h.grabStrength.value, 1f, 0f, 0f, 100f), 0.1f)
             }
 

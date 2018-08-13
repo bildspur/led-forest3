@@ -1,7 +1,9 @@
 package ch.bildspur.ledforest.model.interaction
 
 import ch.bildspur.ledforest.model.DataModel
+import ch.bildspur.ledforest.model.NumberRange
 import ch.bildspur.ledforest.ui.properties.BooleanParameter
+import ch.bildspur.ledforest.ui.properties.RangeSliderParameter
 import ch.bildspur.ledforest.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose
 
@@ -23,10 +25,6 @@ class LeapInteraction {
     var interactionDistance = DataModel(75f)
 
     @Expose
-    @SliderParameter("Hue Start", 0.0, 360.0)
-    var hueStart = DataModel(180f)
-
-    @Expose
-    @SliderParameter("Hue End", 0.0, 360.0)
-    var hueEnd = DataModel(360f)
+    @RangeSliderParameter("Hue Spectrum", 0.0, 360.0, 1.0, snap = true, roundInt = true)
+    var hueSpectrum = DataModel(NumberRange(180.0, 360.0))
 }
