@@ -9,6 +9,14 @@ class StringProperty(field: Field, obj: Any, val annotation: StringParameter) : 
     val textField = TextField()
 
     init {
+        textField.isEditable = annotation.isEditable
+        if (!annotation.isEditable) {
+            // set to read only
+            textField.style = "-fx-background-color: rgba(200, 200, 200, 0.3);\n" +
+                    "-fx-border-color: rgba(200, 200, 200, 1.0);\n" +
+                    "-fx-border-width: 1px;"
+        }
+
         children.add(textField)
 
         // setup binding
