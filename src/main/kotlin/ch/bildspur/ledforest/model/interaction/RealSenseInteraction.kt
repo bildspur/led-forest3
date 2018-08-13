@@ -58,4 +58,9 @@ class RealSenseInteraction {
     @Expose
     @SliderParameter("Max Delta", 0.0, 500.0, 1.0, snap = true, roundInt = true)
     var maxDelta = DataModel(100.0)
+
+    @Expose
+    @SliderParameter("Min Lifetime", 0.0, 500.0, 1.0, snap = true, roundInt = true)
+    var minLifeTime = DataModel(20.0)
+
 }

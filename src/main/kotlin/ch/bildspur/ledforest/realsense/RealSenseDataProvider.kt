@@ -99,6 +99,8 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
         tracker.sparsing = project.value.realSenseInteraction.sparsing.value
         tracker.maxDelta = project.value.realSenseInteraction.maxDelta.value
 
+        val minLifeTime = project.value.realSenseInteraction.minLifeTime.value.roundToInt()
+
         // read streams
         camera.readStreams()
 
@@ -110,7 +112,7 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
         tracker.track(depthImage.components)
 
         // update regions synchronized
-        activeRegions = tracker.regions.toMutableList()
+        activeRegions = tracker.regions.filter { it.lifeTime > minLifeTime }.toMutableList()
 
         project.value.realSenseInteraction.activeRegionCount.value = "${tracker.regions.size}"
 
@@ -121,7 +123,7 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
     fun renderDebug(g: PGraphics) {
         if (!isRunning)
             return
-        
+
         readSensor(isDebugger = true)
 
         // convert grayscale to color image
@@ -137,8 +139,8 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
             debugImage.drawText("A$i (${it.lifeTime})", position.transform(10.0, 30.0), color, thickness = 2, scale = 1.2)
         }
 
-        g.image(camera.depthImage, 0f, 0f, 320f, 240f)
-        g.image(debugImage.toPImage(), 0f, 240f, 320f, 240f)
+        g.image(camera.depthImage, 0f, 0f, 512f, 384f)
+        g.image(debugImage.toPImage(), 0f, 384f, 512f, 384f)
 
         depthImage.release()
     }
