@@ -55,6 +55,9 @@ class Sketch : PApplet() {
         val VERSION = "0.5"
 
         @JvmStatic
+        val URI_NAME = "ledforest"
+
+        @JvmStatic
         lateinit var instance: PApplet
 
         @JvmStatic

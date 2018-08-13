@@ -47,7 +47,7 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
             } else {
                 handPlayer.volume.target = EasingAudioPlayer.DEFAULT_GAIN
                 val average = (hands.sumByDouble { it.position.x.toDouble() } / hands.size.toDouble()).toFloat()
-                handPlayer.player.pan = PApplet.map(average, 0f, project.interactionBox.value.x, 0f, 1f).limit(-1f, 1f)
+                handPlayer.player.pan = PApplet.map(average, 0f, project.interaction.interactionBox.value.x, 0f, 1f).limit(-1f, 1f)
             }
         } catch (ex: Exception) {
             println("LCB 2: ${ex.message}")

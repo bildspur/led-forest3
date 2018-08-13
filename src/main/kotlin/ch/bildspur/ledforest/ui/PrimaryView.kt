@@ -33,6 +33,7 @@ import processing.core.PVector
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.concurrent.thread
+import kotlin.system.exitProcess
 
 
 class PrimaryView {
@@ -68,12 +69,6 @@ class PrimaryView {
     @FXML
     lateinit var statusLabel: Label
 
-    @FXML
-    lateinit var progressIndicator: ProgressIndicator
-
-    @FXML
-    lateinit var iconView: ImageView
-
     private val appIcon = Image(javaClass.getResourceAsStream("images/LEDForestIcon.png"))
     private val nodeIcon = Image(javaClass.getResourceAsStream("images/ArtnetIcon32.png"))
     private val dmxIcon = Image(javaClass.getResourceAsStream("images/DmxFront16.png"))
@@ -87,8 +82,7 @@ class PrimaryView {
         propertiesPane.content = propertiesControl
 
         // setup ui task
-        UITask.status.addListener { o -> statusLabel.text = UITask.status.value }
-        UITask.running.addListener { o -> progressIndicator.isVisible = UITask.running.value }
+        UITask.status.addListener { _ -> statusLabel.text = UITask.status.value }
 
         // setup treeview
         elementTreeView.selectionModel.selectedItemProperty().addListener { o ->
@@ -96,7 +90,7 @@ class PrimaryView {
             Platform.runLater {
                 if (item != null) {
                     selectedItem = item.value!!.item!!
-                    propertiesControl.initView(item.value!!.item!!)
+                    initSettingsView(item.value!!.item!!, item.value!!.item!!.toString())
                 }
             }
         }
@@ -121,9 +115,6 @@ class PrimaryView {
                     }
                 }
             }
-
-            // set app icon
-            iconView.image = appIcon
 
             // for updating the property view
             propertiesControl.propertyChanged += {
@@ -179,7 +170,7 @@ class PrimaryView {
                 universeItem.isExpanded = true
                 nodeItem.children.add(universeItem)
 
-                tubes.getOrElse(u.id.value, { emptyList<Tube>() }).forEach { t ->
+                tubes.getOrElse(u.id.value) { emptyList<Tube>() }.forEach { t ->
                     val tubeItem = TreeItem(TagItem(t), ImageView(tubeIcon))
                     tubeItem.isExpanded = true
                     universeItem.children.add(tubeItem)
@@ -191,7 +182,7 @@ class PrimaryView {
         updateTubeMap()
     }
 
-    fun newProject(e: ActionEvent) {
+    fun onNewProject() {
 
         val loader = FXMLLoader(javaClass.getResource("SetupProjectView.fxml"))
         val root1 = loader.load<Any>() as Parent
@@ -223,7 +214,7 @@ class PrimaryView {
         }, { updateUI() }, "new project")
     }
 
-    fun loadProject(e: ActionEvent) {
+    fun onLoadProject() {
         val fileChooser = FileChooser()
         fileChooser.title = "Select project to load"
         fileChooser.initialFileName = ""
@@ -252,7 +243,7 @@ class PrimaryView {
         sketch.renderer.forEach { it.setup() }
     }
 
-    fun saveProjectAs(e: ActionEvent) {
+    fun onSaveProjectAs() {
         val fileChooser = FileChooser()
         fileChooser.initialFileName = ""
         fileChooser.title = "Save project..."
@@ -269,7 +260,7 @@ class PrimaryView {
         }
     }
 
-    fun saveProject(e: ActionEvent) {
+    fun onSaveProject() {
         if (Files.exists(Paths.get(appConfig.projectFile)) && !Files.isDirectory(Paths.get(appConfig.projectFile))) {
             UITask.run({
                 configuration.saveProject(appConfig.projectFile, project.value)
@@ -278,7 +269,7 @@ class PrimaryView {
         }
     }
 
-    fun addElement(e: ActionEvent) {
+    fun addElement() {
         // show selection dialog
         val dialog = ChoiceDialog("Tube", listOf("Tube", "Universe", "Node"))
         dialog.title = "Add Element"
@@ -287,7 +278,7 @@ class PrimaryView {
 
         val result = dialog.showAndWait()
 
-        result.ifPresent({ elementName ->
+        result.ifPresent { elementName ->
             when (elementName) {
                 "Tube" -> project.value.tubes.add(Tube())
                 "Universe" -> project.value.nodes.first().universes.add(Universe())
@@ -297,10 +288,10 @@ class PrimaryView {
             sketch.setupHooks()
             rebuildRenderer()
             updateUI()
-        })
+        }
     }
 
-    fun removeElement(e: ActionEvent) {
+    fun removeElement() {
         if (selectedItem != null) {
             when (selectedItem) {
                 is DmxNode -> project.value.nodes.remove(selectedItem as DmxNode)
@@ -330,19 +321,46 @@ class PrimaryView {
         tubeMap.redraw()
     }
 
-    fun showLeapInteractionSettings(e: ActionEvent) {
-        propertiesControl.initView(project.value.leapInteraction)
+    private fun initSettingsView(value: Any, name: String) {
+        propertiesPane.text = name
+        propertiesControl.initView(value)
     }
 
-    fun showRSInteractionSettings(e: ActionEvent) {
-        propertiesControl.initView(project.value.realSenseInteraction)
+    fun onShowLeapInteractionSettings() {
+        initSettingsView(project.value.leapInteraction, "LeapMotion")
     }
 
-    fun showProjectSettings(e: ActionEvent) {
-        propertiesControl.initView(project.value)
+    fun onShowRealSenseInteractionSettings() {
+        initSettingsView(project.value.realSenseInteraction, "RealSense")
     }
 
-    fun showLightSettings(e: ActionEvent) {
-        propertiesControl.initView(project.value.light)
+    fun onShowProjectSettings() {
+        initSettingsView(project.value, "Project")
+    }
+
+    fun onShowLightSettings() {
+        initSettingsView(project.value.light, "Light")
+    }
+
+    fun onClose(e: ActionEvent) {
+        sketch.exit()
+        exitProcess(0)
+    }
+
+    fun onResetRenderer() {
+        resetRenderer()
+    }
+
+    fun onShowAbout() {
+        val alert = Alert(Alert.AlertType.INFORMATION)
+        alert.title = "About"
+        alert.headerText = "${Sketch.NAME} - ${Sketch.VERSION}"
+        alert.contentText = "Developed by Florian Bruggisser 2018.\nwww.bildspur.ch\n\nURI: ${Sketch.URI_NAME}"
+
+        alert.showAndWait()
+    }
+
+    fun onShowInteractionSettings() {
+        initSettingsView(project.value.interaction, "Interaction")
     }
 }

@@ -1,13 +1,16 @@
 package ch.bildspur.ledforest.model
 
 import ch.bildspur.ledforest.Sketch
+import ch.bildspur.ledforest.model.interaction.Interaction
 import ch.bildspur.ledforest.model.interaction.LeapInteraction
 import ch.bildspur.ledforest.model.interaction.RealSenseInteraction
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
-import ch.bildspur.ledforest.ui.properties.*
+import ch.bildspur.ledforest.ui.properties.BooleanParameter
+import ch.bildspur.ledforest.ui.properties.IntParameter
+import ch.bildspur.ledforest.ui.properties.SliderParameter
+import ch.bildspur.ledforest.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
-import processing.core.PVector
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
@@ -57,28 +60,11 @@ class Project {
     var isSceneManager = DataModel(true)
 
     @Expose
-    @BooleanParameter("Interaction On")
-    var isInteractionOn = DataModel(true)
-
-    @Expose
-    @BooleanParameter("Leap Interaction")
-    var isLeapInteraction = DataModel(true)
-
-    @Expose
-    @BooleanParameter("Real Sense Interaction")
-    var isRealSenseInteraction = DataModel(false)
-
-    @Expose
-    @PVectorParameter("Interaction Box")
-    var interactionBox = DataModel(PVector(150f, 150f, 100f))
-
-    @Expose
-    @BooleanParameter("Show Interaction Box")
-    var showInteractionInfo = DataModel(false)
-
-    @Expose
     @BooleanParameter("ArtNet Rendering")
     var isArtNetRendering = DataModel(true)
+
+    @Expose
+    var interaction = Interaction()
 
     @Expose
     var leapInteraction = LeapInteraction()

@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.configuration
 
+import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
@@ -21,10 +22,10 @@ import java.nio.file.Paths
 class ConfigurationController {
     companion object {
         @JvmStatic
-        val CONFIGURATION_FILE = "ledforest.json"
+        val CONFIGURATION_FILE = "${Sketch.URI_NAME}.json"
 
         @JvmStatic
-        val CONFIGURATION_DIR: Path = Paths.get(System.getProperty("user.home"), ".bildspur", "ledforest")
+        val CONFIGURATION_DIR: Path = Paths.get(System.getProperty("user.home"), ".bildspur", Sketch.URI_NAME)
 
         @JvmStatic
         val CONFIGURATION_PATH: Path = Paths.get(CONFIGURATION_DIR.toString(), CONFIGURATION_FILE)

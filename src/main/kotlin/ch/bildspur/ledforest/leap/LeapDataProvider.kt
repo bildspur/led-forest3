@@ -60,7 +60,7 @@ class LeapDataProvider(val project: DataModel<Project>) {
         if (controller.frame() == null)
             return
 
-        if (!project.value.isInteractionOn.value)
+        if (!project.value.interaction.isInteractionOn.value)
             return
 
         updateHands(controller.frame()!!)
@@ -71,7 +71,7 @@ class LeapDataProvider(val project: DataModel<Project>) {
         frame.hands().forEach {
             // add if not already in cache
             if (!handCache.containsKey(it.id())) {
-                handCache[it.id()] = InteractionHand(it, project.value.interactionBox.value)
+                handCache[it.id()] = InteractionHand(it, project.value.interaction.interactionBox.value)
                 handCount++
             }
 

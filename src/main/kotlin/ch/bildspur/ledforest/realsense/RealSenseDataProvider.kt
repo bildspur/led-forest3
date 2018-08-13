@@ -56,7 +56,7 @@ class RealSenseDataProvider(val project: DataModel<Project>) {
             return
             */
 
-        if (!project.value.isInteractionOn.value)
+        if (!project.value.interaction.isInteractionOn.value)
             return
 
         updateRegions()

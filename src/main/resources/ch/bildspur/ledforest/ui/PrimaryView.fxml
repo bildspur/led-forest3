@@ -1,40 +1,53 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="600.0" prefWidth="1078.0"
+            prefHeight="720.0" prefWidth="1221.0"
             xmlns="http://javafx.com/javafx/8.0.101"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.bildspur.ledforest.ui.PrimaryView">
     <top>
-        <HBox prefHeight="50.0" spacing="10.0" style="-fx-background-color: #333333; -fx-border-width: 0;"
-              alignment="CENTER_LEFT">
-            <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-            </padding>
-            <ImageView fx:id="iconView" preserveRatio="true" fitHeight="32"/>
-            <Separator orientation="VERTICAL"/>
-            <Label text="Project:" textFill="WHITE"/>
-            <Button mnemonicParsing="false" onAction="#newProject" alignment="CENTER_RIGHT" text="New"/>
-            <Button mnemonicParsing="false" onAction="#loadProject" text="Load"/>
-            <Button mnemonicParsing="false" onAction="#saveProject" text="Save"/>
-            <Button mnemonicParsing="false" onAction="#saveProjectAs" text="Save As"/>
-            <Separator orientation="VERTICAL"/>
-            <Button mnemonicParsing="false" onAction="#showProjectSettings" text="Project"/>
-            <Button mnemonicParsing="false" onAction="#showLeapInteractionSettings" text="Leap Interaction"/>
-            <Button mnemonicParsing="false" onAction="#showRSInteractionSettings" text="RS Interaction"/>
-            <Button mnemonicParsing="false" onAction="#showLightSettings" text="Light"/>
-
-            <ProgressIndicator fx:id="progressIndicator" prefHeight="25.0"
-                               prefWidth="25.0"/>
-        </HBox>
+        <MenuBar BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="Project">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onNewProject" text="New"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onLoadProject" text="Open"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onSaveProject" text="Save"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onSaveProjectAs" text="Save As..."/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onClose" text="Close"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Settings">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onShowProjectSettings" text="Project"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onShowLightSettings" text="Light"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onShowInteractionSettings" text="Interaction"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onShowLeapInteractionSettings" text="LeapMotion"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onShowRealSenseInteractionSettings"
+                                  text="RealSense"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Renderer">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onResetRenderer" text="Reset"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onShowAbout" text="About"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
     </top>
     <left>
         <TitledPane text="Scene" collapsible="false" prefWidth="260">
             <VBox prefWidth="200.0" BorderPane.alignment="CENTER"
                   style="-fx-border-style: none;">
-                <TreeView fx:id="elementTreeView" prefWidth="300.0"/>
+                <TreeView fx:id="elementTreeView" prefWidth="300.0" prefHeight="800.0"/>
                 <HBox prefWidth="200.0" spacing="10.0">
                     <padding>
                         <Insets top="10.0"/>
