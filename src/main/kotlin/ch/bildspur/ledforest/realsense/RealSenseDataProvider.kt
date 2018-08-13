@@ -116,12 +116,18 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
         // track regions
         tracker.track(depthImage.components)
 
-        // update position of regions (also very inaccurate depth)
+        // update normalizedPosition of regions (also very inaccurate depth)
         tracker.regions.forEach {
             val depthColor = camera.depthImage.get(it.x.roundToInt(), it.y.roundToInt()) and 0xFF
             val normalizedDepth = Sketch.map(depthColor.toDouble(), detector.threshold, 255.0, 0.0, 1.0)
-            it.position.target = PVector(it.x.toFloat() / camera.width, it.y.toFloat() / camera.height, normalizedDepth.toFloat())
+            it.normalizedPosition.target = PVector(it.x.toFloat() / camera.width, it.y.toFloat() / camera.height, normalizedDepth.toFloat())
             it.update()
+
+            // map to interaction box todo: should not be here but is convenient
+            it.mapToInteractionBox(project.value.interaction.interactionBox.value,
+                    project.value.realSenseInteraction.flipX.value,
+                    project.value.realSenseInteraction.flipY.value,
+                    project.value.realSenseInteraction.flipZ.value)
         }
 
         // update regions synchronized
@@ -149,7 +155,7 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
             val color = Scalar(0.0, 255.0, 0.0)
 
             debugImage.drawMarker(position, color, markerSize = 50, thickness = 2)
-            debugImage.drawText("A.$i (${it.position.z})", position.transform(20.0, 40.0), color,
+            debugImage.drawText("A.$i (${it.normalizedPosition.z})", position.transform(20.0, 40.0), color,
                     thickness = 2,
                     scale = 1.0,
                     fontFace = FONT_HERSHEY_SIMPLEX)

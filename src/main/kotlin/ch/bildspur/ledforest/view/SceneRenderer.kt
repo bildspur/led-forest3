@@ -6,12 +6,18 @@ import ch.bildspur.ledforest.leap.LeapDataProvider
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.realsense.RealSenseDataProvider
+import ch.bildspur.ledforest.realsense.tracking.ActiveRegion
 import ch.bildspur.ledforest.util.*
 import processing.core.PApplet
 import processing.core.PGraphics
 import processing.core.PShape
 
-class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataProvider, val project: Project) : IRenderer {
+class SceneRenderer(val g: PGraphics,
+                    val tubes: List<Tube>,
+                    val leap: LeapDataProvider,
+                    val realSense: RealSenseDataProvider,
+                    val project: Project) : IRenderer {
     private val task = TimerTask(0, { render() }, "SceneRenderer")
     override val timerTask: TimerTask
         get() = task
@@ -36,7 +42,7 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
         }
 
         // render hands
-        if (leap.isRunning) {
+        if (leap.isRunning && project.interaction.isLeapInteraction.value) {
             try {
                 leap.hands.forEach {
                     renderHand(it)
@@ -44,6 +50,11 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
             } catch (ex: Exception) {
                 println("LCB 1: ${ex.message}")
             }
+        }
+
+        // render active regions
+        if (realSense.isRunning && project.interaction.isRealSenseInteraction.value) {
+            realSense.activeRegions.forEach { renderActiveRegion(it) }
         }
 
         // render leapInteraction box
@@ -56,7 +67,7 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
         for (i in tube.leds.indices) {
             g.pushMatrix()
 
-            // translate position
+            // translate normalizedPosition
             g.translate(tube.position.value)
 
             // global rotation
@@ -85,6 +96,16 @@ class SceneRenderer(val g: PGraphics, val tubes: List<Tube>, val leap: LeapDataP
     private fun setupRod() {
         rodShape = g.createRod(Tube.WIDTH, LED.SIZE, project.tubeDetail.value.toInt())
         rodShape.disableStyle()
+    }
+
+    private fun renderActiveRegion(region: ActiveRegion) {
+        // render
+        g.pushMatrix()
+        g.translate(region.interactionPosition)
+        g.fill(0f, 255f, 0f)
+        g.noStroke()
+        g.box(10f)
+        g.popMatrix()
     }
 
     private fun renderHand(hand: InteractionHand) {

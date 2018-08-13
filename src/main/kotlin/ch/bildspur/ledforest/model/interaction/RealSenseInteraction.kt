@@ -71,4 +71,15 @@ class RealSenseInteraction {
     @SliderParameter("Min Lifetime", 0.0, 500.0, 1.0, snap = true, roundInt = true)
     var minLifeTime = DataModel(20.0)
 
+    @Expose
+    @BooleanParameter("Flip X")
+    var flipX = DataModel(false)
+
+    @Expose
+    @BooleanParameter("Flip Y")
+    var flipY = DataModel(false)
+
+    @Expose
+    @BooleanParameter("Flip Z")
+    var flipZ = DataModel(false)
 }
