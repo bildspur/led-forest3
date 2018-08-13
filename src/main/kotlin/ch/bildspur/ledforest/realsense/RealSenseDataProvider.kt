@@ -55,7 +55,9 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
         camera = RealSenseCamera(sketch,
                 project.value.realSenseInteraction.inputWidth.value,
                 project.value.realSenseInteraction.inputHeight.value,
-                project.value.realSenseInteraction.inputFPS.value)
+                project.value.realSenseInteraction.inputFPS.value,
+                enableDepthStream = true,
+                enableColorStream = project.value.realSenseInteraction.enableColorStream.value)
 
         thread = thread {
             isRunning = true
@@ -139,8 +141,13 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
             debugImage.drawText("A$i (${it.lifeTime})", position.transform(10.0, 30.0), color, thickness = 2, scale = 1.2)
         }
 
+        // show debug pictures
         g.image(camera.depthImage, 0f, 0f, 512f, 384f)
         g.image(debugImage.toPImage(), 0f, 384f, 512f, 384f)
+
+        // show color stream
+        if (project.value.realSenseInteraction.displayColorStream.value)
+            g.image(camera.colorImage, 0f, 0f, 512f, 384f)
 
         depthImage.release()
     }

@@ -20,6 +20,14 @@ class RealSenseInteraction {
     var isDebug = DataModel(false)
 
     @Expose
+    @BooleanParameter("Display Color Stream")
+    var displayColorStream = DataModel(false)
+
+    @Expose
+    @BooleanParameter("Enable Color Sream")
+    var enableColorStream = DataModel(true)
+
+    @Expose
     @StringParameter("Active Region Count", isEditable = false)
     var activeRegionCount = DataModel("-")
 

@@ -6,7 +6,12 @@ import processing.core.PApplet
 import processing.core.PConstants
 import processing.core.PImage
 
-class RealSenseCamera(val applet: PApplet, val width: Int = 640, val height: Int = 480, val fps: Int = 30) {
+class RealSenseCamera(val applet: PApplet,
+                      val width: Int = 640,
+                      val height: Int = 480,
+                      val fps: Int = 30,
+                      val enableDepthStream: Boolean = true,
+                      val enableColorStream: Boolean = false) {
     private var context: Context = Context.create()
     private lateinit var pipeline: Pipeline
 
@@ -41,8 +46,12 @@ class RealSenseCamera(val applet: PApplet, val width: Int = 640, val height: Int
         pipeline = context.createPipeline()
         val config = Config.create()
         config.enableDevice(device)
-        config.enableStream(Native.Stream.RS2_STREAM_DEPTH, depthStreamIndex, width, height, Native.Format.RS2_FORMAT_Z16, fps)
-        //config.enableStream(Native.Stream.RS2_STREAM_COLOR, colorStreamIndex, width, height, Native.Format.RS2_FORMAT_RGB8, fps)
+
+        if (enableDepthStream)
+            config.enableStream(Native.Stream.RS2_STREAM_DEPTH, depthStreamIndex, width, height, Native.Format.RS2_FORMAT_Z16, fps)
+
+        if (enableColorStream)
+            config.enableStream(Native.Stream.RS2_STREAM_COLOR, colorStreamIndex, width, height, Native.Format.RS2_FORMAT_RGB8, fps)
 
         Thread.sleep(1000) // CONCURRENCY BUG SOMEWHERE!
 
@@ -86,6 +95,7 @@ class RealSenseCamera(val applet: PApplet, val width: Int = 640, val height: Int
 
     private fun readColorImage(frame: Frame) {
         val buffer = frame.frameData
+
         colorImage.loadPixels()
         (0 until frame.strideInBytes * height step 3).forEach { i ->
             colorImage.pixels[i / 3] =
