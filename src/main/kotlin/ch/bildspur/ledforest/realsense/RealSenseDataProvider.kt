@@ -55,8 +55,7 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
     fun start() {
         detector = ActiveRegionDetector()
         tracker = ActiveRegionTracker()
-        camera = RealSenseCamera(sketch,
-                project.value.realSenseInteraction.inputWidth.value,
+        camera = RealSenseCamera(project.value.realSenseInteraction.inputWidth.value,
                 project.value.realSenseInteraction.inputHeight.value,
                 project.value.realSenseInteraction.inputFPS.value,
                 enableDepthStream = true,

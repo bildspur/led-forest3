@@ -2,12 +2,10 @@ package ch.bildspur.ledforest.realsense.io
 
 import ch.bildspur.ledforest.Sketch
 import org.librealsense.*
-import processing.core.PApplet
 import processing.core.PConstants
 import processing.core.PImage
 
-class RealSenseCamera(val applet: PApplet,
-                      val width: Int = 640,
+class RealSenseCamera(val width: Int = 640,
                       val height: Int = 480,
                       val fps: Int = 30,
                       val enableDepthStream: Boolean = true,
