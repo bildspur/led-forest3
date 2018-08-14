@@ -4,6 +4,7 @@ import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.util.Synchronize
 import com.leapmotion.leap.Controller
 import com.leapmotion.leap.Frame
 import java.util.concurrent.ConcurrentHashMap
@@ -24,11 +25,7 @@ class LeapDataProvider(val project: DataModel<Project>) {
 
     private val handCache = ConcurrentHashMap<Int, InteractionHand>()
 
-    /**
-     * Not thread safe -> Maybe using entry to make it concurrency safe
-     */
-    val hands: MutableCollection<InteractionHand>
-        get() = handCache.values //entries.map { it -> it.value }.toMutableList()
+    var hands by Synchronize(mutableListOf<InteractionHand>())
 
     init {
         timer.addTask(TimerTask(updateTime, {
@@ -89,5 +86,8 @@ class LeapDataProvider(val project: DataModel<Project>) {
         // remove old hands
         handCache.values.filter { !handKeys.contains(it.hand.id()) }
                 .forEach { handCache.remove(it.hand.id()) }
+
+        // add to hand cache (synchronized)
+        hands = handCache.values.toMutableList()
     }
 }

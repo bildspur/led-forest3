@@ -43,12 +43,8 @@ class SceneRenderer(val g: PGraphics,
 
         // render hands
         if (leap.isRunning && project.interaction.isLeapInteractionEnabled.value) {
-            try {
-                leap.hands.forEach {
-                    renderHand(it)
-                }
-            } catch (ex: Exception) {
-                println("LCB 1: ${ex.message}")
+            leap.hands.forEach {
+                renderHand(it)
             }
         }
 

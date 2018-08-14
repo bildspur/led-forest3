@@ -41,16 +41,13 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
             return
 
         val hands = leap.hands
-        try {
-            if (hands.isEmpty()) {
-                handPlayer.volume.target = EasingAudioPlayer.MUTED_GAIN
-            } else {
-                handPlayer.volume.target = EasingAudioPlayer.DEFAULT_GAIN
-                val average = (hands.sumByDouble { it.position.x.toDouble() } / hands.size.toDouble()).toFloat()
-                handPlayer.player.pan = PApplet.map(average, 0f, project.interaction.interactionBox.value.x, 0f, 1f).limit(-1f, 1f)
-            }
-        } catch (ex: Exception) {
-            println("LCB 2: ${ex.message}")
+
+        if (hands.isEmpty()) {
+            handPlayer.volume.target = EasingAudioPlayer.MUTED_GAIN
+        } else {
+            handPlayer.volume.target = EasingAudioPlayer.DEFAULT_GAIN
+            val average = (hands.sumByDouble { it.position.x.toDouble() } / hands.size.toDouble()).toFloat()
+            handPlayer.player.pan = PApplet.map(average, 0f, project.interaction.interactionBox.value.x, 0f, 1f).limit(-1f, 1f)
         }
     }
 

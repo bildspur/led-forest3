@@ -52,32 +52,28 @@ class LeapMotionScene(tubes: List<Tube>) : BaseScene(tubes) {
 
     private fun interactWithLED(index: Int, led: LED, tube: Tube) {
         val ledPosition = getLEDPosition(index, tube)
+        val hands = leap.hands
 
-        if (leap.hands.isEmpty())
+        if (hands.isEmpty())
             return
 
-        try {
-            val h = leap.hands.sortedBy { it.position.dist(ledPosition) }.firstOrNull() ?: return
+        val h = hands.sortedBy { it.position.dist(ledPosition) }.firstOrNull() ?: return
 
-            val distance = h.position.dist(ledPosition)
+        val distance = h.position.dist(ledPosition)
 
-            // change color / saturation only if it is in reach
-            if (distance <= sketch.project.value.leapInteraction.interactionDistance.value
-                    || sketch.project.value.leapInteraction.singleColorInteraction.value) {
-                led.color.fadeH(PApplet.map(h.rotation.y, -PApplet.PI, PApplet.PI,
-                        sketch.project.value.leapInteraction.hueSpectrum.value.lowValue.toFloat(),
-                        sketch.project.value.leapInteraction.hueSpectrum.value.highValue.toFloat()), 0.1f)
-                led.color.fadeS(PApplet.map(h.grabStrength.value, 1f, 0f, 0f, 100f), 0.1f)
-            }
-
-            // always change brightness
-            led.color.fadeB(PApplet.max(0f,
-                    PApplet.map(distance, sketch.project.value.leapInteraction.interactionDistance.value, 0f, 0f, 100f)),
-                    0.1f)
-        } catch (ex: Exception) {
-            println("LCB 0: ${ex.message}")
-            return
+        // change color / saturation only if it is in reach
+        if (distance <= sketch.project.value.leapInteraction.interactionDistance.value
+                || sketch.project.value.leapInteraction.singleColorInteraction.value) {
+            led.color.fadeH(PApplet.map(h.rotation.y, -PApplet.PI, PApplet.PI,
+                    sketch.project.value.leapInteraction.hueSpectrum.value.lowValue.toFloat(),
+                    sketch.project.value.leapInteraction.hueSpectrum.value.highValue.toFloat()), 0.1f)
+            led.color.fadeS(PApplet.map(h.grabStrength.value, 1f, 0f, 0f, 100f), 0.1f)
         }
+
+        // always change brightness
+        led.color.fadeB(PApplet.max(0f,
+                PApplet.map(distance, sketch.project.value.leapInteraction.interactionDistance.value, 0f, 0f, 100f)),
+                0.1f)
     }
 
     private fun getLEDPosition(index: Int, tube: Tube): PVector {
