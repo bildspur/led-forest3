@@ -5,9 +5,14 @@ import ch.bildspur.ledforest.model.NumberRange
 import ch.bildspur.ledforest.ui.properties.BooleanParameter
 import ch.bildspur.ledforest.ui.properties.RangeSliderParameter
 import ch.bildspur.ledforest.ui.properties.SliderParameter
+import ch.bildspur.ledforest.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
 
 class LeapInteraction {
+
+    @StringParameter("Hand Count", isEditable = false)
+    var handCount = DataModel("-")
+
     @Expose
     @BooleanParameter("Single Color Int.")
     var singleColorInteraction = DataModel(false)

@@ -63,6 +63,8 @@ class LeapDataProvider(val project: DataModel<Project>) {
             return
 
         updateHands(controller.frame()!!)
+
+        project.value.leapInteraction.handCount.value = "${hands.size}"
     }
 
     private fun updateHands(frame: Frame) {
