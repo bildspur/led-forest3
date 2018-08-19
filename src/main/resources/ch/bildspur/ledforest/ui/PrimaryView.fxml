@@ -34,6 +34,7 @@
                 <Menu mnemonicParsing="false" text="Settings">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#onShowProjectSettings" text="Project" />
+                  <MenuItem mnemonicParsing="false" onAction="#onShowVisualisationSettings" text="Visualisation" />
                         <MenuItem mnemonicParsing="false" onAction="#onShowLightSettings" text="Light" />
                         <MenuItem mnemonicParsing="false" onAction="#onShowInteractionSettings" text="Interaction" />
                         <MenuItem mnemonicParsing="false" onAction="#onShowLeapInteractionSettings" text="LeapMotion" />

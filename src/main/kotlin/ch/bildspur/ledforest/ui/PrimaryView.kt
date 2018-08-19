@@ -97,7 +97,7 @@ class PrimaryView {
         UITask.status.addListener { _ -> statusLabel.text = UITask.status.value }
 
         // setup treeview
-        elementTreeView.selectionModel.selectedItemProperty().addListener { o ->
+        elementTreeView.selectionModel.selectedItemProperty().addListener { _ ->
             val item = elementTreeView.selectionModel.selectedItem
             Platform.runLater {
                 if (item != null) {
@@ -389,7 +389,7 @@ class PrimaryView {
         initSettingsView(project.value.light, "Light")
     }
 
-    fun onClose(e: ActionEvent) {
+    fun onClose() {
         sketch.exit()
         exitProcess(0)
     }
@@ -412,5 +412,9 @@ class PrimaryView {
 
     fun onPlayPauseClicked() {
         println("Play Pause")
+    }
+
+    fun onShowVisualisationSettings() {
+        initSettingsView(project.value.visualisation, "Visualisation")
     }
 }

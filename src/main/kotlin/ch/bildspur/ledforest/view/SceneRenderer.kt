@@ -26,10 +26,10 @@ class SceneRenderer(val g: PGraphics,
 
 
     override fun setup() {
-        project.tubeDetail.onChanged += {
+        project.visualisation.tubeDetail.onChanged += {
             setupRod()
         }
-        project.tubeDetail.fireLatest()
+        project.visualisation.tubeDetail.fireLatest()
     }
 
     override fun render() {
@@ -80,7 +80,7 @@ class SceneRenderer(val g: PGraphics,
             g.noStroke()
             g.fill(tube.leds[i].color.color)
 
-            if (project.highDetail.value)
+            if (project.visualisation.highDetail.value)
                 g.shape(rodShape)
             else
                 g.box(LED.SIZE)
@@ -90,7 +90,7 @@ class SceneRenderer(val g: PGraphics,
     }
 
     private fun setupRod() {
-        rodShape = g.createRod(Tube.WIDTH, LED.SIZE, project.tubeDetail.value.toInt())
+        rodShape = g.createRod(Tube.WIDTH, LED.SIZE, project.visualisation.tubeDetail.value.toInt())
         rodShape.disableStyle()
     }
 

@@ -116,8 +116,8 @@ class Sketch : PApplet() {
     }
 
     override fun settings() {
-        if (project.value.isFullScreenMode.value)
-            fullScreen(PConstants.P3D, project.value.fullScreenDisplay.value)
+        if (project.value.visualisation.isFullScreenMode.value)
+            fullScreen(PConstants.P3D, project.value.visualisation.fullScreenDisplay.value)
         else
             size(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
 
@@ -125,14 +125,14 @@ class Sketch : PApplet() {
         smooth()
 
         // retina screen
-        if (project.value.highResMode.value)
+        if (project.value.visualisation.highResMode.value)
             pixelDensity = 2
     }
 
     override fun setup() {
         Sketch.instance = this
 
-        frameRate(if (project.value.highFPSMode.value) HIGH_RES_FRAME_RATE else LOW_RES_FRAME_RATE)
+        frameRate(if (project.value.visualisation.highFPSMode.value) HIGH_RES_FRAME_RATE else LOW_RES_FRAME_RATE)
         colorMode(HSB, 360f, 100f, 100f)
 
         project.onChanged += {
@@ -193,7 +193,7 @@ class Sketch : PApplet() {
         // add hud
         peasy.hud {
             // output image
-            if (project.value.highResMode.value)
+            if (project.value.visualisation.highResMode.value)
                 fx.render(canvas)
                         .bloom(0.0f, 20, 40f)
                         .compose()
@@ -274,7 +274,7 @@ class Sketch : PApplet() {
         canvas = createGraphics(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
 
         // retina screen
-        if (project.value.highResMode.value)
+        if (project.value.visualisation.highResMode.value)
             canvas.pixelDensity = 2
     }
 
