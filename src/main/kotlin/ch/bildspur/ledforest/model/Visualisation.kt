@@ -27,7 +27,7 @@ class Visualisation {
     var fullScreenDisplay = DataModel(0)
 
     @Expose
-    @SliderParameter("Global Scale Factor (cm to px)", 5.0, 200.0, 5.0)
+    @SliderParameter("Global Scale Factor (m to px)", 5.0, 200.0, 5.0)
     var globalScaleFactor = DataModel(50.0f)
 
     @Expose

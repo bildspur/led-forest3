@@ -219,6 +219,11 @@ class PrimaryView {
         createBidirectionalMapping(project.interaction.isInteractionDataEnabled,
                 interactionSceneManager.onActionProperty(),
                 interactionSceneManager.selectedProperty())
+
+        // add redraw of ui
+        project.map.mapScaleFactor.onChanged += {
+            updateTubeMap()
+        }
     }
 
     fun <T> createBidirectionalMapping(dataModel: DataModel<T>,
@@ -359,10 +364,11 @@ class PrimaryView {
 
         // transform
         val transform = PVector(tubeMap.canvas.width.toFloat() / 2f, tubeMap.canvas.height.toFloat() / 2f)
+        val scale = project.value.map.mapScaleFactor.value
 
         // add all tubes
         project.value.tubes.forEach {
-            tubeMap.activeLayer.shapes.add(TubeShape(it, transform))
+            tubeMap.activeLayer.shapes.add(TubeShape(it, transform, scale))
         }
 
         tubeMap.redraw()

@@ -27,10 +27,10 @@
                         <MenuItem id="visualisationMenuItem" mnemonicParsing="false"
                                   onAction="#onShowVisualisationSettings" text="Visualisation"/>
                         <MenuItem id="lightMenuItem" mnemonicParsing="false" onAction="#onShowLightSettings"
-                                  text="ArtNet"/>
+                                  text="Art-Net"/>
                         <MenuItem id="mapMenuItem" mnemonicParsing="false"
                                   onAction="#onShowMapSettings"
-                                  text="2d Map"/>
+                                  text="2D Map"/>
                         <MenuItem id="interactionMenuItem" mnemonicParsing="false" onAction="#onShowInteractionSettings"
                                   text="Interaction"/>
                         <MenuItem id="leapMenuItem" mnemonicParsing="false" onAction="#onShowLeapInteractionSettings"
