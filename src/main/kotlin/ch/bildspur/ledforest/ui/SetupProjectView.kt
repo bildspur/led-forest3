@@ -24,7 +24,7 @@ class SetupProjectView {
     lateinit var tubesPerUniverseCount: Spinner<Int>
     lateinit var isUniverseAutoFill: CheckBox
     lateinit var universesPerNode: Spinner<Int>
-    lateinit var space: Spinner<Int>
+    lateinit var space: Spinner<Double>
     lateinit var flipXY: CheckBox
     lateinit var clonePattern: ComboBox<ClonePattern>
 
@@ -79,7 +79,7 @@ class SetupProjectView {
         }
 
         space.valueProperty().addListener { _, _, newValue ->
-            info.space = newValue
+            info.space = newValue.toFloat()
             updateWindow()
         }
 
@@ -97,7 +97,7 @@ class SetupProjectView {
         isUniverseAutoFill.isSelected = info.isUniverseAutoFill
         universesPerNode.valueFactory.value = info.universesPerNode
         clonePattern.selectionModel.select(info.clonePattern)
-        space.valueFactory.value = info.space
+        space.valueFactory.value = info.space.toDouble()
         flipXY.isSelected = info.flipXY
 
         // set special unit values

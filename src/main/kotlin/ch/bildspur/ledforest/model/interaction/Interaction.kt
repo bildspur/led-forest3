@@ -23,7 +23,7 @@ class Interaction {
 
     @Expose
     @PVectorParameter("Interaction Box")
-    var interactionBox = DataModel(PVector(150f, 150f, 100f))
+    var interactionBox = DataModel(PVector(15f, 15f, 10f))
 
     @ActionParameter("Interaction Box", "Auto Scale")
     val autoScaleInteractionBox = {

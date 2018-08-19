@@ -93,10 +93,10 @@
                 </CheckBox>
                 <Spinner fx:id="space" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <valueFactory>
-                        <SpinnerValueFactory.IntegerSpinnerValueFactory max="1024" min="0"/>
+                        <SpinnerValueFactory.DoubleSpinnerValueFactory max="10" min="0"/>
                     </valueFactory>
                 </Spinner>
-                <Label text="Space (px)" GridPane.rowIndex="5"/>
+                <Label text="Space (m)" GridPane.rowIndex="5"/>
             </children>
             <BorderPane.margin>
                 <Insets left="20.0" right="20.0"/>

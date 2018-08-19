@@ -27,12 +27,16 @@ class Visualisation {
     var fullScreenDisplay = DataModel(0)
 
     @Expose
-    @SliderParameter("LED Width", 0.1, 10.0, 0.1)
-    var ledWidth = DataModel(1f)
+    @SliderParameter("Global Scale Factor (cm to px)", 5.0, 200.0, 5.0)
+    var globalScaleFactor = DataModel(50.0f)
 
     @Expose
-    @SliderParameter("LED Height", 0.1, 10.0, 0.1)
-    var ledHeight = DataModel(2f)
+    @SliderParameter("LED Width", 0.01, 0.1, 0.01)
+    var ledWidth = DataModel(0.03f)
+
+    @Expose
+    @SliderParameter("LED Height", 0.01, 0.1, 0.01)
+    var ledHeight = DataModel(0.06f)
 
     @Expose
     @SliderParameter("LED Detail", 2.0, 10.0, 1.0)

@@ -23,7 +23,6 @@ class SceneRenderer(val g: PGraphics,
 
     lateinit var rodShape: PShape
 
-
     override fun setup() {
         project.visualisation.ledWidth.onChanged += {
             setupRod()
@@ -43,6 +42,8 @@ class SceneRenderer(val g: PGraphics,
     }
 
     override fun render() {
+        // apply scale to everything
+        g.scale(project.visualisation.globalScaleFactor.value)
 
         // render tubes
         tubes.forEach { t ->
