@@ -113,7 +113,7 @@ class PrimaryView {
         // setup ui
         UITask.run({
             // init canvas
-            tubeMap.setupMap(300.0, 300.0)
+            tubeMap.setupMap(TubeMap.CANVAS_WIDTH, TubeMap.CANVAS_HEIGHT)
             tubeMap.activeTool = moveTool
 
             // on map select
@@ -224,6 +224,7 @@ class PrimaryView {
         project.map.mapScaleFactor.onChanged += {
             updateTubeMap()
         }
+        project.map.mapScaleFactor.fireLatest()
     }
 
     fun <T> createBidirectionalMapping(dataModel: DataModel<T>,
