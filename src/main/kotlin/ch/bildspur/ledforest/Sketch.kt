@@ -6,6 +6,7 @@ import ch.bildspur.ledforest.controller.PeasyController
 import ch.bildspur.ledforest.controller.RemoteController
 import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
+import ch.bildspur.ledforest.event.Event
 import ch.bildspur.ledforest.leap.LeapDataProvider
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
@@ -75,6 +76,10 @@ class Sketch : PApplet() {
 
     @Volatile
     var isInitialised = false
+
+    var onSetupFinished = Event<Sketch>()
+
+    var onInitialisationFinished = Event<Sketch>()
 
     var fpsOverTime = 0f
 
@@ -166,6 +171,7 @@ class Sketch : PApplet() {
         }))
 
         LogBook.log("Start")
+        onSetupFinished(this)
     }
 
     override fun draw() {
@@ -311,6 +317,7 @@ class Sketch : PApplet() {
             resetRenderer()
 
             isInitialised = true
+            onInitialisationFinished(this)
             return true
         }
 

@@ -161,6 +161,10 @@ class PrimaryView {
     fun startProcessing() {
         sketch = Sketch()
 
+        sketch.onSetupFinished += {
+            project.value.map.autoScaleMap()
+        }
+
         project.onChanged += {
             sketch.project.value = project.value
         }
@@ -224,7 +228,6 @@ class PrimaryView {
         project.map.mapScaleFactor.onChanged += {
             updateTubeMap()
         }
-        project.map.mapScaleFactor.fireLatest()
     }
 
     fun <T> createBidirectionalMapping(dataModel: DataModel<T>,
