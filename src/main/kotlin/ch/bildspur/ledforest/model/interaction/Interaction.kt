@@ -27,21 +27,14 @@ class Interaction {
 
     @ActionParameter("Interaction Box", "Auto Scale")
     val autoScaleInteractionBox = {
-        val tubes = Sketch.instance.project.value.tubes.map { it.position.value }
         val scaleFactor = 2.2
 
-        // calculate min & max
-        val maxX = tubes.map { it.x }.max() ?: 0f
-        val minX = tubes.map { it.x }.min() ?: 0f
-        val maxY = tubes.map { it.y }.max() ?: 0f
-        val minY = tubes.map { it.y }.min() ?: 0f
-        val maxZ = tubes.map { it.z }.max() ?: 0f
-        val minZ = tubes.map { it.z }.min() ?: 0f
+        val ranges = Sketch.instance.spaceInformation.calculateTubeDimensions(Sketch.instance.project.value.tubes)
 
         interactionBox.value = PVector(
-                Math.ceil(Math.max(Math.abs(minX), maxX) * scaleFactor).toFloat(),
-                Math.ceil(Math.max(Math.abs(minY), maxY) * scaleFactor).toFloat(),
-                Math.ceil(Math.max(Math.abs(minZ), maxZ) * scaleFactor).toFloat()
+                Math.ceil(Math.max(Math.abs(ranges.x.lowValue), ranges.x.highValue) * scaleFactor).toFloat(),
+                Math.ceil(Math.max(Math.abs(ranges.y.lowValue), ranges.y.highValue) * scaleFactor).toFloat(),
+                Math.ceil(Math.max(Math.abs(ranges.z.lowValue), ranges.z.highValue) * scaleFactor).toFloat()
         )
     }
 

@@ -12,6 +12,7 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.realsense.RealSenseDataProvider
 import ch.bildspur.ledforest.scene.SceneManager
 import ch.bildspur.ledforest.util.LogBook
+import ch.bildspur.ledforest.util.SpaceInformation
 import ch.bildspur.ledforest.util.draw
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.view.ArtNetRenderer
@@ -110,6 +111,8 @@ class Sketch : PApplet() {
 
     val minim = Minim(this)
 
+    val spaceInformation = SpaceInformation(this)
+
     lateinit var fx: PostFX
 
     init {
@@ -146,6 +149,8 @@ class Sketch : PApplet() {
 
         leapMotion.start()
         realSense.start()
+
+        spaceInformation.setup()
 
         // timer for cursor hiding
         timer.addTask(TimerTask(CURSOR_HIDING_TIME, {
@@ -345,4 +350,6 @@ class Sketch : PApplet() {
         cursor()
         lastCursorMoveTime = millis()
     }
+
+
 }
