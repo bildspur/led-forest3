@@ -39,9 +39,8 @@ class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSen
 
     }
 
-    fun isTrackingAvailable(): Boolean {
-        return realSense.activeRegions.isNotEmpty()
-    }
+    override val isInteracting: Boolean
+        get() = realSense.activeRegions.isNotEmpty()
 
     private fun interactWithLED(index: Int, led: LED, tube: Tube) {
         val ledPosition = getLEDPosition(index, tube)

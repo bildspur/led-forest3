@@ -10,7 +10,6 @@ import processing.core.PApplet
 
 class LeapMotionScene(project: Project, tubes: List<Tube>, val leap: LeapDataProvider)
     : BaseInteractionScene("LeapMotion Scene", project, tubes) {
-
     private val task = TimerTask(0, { update() })
 
     override val timerTask: TimerTask
@@ -37,9 +36,8 @@ class LeapMotionScene(project: Project, tubes: List<Tube>, val leap: LeapDataPro
 
     }
 
-    fun isLeapAvailable(): Boolean {
-        return leap.isRunning && leap.hands.isNotEmpty()
-    }
+    override val isInteracting: Boolean
+        get() = leap.isRunning && leap.hands.isNotEmpty()
 
     private fun interactWithLED(index: Int, led: LED, tube: Tube) {
         val ledPosition = getLEDPosition(index, tube)

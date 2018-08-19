@@ -11,6 +11,8 @@ import processing.core.PVector
 abstract class BaseInteractionScene(name: String, project: Project, tubes: List<Tube>) : BaseScene(name, project, tubes) {
     var space = Sketch.instance.createGraphics(10, 10, PApplet.P3D)
 
+    abstract val isInteracting: Boolean
+
     fun getLEDPosition(index: Int, tube: Tube): PVector {
         val position = PVector()
         space.stackMatrix {

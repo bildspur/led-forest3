@@ -31,20 +31,20 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
     override fun render() {
         // check if hand is detected
         if (activeScene != leapMotionScene
-                && leapMotionScene.isLeapAvailable()
+                && leapMotionScene.isInteracting
                 && project.isSceneManagerEnabled.value
                 && project.interaction.isLeapInteractionEnabled.value)
             initScene(leapMotionScene)
 
         if (activeScene != realSenseScene
-                && realSenseScene.isTrackingAvailable()
+                && realSenseScene.isInteracting
                 && project.isSceneManagerEnabled.value
                 && project.interaction.isRealSenseInteractionEnabled.value)
             initScene(realSenseScene)
 
         if (activeScene != starScene
-                && !leapMotionScene.isLeapAvailable()
-                && !realSenseScene.isTrackingAvailable()
+                && !leapMotionScene.isInteracting
+                && !realSenseScene.isInteracting
                 && project.isSceneManagerEnabled.value)
             initScene(starScene)
 
@@ -54,7 +54,7 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
         try {
             if (activeScene != strobeScene
                     && project.leapInteraction.isStrobeEnabled.value
-                    && leapMotionScene.isLeapAvailable()
+                    && leapMotionScene.isInteracting
                     && leapMotionScene.leap.hands.map { it.grabStrength.value >= project.leapInteraction.strobeThreshold.value }.contains(true))
                 initScene(strobeScene)
         } catch (ex: Exception) {
