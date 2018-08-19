@@ -9,6 +9,7 @@ import com.google.gson.annotations.Expose
  */
 class DataModel<T>(@Expose @Volatile private var dataValue: T) {
     val onChanged = Event<T>()
+    private var publishActive = true
 
     var value: T
         get() = this.dataValue
@@ -17,9 +18,15 @@ class DataModel<T>(@Expose @Volatile private var dataValue: T) {
             dataValue = value
 
             // fire event if changed
-            if (dataValue != oldValue)
+            if (publishActive && dataValue != oldValue)
                 fire()
         }
+
+    fun setSilent(value: T) {
+        publishActive = false
+        this.value = value
+        publishActive = true
+    }
 
     fun fire() {
         onChanged(dataValue)

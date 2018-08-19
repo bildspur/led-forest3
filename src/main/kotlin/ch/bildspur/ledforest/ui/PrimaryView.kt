@@ -15,7 +15,10 @@ import ch.bildspur.ledforest.ui.properties.PropertiesControl
 import ch.bildspur.ledforest.ui.util.TagItem
 import ch.bildspur.ledforest.ui.util.UITask
 import javafx.application.Platform
+import javafx.beans.property.ObjectProperty
+import javafx.beans.value.WritableValue
 import javafx.event.ActionEvent
+import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
@@ -71,6 +74,13 @@ class PrimaryView {
     @FXML
     lateinit var statusLabel: Label
 
+    // quick settings
+    @FXML
+    lateinit var sceneManagerMenuItem: CheckMenuItem
+
+    @FXML
+    lateinit var interactionSceneManager: CheckMenuItem
+
     private val appIcon = Image(javaClass.getResourceAsStream("images/LEDForestIcon.png"))
     private val nodeIcon = Image(javaClass.getResourceAsStream("images/ArtnetIcon32.png"))
     private val dmxIcon = Image(javaClass.getResourceAsStream("images/DmxFront16.png"))
@@ -96,6 +106,9 @@ class PrimaryView {
                 }
             }
         }
+
+        // setup project changed handler
+        project.onChanged += { onProjectChanged(it) }
 
         // setup ui
         UITask.run({
@@ -185,6 +198,27 @@ class PrimaryView {
 
         elementTreeView.root = rootItem
         updateTubeMap()
+    }
+
+    fun onProjectChanged(project: Project) {
+        // setup specific handlers for project
+
+        // quick settings
+        createBidirectionalMapping(project.isSceneManagerEnabled,
+                sceneManagerMenuItem.onActionProperty(),
+                sceneManagerMenuItem.selectedProperty())
+
+        createBidirectionalMapping(project.interaction.isInteractionDataEnabled,
+                interactionSceneManager.onActionProperty(),
+                interactionSceneManager.selectedProperty())
+    }
+
+    fun <T> createBidirectionalMapping(dataModel: DataModel<T>,
+                                       onActionProperty: ObjectProperty<EventHandler<ActionEvent>>,
+                                       value: WritableValue<T>) {
+        dataModel.onChanged += { value.value = it }
+        onActionProperty.set(EventHandler { dataModel.setSilent(value.value) })
+        dataModel.fireLatest()
     }
 
     fun onNewProject() {
@@ -367,5 +401,9 @@ class PrimaryView {
 
     fun onShowInteractionSettings() {
         initSettingsView(project.value.interaction, "Interaction")
+    }
+
+    fun onPlayPauseClicked() {
+        println("Play Pause")
     }
 }
