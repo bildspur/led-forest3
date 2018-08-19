@@ -22,7 +22,7 @@ class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: 
 
     override fun render() {
         // check if artnet rendering is used
-        if (!project.isArtNetRendering.value)
+        if (!project.light.isArtNetRendering.value)
             return
 
         tubes.groupBy { it.universe.value }.forEach {

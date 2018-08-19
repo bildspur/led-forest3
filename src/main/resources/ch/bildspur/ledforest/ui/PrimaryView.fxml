@@ -1,62 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckMenuItem?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.control.TreeView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1221.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.bildspur.ledforest.ui.PrimaryView">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="720.0" prefWidth="1221.0" xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.bildspur.ledforest.ui.PrimaryView">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="Project">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onNewProject" text="New" />
-                        <MenuItem mnemonicParsing="false" onAction="#onLoadProject" text="Open" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#onSaveProject" text="Save" />
-                        <MenuItem mnemonicParsing="false" onAction="#onSaveProjectAs" text="Save As..." />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#onClose" text="Close" />
+                        <MenuItem mnemonicParsing="false" onAction="#onNewProject" text="New"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onLoadProject" text="Open"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onSaveProject" text="Save"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onSaveProjectAs" text="Save As..."/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onClose" text="Close"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Settings">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onShowProjectSettings" text="Project" />
-                  <MenuItem mnemonicParsing="false" onAction="#onShowVisualisationSettings" text="Visualisation" />
-                        <MenuItem mnemonicParsing="false" onAction="#onShowLightSettings" text="Light" />
-                        <MenuItem mnemonicParsing="false" onAction="#onShowInteractionSettings" text="Interaction" />
-                        <MenuItem mnemonicParsing="false" onAction="#onShowLeapInteractionSettings" text="LeapMotion" />
-                        <MenuItem mnemonicParsing="false" onAction="#onShowRealSenseInteractionSettings" text="RealSense" />
+                        <MenuItem mnemonicParsing="false" onAction="#onShowProjectSettings" text="Project"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onShowVisualisationSettings" text="Visualisation"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onShowLightSettings" text="Art-Net"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onShowInteractionSettings" text="Interaction"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onShowLeapInteractionSettings" text="LeapMotion"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onShowRealSenseInteractionSettings"
+                                  text="RealSense"/>
                     </items>
                 </Menu>
-            <Menu disable="true" mnemonicParsing="false" text="|" />
+                <Menu disable="true" mnemonicParsing="false" text="|"/>
                 <Menu mnemonicParsing="false" text="Renderer">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onResetRenderer" text="Reset" />
+                        <MenuItem mnemonicParsing="false" onAction="#onResetRenderer" text="Reset"/>
                     </items>
                 </Menu>
-            <Menu mnemonicParsing="false" text="Scene">
-               <items>
-                  <CheckMenuItem fx:id="sceneManagerMenuItem" mnemonicParsing="false" text="Scene Manager On" />
-                  <CheckMenuItem fx:id="interactionSceneManager" mnemonicParsing="false" text="Interaction On" />
-               </items>
-            </Menu>
-            <Menu disable="true" mnemonicParsing="false" text="|" />
+                <Menu mnemonicParsing="false" text="Scene">
+                    <items>
+                        <CheckMenuItem fx:id="sceneManagerMenuItem" mnemonicParsing="false" text="Scene Manager On"/>
+                        <CheckMenuItem fx:id="interactionSceneManager" mnemonicParsing="false" text="Interaction On"/>
+                    </items>
+                </Menu>
+                <Menu disable="true" mnemonicParsing="false" text="|"/>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onShowAbout" text="About" />
+                        <MenuItem mnemonicParsing="false" onAction="#onShowAbout" text="About"/>
                     </items>
                 </Menu>
             </menus>
@@ -65,22 +55,23 @@
     <left>
         <TitledPane collapsible="false" prefWidth="260" text="Scene">
             <VBox prefWidth="200.0" style="-fx-border-style: none;" BorderPane.alignment="CENTER">
-                <TreeView fx:id="elementTreeView" prefHeight="800.0" prefWidth="300.0" />
+                <TreeView fx:id="elementTreeView" prefHeight="800.0" prefWidth="300.0"/>
                 <HBox prefWidth="200.0" spacing="10.0">
                     <padding>
-                        <Insets top="10.0" />
+                        <Insets top="10.0"/>
                     </padding>
-                    <Button mnemonicParsing="false" onAction="#addElement" text="Add" />
-                    <Button mnemonicParsing="false" onAction="#removeElement" text="Remove" />
+                    <Button mnemonicParsing="false" onAction="#addElement" text="Add"/>
+                    <Button mnemonicParsing="false" onAction="#removeElement" text="Remove"/>
                 </HBox>
             </VBox>
         </TitledPane>
     </left>
     <bottom>
-        <FlowPane prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #696969;" BorderPane.alignment="CENTER">
+        <FlowPane prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #696969;"
+                  BorderPane.alignment="CENTER">
             <Label fx:id="statusLabel" text="Status" textFill="WHITE">
                 <FlowPane.margin>
-                    <Insets left="10.0" top="10.0" />
+                    <Insets left="10.0" top="10.0"/>
                 </FlowPane.margin>
             </Label>
         </FlowPane>
@@ -90,7 +81,8 @@
     <right>
         <ScrollPane prefHeight="200.0" prefWidth="310.0" BorderPane.alignment="CENTER">
             <content>
-                <TitledPane fx:id="propertiesPane" animated="false" collapsible="false" prefWidth="305.0" text="Properties" />
+                <TitledPane fx:id="propertiesPane" animated="false" collapsible="false" prefWidth="305.0"
+                            text="Properties"/>
             </content>
         </ScrollPane>
     </right>

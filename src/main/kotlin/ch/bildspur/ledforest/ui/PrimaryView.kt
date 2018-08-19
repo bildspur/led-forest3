@@ -386,7 +386,7 @@ class PrimaryView {
     }
 
     fun onShowLightSettings() {
-        initSettingsView(project.value.light, "Light")
+        initSettingsView(project.value.light, "Art-Net")
     }
 
     fun onClose() {
