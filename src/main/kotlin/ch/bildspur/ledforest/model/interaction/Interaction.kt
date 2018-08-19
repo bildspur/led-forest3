@@ -38,7 +38,6 @@ class Interaction {
         )
     }
 
-
     @Expose
     @BooleanParameter("Show Interaction Box")
     var showInteractionInfo = DataModel(false)

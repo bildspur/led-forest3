@@ -17,15 +17,18 @@ class SpaceInformation(val sketch: Sketch) {
     }
 
     fun calculateTubeDimensions(tubes: List<Tube>): RangeVector {
-        val tubePosition = tubes.map { it.position.value }
+        val ledPositions = tubes.map { Pair(it, it.leds) }
+                .map { p ->
+                    p.second.mapIndexed { i, _ -> getLEDPosition(i, p.first) }
+                }.flatMap { it }
 
         // calculate min & max
-        val maxX = tubePosition.map { it.x }.max() ?: 0f
-        val minX = tubePosition.map { it.x }.min() ?: 0f
-        val maxY = tubePosition.map { it.y }.max() ?: 0f
-        val minY = tubePosition.map { it.y }.min() ?: 0f
-        val maxZ = tubePosition.map { it.z }.max() ?: 0f
-        val minZ = tubePosition.map { it.z }.min() ?: 0f
+        val maxX = ledPositions.map { it.x }.max() ?: 0f
+        val minX = ledPositions.map { it.x }.min() ?: 0f
+        val maxY = ledPositions.map { it.y }.max() ?: 0f
+        val minY = ledPositions.map { it.y }.min() ?: 0f
+        val maxZ = ledPositions.map { it.z }.max() ?: 0f
+        val minZ = ledPositions.map { it.z }.min() ?: 0f
 
         return RangeVector(NumberRange(minX.toDouble(), maxX.toDouble()),
                 NumberRange(minY.toDouble(), maxY.toDouble()),
