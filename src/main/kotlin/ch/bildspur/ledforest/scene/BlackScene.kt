@@ -1,15 +1,13 @@
 package ch.bildspur.ledforest.scene
 
 import ch.bildspur.ledforest.controller.timer.TimerTask
+import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
 
-class BlackScene(tubes: List<Tube>) : BaseScene(tubes) {
+class BlackScene(project: Project, tubes: List<Tube>) : BaseScene("Black Scene", project, tubes) {
     private val task = TimerTask(1000, { update() })
-
-    override val name: String
-        get() = "Black Scene"
 
     override val timerTask: TimerTask
         get() = task

@@ -1,17 +1,18 @@
 package ch.bildspur.ledforest.scene
 
+import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.view.IRenderer
 
-class SceneManager(val project: Project, val tubes: List<Tube>) : IRenderer {
-    val starScene = StarPatternScene(tubes)
-    val leapMotionScene = LeapMotionScene(tubes)
-    val realSenseScene = RealSenseScene(tubes)
-    val blackScene = BlackScene(tubes)
-    val strobeScene = StrobeScene(tubes)
+class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tube>) : IRenderer {
+    val starScene = StarPatternScene(project, tubes)
+    val leapMotionScene = LeapMotionScene(project, tubes, sketch.leapMotion)
+    val realSenseScene = RealSenseScene(project, tubes, sketch.realSense)
+    val blackScene = BlackScene(project, tubes)
+    val strobeScene = StrobeScene(project, tubes)
 
     var activeScene: BaseScene = blackScene
 

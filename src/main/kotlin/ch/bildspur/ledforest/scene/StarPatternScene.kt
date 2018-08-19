@@ -2,21 +2,19 @@ package ch.bildspur.ledforest.scene
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
+import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
 
 
-class StarPatternScene(tubes: List<Tube>) : BaseScene(tubes) {
+class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPattern Scene", project, tubes) {
     private var randomOnFactor = 0.95f
     private var randomOffFactor = 0.8f
     private var fadeSpeed = 0.01f
 
     private val task = TimerTask(500, { update() })
-
-    override val name: String
-        get() = "StarPattern Scene"
 
     override val timerTask: TimerTask
         get() = task

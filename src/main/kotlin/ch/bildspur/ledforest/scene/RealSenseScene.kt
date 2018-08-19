@@ -1,26 +1,17 @@
 package ch.bildspur.ledforest.scene
 
-import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
+import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
-import ch.bildspur.ledforest.util.stackMatrix
-import ch.bildspur.ledforest.util.translate
+import ch.bildspur.ledforest.realsense.RealSenseDataProvider
 import processing.core.PApplet
-import processing.core.PVector
 
-class RealSenseScene(tubes: List<Tube>) : BaseScene(tubes) {
-    // todo: remove ugly grab of data provider
-    val sketch = Sketch.instance
-    val realSense = sketch.realSense
-
-    var space = Sketch.instance.createGraphics(10, 10, PApplet.P3D)
+class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSenseDataProvider)
+    : BaseInteractionScene("RealSense Scene", project, tubes) {
 
     private val task = TimerTask(0, { update() })
-
-    override val name: String
-        get() = "RealSense Scene"
 
     override val timerTask: TimerTask
         get() = task
@@ -61,39 +52,14 @@ class RealSenseScene(tubes: List<Tube>) : BaseScene(tubes) {
         val distance = nearestRegion.interactionPosition.dist(ledPosition)
 
         // change color / saturation only if it is in reach
-        if (distance <= sketch.project.value.realSenseInteraction.interactionDistance.value) {
+        if (distance <= project.realSenseInteraction.interactionDistance.value) {
             led.color.fadeH(200f, 0.1f)
             led.color.fadeS(100f, 0.1f)
         }
 
         // always change brightness
         led.color.fadeB(PApplet.max(0f,
-                PApplet.map(distance, sketch.project.value.realSenseInteraction.interactionDistance.value, 0f, 0f, 100f)),
+                PApplet.map(distance, project.realSenseInteraction.interactionDistance.value, 0f, 0f, 100f)),
                 0.1f)
-    }
-
-    private fun getLEDPosition(index: Int, tube: Tube): PVector {
-        val position = PVector()
-        space.stackMatrix {
-            // translate normalizedPosition
-            it.translate(tube.position.value)
-
-            // global rotation
-            it.rotateX(tube.rotation.value.x)
-            it.rotateY(tube.rotation.value.y)
-            it.rotateZ(tube.rotation.value.z)
-
-            // translate height
-            it.translate(0f, 0f, (if (tube.inverted.value) -1 else 1) * (index * sketch.project.value.visualisation.ledHeight.value))
-
-            // rotate shape
-            it.rotateX(PApplet.radians(90f))
-
-            position.x = it.modelX(0f, 0f, 0f)
-            position.y = it.modelY(0f, 0f, 0f)
-            position.z = it.modelZ(0f, 0f, 0f)
-        }
-
-        return position
     }
 }

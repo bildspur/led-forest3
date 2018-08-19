@@ -1,17 +1,15 @@
 package ch.bildspur.ledforest.scene
 
 import ch.bildspur.ledforest.controller.timer.TimerTask
+import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.ExtendedRandom
 import ch.bildspur.ledforest.util.forEachLED
 
-class StrobeScene(tubes: List<Tube>) : BaseScene(tubes) {
+class StrobeScene(project: Project, tubes: List<Tube>) : BaseScene("Strobe Scene", project, tubes) {
 
     private val task = TimerTask(10, { update() })
-
-    override val name: String
-        get() = "Strobe Scene"
 
     override val timerTask: TimerTask
         get() = task
