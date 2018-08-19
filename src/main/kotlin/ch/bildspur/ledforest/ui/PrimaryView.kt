@@ -417,4 +417,8 @@ class PrimaryView {
     fun onShowVisualisationSettings() {
         initSettingsView(project.value.visualisation, "Visualisation")
     }
+
+    fun onShowMapSettings() {
+        initSettingsView(project.value.map, "Map")
+    }
 }

@@ -2,7 +2,6 @@ package ch.bildspur.ledforest
 
 import ch.bildspur.ledforest.ui.PrimaryView
 import com.sun.javafx.application.PlatformImpl
-import com.sun.javafx.css.StyleManager
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
@@ -31,7 +30,8 @@ class Main : Application() {
 
         // style
         PlatformImpl.setDefaultPlatformUserAgentStylesheet()
-        StyleManager.getInstance().addUserAgentStylesheet(javaClass.classLoader.getResource("ch/bildspur/ledforest/ui/style/ledforest.css").toExternalForm())
+        //StyleManager.getInstance().addUserAgentStylesheet(javaClass.classLoader.getResource("ch/bildspur/ledforest/ui/style/ledforest.css").toExternalForm())
+        root.stylesheets.add("ch/bildspur/ledforest/ui/style/PrimaryView.css")
 
         primaryStage.setOnShown { controller.setupView() }
         primaryStage.setOnCloseRequest {

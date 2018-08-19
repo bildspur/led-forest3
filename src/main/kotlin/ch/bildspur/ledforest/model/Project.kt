@@ -50,4 +50,7 @@ class Project {
 
     @Expose
     var light = Light()
+
+    @Expose
+    var map = Map()
 }

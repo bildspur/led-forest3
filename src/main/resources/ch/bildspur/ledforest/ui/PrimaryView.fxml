@@ -9,7 +9,7 @@
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
-                <Menu mnemonicParsing="false" text="Project">
+                <Menu id="projectMenu" mnemonicParsing="false" text="Project">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#onNewProject" text="New"/>
                         <MenuItem mnemonicParsing="false" onAction="#onLoadProject" text="Open"/>
@@ -22,12 +22,21 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Settings">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onShowProjectSettings" text="Project"/>
-                        <MenuItem mnemonicParsing="false" onAction="#onShowVisualisationSettings" text="Visualisation"/>
-                        <MenuItem mnemonicParsing="false" onAction="#onShowLightSettings" text="Art-Net"/>
-                        <MenuItem mnemonicParsing="false" onAction="#onShowInteractionSettings" text="Interaction"/>
-                        <MenuItem mnemonicParsing="false" onAction="#onShowLeapInteractionSettings" text="LeapMotion"/>
-                        <MenuItem mnemonicParsing="false" onAction="#onShowRealSenseInteractionSettings"
+                        <MenuItem id="projectMenuItem" mnemonicParsing="false" onAction="#onShowProjectSettings"
+                                  text="Project"/>
+                        <MenuItem id="visualisationMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowVisualisationSettings" text="Visualisation"/>
+                        <MenuItem id="lightMenuItem" mnemonicParsing="false" onAction="#onShowLightSettings"
+                                  text="ArtNet"/>
+                        <MenuItem id="mapMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowMapSettings"
+                                  text="2d Map"/>
+                        <MenuItem id="interactionMenuItem" mnemonicParsing="false" onAction="#onShowInteractionSettings"
+                                  text="Interaction"/>
+                        <MenuItem id="leapMenuItem" mnemonicParsing="false" onAction="#onShowLeapInteractionSettings"
+                                  text="LeapMotion"/>
+                        <MenuItem id="realsenseMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowRealSenseInteractionSettings"
                                   text="RealSense"/>
                     </items>
                 </Menu>

@@ -1,0 +1,35 @@
+#projectMenu > .label {
+    -fx-graphic: url("../images/LEDForestIcon16.png");
+}
+
+#projectMenu .accelerator-text {
+    -fx-graphic: none;
+}
+
+#projectMenuItem > .label {
+    -fx-graphic: url("../images/ProjectIcon16.png");
+}
+
+#visualisationMenuItem > .label {
+    -fx-graphic: url("../images/VisualisationIcon16.png");
+}
+
+#lightMenuItem > .label {
+    -fx-graphic: url("../images/ArtnetIcon16.png");
+}
+
+#interactionMenuItem > .label {
+    -fx-graphic: url("../images/InteractionIcon16.png");
+}
+
+#leapMenuItem > .label {
+    -fx-graphic: url("../images/LeapIcon16.png");
+}
+
+#realsenseMenuItem > .label {
+    -fx-graphic: url("../images/RealSense16.png");
+}
+
+#mapMenuItem > .label {
+    -fx-graphic: url("../images/MapIcon16.png");
+}

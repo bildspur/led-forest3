@@ -28,7 +28,7 @@ class SetupProjectView {
     lateinit var flipXY: CheckBox
     lateinit var clonePattern: ComboBox<ClonePattern>
 
-    val clonePatterns = listOf(LinearPattern(), SquarePattern(), CircularPattern(), CubePattern())
+    private val clonePatterns = listOf(LinearPattern(), SquarePattern(), CircularPattern(), CubePattern())
 
     data class PreCalculation(var ledCount: Int = 0, var tubeCount: Int = 0, var universeCount: Int = 0, var nodeCount: Int = 0)
 
