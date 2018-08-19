@@ -141,7 +141,15 @@ class PrimaryView {
 
             // create or load configuration
             if (Files.exists(Paths.get(appConfig.projectFile)) && !Files.isDirectory(Paths.get(appConfig.projectFile)))
-                project.value = configuration.loadProject(appConfig.projectFile)
+                try {
+                    project.value = configuration.loadProject(appConfig.projectFile)
+                } catch (ex: Exception) {
+                    val alert = Alert(Alert.AlertType.ERROR)
+                    alert.title = "Error"
+                    alert.headerText = "Could not load configuration file!"
+                    alert.contentText = "File: ${appConfig.projectFile}\nMessage: ${ex.message}"
+                    alert.showAndWait()
+                }
             else
                 project.value = Project()
 
@@ -395,7 +403,6 @@ class PrimaryView {
         alert.title = "About"
         alert.headerText = "${Sketch.NAME} - ${Sketch.VERSION}"
         alert.contentText = "Developed by Florian Bruggisser 2018.\nwww.bildspur.ch\n\nURI: ${Sketch.URI_NAME}"
-
         alert.showAndWait()
     }
 
