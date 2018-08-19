@@ -84,7 +84,7 @@ class RealSenseScene(tubes: List<Tube>) : BaseScene(tubes) {
             it.rotateZ(tube.rotation.value.z)
 
             // translate height
-            it.translate(0f, 0f, (if (tube.inverted.value) -1 else 1) * (index * LED.SIZE))
+            it.translate(0f, 0f, (if (tube.inverted.value) -1 else 1) * (index * sketch.project.value.visualisation.ledHeight.value))
 
             // rotate shape
             it.rotateX(PApplet.radians(90f))

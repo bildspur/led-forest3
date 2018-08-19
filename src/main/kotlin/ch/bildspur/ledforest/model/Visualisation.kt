@@ -27,6 +27,14 @@ class Visualisation {
     var fullScreenDisplay = DataModel(0)
 
     @Expose
-    @SliderParameter("Tube Detail", 2.0, 10.0, 1.0)
-    var tubeDetail = DataModel(5.0)
+    @SliderParameter("LED Width", 0.1, 10.0, 0.1)
+    var ledWidth = DataModel(1f)
+
+    @Expose
+    @SliderParameter("LED Height", 0.1, 10.0, 0.1)
+    var ledHeight = DataModel(2f)
+
+    @Expose
+    @SliderParameter("LED Detail", 2.0, 10.0, 1.0)
+    var ledDetail = DataModel(5.0)
 }

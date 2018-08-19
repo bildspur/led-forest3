@@ -4,7 +4,6 @@ import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.leap.InteractionHand
 import ch.bildspur.ledforest.leap.LeapDataProvider
 import ch.bildspur.ledforest.model.Project
-import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.realsense.RealSenseDataProvider
 import ch.bildspur.ledforest.realsense.tracking.ActiveRegion
@@ -26,10 +25,21 @@ class SceneRenderer(val g: PGraphics,
 
 
     override fun setup() {
-        project.visualisation.tubeDetail.onChanged += {
+        project.visualisation.ledWidth.onChanged += {
             setupRod()
         }
-        project.visualisation.tubeDetail.fireLatest()
+
+        project.visualisation.ledHeight.onChanged += {
+            setupRod()
+        }
+
+        project.visualisation.ledDetail.onChanged += {
+            setupRod()
+        }
+
+        project.visualisation.ledDetail.fireLatest()
+        project.visualisation.ledWidth.fireLatest()
+        project.visualisation.ledHeight.fireLatest()
     }
 
     override fun render() {
@@ -72,7 +82,7 @@ class SceneRenderer(val g: PGraphics,
             g.rotateZ(tube.rotation.value.z)
 
             // translate height
-            g.translate(0f, 0f, (if (tube.inverted.value) -1 else 1) * (i * LED.SIZE))
+            g.translate(0f, 0f, (if (tube.inverted.value) -1 else 1) * (i * project.visualisation.ledHeight.value))
 
             // rotate shape
             g.rotateX(PApplet.radians(90f))
@@ -83,14 +93,18 @@ class SceneRenderer(val g: PGraphics,
             if (project.visualisation.highDetail.value)
                 g.shape(rodShape)
             else
-                g.box(LED.SIZE)
+                g.box(project.visualisation.ledWidth.value,
+                        project.visualisation.ledWidth.value,
+                        project.visualisation.ledHeight.value)
 
             g.popMatrix()
         }
     }
 
     private fun setupRod() {
-        rodShape = g.createRod(Tube.WIDTH, LED.SIZE, project.visualisation.tubeDetail.value.toInt())
+        rodShape = g.createRod(project.visualisation.ledWidth.value,
+                project.visualisation.ledHeight.value,
+                project.visualisation.ledDetail.value.toInt())
         rodShape.disableStyle()
     }
 
