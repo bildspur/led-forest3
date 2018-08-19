@@ -22,7 +22,7 @@ class Main : Application() {
 
         controller.primaryStage = primaryStage
 
-        primaryStage.title = "LED Forest 3"
+        primaryStage.title = Sketch.NAME
         primaryStage.scene = Scene(root)
 
         // setup on shown event
