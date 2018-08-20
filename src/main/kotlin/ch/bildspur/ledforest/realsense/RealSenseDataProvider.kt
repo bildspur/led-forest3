@@ -120,6 +120,8 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
             val depthColor = camera.depthImage.get(it.x.roundToInt(), it.y.roundToInt()) and 0xFF
             val normalizedDepth = Sketch.map(depthColor.toDouble(), detector.threshold, 255.0, 0.0, 1.0)
             it.normalizedPosition.target = PVector(it.x.toFloat() / camera.width, it.y.toFloat() / camera.height, normalizedDepth.toFloat())
+            it.normalizedPosition.easing = project.value.realSenseInteraction.activeRegionTranslationSpeed.value
+            
             it.update()
 
             // map to interaction box todo: should not be here but is convenient

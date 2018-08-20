@@ -83,6 +83,10 @@ class RealSenseInteraction {
     var flipZ = DataModel(false)
 
     @Expose
+    @SliderParameter("Active Region Translation Speed", 0.01, 1.0, 0.01, snap = true)
+    var activeRegionTranslationSpeed = DataModel(0.1f)
+
+    @Expose
     @SliderParameter("Interaction Distance", 0.1, 50.0, 0.1, snap = true)
     var interactionDistance = DataModel(5.0f)
 }
