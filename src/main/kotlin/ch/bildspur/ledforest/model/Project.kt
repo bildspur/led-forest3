@@ -27,10 +27,6 @@ class Project {
     var isSceneManagerEnabled = DataModel(true)
 
     @Expose
-    @BooleanParameter("Sound*")
-    var isSound = DataModel(true)
-
-    @Expose
     var nodes = CopyOnWriteArrayList<DmxNode>()
 
     @Expose
@@ -53,4 +49,7 @@ class Project {
 
     @Expose
     var map = Map()
+
+    @Expose
+    var audio = Audio()
 }

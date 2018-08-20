@@ -31,6 +31,9 @@
                         <MenuItem id="mapMenuItem" mnemonicParsing="false"
                                   onAction="#onShowMapSettings"
                                   text="2D Map"/>
+                        <MenuItem id="audioMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowAudioSettings"
+                                  text="Audio"/>
                         <MenuItem id="interactionMenuItem" mnemonicParsing="false" onAction="#onShowInteractionSettings"
                                   text="Interaction"/>
                         <MenuItem id="leapMenuItem" mnemonicParsing="false" onAction="#onShowLeapInteractionSettings"

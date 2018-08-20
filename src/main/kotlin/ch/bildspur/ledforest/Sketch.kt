@@ -267,8 +267,8 @@ class Sketch : PApplet() {
         renderer.add(ArtNetRenderer(project.value, artnet, project.value.nodes, project.value.tubes))
         renderer.add(SceneManager(this, project.value, project.value.tubes))
 
-        // make sound optional
-        if (project.value.isSound.value)
+        // make audio optional
+        if (project.value.audio.soundEnabled.value)
             renderer.add(SoundRenderer(project.value, minim, leapMotion, project.value.tubes))
 
         isResetRendererProposed = false

@@ -21,7 +21,7 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
         backgroundPlayer = EasingAudioPlayer(minim.loadFile("sound/background.wav", 2048),
                 easing = 0.01f,
                 value = EasingAudioPlayer.MUTED_GAIN,
-                target = EasingAudioPlayer.DEFAULT_GAIN)
+                target = project.audio.backgroundGain.value.toFloat())
         backgroundPlayer.player.loop()
 
         handPlayer = EasingAudioPlayer(minim.loadFile("sound/hand.wav", 2048),
@@ -32,6 +32,9 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
     }
 
     override fun render() {
+        // set loudness
+        backgroundPlayer.volume.target = project.audio.backgroundGain.value.toFloat()
+
         // update players
         handPlayer.update()
         backgroundPlayer.update()
@@ -45,7 +48,7 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
         if (hands.isEmpty()) {
             handPlayer.volume.target = EasingAudioPlayer.MUTED_GAIN
         } else {
-            handPlayer.volume.target = EasingAudioPlayer.DEFAULT_GAIN
+            handPlayer.volume.target = project.audio.rattleGain.value.toFloat()
             val average = (hands.sumByDouble { it.position.x.toDouble() } / hands.size.toDouble()).toFloat()
             handPlayer.player.pan = PApplet.map(average, 0f, project.interaction.interactionBox.value.x, 0f, 1f).limit(-1f, 1f)
         }

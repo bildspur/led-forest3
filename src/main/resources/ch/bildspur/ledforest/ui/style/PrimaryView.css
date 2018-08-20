@@ -33,3 +33,7 @@
 #mapMenuItem > .label {
     -fx-graphic: url("../images/MapIcon16.png");
 }
+
+#audioMenuItem > .label {
+    -fx-graphic: url("../images/AudioIcon16.png");
+}
