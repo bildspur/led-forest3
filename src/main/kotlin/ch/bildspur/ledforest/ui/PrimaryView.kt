@@ -301,7 +301,7 @@ class PrimaryView {
 
     fun onSaveProjectAs() {
         val fileChooser = FileChooser()
-        fileChooser.initialFileName = ""
+        fileChooser.initialFileName = "${project.value.name.value}.json"
         fileChooser.title = "Save project..."
         fileChooser.extensionFilters.addAll(FileChooser.ExtensionFilter("JSON", "*.json"))
 
@@ -322,6 +322,8 @@ class PrimaryView {
                 configuration.saveProject(appConfig.projectFile, project.value)
                 configuration.saveAppConfig(appConfig)
             }, { updateUI() }, "save project")
+        } else {
+            onSaveProjectAs()
         }
     }
 

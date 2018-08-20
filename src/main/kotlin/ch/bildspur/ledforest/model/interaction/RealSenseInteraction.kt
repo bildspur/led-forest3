@@ -83,6 +83,6 @@ class RealSenseInteraction {
     var flipZ = DataModel(false)
 
     @Expose
-    @SliderParameter("Interaction Distance", 0.1, 20.0, 0.05, snap = true)
-    var interactionDistance = DataModel(0.75f)
+    @SliderParameter("Interaction Distance", 0.1, 50.0, 0.1, snap = true)
+    var interactionDistance = DataModel(5.0f)
 }

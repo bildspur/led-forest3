@@ -43,7 +43,12 @@ class SceneRenderer(val g: PGraphics,
 
     override fun render() {
         // apply scale to everything
+        g.pushMatrix()
         g.scale(project.visualisation.globalScaleFactor.value)
+
+        // render floor
+        if (project.visualisation.displayFloor.value)
+            renderFloor()
 
         // render tubes
         tubes.forEach { t ->
@@ -67,6 +72,19 @@ class SceneRenderer(val g: PGraphics,
         // render leapInteraction box
         if (project.interaction.showInteractionInfo.value)
             renderInteractionBox()
+
+        g.popMatrix()
+    }
+
+    private fun renderFloor() {
+        g.pushMatrix()
+        g.fill(28)
+        g.noStroke()
+        g.translate(0f, 0f, project.visualisation.floorZHeight.value / -2f)
+        g.box(project.interaction.interactionBox.value.x,
+                project.interaction.interactionBox.value.y,
+                project.visualisation.floorZHeight.value)
+        g.popMatrix()
     }
 
     private fun renderTube(tube: Tube) {
@@ -125,14 +143,15 @@ class SceneRenderer(val g: PGraphics,
         g.rotate(hand.rotation)
         g.noFill()
         g.stroke(ColorMode.color(255))
-        g.strokeWeight(2f)
+        g.strokeWeight(0.05f)
         g.sphereDetail(PApplet.map(hand.grabStrength.value, 0f, 1f, 5f, 20f).toInt())
-        g.sphere(20f)
+        g.sphere(0.5f)
         g.popMatrix()
     }
 
     private fun renderInteractionBox() {
         g.pushMatrix()
+        g.strokeWeight(0.05f)
         g.noFill()
         g.stroke(255)
         g.box(project.interaction.interactionBox.value.x,

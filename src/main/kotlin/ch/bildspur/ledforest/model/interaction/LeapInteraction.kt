@@ -26,10 +26,18 @@ class LeapInteraction {
     var strobeThreshold = DataModel(0.8f)
 
     @Expose
-    @SliderParameter("Interaction Distance", 0.1, 20.0, 0.05, snap = true)
-    var interactionDistance = DataModel(0.75f)
+    @SliderParameter("Interaction Distance", 0.1, 50.0, 0.1, snap = true)
+    var interactionDistance = DataModel(5.0f)
 
     @Expose
     @RangeSliderParameter("Hue Spectrum", 0.0, 360.0, 1.0, snap = true, roundInt = true)
     var hueSpectrum = DataModel(NumberRange(180.0, 360.0))
+
+    @Expose
+    @SliderParameter("Hand Translation Speed", 0.01, 1.0, 0.01, snap = true)
+    var handTranslationSpeed = DataModel(0.1f)
+
+    @Expose
+    @SliderParameter("Hand Rotation Speed", 0.01, 1.0, 0.01, snap = true)
+    var handRotationSpeed = DataModel(0.5f)
 }

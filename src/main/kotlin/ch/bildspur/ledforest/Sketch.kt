@@ -54,7 +54,7 @@ class Sketch : PApplet() {
         val NAME = "LED Forest 3"
 
         @JvmStatic
-        val VERSION = "0.6"
+        val VERSION = "0.8"
 
         @JvmStatic
         val URI_NAME = "ledforest"
@@ -206,7 +206,7 @@ class Sketch : PApplet() {
             // output image
             if (project.value.visualisation.highResMode.value)
                 fx.render(canvas)
-                        .bloom(0.0f, 20, 40f)
+                        .bloom(project.value.visualisation.bloomBrightPassThreshold.value.toFloat(), 20, 40f)
                         .compose()
             else
                 image(canvas, 0f, 0f)

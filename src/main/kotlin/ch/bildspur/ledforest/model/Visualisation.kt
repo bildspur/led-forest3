@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.model
 
 import ch.bildspur.ledforest.ui.properties.BooleanParameter
+import ch.bildspur.ledforest.ui.properties.FloatParameter
 import ch.bildspur.ledforest.ui.properties.IntParameter
 import ch.bildspur.ledforest.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose
@@ -27,6 +28,10 @@ class Visualisation {
     var fullScreenDisplay = DataModel(0)
 
     @Expose
+    @SliderParameter("Bloom BrightPass Threshold", 0.0, 1.0, 0.05)
+    var bloomBrightPassThreshold = DataModel(0.15)
+
+    @Expose
     @SliderParameter("Clear Color Brightness", 0.0, 255.0, 1.0, roundInt = true)
     var clearColorBrightness = DataModel(12.0)
 
@@ -49,4 +54,8 @@ class Visualisation {
     @Expose
     @BooleanParameter("Display Floor")
     var displayFloor = DataModel(true)
+
+    @Expose
+    @FloatParameter("Floor Z-Height")
+    var floorZHeight = DataModel(0.2f)
 }

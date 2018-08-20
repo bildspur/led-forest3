@@ -5,9 +5,12 @@ import ch.bildspur.ledforest.model.easing.EasingVector
 import com.leapmotion.leap.Hand
 import processing.core.PVector
 
-class InteractionHand(var hand: Hand, val interactionBox: PVector) {
-    var position = EasingVector(0.1f)
-    var rotation = EasingVector(0.05f)
+class InteractionHand(var hand: Hand,
+                      private val interactionBox: PVector,
+                      private val translationSpeed: Float,
+                      private val rotationSpeed: Float) {
+    var position = EasingVector(translationSpeed)
+    var rotation = EasingVector(rotationSpeed)
     var grabStrength = EasingFloat(0.1f)
 
     fun update() {

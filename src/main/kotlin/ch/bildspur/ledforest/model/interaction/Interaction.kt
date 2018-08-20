@@ -27,7 +27,8 @@ class Interaction {
 
     @ActionParameter("Interaction Box", "Auto Scale")
     val autoScaleInteractionBox = {
-        val scaleFactor = 2.2
+        // factor two because interaction box is only half sized
+        val scaleFactor = 2.02f
 
         val ranges = Sketch.instance.spaceInformation.calculateTubeDimensions(Sketch.instance.project.value.tubes)
 
