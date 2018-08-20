@@ -27,6 +27,10 @@ class Visualisation {
     var fullScreenDisplay = DataModel(0)
 
     @Expose
+    @SliderParameter("Clear Color Brightness", 0.0, 255.0, 1.0, roundInt = true)
+    var clearColorBrightness = DataModel(12.0)
+
+    @Expose
     @SliderParameter("Global Scale Factor (m to px)", 5.0, 200.0, 5.0)
     var globalScaleFactor = DataModel(50.0f)
 
@@ -41,4 +45,8 @@ class Visualisation {
     @Expose
     @SliderParameter("LED Detail", 2.0, 10.0, 1.0)
     var ledDetail = DataModel(5.0)
+
+    @Expose
+    @BooleanParameter("Display Floor")
+    var displayFloor = DataModel(true)
 }

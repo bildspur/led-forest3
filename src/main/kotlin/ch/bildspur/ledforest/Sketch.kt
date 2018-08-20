@@ -192,7 +192,7 @@ class Sketch : PApplet() {
         updateLEDColors()
 
         canvas.draw {
-            it.background(0)
+            it.background(project.value.visualisation.clearColorBrightness.value.toInt())
 
             // render (update timer)
             if (isRendering.value)
