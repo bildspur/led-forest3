@@ -155,7 +155,11 @@ class PrimaryView {
 
             // start processing
             startProcessing()
-        }, { updateUI() }, "startup")
+        }, {
+            updateUI()
+            onShowProjectSettings()
+
+        }, "startup")
     }
 
     fun startProcessing() {
