@@ -1,7 +1,8 @@
-package ch.bildspur.ledforest.ui.properties
+package ch.bildspur.ledforest.ui.properties.types
 
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.NumberRange
+import ch.bildspur.ledforest.ui.properties.RangeSliderParameter
 import ch.bildspur.ledforest.util.format
 import javafx.scene.control.Label
 import javafx.scene.layout.VBox

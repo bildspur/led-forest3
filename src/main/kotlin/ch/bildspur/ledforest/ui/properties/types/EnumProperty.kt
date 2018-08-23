@@ -1,6 +1,7 @@
-package ch.bildspur.ledforest.ui.properties
+package ch.bildspur.ledforest.ui.properties.types
 
 import ch.bildspur.ledforest.model.DataModel
+import ch.bildspur.ledforest.ui.properties.EnumParameter
 import javafx.scene.control.ComboBox
 import java.lang.reflect.Field
 

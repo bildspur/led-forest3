@@ -1,7 +1,8 @@
-package ch.bildspur.ledforest.ui.properties
+package ch.bildspur.ledforest.ui.properties.types
 
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.ui.control.RelationNumberField
+import ch.bildspur.ledforest.ui.properties.PVectorParameter
 import javafx.scene.control.Label
 import javafx.scene.control.TextFormatter
 import javafx.scene.layout.HBox

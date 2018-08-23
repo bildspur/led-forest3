@@ -1,5 +1,6 @@
-package ch.bildspur.ledforest.ui.properties
+package ch.bildspur.ledforest.ui.properties.types
 
+import ch.bildspur.ledforest.ui.properties.ActionParameter
 import javafx.scene.control.Button
 import java.lang.reflect.Field
 

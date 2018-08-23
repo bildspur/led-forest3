@@ -1,6 +1,7 @@
-package ch.bildspur.ledforest.ui.properties
+package ch.bildspur.ledforest.ui.properties.types
 
 import ch.bildspur.ledforest.model.DataModel
+import ch.bildspur.ledforest.ui.properties.PVectorAngleParameter
 import ch.bildspur.ledforest.util.toDegrees
 import ch.bildspur.ledforest.util.toRadians
 import javafx.scene.control.Label

@@ -1,6 +1,7 @@
-package ch.bildspur.ledforest.ui.properties
+package ch.bildspur.ledforest.ui.properties.types
 
 import ch.bildspur.ledforest.model.DataModel
+import ch.bildspur.ledforest.ui.properties.StringParameter
 import javafx.scene.control.TextField
 import java.lang.reflect.Field
 

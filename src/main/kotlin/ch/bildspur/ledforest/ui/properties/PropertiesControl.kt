@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.ui.properties
 
 import ch.bildspur.ledforest.event.Event
+import ch.bildspur.ledforest.ui.properties.types.*
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.Label
