@@ -66,9 +66,9 @@ class PropertiesControl : VBox() {
                 addProperty(annotation.name, FloatProperty(it, obj, annotation))
             }
 
-            if (it.isAnnotationPresent(ArrayParameter::class.java)) {
-                val annotation = it.getAnnotation(ArrayParameter::class.java)
-                addProperty(annotation.name, ArrayProperty(it, obj, annotation))
+            if (it.isAnnotationPresent(EnumParameter::class.java)) {
+                val annotation = it.getAnnotation(EnumParameter::class.java)
+                addProperty(annotation.name, EnumProperty(it, obj, annotation))
             }
 
             if (it.isAnnotationPresent(PVectorAngleParameter::class.java)) {
@@ -116,7 +116,7 @@ class PropertiesControl : VBox() {
                     it.isAnnotationPresent(PVectorParameter::class.java) ||
                     it.isAnnotationPresent(ActionParameter::class.java) ||
                     it.isAnnotationPresent(FloatParameter::class.java) ||
-                    it.isAnnotationPresent(ArrayParameter::class.java) ||
+                    it.isAnnotationPresent(EnumParameter::class.java) ||
                     it.isAnnotationPresent(PVectorAngleParameter::class.java) ||
                     it.isAnnotationPresent(RangeSliderParameter::class.java)
 

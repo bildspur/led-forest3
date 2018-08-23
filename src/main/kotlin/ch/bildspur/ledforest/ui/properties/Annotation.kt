@@ -52,4 +52,4 @@ annotation class ActionParameter(val name: String, val caption: String)
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ArrayParameter(val name: String, val values: Array<String>)
+annotation class EnumParameter(val name: String)
