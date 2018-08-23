@@ -37,16 +37,6 @@ class PropertiesControl : VBox() {
                 addProperty(annotation.name, NumberProperty(it, obj, annotation))
             }
 
-            if (it.isAnnotationPresent(IntParameter::class.java)) {
-                val annotation = it.getAnnotation(IntParameter::class.java)
-                addProperty(annotation.name, IntProperty(it, obj, annotation))
-            }
-
-            if (it.isAnnotationPresent(DoubleParameter::class.java)) {
-                val annotation = it.getAnnotation(DoubleParameter::class.java)
-                addProperty(annotation.name, DoubleProperty(it, obj, annotation))
-            }
-
             if (it.isAnnotationPresent(SliderParameter::class.java)) {
                 val annotation = it.getAnnotation(SliderParameter::class.java)
                 addProperty(annotation.name, SliderProperty(it, obj, annotation))
@@ -65,11 +55,6 @@ class PropertiesControl : VBox() {
             if (it.isAnnotationPresent(ActionParameter::class.java)) {
                 val annotation = it.getAnnotation(ActionParameter::class.java)
                 addProperty(annotation.name, ActionProperty(it, obj, annotation))
-            }
-
-            if (it.isAnnotationPresent(FloatParameter::class.java)) {
-                val annotation = it.getAnnotation(FloatParameter::class.java)
-                addProperty(annotation.name, FloatProperty(it, obj, annotation))
             }
 
             if (it.isAnnotationPresent(EnumParameter::class.java)) {
@@ -115,14 +100,11 @@ class PropertiesControl : VBox() {
 
         val fields = c.declaredFields.filter {
             it.isAnnotationPresent(SliderParameter::class.java) ||
-                    it.isAnnotationPresent(DoubleParameter::class.java) ||
                     it.isAnnotationPresent(StringParameter::class.java) ||
                     it.isAnnotationPresent(BooleanParameter::class.java) ||
                     it.isAnnotationPresent(NumberParameter::class.java) ||
-                    it.isAnnotationPresent(IntParameter::class.java) ||
                     it.isAnnotationPresent(PVectorParameter::class.java) ||
                     it.isAnnotationPresent(ActionParameter::class.java) ||
-                    it.isAnnotationPresent(FloatParameter::class.java) ||
                     it.isAnnotationPresent(EnumParameter::class.java) ||
                     it.isAnnotationPresent(PVectorAngleParameter::class.java) ||
                     it.isAnnotationPresent(RangeSliderParameter::class.java)

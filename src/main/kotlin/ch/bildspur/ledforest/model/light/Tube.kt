@@ -8,8 +8,8 @@ import com.google.gson.annotations.Expose
 import processing.core.PVector
 
 
-class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = DataModel(0),
-           @IntParameter("Start") @Expose val addressStart: DataModel<Int> = DataModel(0),
+class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = DataModel(0),
+           @NumberParameter("Start") @Expose val addressStart: DataModel<Int> = DataModel(0),
            @PVectorParameter("Position") @Expose val position: DataModel<PVector> = DataModel(PVector()),
            @PVectorAngleParameter("Rotation") @Expose val rotation: DataModel<PVector> = DataModel(PVector()))
     : PostProcessable {
@@ -21,7 +21,7 @@ class Tube(@IntParameter("Universe") @Expose val universe: DataModel<Int> = Data
     var inverted = DataModel(false)
 
     @Expose
-    @IntParameter("LED Count")
+    @NumberParameter("LED Count")
     val ledCount = DataModel(24)
 
     @StringParameter("Tag")

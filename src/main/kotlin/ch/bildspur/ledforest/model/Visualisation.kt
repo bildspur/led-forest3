@@ -1,8 +1,7 @@
 package ch.bildspur.ledforest.model
 
 import ch.bildspur.ledforest.ui.properties.BooleanParameter
-import ch.bildspur.ledforest.ui.properties.FloatParameter
-import ch.bildspur.ledforest.ui.properties.IntParameter
+import ch.bildspur.ledforest.ui.properties.NumberParameter
 import ch.bildspur.ledforest.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose
 
@@ -24,7 +23,7 @@ class Visualisation {
     var isFullScreenMode = DataModel(false)
 
     @Expose
-    @IntParameter("Fullscreen Display*")
+    @NumberParameter("Fullscreen Display*")
     var fullScreenDisplay = DataModel(0)
 
     @Expose
@@ -56,6 +55,6 @@ class Visualisation {
     var displayFloor = DataModel(true)
 
     @Expose
-    @FloatParameter("Floor Z-Height")
+    @NumberParameter("Floor Z-Height")
     var floorZHeight = DataModel(0.2f)
 }

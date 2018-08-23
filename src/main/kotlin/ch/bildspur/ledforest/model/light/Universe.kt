@@ -1,16 +1,17 @@
 package ch.bildspur.ledforest.model.light
 
 import ch.bildspur.ledforest.model.DataModel
-import ch.bildspur.ledforest.ui.properties.IntParameter
+import ch.bildspur.ledforest.ui.properties.NumberParameter
 import com.google.gson.annotations.Expose
 import java.awt.Color
 
 class Universe(id: Int = 0) {
     companion object {
-        @JvmStatic val MAX_LUMINANCE = 255
+        @JvmStatic
+        val MAX_LUMINANCE = 255
     }
 
-    @IntParameter("Id")
+    @NumberParameter("Id")
     @Expose
     var id = DataModel(id)
 

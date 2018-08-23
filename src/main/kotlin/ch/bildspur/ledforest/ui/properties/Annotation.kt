@@ -28,18 +28,6 @@ annotation class NumberParameter(val name: String)
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class IntParameter(val name: String)
-
-@Target(AnnotationTarget.FIELD)
-@Retention(AnnotationRetention.RUNTIME)
-annotation class FloatParameter(val name: String)
-
-@Target(AnnotationTarget.FIELD)
-@Retention(AnnotationRetention.RUNTIME)
-annotation class DoubleParameter(val name: String)
-
-@Target(AnnotationTarget.FIELD)
-@Retention(AnnotationRetention.RUNTIME)
 annotation class BooleanParameter(val name: String)
 
 @Target(AnnotationTarget.FIELD)

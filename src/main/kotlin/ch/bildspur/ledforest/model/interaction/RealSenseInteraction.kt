@@ -31,15 +31,15 @@ class RealSenseInteraction {
     var activeRegionCount = DataModel("-")
 
     @Expose
-    @IntParameter("Input Width")
+    @NumberParameter("Input Width")
     var inputWidth = DataModel(640)
 
     @Expose
-    @IntParameter("Input Height")
+    @NumberParameter("Input Height")
     var inputHeight = DataModel(480)
 
     @Expose
-    @IntParameter("Input FPS")
+    @NumberParameter("Input FPS")
     var inputFPS = DataModel(30)
 
     @Expose
