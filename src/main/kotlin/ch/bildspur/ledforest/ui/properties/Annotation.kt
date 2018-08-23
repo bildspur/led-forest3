@@ -24,6 +24,10 @@ annotation class RangeSliderParameter(val name: String,
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
+annotation class NumberParameter(val name: String)
+
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
 annotation class IntParameter(val name: String)
 
 @Target(AnnotationTarget.FIELD)

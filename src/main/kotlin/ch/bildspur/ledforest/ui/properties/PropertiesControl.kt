@@ -32,6 +32,11 @@ class PropertiesControl : VBox() {
                 addProperty(annotation.name, StringProperty(it, obj, annotation))
             }
 
+            if (it.isAnnotationPresent(NumberParameter::class.java)) {
+                val annotation = it.getAnnotation(NumberParameter::class.java)
+                addProperty(annotation.name, NumberProperty(it, obj, annotation))
+            }
+
             if (it.isAnnotationPresent(IntParameter::class.java)) {
                 val annotation = it.getAnnotation(IntParameter::class.java)
                 addProperty(annotation.name, IntProperty(it, obj, annotation))
@@ -113,6 +118,7 @@ class PropertiesControl : VBox() {
                     it.isAnnotationPresent(DoubleParameter::class.java) ||
                     it.isAnnotationPresent(StringParameter::class.java) ||
                     it.isAnnotationPresent(BooleanParameter::class.java) ||
+                    it.isAnnotationPresent(NumberParameter::class.java) ||
                     it.isAnnotationPresent(IntParameter::class.java) ||
                     it.isAnnotationPresent(PVectorParameter::class.java) ||
                     it.isAnnotationPresent(ActionParameter::class.java) ||
