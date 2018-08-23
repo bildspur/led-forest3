@@ -123,7 +123,7 @@ class SceneRenderer(val g: PGraphics,
     private fun setupRod() {
         rodShape = g.createRod(project.visualisation.ledWidth.value,
                 project.visualisation.ledHeight.value,
-                project.visualisation.ledDetail.value.toInt())
+                project.visualisation.ledDetail.value)
         rodShape.disableStyle()
     }
 

@@ -47,14 +47,14 @@ class Visualisation {
     var ledHeight = DataModel(0.06f)
 
     @Expose
-    @SliderParameter("LED Detail", 2.0, 10.0, 1.0)
-    var ledDetail = DataModel(5.0)
+    @SliderParameter("LED Detail", 2.0, 10.0)
+    var ledDetail = DataModel(5)
 
     @Expose
     @BooleanParameter("Display Floor")
     var displayFloor = DataModel(true)
 
     @Expose
-    @NumberParameter("Floor Z-Height")
+    @SliderParameter("Floor Z-Height", 0.1, 10.0, 0.1)
     var floorZHeight = DataModel(0.2f)
 }

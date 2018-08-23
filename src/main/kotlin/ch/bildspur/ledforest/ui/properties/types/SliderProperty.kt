@@ -28,7 +28,11 @@ class SliderProperty(field: Field, obj: Any, val annotation: SliderParameter) : 
 
         model.onChanged += {
             slider.value = model.value.toDouble()
-            valueLabel.text = model.value.format(digits)
+
+            if (model.value is Int)
+                valueLabel.text = model.value.toString()
+            else
+                valueLabel.text = model.value.format(digits)
         }
         model.fireLatest()
 
