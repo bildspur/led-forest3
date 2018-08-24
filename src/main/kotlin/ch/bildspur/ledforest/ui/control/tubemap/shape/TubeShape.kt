@@ -11,7 +11,7 @@ import javafx.scene.text.Font
 import javafx.scene.text.TextAlignment
 import processing.core.PVector
 
-class TubeShape(val tube: Tube, val transform: PVector = PVector(), val scale: Float = 1.0f) : OvalShape() {
+class TubeShape(val tube: Tube, val transform: PVector = PVector(), val scale: Float = 1.0f, val showExtendedName: Boolean = false) : OvalShape() {
     companion object {
         @JvmStatic
         val UNIVERSE_COLORS = arrayOf(
@@ -59,7 +59,7 @@ class TubeShape(val tube: Tube, val transform: PVector = PVector(), val scale: F
         gc.fill = Color.DARKGRAY
         gc.textAlign = TextAlignment.LEFT
         gc.font = font
-        gc.fillText("$tube", exact.x + 10.0, exact.y + 15.0)
+        gc.fillText(if (showExtendedName) "$tube" else tube.name.value, exact.x + 10.0, exact.y + 15.0)
     }
 
     override fun contains(point: Point2D): Boolean {

@@ -28,7 +28,7 @@ class Project {
     var isSceneManagerEnabled = DataModel(true)
 
     @Expose
-    @ActionParameter("LED Tubes", "Auto Name")
+    @ActionParameter("LED Tubes", "Rename")
     var autoNameLEDTubes = {
         tubes.groupBy { it.universe.value }.forEach { u, ts ->
             ts.forEachIndexed { i, t -> t.name.value = "${(65 + u).toChar()}${i + 1}" }

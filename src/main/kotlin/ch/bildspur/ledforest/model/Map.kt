@@ -3,10 +3,16 @@ package ch.bildspur.ledforest.model
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.properties.ActionParameter
+import ch.bildspur.ledforest.ui.properties.BooleanParameter
 import ch.bildspur.ledforest.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose
 
 class Map {
+
+    @Expose
+    @BooleanParameter("Show Extended Name")
+    var showExtendedName = DataModel(false)
+
     @Expose
     @SliderParameter("Map Scale Factor (m to px)", 1.0, 30.0, 1.0)
     var mapScaleFactor = DataModel(15.0f)

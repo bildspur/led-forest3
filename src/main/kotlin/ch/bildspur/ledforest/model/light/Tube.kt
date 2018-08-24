@@ -73,7 +73,7 @@ class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = D
     }
 
     override fun toString(): String {
-        return "${universe.value}.$startAddress-$endAddress (${ledCount.value})"
+        return "${name.value} ${universe.value}.$startAddress-$endAddress (${ledCount.value})"
     }
 
     override fun gsonPostProcess() {

@@ -232,6 +232,11 @@ class PrimaryView {
         project.map.mapScaleFactor.onChanged += {
             updateTubeMap()
         }
+
+        // redraw of ui if setting changes
+        project.map.showExtendedName.onChanged += {
+            updateTubeMap()
+        }
     }
 
     fun <T> createBidirectionalMapping(dataModel: DataModel<T>,
@@ -269,7 +274,9 @@ class PrimaryView {
             // create project
             controller.info.clonePattern.create(controller.project, controller.info)
 
+            project.value.autoNameLEDTubes()
             project.value = controller.project
+
             resetRenderer()
         }, { updateUI() }, "new project")
     }
