@@ -26,8 +26,7 @@ class Project {
     @Expose
     @BooleanParameter("Scene Manager Enabled")
     var isSceneManagerEnabled = DataModel(true)
-
-    @Expose
+    
     @ActionParameter("LED Tubes", "Rename")
     var autoNameLEDTubes = {
         tubes.groupBy { it.universe.value }.forEach { u, ts ->
