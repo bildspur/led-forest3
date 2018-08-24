@@ -28,11 +28,10 @@ switch (OperatingSystem.current()) {
     case OperatingSystem.MAC_OS:
         project.ext.osName = "macos"
         applicationDefaultJvmArgs = ["-Djava.library.path=lib/LeapMotion/library/macosx:lib/opencv/macosx"]
-        println("macos")
         break
     case OperatingSystem.WINDOWS:
         project.ext.osName = "windows"
-        applicationDefaultJvmArgs = ["-Djava.library.path=lib/LeapMotion/library/windows64:lib/opencv/windows64"]
+        applicationDefaultJvmArgs = ["-Djava.library.path=lib/LeapMotion/library/windows64;lib/opencv/windows64"]
         break
 }
 
