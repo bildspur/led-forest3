@@ -133,7 +133,7 @@ class SceneRenderer(val g: PGraphics,
         g.translate(region.interactionPosition)
         g.fill(255f)
         g.noStroke()
-        g.box(10f)
+        g.box(0.5f)
         g.popMatrix()
     }
 
