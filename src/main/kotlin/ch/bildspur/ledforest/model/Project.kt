@@ -6,6 +6,7 @@ import ch.bildspur.ledforest.model.interaction.LeapInteraction
 import ch.bildspur.ledforest.model.interaction.RealSenseInteraction
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.ui.properties.ActionParameter
 import ch.bildspur.ledforest.ui.properties.BooleanParameter
 import ch.bildspur.ledforest.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
@@ -25,6 +26,15 @@ class Project {
     @Expose
     @BooleanParameter("Scene Manager Enabled")
     var isSceneManagerEnabled = DataModel(true)
+
+    @Expose
+    @ActionParameter("LED Tubes", "Auto Name")
+    var autoNameLEDTubes = {
+        tubes.groupBy { it.universe.value }.forEach { u, ts ->
+            ts.forEachIndexed { i, t -> t.name.value = "${(65 + u).toChar()}${i + 1}" }
+        }
+        println("renamed tubes!")
+    }
 
     @Expose
     var nodes = CopyOnWriteArrayList<DmxNode>()
