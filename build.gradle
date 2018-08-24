@@ -1,6 +1,9 @@
 group 'ch.bildspur.ledforest'
 version '1.0-SNAPSHOT'
 
+import org.gradle.internal.os.OperatingSystem
+
+
 buildscript {
     ext.kotlin_version = '1.2.61'
 
@@ -16,7 +19,22 @@ apply plugin: 'kotlin'
 
 apply plugin: 'application'
 mainClassName = "ch.bildspur.ledforest.Main"
-applicationDefaultJvmArgs = ["-Djava.library.path=lib/LeapMotion/library/macosx:lib/opencv/macosx"]
+applicationDefaultJvmArgs = [""]
+
+switch (OperatingSystem.current()) {
+    case OperatingSystem.LINUX:
+        project.ext.osName = "linux"
+        break
+    case OperatingSystem.MAC_OS:
+        project.ext.osName = "macos"
+        applicationDefaultJvmArgs = ["-Djava.library.path=lib/LeapMotion/library/macosx:lib/opencv/macosx"]
+        println("macos")
+        break
+    case OperatingSystem.WINDOWS:
+        project.ext.osName = "windows"
+        applicationDefaultJvmArgs = ["-Djava.library.path=lib/LeapMotion/library/windows64:lib/opencv/windows64"]
+        break
+}
 
 repositories {
     mavenCentral()
