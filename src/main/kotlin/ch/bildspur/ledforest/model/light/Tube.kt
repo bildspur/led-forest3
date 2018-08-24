@@ -16,6 +16,10 @@ class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = D
 
     var isSelected = DataModel(false)
 
+    @Expose
+    @StringParameter("Name")
+    var name = DataModel("")
+
     @BooleanParameter("Inverted")
     @Expose
     var inverted = DataModel(false)
@@ -24,9 +28,9 @@ class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = D
     @NumberParameter("LED Count")
     val ledCount = DataModel(24)
 
-    @StringParameter("Tag")
     @Expose
-    var tag = DataModel(TubeTag.Interaction.name)
+    @EnumParameter("Tag")
+    var tag = DataModel(TubeTag.Interaction)
 
     @ActionParameter("LEDs", "Select")
     val markLEDs = {

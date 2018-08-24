@@ -18,7 +18,7 @@ class LeapMotionScene(project: Project, tubes: List<Tube>, val leap: LeapDataPro
     var iaTubes = emptyList<Tube>()
 
     override fun setup() {
-        iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction.name }.toList()
+        iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction }.toList()
     }
 
     override fun update() {

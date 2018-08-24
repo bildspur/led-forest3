@@ -22,7 +22,7 @@ class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPat
     var iaTubes = emptyList<Tube>()
 
     override fun setup() {
-        iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction.name }.toList()
+        iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction }.toList()
 
         tubes.forEachLED {
             it.color.fadeB(0f, 0.05f)

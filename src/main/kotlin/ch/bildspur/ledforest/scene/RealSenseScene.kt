@@ -19,7 +19,7 @@ class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSen
     var iaTubes = emptyList<Tube>()
 
     override fun setup() {
-        iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction.name }.toList()
+        iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction }.toList()
     }
 
     override fun update() {

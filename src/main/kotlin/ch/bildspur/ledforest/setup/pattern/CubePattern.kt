@@ -2,6 +2,7 @@ package ch.bildspur.ledforest.setup.pattern
 
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.model.light.Universe
 import ch.bildspur.ledforest.setup.SetupInformation
 import processing.core.PApplet
@@ -33,8 +34,8 @@ class CubePattern : BaseClonePattern("Square with Cube") {
         val tubeAddressSpace = (info.ledsPerTubeCount * addressPerLED)
         var tubeIndex = 0
 
-        val topTag = "cube-top"
-        val bottomTag = "cube-bottom"
+        val topTag = TubeTag.CubeTop
+        val bottomTag = TubeTag.CubeBottom
 
         // find free universe
         val node = project.nodes.first()
@@ -64,7 +65,7 @@ class CubePattern : BaseClonePattern("Square with Cube") {
 
     }
 
-    private fun Tube.init(universe: Int, addressStart: Int, tag: String,
+    private fun Tube.init(universe: Int, addressStart: Int, tag: TubeTag,
                           x: Float = 0f, y: Float = 0f, z: Float = 0f,
                           rx: Float = 0f, ry: Float = 0f, rz: Float = 0f): Tube {
         this.universe.value = universe
