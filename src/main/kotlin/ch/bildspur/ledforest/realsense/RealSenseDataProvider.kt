@@ -18,9 +18,7 @@ import org.opencv.core.CvType.CV_8UC3
 import org.opencv.core.Point
 import org.opencv.core.Scalar
 import org.opencv.imgproc.Imgproc
-import processing.core.PApplet
-import processing.core.PGraphics
-import processing.core.PVector
+import processing.core.*
 import kotlin.concurrent.thread
 import kotlin.math.roundToInt
 
@@ -42,6 +40,8 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
 
     private lateinit var depthImage: DepthImage
 
+    private lateinit var squaredInputImage: PImage
+
     var activeRegions by Synchronize(mutableListOf<ActiveRegion>())
 
     init {
@@ -60,6 +60,9 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
                 project.value.realSenseInteraction.inputFPS.value,
                 enableDepthStream = true,
                 enableColorStream = project.value.realSenseInteraction.enableColorStream.value)
+
+        // initialize squaredInput
+        squaredInputImage = PImage(project.value.realSenseInteraction.inputHeight.value, project.value.realSenseInteraction.inputHeight.value, PConstants.RGB)
 
         thread = thread {
             isRunning = true
@@ -86,30 +89,47 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
     }
 
     private fun readSensor(isDebugger: Boolean = false) {
+        val rsi = project.value.realSenseInteraction
+
         if (!project.value.interaction.isInteractionDataEnabled.value)
             return
 
-        if (project.value.realSenseInteraction.isDebug.value && !isDebugger)
+        if (rsi.isDebug.value && !isDebugger)
             return
 
         // set settings
-        camera.depthLevelLow = project.value.realSenseInteraction.depthRange.value.lowValue.roundToInt()
-        camera.depthLevelHigh = project.value.realSenseInteraction.depthRange.value.highValue.roundToInt()
+        camera.depthLevelLow = rsi.depthRange.value.lowValue.roundToInt()
+        camera.depthLevelHigh = rsi.depthRange.value.highValue.roundToInt()
 
-        detector.threshold = project.value.realSenseInteraction.threshold.value
-        detector.elementSize = project.value.realSenseInteraction.elementSize.value.roundToInt()
-        detector.minAreaSize = project.value.realSenseInteraction.minAreaSize.value.roundToInt()
+        detector.threshold = rsi.threshold.value
+        detector.elementSize = rsi.elementSize.value.roundToInt()
+        detector.minAreaSize = rsi.minAreaSize.value.roundToInt()
 
-        tracker.sparsing = project.value.realSenseInteraction.sparsing.value
-        tracker.maxDelta = project.value.realSenseInteraction.maxDelta.value
+        tracker.sparsing = rsi.sparsing.value
+        tracker.maxDelta = rsi.maxDelta.value
 
-        val minLifeTime = project.value.realSenseInteraction.minLifeTime.value.roundToInt()
+        val minLifeTime = rsi.minLifeTime.value.roundToInt()
 
         // read streams
         camera.readStreams()
 
+        // add squared input possibility
+        depthImage = if (rsi.squaredInput.value) {
+            squaredInputImage.copy(camera.depthImage,
+                    (camera.depthImage.width - squaredInputImage.width) / 2,
+                    0,
+                    squaredInputImage.width,
+                    squaredInputImage.height,
+                    0,
+                    0,
+                    squaredInputImage.width,
+                    squaredInputImage.height)
+            DepthImage(squaredInputImage)
+        } else {
+            DepthImage(camera.depthImage)
+        }
+
         // detect
-        depthImage = DepthImage(camera.depthImage)
         detector.detect(depthImage)
 
         // track regions
@@ -117,24 +137,24 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
 
         // update normalizedPosition of regions (also very inaccurate depth)
         tracker.regions.forEach {
-            val depthColor = camera.depthImage.get(it.x.roundToInt(), it.y.roundToInt()) and 0xFF
+            val depthColor = depthImage.input.get(it.x.roundToInt(), it.y.roundToInt()) and 0xFF
             val normalizedDepth = Sketch.map(depthColor.toDouble(), detector.threshold, 255.0, 0.0, 1.0)
-            it.normalizedPosition.target = PVector(it.x.toFloat() / camera.width, it.y.toFloat() / camera.height, normalizedDepth.toFloat())
-            it.normalizedPosition.easing = project.value.realSenseInteraction.activeRegionTranslationSpeed.value
-            
+            it.normalizedPosition.target = PVector(it.x.toFloat() / depthImage.input.width, it.y.toFloat() / depthImage.input.height, normalizedDepth.toFloat())
+            it.normalizedPosition.easing = rsi.activeRegionTranslationSpeed.value
+
             it.update()
 
             // map to interaction box todo: should not be here but is convenient
             it.mapToInteractionBox(project.value.interaction.interactionBox.value,
-                    project.value.realSenseInteraction.flipX.value,
-                    project.value.realSenseInteraction.flipY.value,
-                    project.value.realSenseInteraction.flipZ.value)
+                    rsi.flipX.value,
+                    rsi.flipY.value,
+                    rsi.flipZ.value)
         }
 
         // update regions synchronized
         activeRegions = tracker.regions.filter { it.lifeTime > minLifeTime }.toMutableList()
 
-        project.value.realSenseInteraction.activeRegionCount.value = "${tracker.regions.size}"
+        rsi.activeRegionCount.value = "${tracker.regions.size}"
 
         if (!isDebugger)
             depthImage.release()
