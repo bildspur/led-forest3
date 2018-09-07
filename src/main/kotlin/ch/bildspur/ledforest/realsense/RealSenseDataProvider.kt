@@ -138,7 +138,8 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
         // update normalizedPosition of regions (also very inaccurate depth)
         tracker.regions.forEach {
             val depthColor = depthImage.input.get(it.x.roundToInt(), it.y.roundToInt()) and 0xFF
-            val normalizedDepth = Sketch.map(depthColor.toDouble(), detector.threshold, 255.0, 0.0, 1.0)
+            val normalizedDepth = Sketch.map(depthColor.toDouble(), detector.threshold, 255.0,
+                    if (rsi.halfCutZAxis.value) 0.5 else 0.0, 1.0)
             it.normalizedPosition.target = PVector(it.x.toFloat() / depthImage.input.width, it.y.toFloat() / depthImage.input.height, normalizedDepth.toFloat())
             it.normalizedPosition.easing = rsi.activeRegionTranslationSpeed.value
 

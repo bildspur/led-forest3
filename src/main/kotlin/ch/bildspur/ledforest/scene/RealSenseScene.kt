@@ -7,6 +7,7 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.realsense.RealSenseDataProvider
 import ch.bildspur.ledforest.util.forEachLED
+import ch.bildspur.ledforest.util.limit
 import processing.core.PApplet
 
 class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSenseDataProvider)
@@ -77,8 +78,9 @@ class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSen
         // change color / saturation only if it is in reach
         if (distance <= project.realSenseInteraction.interactionDistance.value) {
             if (rsi.mapDepthToColor.value) {
-                led.color.fadeH(PApplet.map(nearestRegion.normalizedPosition.z, 0f, 1f,
-                        rsi.hueSpectrum.value.lowValue.toFloat(), rsi.hueSpectrum.value.highValue.toFloat()), 0.05f)
+                led.color.fadeH(PApplet.map(nearestRegion.normalizedPosition.z.limit(0f, 1f),
+                        0f, 1f,
+                        rsi.hueSpectrum.value.lowValue.toFloat(), rsi.hueSpectrum.value.highValue.toFloat()), 0.1f)
             } else {
                 led.color.fadeH(200f, 0.1f)
             }

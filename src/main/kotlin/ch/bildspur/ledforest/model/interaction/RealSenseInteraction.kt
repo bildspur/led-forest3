@@ -105,4 +105,8 @@ class RealSenseInteraction {
     @Expose
     @SliderParameter("Pulse Speed", 0.01, 0.5, 0.01, snap = true)
     var pulseSpeed = DataModel(0.1f)
+
+    @Expose
+    @BooleanParameter("Half Cut Z-Axis")
+    var halfCutZAxis = DataModel(true)
 }
