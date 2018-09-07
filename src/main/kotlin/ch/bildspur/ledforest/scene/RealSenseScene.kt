@@ -43,6 +43,7 @@ class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSen
         get() = realSense.activeRegions.isNotEmpty()
 
     private fun interactWithLED(index: Int, led: LED, tube: Tube) {
+        val rsi = project.realSenseInteraction
         val ledPosition = getLEDPosition(index, tube)
 
         val nearestRegion = realSense.activeRegions.sortedBy { it.interactionPosition.dist(ledPosition) }.firstOrNull()
@@ -52,13 +53,19 @@ class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSen
 
         // change color / saturation only if it is in reach
         if (distance <= project.realSenseInteraction.interactionDistance.value) {
-            led.color.fadeH(200f, 0.1f)
+            if (rsi.mapDepthToColor.value) {
+                led.color.fadeH(PApplet.map(nearestRegion.normalizedPosition.z, 0f, 1f,
+                        rsi.hueSpectrum.value.lowValue.toFloat(), rsi.hueSpectrum.value.highValue.toFloat()), 0.05f)
+            } else {
+                led.color.fadeH(200f, 0.1f)
+            }
+
             led.color.fadeS(100f, 0.1f)
         }
 
         // always change brightness
         led.color.fadeB(PApplet.max(0f,
-                PApplet.map(distance, project.realSenseInteraction.interactionDistance.value, 0f, 0f, 100f)),
+                PApplet.map(distance, rsi.interactionDistance.value, 0f, 0f, 100f)),
                 0.1f)
     }
 }
