@@ -39,6 +39,10 @@ class RealSenseInteraction {
     var inputHeight = DataModel(480)
 
     @Expose
+    @BooleanParameter("Squared Input")
+    var squaredInput = DataModel(false)
+
+    @Expose
     @NumberParameter("Input FPS")
     var inputFPS = DataModel(30)
 
@@ -89,4 +93,12 @@ class RealSenseInteraction {
     @Expose
     @SliderParameter("Interaction Distance", 0.1, 50.0, 0.1, snap = true)
     var interactionDistance = DataModel(5.0f)
+
+    @Expose
+    @BooleanParameter("Map Depth to Hue")
+    var mapDepthToColor = DataModel(true)
+
+    @Expose
+    @RangeSliderParameter("Hue Spectrum", 0.0, 360.0, 1.0, snap = true, roundInt = true)
+    var hueSpectrum = DataModel(NumberRange(180.0, 360.0))
 }
