@@ -20,12 +20,23 @@ class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPat
         get() = task
 
     var iaTubes = emptyList<Tube>()
+    var cubeTubes = emptyList<Tube>()
 
     override fun setup() {
         iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction }.toList()
+        cubeTubes = tubes.filter { it.tag.value == TubeTag.CubeBottom || it.tag.value == TubeTag.CubeTop }.toList()
 
         tubes.forEachLED {
             it.color.fadeB(0f, 0.05f)
+        }
+
+        // turn on cube leds
+        cubeTubes.forEach {
+            it.leds.forEach {
+                it.color.fadeH(0f, 0.1f)
+                it.color.fadeS(0f, 0.05f)
+                it.color.fadeB(100f, 0.05f)
+            }
         }
     }
 

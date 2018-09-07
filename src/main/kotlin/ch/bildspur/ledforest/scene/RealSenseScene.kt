@@ -6,6 +6,7 @@ import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.realsense.RealSenseDataProvider
+import ch.bildspur.ledforest.util.forEachLED
 import processing.core.PApplet
 
 class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSenseDataProvider)
@@ -17,17 +18,39 @@ class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSen
         get() = task
 
     var iaTubes = emptyList<Tube>()
+    var cubeTubes = emptyList<Tube>()
 
     override fun setup() {
         iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction }.toList()
+        cubeTubes = tubes.filter { it.tag.value == TubeTag.CubeBottom || it.tag.value == TubeTag.CubeTop }.toList()
+
+        // turn off cube leds
+        cubeTubes.forEach {
+            it.leds.forEach {
+                it.color.fadeH(0f, 0.1f)
+                it.color.fadeS(0f, 0.05f)
+                it.color.fadeB(0f, 0.05f)
+            }
+        }
     }
 
     override fun update() {
         if (!realSense.isRunning)
             return
 
+        // interaction tubes
         iaTubes.forEach {
             it.leds.forEachIndexed { i, led -> interactWithLED(i, led, it) }
+        }
+
+        // cube tubes (pulsing)
+        cubeTubes.first().leds.first().let {
+            if (!it.color.isFading) {
+                val nextBrightness = if (it.color.current.z < 1.0f) 100f else 0f
+                cubeTubes.forEachLED {
+                    it.color.fadeB(nextBrightness, 0.05f)
+                }
+            }
         }
     }
 
