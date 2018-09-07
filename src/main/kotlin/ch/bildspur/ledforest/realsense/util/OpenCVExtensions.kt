@@ -3,7 +3,6 @@ package ch.bildspur.ledforest.realsense.util
 import ch.bildspur.ledforest.realsense.vision.ConnectedComponentsResult
 import org.opencv.core.*
 import org.opencv.core.Core.FONT_HERSHEY_SCRIPT_SIMPLEX
-import org.opencv.highgui.HighGui
 import org.opencv.imgproc.Imgproc
 import processing.core.PApplet
 import processing.core.PGraphics
@@ -324,16 +323,20 @@ fun Rect.translate(dx: Int, dy: Int): Rect {
     return Rect(Point(this.tl().x + dx, this.tl().y + dy), Point(this.br().x + dx, this.br().y + dy))
 }
 
+/*
 fun Mat.display(title: String, waitKey: Boolean = false) {
     HighGui.imshow(title, this)
 
     if (waitKey)
         HighGui.waitKey()
 }
+*/
 
+/*
 fun Mat.display(waitKey: Boolean = false) {
     this.display("$this", waitKey)
 }
+*/
 
 fun Mat.rect(): Rect {
     return Rect(0, 0, this.width(), this.height())

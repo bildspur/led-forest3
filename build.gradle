@@ -27,11 +27,11 @@ switch (OperatingSystem.current()) {
         break
     case OperatingSystem.MAC_OS:
         project.ext.osName = "macos"
-        applicationDefaultJvmArgs = ["-Djava.library.path=lib/LeapMotion/library/macosx:lib/opencv/macosx"]
+        applicationDefaultJvmArgs = ["-Djava.library.path=lib/opencv31/mac:lib/LeapMotion/library/macosx"]
         break
     case OperatingSystem.WINDOWS:
         project.ext.osName = "windows"
-        applicationDefaultJvmArgs = ["-Djava.library.path=lib/LeapMotion/library/windows64;lib/opencv/windows64"]
+        applicationDefaultJvmArgs = ["-Djava.library.path=lib/LeapMotion/library/windows64;lib/opencv31/x64/opencv_java310.dll"]
         break
 }
 
@@ -76,7 +76,9 @@ dependencies {
 
     compile files('lib/realsense/realsense.jar')
 
-    compile files('lib/opencv/opencv-341.jar')
+    //compile files('lib/opencv/opencv-341.jar')
+    //compile files('lib/opencv4/opencv-400.jar')
+    compile files('lib/opencv31/opencv-310.jar')
 }
 
 task fatJar(type: Jar) {
