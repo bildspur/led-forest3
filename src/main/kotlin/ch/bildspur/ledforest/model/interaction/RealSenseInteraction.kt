@@ -101,4 +101,8 @@ class RealSenseInteraction {
     @Expose
     @RangeSliderParameter("Hue Spectrum", 0.0, 360.0, 1.0, snap = true, roundInt = true)
     var hueSpectrum = DataModel(NumberRange(180.0, 360.0))
+
+    @Expose
+    @SliderParameter("Pulse Speed", 0.01, 0.5, 0.01, snap = true)
+    var pulseSpeed = DataModel(0.1f)
 }

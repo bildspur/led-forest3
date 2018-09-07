@@ -10,7 +10,7 @@ import processing.core.PVector
 
 class CubePattern : BaseClonePattern("Square with Cube") {
 
-    var cubeSize = 50f
+    var cubeSize = 2.5f
 
     override fun create(project: Project, info: SetupInformation) {
         super.create(project, info)

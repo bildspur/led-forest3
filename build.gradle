@@ -75,9 +75,7 @@ dependencies {
     compile files('lib/plugins/minim/library/tritonus_share.jar')
 
     compile files('lib/realsense/realsense.jar')
-
-    //compile files('lib/opencv/opencv-341.jar')
-    //compile files('lib/opencv4/opencv-400.jar')
+    
     compile files('lib/opencv31/opencv-310.jar')
 }
 
