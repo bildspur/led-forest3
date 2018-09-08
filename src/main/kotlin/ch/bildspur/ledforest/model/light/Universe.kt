@@ -1,7 +1,11 @@
 package ch.bildspur.ledforest.model.light
 
+import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.DataModel
+import ch.bildspur.ledforest.ui.properties.ActionParameter
 import ch.bildspur.ledforest.ui.properties.NumberParameter
+import ch.bildspur.ledforest.util.ColorMode
+import ch.bildspur.ledforest.util.forEachLED
 import com.google.gson.annotations.Expose
 import java.awt.Color
 
@@ -14,6 +18,24 @@ class Universe(id: Int = 0) {
     @NumberParameter("Id")
     @Expose
     var id = DataModel(id)
+
+    @ActionParameter("LEDs", "Select")
+    val markLEDs = {
+        Sketch.instance.project.value.tubes
+                .filter { it.universe.value == this.id.value }
+                .forEachLED {
+                    it.color.fade(ColorMode.color(250, 0, 100), 0.1f)
+                }
+    }
+
+    @ActionParameter("LEDs", "Deselect")
+    val deselectLEDs = {
+        Sketch.instance.project.value.tubes
+                .filter { it.universe.value == this.id.value }
+                .forEachLED {
+                    it.color.fadeB(0f, 0.1f)
+                }
+    }
 
     var dmxData: ByteArray
         internal set
