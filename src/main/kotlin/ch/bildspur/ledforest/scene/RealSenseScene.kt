@@ -30,7 +30,7 @@ class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSen
             it.leds.forEach {
                 it.color.fadeH(0f, 0.1f)
                 it.color.fadeS(0f, 0.05f)
-                //it.color.fadeB(0f, 0.05f)
+                it.color.fadeB(0f, 0.05f)
             }
         }
     }
@@ -47,8 +47,10 @@ class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSen
         // cube tubes (pulsing)
         cubeTubes.first().leds.first().let {
             if (!it.color.isFading) {
-                val nextBrightness = if (it.color.current.z < 1.0f) 100f else 0f
+                val nextBrightness = if (it.color.current.z < 16f) 30f else 15f
                 cubeTubes.forEachLED {
+                    it.color.fadeH(300f, 0.1f)
+                    it.color.fadeS(100f, 0.05f)
                     it.color.fadeB(nextBrightness, project.realSenseInteraction.pulseSpeed.value)
                 }
             }

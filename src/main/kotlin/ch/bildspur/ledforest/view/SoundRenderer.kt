@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.view
 
+import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.leap.LeapDataProvider
 import ch.bildspur.ledforest.model.Project
@@ -39,8 +40,10 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
         handPlayer.update()
         backgroundPlayer.update()
 
+        val rs = Sketch.instance.realSense
+
         // check for hands
-        if (!leap.isRunning)
+        if (!leap.isRunning && !rs.isRunning)
             return
 
         val hands = leap.hands
@@ -50,6 +53,14 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
         } else {
             handPlayer.volume.target = project.audio.rattleGain.value.toFloat()
             val average = (hands.sumByDouble { it.position.x.toDouble() } / hands.size.toDouble()).toFloat()
+            handPlayer.player.pan = PApplet.map(average, 0f, project.interaction.interactionBox.value.x, 0f, 1f).limit(-1f, 1f)
+        }
+
+        if (rs.activeRegions.isEmpty()) {
+            handPlayer.volume.target = EasingAudioPlayer.MUTED_GAIN
+        } else {
+            handPlayer.volume.target = project.audio.rattleGain.value.toFloat()
+            val average = rs.activeRegions.map { it.normalizedPosition.x }.average().toFloat()
             handPlayer.player.pan = PApplet.map(average, 0f, project.interaction.interactionBox.value.x, 0f, 1f).limit(-1f, 1f)
         }
     }

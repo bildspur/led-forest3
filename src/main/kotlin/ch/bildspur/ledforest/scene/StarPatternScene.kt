@@ -33,9 +33,9 @@ class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPat
         // turn on cube leds
         cubeTubes.forEach {
             it.leds.forEach {
-                it.color.fadeH(0f, 0.1f)
-                it.color.fadeS(0f, 0.05f)
-                it.color.fadeB(100f, 0.05f)
+                it.color.fadeH(300f, 0.1f)
+                it.color.fadeS(100f, 0.05f)
+                it.color.fadeB(50f, 0.05f)
             }
         }
     }
