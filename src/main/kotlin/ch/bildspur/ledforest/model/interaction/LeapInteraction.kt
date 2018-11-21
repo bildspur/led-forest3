@@ -40,4 +40,16 @@ class LeapInteraction {
     @Expose
     @SliderParameter("Hand Rotation Speed", 0.01, 1.0, 0.01, snap = true)
     var handRotationSpeed = DataModel(0.5f)
+
+    @Expose
+    @BooleanParameter("Flip X")
+    var flipX = DataModel(false)
+
+    @Expose
+    @BooleanParameter("Flip Y")
+    var flipY = DataModel(false)
+
+    @Expose
+    @BooleanParameter("Flip Z")
+    var flipZ = DataModel(false)
 }
