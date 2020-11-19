@@ -15,6 +15,9 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
+import org.apache.log4j.BasicConfigurator
+import org.apache.log4j.Level
+import org.apache.log4j.Logger
 
 /**
  * Created by cansik on 04.02.17.
@@ -23,6 +26,10 @@ class Main : Application() {
 
     @Throws(Exception::class)
     override fun start(primaryStage: Stage) {
+        // start logger
+        BasicConfigurator.configure()
+        Logger.getRootLogger().level = Level.ERROR
+
         // register properties
         FXPropertyRegistry.properties.add(PropertiesRegistryEntry(PVectorParameter::class.java, PVectorParameter::name, ::PVectorProperty))
         FXPropertyRegistry.properties.add(PropertiesRegistryEntry(PVectorAngleParameter::class.java, PVectorAngleParameter::name, ::PVectorAngleProperty))
