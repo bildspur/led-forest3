@@ -1,8 +1,8 @@
-package ch.bildspur.ledforest.ui.properties.types
+package ch.bildspur.ledforest.ui.properties
 
-import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.ui.control.RelationNumberField
-import ch.bildspur.ledforest.ui.properties.PVectorParameter
+import ch.bildspur.model.DataModel
+import ch.bildspur.ui.fx.BaseFXFieldProperty
 import javafx.scene.control.Label
 import javafx.scene.control.TextFormatter
 import javafx.scene.layout.HBox
@@ -11,7 +11,7 @@ import javafx.util.converter.FloatStringConverter
 import processing.core.PVector
 import java.lang.reflect.Field
 
-class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) : BaseProperty(field, obj) {
+class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) : BaseFXFieldProperty(field, obj) {
 
     val model = field.get(obj) as DataModel<PVector>
     val xField = RelationNumberField<Float>(TextFormatter(FloatStringConverter()))

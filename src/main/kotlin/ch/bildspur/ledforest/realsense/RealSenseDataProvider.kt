@@ -3,7 +3,6 @@ package ch.bildspur.ledforest.realsense
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
-import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.realsense.tracking.ActiveRegion
 import ch.bildspur.ledforest.realsense.tracking.ActiveRegionTracker
@@ -11,6 +10,7 @@ import ch.bildspur.ledforest.realsense.util.*
 import ch.bildspur.ledforest.realsense.vision.ActiveRegionDetector
 import ch.bildspur.ledforest.realsense.vision.DepthImage
 import ch.bildspur.ledforest.util.Synchronize
+import ch.bildspur.model.DataModel
 import ch.bildspur.realsense.RealSenseCamera
 import ch.bildspur.realsense.processing.RSFilterBlock
 import ch.bildspur.realsense.type.ColorScheme
@@ -65,6 +65,11 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
         tracker = ActiveRegionTracker()
         camera = RealSenseCamera(sketch)
 
+        if(!RealSenseCamera.isDeviceAvailable()) {
+            println("no rs device found!")
+            return
+        }
+
         // threshold filter
         thresholdFilter = RSFilterBlock()
         thresholdFilter.init(ThresholdFilter())
@@ -109,6 +114,9 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
     }
 
     private fun readSensor(isDebugger: Boolean = false) {
+        if(!isRunning)
+            return
+
         val rsi = project.value.realSenseInteraction
 
         if (!project.value.interaction.isInteractionDataEnabled.value)

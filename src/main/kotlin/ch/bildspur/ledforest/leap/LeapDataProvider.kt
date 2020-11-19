@@ -2,9 +2,9 @@ package ch.bildspur.ledforest.leap
 
 import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
-import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.util.Synchronize
+import ch.bildspur.model.DataModel
 import com.leapmotion.leap.Controller
 import com.leapmotion.leap.Frame
 import java.util.concurrent.ConcurrentHashMap

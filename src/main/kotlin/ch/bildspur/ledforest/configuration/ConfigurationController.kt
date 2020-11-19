@@ -2,9 +2,9 @@ package ch.bildspur.ledforest.configuration
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.AppConfig
-import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.model.DataModel
 import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.get
 import com.google.gson.*

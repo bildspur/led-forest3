@@ -17,19 +17,19 @@ class UITask(val block: ((task: UITask) -> Unit), val callBack: ((task: UITask) 
     }
 
     fun run() {
-        Platform.runLater({
+        Platform.runLater {
             running.set(true)
             status.set("running task $taskName...")
-        })
+        }
 
         // run block
         block(this)
 
-        Platform.runLater({
+        Platform.runLater {
             callBack(this)
 
             status.set("task $taskName finished!")
             running.set(false)
-        })
+        }
     }
 }

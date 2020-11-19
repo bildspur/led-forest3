@@ -1,14 +1,13 @@
 package ch.bildspur.ledforest
 
+import ch.bildspur.event.Event
 import ch.bildspur.ledforest.artnet.ArtNetClient
 import ch.bildspur.ledforest.controller.OscController
 import ch.bildspur.ledforest.controller.PeasyController
 import ch.bildspur.ledforest.controller.RemoteController
 import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
-import ch.bildspur.ledforest.event.Event
 import ch.bildspur.ledforest.leap.LeapDataProvider
-import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.realsense.RealSenseDataProvider
 import ch.bildspur.ledforest.scene.SceneManager
@@ -20,6 +19,7 @@ import ch.bildspur.ledforest.view.ArtNetRenderer
 import ch.bildspur.ledforest.view.IRenderer
 import ch.bildspur.ledforest.view.SceneRenderer
 import ch.bildspur.ledforest.view.SoundRenderer
+import ch.bildspur.model.DataModel
 import ch.bildspur.postfx.builder.PostFX
 import ddf.minim.Minim
 import processing.core.PApplet

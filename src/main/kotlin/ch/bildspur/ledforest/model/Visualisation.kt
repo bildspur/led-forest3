@@ -1,8 +1,9 @@
 package ch.bildspur.ledforest.model
 
-import ch.bildspur.ledforest.ui.properties.BooleanParameter
-import ch.bildspur.ledforest.ui.properties.NumberParameter
-import ch.bildspur.ledforest.ui.properties.SliderParameter
+import ch.bildspur.model.DataModel
+import ch.bildspur.ui.properties.BooleanParameter
+import ch.bildspur.ui.properties.NumberParameter
+import ch.bildspur.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose
 
 class Visualisation {

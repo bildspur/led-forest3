@@ -2,9 +2,10 @@ package ch.bildspur.ledforest.model
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
-import ch.bildspur.ledforest.ui.properties.ActionParameter
-import ch.bildspur.ledforest.ui.properties.BooleanParameter
-import ch.bildspur.ledforest.ui.properties.SliderParameter
+import ch.bildspur.model.DataModel
+import ch.bildspur.ui.properties.ActionParameter
+import ch.bildspur.ui.properties.BooleanParameter
+import ch.bildspur.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose
 
 class Map {

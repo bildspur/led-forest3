@@ -1,7 +1,7 @@
 package ch.bildspur.ledforest.model.light
 
-import ch.bildspur.ledforest.model.DataModel
-import ch.bildspur.ledforest.ui.properties.StringParameter
+import ch.bildspur.model.DataModel
+import ch.bildspur.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
 import java.util.concurrent.CopyOnWriteArrayList
 

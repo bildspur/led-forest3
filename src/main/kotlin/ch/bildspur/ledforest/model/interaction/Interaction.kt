@@ -1,10 +1,10 @@
 package ch.bildspur.ledforest.model.interaction
 
 import ch.bildspur.ledforest.Sketch
-import ch.bildspur.ledforest.model.DataModel
-import ch.bildspur.ledforest.ui.properties.ActionParameter
-import ch.bildspur.ledforest.ui.properties.BooleanParameter
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
+import ch.bildspur.model.DataModel
+import ch.bildspur.ui.properties.ActionParameter
+import ch.bildspur.ui.properties.BooleanParameter
 import com.google.gson.annotations.Expose
 import processing.core.PVector
 

@@ -1,6 +1,6 @@
 package ch.bildspur.ledforest.ui.control.tubemap.tool
 
-import ch.bildspur.ledforest.event.Event
+import ch.bildspur.event.Event
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.fhnw.afpars.ui.control.editor.shapes.BaseShape
 import javafx.geometry.Point2D

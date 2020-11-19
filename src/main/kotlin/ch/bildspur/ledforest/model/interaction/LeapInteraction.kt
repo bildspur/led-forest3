@@ -1,11 +1,11 @@
 package ch.bildspur.ledforest.model.interaction
 
-import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.NumberRange
-import ch.bildspur.ledforest.ui.properties.BooleanParameter
-import ch.bildspur.ledforest.ui.properties.RangeSliderParameter
-import ch.bildspur.ledforest.ui.properties.SliderParameter
-import ch.bildspur.ledforest.ui.properties.StringParameter
+import ch.bildspur.model.DataModel
+import ch.bildspur.ui.properties.BooleanParameter
+import ch.bildspur.ui.properties.RangeSliderParameter
+import ch.bildspur.ui.properties.SliderParameter
+import ch.bildspur.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
 
 class LeapInteraction {

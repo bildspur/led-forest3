@@ -1,11 +1,11 @@
 package ch.bildspur.ledforest.setup.pattern
 
-import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
 import ch.bildspur.ledforest.setup.SetupInformation
+import ch.bildspur.model.DataModel
 
 abstract class BaseClonePattern(val name: String) : ClonePattern {
     override fun create(project: Project, info: SetupInformation) {

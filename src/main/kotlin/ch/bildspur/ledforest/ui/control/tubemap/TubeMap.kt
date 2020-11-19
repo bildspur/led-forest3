@@ -1,6 +1,6 @@
 package ch.bildspur.ledforest.ui.control.tubemap
 
-import ch.bildspur.ledforest.event.Event
+import ch.bildspur.event.Event
 import ch.bildspur.ledforest.ui.control.ResizableCanvas
 import ch.bildspur.ledforest.ui.control.tubemap.tool.IEditorTool
 import ch.bildspur.ledforest.ui.control.tubemap.tool.ViewTool

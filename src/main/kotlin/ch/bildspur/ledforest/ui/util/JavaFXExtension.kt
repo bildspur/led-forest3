@@ -4,7 +4,7 @@ import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
 
 fun TreeView<TagItem>.items(current: TreeItem<TagItem> = this.root,
-                            items: MutableList<TreeItem<TagItem>> = mutableListOf<TreeItem<TagItem>>())
+                            items: MutableList<TreeItem<TagItem>> = mutableListOf())
         : MutableList<TreeItem<TagItem>> {
     items.add(current)
 

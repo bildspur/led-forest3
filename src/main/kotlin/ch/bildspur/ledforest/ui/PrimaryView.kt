@@ -3,7 +3,6 @@ package ch.bildspur.ledforest.ui
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.AppConfig
-import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
@@ -11,9 +10,10 @@ import ch.bildspur.ledforest.model.light.Universe
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
-import ch.bildspur.ledforest.ui.properties.PropertiesControl
 import ch.bildspur.ledforest.ui.util.TagItem
 import ch.bildspur.ledforest.ui.util.UITask
+import ch.bildspur.model.DataModel
+import ch.bildspur.ui.fx.PropertiesControl
 import javafx.application.Platform
 import javafx.beans.property.ObjectProperty
 import javafx.beans.value.WritableValue

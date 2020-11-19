@@ -1,9 +1,9 @@
-package ch.bildspur.ledforest.ui.properties.types
+package ch.bildspur.ledforest.ui.properties
 
-import ch.bildspur.ledforest.model.DataModel
-import ch.bildspur.ledforest.ui.properties.PVectorAngleParameter
 import ch.bildspur.ledforest.util.toDegrees
 import ch.bildspur.ledforest.util.toRadians
+import ch.bildspur.model.DataModel
+import ch.bildspur.ui.fx.BaseFXFieldProperty
 import javafx.scene.control.Label
 import javafx.scene.control.Slider
 import javafx.scene.layout.HBox
@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox
 import processing.core.PVector
 import java.lang.reflect.Field
 
-class PVectorAngleProperty(field: Field, obj: Any, val annotation: PVectorAngleParameter) : BaseProperty(field, obj) {
+class PVectorAngleProperty(field: Field, obj: Any, val annotation: PVectorAngleParameter) : BaseFXFieldProperty(field, obj) {
 
     private val minAngle = -180.0
     private val maxAngle = 180.0
@@ -52,11 +52,11 @@ class PVectorAngleProperty(field: Field, obj: Any, val annotation: PVectorAngleP
                 }
             }
 
-            slider.setOnMouseClicked({ event ->
+            slider.setOnMouseClicked { event ->
                 if (event.clickCount == 2) {
                     slider.value = initValue
                 }
-            })
+            }
 
             box.children.add(HBox(label, it.value))
         }

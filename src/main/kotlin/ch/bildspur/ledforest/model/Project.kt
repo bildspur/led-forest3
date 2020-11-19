@@ -6,9 +6,10 @@ import ch.bildspur.ledforest.model.interaction.LeapInteraction
 import ch.bildspur.ledforest.model.interaction.RealSenseInteraction
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
-import ch.bildspur.ledforest.ui.properties.ActionParameter
-import ch.bildspur.ledforest.ui.properties.BooleanParameter
-import ch.bildspur.ledforest.ui.properties.StringParameter
+import ch.bildspur.model.DataModel
+import ch.bildspur.ui.properties.ActionParameter
+import ch.bildspur.ui.properties.BooleanParameter
+import ch.bildspur.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
 import java.util.concurrent.CopyOnWriteArrayList
 

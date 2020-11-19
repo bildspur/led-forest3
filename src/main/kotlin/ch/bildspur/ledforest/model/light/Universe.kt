@@ -1,11 +1,11 @@
 package ch.bildspur.ledforest.model.light
 
 import ch.bildspur.ledforest.Sketch
-import ch.bildspur.ledforest.model.DataModel
-import ch.bildspur.ledforest.ui.properties.ActionParameter
-import ch.bildspur.ledforest.ui.properties.NumberParameter
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
+import ch.bildspur.model.DataModel
+import ch.bildspur.ui.properties.ActionParameter
+import ch.bildspur.ui.properties.NumberParameter
 import com.google.gson.annotations.Expose
 import java.awt.Color
 
