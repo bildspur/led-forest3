@@ -425,7 +425,7 @@ class PrimaryView {
         val alert = Alert(Alert.AlertType.INFORMATION)
         alert.title = "About"
         alert.headerText = "${Sketch.NAME} - ${Sketch.VERSION}"
-        alert.contentText = "Developed by Florian Bruggisser 2018.\nwww.bildspur.ch\n\nURI: ${Sketch.URI_NAME}"
+        alert.contentText = "Developed by Florian Bruggisser 2018.\nUpdated in 2020\nwww.bildspur.ch\n\nURI: ${Sketch.URI_NAME}"
         alert.showAndWait()
     }
 
