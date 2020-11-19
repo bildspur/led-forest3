@@ -79,6 +79,9 @@ dependencies {
     implementation "com.github.cansik:bildspur-base:7436a637a5"
     implementation 'com.github.cansik:bildspur-ui:fdbba863da'
 
+    // deep vision
+    implementation 'com.github.cansik:deep-vision-processing:9eebd0c440'
+
     // javacv & javacpp
     compile group: 'org.bytedeco', name: 'javacv', version: "$javacppVersion"
     compile group: 'org.bytedeco', name: 'opencv-platform', version: "4.4.0-$javacppVersion"
