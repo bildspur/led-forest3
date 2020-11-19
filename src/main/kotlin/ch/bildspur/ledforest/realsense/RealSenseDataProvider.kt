@@ -5,22 +5,28 @@ import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.DataModel
 import ch.bildspur.ledforest.model.Project
-import ch.bildspur.ledforest.realsense.io.RealSenseCamera
 import ch.bildspur.ledforest.realsense.tracking.ActiveRegion
 import ch.bildspur.ledforest.realsense.tracking.ActiveRegionTracker
 import ch.bildspur.ledforest.realsense.util.*
 import ch.bildspur.ledforest.realsense.vision.ActiveRegionDetector
 import ch.bildspur.ledforest.realsense.vision.DepthImage
 import ch.bildspur.ledforest.util.Synchronize
-import org.opencv.core.Core
-import org.opencv.core.Core.FONT_HERSHEY_SIMPLEX
+import ch.bildspur.realsense.RealSenseCamera
+import ch.bildspur.realsense.processing.RSFilterBlock
+import ch.bildspur.realsense.type.ColorScheme
+import org.bytedeco.javacpp.Loader
+import org.bytedeco.opencv.opencv_java
+import org.intel.rs.processing.ThresholdFilter
+import org.intel.rs.types.Option
 import org.opencv.core.CvType.CV_8UC3
 import org.opencv.core.Point
 import org.opencv.core.Scalar
 import org.opencv.imgproc.Imgproc
+import org.opencv.imgproc.Imgproc.FONT_HERSHEY_SIMPLEX
 import processing.core.*
 import kotlin.concurrent.thread
 import kotlin.math.roundToInt
+
 
 class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
     private val updateTime = 15L
@@ -38,6 +44,8 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
 
     private lateinit var camera: RealSenseCamera
 
+    private lateinit var thresholdFilter : RSFilterBlock
+
     private lateinit var depthImage: DepthImage
 
     private lateinit var squaredInputImage: PImage
@@ -45,7 +53,7 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
     var activeRegions by Synchronize(mutableListOf<ActiveRegion>())
 
     init {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
+        Loader.load(opencv_java::class.java)
 
         timer.addTask(TimerTask(updateTime, {
             readSensor()
@@ -55,11 +63,12 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
     fun start() {
         detector = ActiveRegionDetector()
         tracker = ActiveRegionTracker()
-        camera = RealSenseCamera(project.value.realSenseInteraction.inputWidth.value,
-                project.value.realSenseInteraction.inputHeight.value,
-                project.value.realSenseInteraction.inputFPS.value,
-                enableDepthStream = true,
-                enableColorStream = project.value.realSenseInteraction.enableColorStream.value)
+        camera = RealSenseCamera(sketch)
+
+        // threshold filter
+        thresholdFilter = RSFilterBlock()
+        thresholdFilter.init(ThresholdFilter())
+        camera.addFilter(thresholdFilter)
 
         // initialize squaredInput
         squaredInputImage = PImage(project.value.realSenseInteraction.inputHeight.value, project.value.realSenseInteraction.inputHeight.value, PConstants.RGB)
@@ -68,7 +77,18 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
             isRunning = true
 
             try {
-                camera.setup()
+                camera.enableDepthStream(project.value.realSenseInteraction.inputWidth.value,
+                        project.value.realSenseInteraction.inputHeight.value,
+                        project.value.realSenseInteraction.inputFPS.value)
+                camera.enableColorizer(ColorScheme.WhiteToBlack)
+
+                if(project.value.realSenseInteraction.enableColorStream.value) {
+                    camera.enableColorStream(project.value.realSenseInteraction.inputWidth.value,
+                            project.value.realSenseInteraction.inputHeight.value,
+                            project.value.realSenseInteraction.inputFPS.value)
+                }
+
+                camera.start()
             } catch (ex: Exception) {
                 isRunning = false
                 println("Could not start real sense camera! (${ex.message})")
@@ -98,8 +118,8 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
             return
 
         // set settings
-        camera.depthLevelLow = rsi.depthRange.value.lowValue.roundToInt()
-        camera.depthLevelHigh = rsi.depthRange.value.highValue.roundToInt()
+        thresholdFilter.setOption(Option.MinDistance, rsi.depthRange.value.lowValue.toFloat())
+        thresholdFilter.setOption(Option.MaxDistance, rsi.depthRange.value.highValue.toFloat())
 
         detector.threshold = rsi.threshold.value
         detector.elementSize = rsi.elementSize.value.roundToInt()
@@ -111,7 +131,7 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
         val minLifeTime = rsi.minLifeTime.value.roundToInt()
 
         // read streams
-        camera.readStreams()
+        camera.readFrames()
 
         // add squared input possibility
         depthImage = if (rsi.squaredInput.value) {

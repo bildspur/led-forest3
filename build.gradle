@@ -10,8 +10,6 @@ plugins {
 group 'ch.bildspur'
 version '3.1'
 
-import org.gradle.internal.os.OperatingSystem
-
 wrapper {
     gradleVersion = '6.3'
     distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-bin.zip"
@@ -51,8 +49,6 @@ dependencies {
     compile 'ch.bildspur:artnet4j:0.6.2'
 
     // javafx
-    compile group: 'org.openjfx', name: 'javafx-base', version: '11.0.2'
-    compile group: 'org.openjfx', name: 'javafx-controls', version: '11.0.2'
     compile group: 'org.controlsfx', name: 'controlsfx', version: '11.0.0'
 
     // leap motion java
@@ -85,8 +81,12 @@ dependencies {
     compile group: 'org.bytedeco', name: 'javacv', version: "$javacppVersion"
     compile group: 'org.bytedeco', name: 'opencv-platform', version: "4.4.0-$javacppVersion"
     compile group: 'org.bytedeco', name: 'openblas-platform', version: "0.3.10-$javacppVersion"
-    compile group: 'org.bytedeco', name: 'librealsense2-platform', version: "2.29.0-$javacppVersion"
     compile group: 'org.bytedeco', name: 'ffmpeg-platform', version: "4.3.1-$javacppVersion"
+
+    // librealsense
+    compile group: 'org.bytedeco', name: 'librealsense2-platform', version: "2.29.0-$javacppVersion"
+    implementation 'com.github.cansik:librealsense-java:0.2.1'
+    implementation 'com.github.cansik:realsense-processing:2.2.0'
 }
 
 application {

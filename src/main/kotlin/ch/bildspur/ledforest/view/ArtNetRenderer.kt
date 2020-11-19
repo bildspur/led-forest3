@@ -1,6 +1,6 @@
 package ch.bildspur.ledforest.view
 
-import artnet4j.ArtNetNode
+import ch.bildspur.artnet.ArtNetNode
 import ch.bildspur.ledforest.artnet.ArtNetClient
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project

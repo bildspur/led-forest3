@@ -2,8 +2,8 @@ package ch.bildspur.ledforest.realsense.util
 
 import ch.bildspur.ledforest.realsense.vision.ConnectedComponentsResult
 import org.opencv.core.*
-import org.opencv.core.Core.FONT_HERSHEY_SCRIPT_SIMPLEX
 import org.opencv.imgproc.Imgproc
+import org.opencv.imgproc.Imgproc.FONT_HERSHEY_SCRIPT_SIMPLEX
 import processing.core.PApplet
 import processing.core.PGraphics
 import processing.core.PImage
