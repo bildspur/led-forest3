@@ -47,8 +47,8 @@ class RealSenseInteraction {
     var inputFPS = DataModel(30)
 
     @Expose
-    @RangeSliderParameter("Depth Range", 0.0, 65536.0, 1.0, snap = true, roundInt = true)
-    var depthRange = DataModel(NumberRange(0.0, 4096.0))
+    @RangeSliderParameter("Depth Range", 0.0, 20.0, 0.1, snap = true, roundInt = false)
+    var depthRange = DataModel(NumberRange(0.0, 20.0))
 
     @Expose
     @SliderParameter("Binary Threshold", 0.0, 255.0, 1.0, snap = true, roundInt = true)
