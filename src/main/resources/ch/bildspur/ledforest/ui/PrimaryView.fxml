@@ -26,11 +26,11 @@
                                   text="Project"/>
                         <MenuItem id="visualisationMenuItem" mnemonicParsing="false"
                                   onAction="#onShowVisualisationSettings" text="Visualisation"/>
-                        <MenuItem id="lightMenuItem" mnemonicParsing="false" onAction="#onShowLightSettings"
-                                  text="Art-Net"/>
                         <MenuItem id="mapMenuItem" mnemonicParsing="false"
                                   onAction="#onShowMapSettings"
                                   text="2D Map"/>
+                        <MenuItem id="lightMenuItem" mnemonicParsing="false" onAction="#onShowLightSettings"
+                                  text="Art-Net"/>
                         <MenuItem id="audioMenuItem" mnemonicParsing="false"
                                   onAction="#onShowAudioSettings"
                                   text="Audio"/>
