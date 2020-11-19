@@ -126,8 +126,8 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
             return
 
         // set settings
-        thresholdFilter.setOption(Option.MinDistance, rsi.depthRange.value.lowValue.toFloat())
-        thresholdFilter.setOption(Option.MaxDistance, rsi.depthRange.value.highValue.toFloat())
+        thresholdFilter.setOption(Option.MinDistance, rsi.depthRange.value.low.toFloat())
+        thresholdFilter.setOption(Option.MaxDistance, rsi.depthRange.value.high.toFloat())
 
         detector.threshold = rsi.threshold.value
         detector.elementSize = rsi.elementSize.value.roundToInt()

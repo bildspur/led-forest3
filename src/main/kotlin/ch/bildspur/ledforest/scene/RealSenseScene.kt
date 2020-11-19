@@ -82,7 +82,7 @@ class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSen
             if (rsi.mapDepthToColor.value) {
                 led.color.fadeH(PApplet.map(nearestRegion.normalizedPosition.z.limit(0f, 1f),
                         0f, 1f,
-                        rsi.hueSpectrum.value.lowValue.toFloat(), rsi.hueSpectrum.value.highValue.toFloat()), 0.1f)
+                        rsi.hueSpectrum.value.low.toFloat(), rsi.hueSpectrum.value.high.toFloat()), 0.1f)
             } else {
                 led.color.fadeH(200f, 0.1f)
             }

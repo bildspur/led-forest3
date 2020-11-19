@@ -33,9 +33,9 @@ class Interaction {
         val ranges = Sketch.instance.spaceInformation.calculateTubeDimensions(Sketch.instance.project.value.tubes)
 
         interactionBox.value = PVector(
-                Math.ceil(Math.max(Math.abs(ranges.x.lowValue), ranges.x.highValue) * scaleFactor).toFloat(),
-                Math.ceil(Math.max(Math.abs(ranges.y.lowValue), ranges.y.highValue) * scaleFactor).toFloat(),
-                Math.ceil(Math.max(Math.abs(ranges.z.lowValue), ranges.z.highValue) * scaleFactor).toFloat()
+                Math.ceil(Math.max(Math.abs(ranges.x.low), ranges.x.high) * scaleFactor).toFloat(),
+                Math.ceil(Math.max(Math.abs(ranges.y.low), ranges.y.high) * scaleFactor).toFloat(),
+                Math.ceil(Math.max(Math.abs(ranges.z.low), ranges.z.high) * scaleFactor).toFloat()
         )
     }
 

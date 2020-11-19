@@ -1,8 +1,8 @@
 package ch.bildspur.ledforest.util
 
 import ch.bildspur.ledforest.Sketch
-import ch.bildspur.ledforest.model.NumberRange
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.model.NumberRange
 import processing.core.PApplet
 import processing.core.PGraphics
 import processing.core.PVector

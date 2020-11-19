@@ -23,8 +23,8 @@ class Map {
         val scaleFactor = 1.2
 
         val ranges = Sketch.instance.spaceInformation.calculateTubeDimensions(Sketch.instance.project.value.tubes)
-        val maxX = Math.max(Math.abs(ranges.x.lowValue), ranges.x.highValue)
-        val maxY = Math.max(Math.abs(ranges.y.lowValue), ranges.y.highValue)
+        val maxX = Math.max(Math.abs(ranges.x.low), ranges.x.high)
+        val maxY = Math.max(Math.abs(ranges.y.low), ranges.y.high)
 
         val maxFactor = Math.max(TubeMap.CANVAS_WIDTH / 2.0 / maxX, TubeMap.CANVAS_HEIGHT / 2.0 / maxY)
 

@@ -1,9 +1,8 @@
 package ch.bildspur.ledforest.model.interaction
 
 import ch.bildspur.ledforest.Sketch
-import ch.bildspur.ledforest.model.NumberRange
-import ch.bildspur.ledforest.ui.properties.*
 import ch.bildspur.model.DataModel
+import ch.bildspur.model.NumberRange
 import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 

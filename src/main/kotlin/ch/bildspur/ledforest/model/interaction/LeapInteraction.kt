@@ -1,7 +1,7 @@
 package ch.bildspur.ledforest.model.interaction
 
-import ch.bildspur.ledforest.model.NumberRange
 import ch.bildspur.model.DataModel
+import ch.bildspur.model.NumberRange
 import ch.bildspur.ui.properties.BooleanParameter
 import ch.bildspur.ui.properties.RangeSliderParameter
 import ch.bildspur.ui.properties.SliderParameter
