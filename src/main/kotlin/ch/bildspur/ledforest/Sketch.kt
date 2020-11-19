@@ -152,8 +152,21 @@ class Sketch : PApplet() {
         peasy.setup()
         artnet.open()
 
-        leapMotion.start()
-        realSense.start()
+        project.value.interaction.isLeapInteractionEnabled.onChanged += {
+            if(it)
+                leapMotion.start()
+            else
+                leapMotion.stop()
+        }
+        project.value.interaction.isLeapInteractionEnabled.fireLatest()
+
+        project.value.interaction.isRealSenseInteractionEnabled.onChanged += {
+            if(it)
+                realSense.start()
+            else
+                realSense.stop()
+        }
+        project.value.interaction.isRealSenseInteractionEnabled.fireLatest()
 
         spaceInformation.setup()
 

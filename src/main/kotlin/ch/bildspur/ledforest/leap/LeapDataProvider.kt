@@ -34,6 +34,8 @@ class LeapDataProvider(val project: DataModel<Project>) {
     }
 
     fun start() {
+        if(isRunning) return
+
         leapThread = thread {
             controller = Controller()
 
@@ -46,6 +48,8 @@ class LeapDataProvider(val project: DataModel<Project>) {
     }
 
     fun stop() {
+        if(!isRunning) return
+
         isRunning = false
 
         if (::leapThread.isInitialized)

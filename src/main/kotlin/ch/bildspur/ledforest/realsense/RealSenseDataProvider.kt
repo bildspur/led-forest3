@@ -61,6 +61,8 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
     }
 
     fun start() {
+        if(isRunning) return
+
         detector = ActiveRegionDetector()
         tracker = ActiveRegionTracker()
         camera = RealSenseCamera(sketch)
@@ -107,6 +109,8 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
     }
 
     fun stop() {
+        if(!isRunning) return
+
         isRunning = false
 
         if (::thread.isInitialized)
