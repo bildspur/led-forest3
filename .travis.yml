@@ -15,7 +15,7 @@ install:
   - ./gradlew assemble
   - ./gradlew build
   - ./gradlew jar
-  - ./gradlew javadoc
+#  - ./gradlew javadoc
   - ./gradlew fatJar
 
 # command to run tests
