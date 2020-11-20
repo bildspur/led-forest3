@@ -1,13 +1,25 @@
+jobs:
+  include:
+    # - os: windows
+    - os: osx
+    - os: linux
+      dist: bionic
+
 notifications:
   email: false
+
 language: java
 
 # command to build
 install:
-  - "gradle assemble"
+  - ./gradlew assemble
+  - ./gradlew build
+  - ./gradlew jar
+  - ./gradlew javadoc
+  - ./gradlew fatJar
 
 # command to run tests
 script:
-  - "gradle check"
+  - ./gradlew check
 
-after_success:
+after_success: skip
