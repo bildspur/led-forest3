@@ -8,24 +8,13 @@ import ch.bildspur.ledforest.setup.SetupInformation
 import processing.core.PApplet
 import processing.core.PVector
 
-class CubePattern : BaseClonePattern("Square with Cube") {
+class CubePattern : SquarePattern("Square with Cube") {
 
     var cubeSize = 2.5f
 
     override fun create(project: Project, info: SetupInformation) {
         super.create(project, info)
         addCube(project, info)
-    }
-
-    override fun setupPosition(index: Int, tube: Tube, info: SetupInformation) {
-        val tubeCountPerLine = Math.floor(Math.sqrt(info.tubeCount.toDouble())).toInt()
-
-        // check xy flip
-        val x = if (info.flipXY) index / tubeCountPerLine else index % tubeCountPerLine
-        val y = if (info.flipXY) index % tubeCountPerLine else index / tubeCountPerLine
-
-        tube.position.value.x = (x * info.spaceWidth) - ((tubeCountPerLine - 1) * info.spaceWidth / 2f)
-        tube.position.value.y = (y * info.spaceWidth) - ((tubeCountPerLine - 1) * info.spaceWidth / 2f)
     }
 
     fun addCube(project: Project, info: SetupInformation) {
