@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose
 class Audio {
     @Expose
     @BooleanParameter("Audio Enabled*")
-    var soundEnabled = DataModel(true)
+    var soundEnabled = DataModel(false)
 
     @Expose
     @SliderParameter("Background Gain", -35.0, 10.0, 1.0, snap = true, roundInt = true)
