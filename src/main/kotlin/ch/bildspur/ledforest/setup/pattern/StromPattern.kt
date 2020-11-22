@@ -32,6 +32,7 @@ class StromPattern : SquarePattern("Strøm") {
         tube.position.value.z += 2.0f - (0.2f * y)
 
         // add random rotation
+        /*
         val rotation = random.randomFloat(-30.0f, 30.0f)
         startPos = Sketch.instance.spaceInformation.getLEDPosition(0, tube)
         endPos = Sketch.instance.spaceInformation.getLEDPosition(tube.ledCount.value - 1, tube)
@@ -44,5 +45,6 @@ class StromPattern : SquarePattern("Strøm") {
         tube.position.value.add(rodTransformed)
 
         tube.rotation.value.y += radians(rotation)
+        */
     }
 }
