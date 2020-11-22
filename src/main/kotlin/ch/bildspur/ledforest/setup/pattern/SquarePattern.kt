@@ -15,6 +15,6 @@ open class SquarePattern(name : String = "Square") : BaseClonePattern(name) {
         val y = if (info.flipXY) index % tubeCountPerLine else index / tubeCountPerLine
 
         tube.position.value.x = (x * info.spaceWidth) - ((tubeCountPerLine - 1) * info.spaceWidth / 2f)
-        tube.position.value.y = (y * info.spaceHeight) - ((tubeCountPerLine - 1) * info.spaceWidth / 2f)
+        tube.position.value.y = (y * info.spaceHeight) - ((tubeCountPerLine - 1) * info.spaceHeight / 2f)
     }
 }

@@ -20,15 +20,15 @@ class SpaceInformation(val sketch: Sketch) {
         val ledPositions = tubes.map { Pair(it, it.leds) }
                 .map { p ->
                     p.second.mapIndexed { i, _ -> getLEDPosition(i, p.first) }
-                }.flatMap { it }
+                }.flatten()
 
         // calculate min & max
-        val maxX = ledPositions.map { it.x }.max() ?: 0f
-        val minX = ledPositions.map { it.x }.min() ?: 0f
-        val maxY = ledPositions.map { it.y }.max() ?: 0f
-        val minY = ledPositions.map { it.y }.min() ?: 0f
-        val maxZ = ledPositions.map { it.z }.max() ?: 0f
-        val minZ = ledPositions.map { it.z }.min() ?: 0f
+        val maxX = ledPositions.map { it.x }.maxOrNull() ?: 0f
+        val minX = ledPositions.map { it.x }.minOrNull() ?: 0f
+        val maxY = ledPositions.map { it.y }.maxOrNull() ?: 0f
+        val minY = ledPositions.map { it.y }.minOrNull() ?: 0f
+        val maxZ = ledPositions.map { it.z }.maxOrNull() ?: 0f
+        val minZ = ledPositions.map { it.z }.minOrNull() ?: 0f
 
         return RangeVector(NumberRange(minX.toDouble(), maxX.toDouble()),
                 NumberRange(minY.toDouble(), maxY.toDouble()),
