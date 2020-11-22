@@ -15,7 +15,7 @@ class Map {
     var showExtendedName = DataModel(false)
 
     @Expose
-    @SliderParameter("Map Scale Factor (m to px)", 1.0, 30.0, 1.0)
+    @SliderParameter("Map Scale Factor (m to px)", 1.0, 100.0, 1.0)
     var mapScaleFactor = DataModel(15.0f)
 
     @ActionParameter("Map", "Auto Scale")

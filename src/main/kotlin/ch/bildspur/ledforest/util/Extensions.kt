@@ -132,3 +132,21 @@ fun PGraphics.imageRect(image: PImage, x: Float, y: Float, width: Float, height:
 fun <T> Sequence<T>.batch(n: Int): Sequence<List<T>> {
     return BatchingSequence(this, n)
 }
+
+fun Boolean.toSign(): Int {
+    return if (this) 1 else -1
+}
+
+fun Boolean.toInvertSign(): Int {
+    return if (this) -1 else 1
+}
+
+fun Boolean.toInt(): Int {
+    return if (this) 1 else 0
+}
+
+fun PVector.flip(flipX: Boolean, flipY: Boolean, flipZ: Boolean) {
+    this.x = this.x * flipX.toInvertSign()
+    this.y = this.y * flipY.toInvertSign()
+    this.z = this.z * flipZ.toInvertSign()
+}

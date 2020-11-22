@@ -7,6 +7,8 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
+import ch.bildspur.ledforest.setup.SetupInformation
+import ch.bildspur.ledforest.setup.pattern.StromPattern
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
@@ -167,6 +169,33 @@ class PrimaryView {
 
         sketch.onSetupFinished += {
             project.value.map.autoScaleMap()
+
+            // todo: remove AFTER Testing
+            UITask.run({
+                appConfig.projectFile = ""
+
+                // create project
+                val info = SetupInformation()
+                info.spaceWidth = 1.6f
+                info.spaceHeight = 0.5f
+                info.universesPerNode = 8
+                info.tubeCount = 25
+                info.tubesPerUniverseCount = 5
+
+                val stromProject = Project()
+
+                val clonePattern = StromPattern()
+                clonePattern.create(stromProject, info)
+
+                project.value.autoNameLEDTubes()
+                project.value = stromProject
+
+                // rescale map & auto-name rods
+                project.value.map.autoScaleMap()
+                project.value.autoNameLEDTubes()
+
+                resetRenderer()
+            }, { updateUI() }, "new project")
         }
 
         project.onChanged += {

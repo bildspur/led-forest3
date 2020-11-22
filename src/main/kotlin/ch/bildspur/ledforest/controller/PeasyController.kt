@@ -2,7 +2,12 @@ package ch.bildspur.ledforest.controller
 
 import peasy.PeasyCam
 import processing.core.PApplet
+import processing.core.PConstants.PI
 import processing.core.PGraphics
+import javax.swing.Spring.height
+
+
+
 
 
 /**
@@ -19,6 +24,9 @@ class PeasyController(internal var sketch: PApplet) {
 
         //cam.rotateZ(PApplet.radians(-90f).toDouble())
         cam.rotateX(PApplet.radians(-75f).toDouble())
+
+        // remove clipping in scene
+        sketch.perspective(PI / 2.5f, sketch.width.toFloat() / sketch.height, 0.001f, 1000f)
     }
 
     fun applyTo(canvas: PGraphics) {
