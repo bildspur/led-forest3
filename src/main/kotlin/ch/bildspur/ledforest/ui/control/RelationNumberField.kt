@@ -72,8 +72,8 @@ class RelationNumberField<T> @JvmOverloads constructor(var formatter: TextFormat
         setupLabelAnimation(inLabelAnimation, 0.0, 1.0)
         setupLabelAnimation(outLabelAnimation, -20.0, 0.0)
 
-        this.value.addListener { o, oldVal, newVal -> resizeAnimation() }
-        this.widthProperty().addListener { o -> resize() }
+        this.value.addListener { _, _, _ -> resizeAnimation() }
+        this.widthProperty().addListener { _ -> resize() }
 
         this.value.value = this.value.get()
         this.minimum.value = this.minimum.get()
@@ -146,8 +146,8 @@ class RelationNumberField<T> @JvmOverloads constructor(var formatter: TextFormat
         // create binding between value and text
         Bindings.bindBidirectional(textProperty(), value, converter)
 
-        minimum.addListener { obs, o, n -> minimumLabel.text = "Min: " + n }
-        maximum.addListener { obs, o, n -> maximumLabel.text = "Max: " + n }
+        minimum.addListener { _, _, n -> minimumLabel.text = "Min: $n" }
+        maximum.addListener { _, _, n -> maximumLabel.text = "Max: $n" }
 
         // set number formatter
         textFormatter = formatter

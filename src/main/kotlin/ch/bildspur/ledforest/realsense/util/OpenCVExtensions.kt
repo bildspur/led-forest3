@@ -24,7 +24,7 @@ fun Float.isApproximate(value: Double, error: Double): Boolean {
 }
 
 fun DoubleArray.indexOfMax(): Int? {
-    return this.withIndex().maxBy { it.value }?.index
+    return this.withIndex().maxByOrNull { it.value }?.index
 }
 
 fun PGraphics.draw(block: (g: PGraphics) -> Unit) {
@@ -156,7 +156,7 @@ fun Mat.geodesicDilate(mask: Mat, elementSize: Int, dest: Mat) {
     val img = this.clone()
     val element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(2.0 * elementSize + 1.0, 2.0 * elementSize + 1.0))
 
-    var last = img.zeros()
+    var last: Mat
     val next = img.copy()
     do {
         last = next.copy()
@@ -265,7 +265,7 @@ fun Mat.connectedComponentsWithStats(connectivity: Int = 8, ltype: Int = CvType.
     val rectComponents = Mat()
     val centComponents = Mat()
 
-    Imgproc.connectedComponentsWithStats(this, labeled, rectComponents, centComponents)
+    Imgproc.connectedComponentsWithStats(this, labeled, rectComponents, centComponents, connectivity, ltype)
     return ConnectedComponentsResult(labeled, rectComponents, centComponents)
 }
 

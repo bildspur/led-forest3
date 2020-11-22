@@ -449,7 +449,7 @@ class PrimaryView {
         initSettingsView(project.value.map, "Map")
     }
 
-    fun onShowAudioSettings(actionEvent: ActionEvent) {
+    fun onShowAudioSettings() {
         initSettingsView(project.value.audio, "Audio")
     }
 }

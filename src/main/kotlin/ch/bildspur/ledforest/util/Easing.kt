@@ -7,8 +7,8 @@ import processing.core.PConstants.PI
  */
 object Easing {
     // t = current time, b = start value, c = change in value, d = duration
-    fun easeInQuad(t: Float, b: Float, c: Float, d: Float): Float {
-        var t = t
+    fun easeInQuad(time: Float, b: Float, c: Float, d: Float): Float {
+        var t = time
         t /= d
         return c * t * t + b
     }
@@ -17,8 +17,8 @@ object Easing {
         return c * t / d + b
     }
 
-    fun easeOutQuad(t: Float, b: Float, c: Float, d: Float): Float {
-        var t = t
+    fun easeOutQuad(time: Float, b: Float, c: Float, d: Float): Float {
+        var t = time
         t /= d
         return -c * t * (t - 2) + b
     }

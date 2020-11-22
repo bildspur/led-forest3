@@ -87,7 +87,7 @@ class Universe(id: Int = 0) {
         // add trace
         normValue = Math.min(1f, normLast * trace + normValue)
 
-        return (normValue * MAX_LUMINANCE).toByte()
+        return (normValue * MAX_LUMINANCE).toInt().toByte()
     }
 
     /**

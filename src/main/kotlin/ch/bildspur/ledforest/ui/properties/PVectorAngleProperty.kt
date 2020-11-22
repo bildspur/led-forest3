@@ -17,6 +17,7 @@ class PVectorAngleProperty(field: Field, obj: Any, val annotation: PVectorAngleP
     private val maxAngle = 180.0
     private val initValue = 0.0
 
+    @Suppress("UNCHECKED_CAST")
     val model = field.get(obj) as DataModel<PVector>
     val xField = Slider(minAngle, maxAngle, initValue)
     val yField = Slider(minAngle, maxAngle, initValue)

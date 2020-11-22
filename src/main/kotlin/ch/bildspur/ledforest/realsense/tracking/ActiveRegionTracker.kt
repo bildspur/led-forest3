@@ -54,10 +54,10 @@ class ActiveRegionTracker {
 
         // match best region to point
         points.forEachIndexed { i, activePoint ->
-            val minDelta = distances[i].min() ?: Double.MAX_VALUE
+            val minDelta = distances[i].minOrNull() ?: Double.MAX_VALUE
 
             if (minDelta <= maxDelta) {
-                val regionIndex = distances[i].indexOf(minDelta)
+                val regionIndex = distances[i].indexOfFirst { it == minDelta }
                 regions[regionIndex].setCenter(activePoint)
                 regions[regionIndex].isDead = false
 

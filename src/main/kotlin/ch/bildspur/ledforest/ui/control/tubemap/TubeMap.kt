@@ -79,8 +79,8 @@ class TubeMap : Pane() {
         style = "-fx-background-color: #32CD32;"
 
         // setup resize
-        widthProperty().addListener { o -> resize() }
-        heightProperty().addListener { o -> resize() }
+        widthProperty().addListener { _ -> resize() }
+        heightProperty().addListener { _ -> resize() }
 
         // setup clipping
         clip = outputClip

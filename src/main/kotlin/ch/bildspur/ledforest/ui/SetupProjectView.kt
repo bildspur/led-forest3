@@ -4,7 +4,6 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.setup.SetupInformation
 import ch.bildspur.ledforest.setup.pattern.*
 import javafx.application.Platform
-import javafx.event.ActionEvent
 import javafx.scene.control.*
 import javafx.stage.Stage
 
@@ -113,11 +112,11 @@ class SetupProjectView {
         updateWindow()
     }
 
-    fun onCancelClicked(e: ActionEvent) {
+    fun onCancelClicked() {
         closeWindow()
     }
 
-    fun onCreateClicked(e: ActionEvent) {
+    fun onCreateClicked() {
         initNewProject = true
         closeWindow()
     }

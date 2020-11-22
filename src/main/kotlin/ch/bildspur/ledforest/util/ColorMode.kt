@@ -85,28 +85,28 @@ object ColorMode {
     }
 
     internal fun colorCalc(gray: Float, alpha: Float) {
-        var gray = gray
-        var alpha = alpha
-        if (gray > this.colorModeX) {
-            gray = this.colorModeX
+        var g = gray
+        var a = alpha
+        if (g > this.colorModeX) {
+            g = this.colorModeX
         }
 
-        if (alpha > this.colorModeA) {
-            alpha = this.colorModeA
+        if (a > this.colorModeA) {
+            a = this.colorModeA
         }
 
-        if (gray < 0.0f) {
-            gray = 0.0f
+        if (g < 0.0f) {
+            g = 0.0f
         }
 
-        if (alpha < 0.0f) {
-            alpha = 0.0f
+        if (a < 0.0f) {
+            a = 0.0f
         }
 
-        this.calcR = if (this.colorModeScale) gray / this.colorModeX else gray
+        this.calcR = if (this.colorModeScale) g / this.colorModeX else g
         this.calcG = this.calcR
         this.calcB = this.calcR
-        this.calcA = if (this.colorModeScale) alpha / this.colorModeA else alpha
+        this.calcA = if (this.colorModeScale) a / this.colorModeA else a
         this.calcRi = (this.calcR * 255.0f).toInt()
         this.calcGi = (this.calcG * 255.0f).toInt()
         this.calcBi = (this.calcB * 255.0f).toInt()

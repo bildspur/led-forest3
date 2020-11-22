@@ -39,7 +39,7 @@ class CubePattern : BaseClonePattern("Square with Cube") {
 
         // find free universe
         val node = project.nodes.first()
-        val universeId = node.universes.map { it.id.value }.max()!! + 1
+        val universeId = node.universes.map { it.id.value }.maxOrNull()!! + 1
 
         val universe1 = Universe(universeId)
         val universe2 = Universe(universeId + 1)
@@ -54,14 +54,14 @@ class CubePattern : BaseClonePattern("Square with Cube") {
         project.tubes.add(Tube().init(universe1.id.value, (tubeAddressSpace * tubeIndex++), bottomTag, -rc, rc, dc, 180f))
         project.tubes.add(Tube().init(universe1.id.value, (tubeAddressSpace * tubeIndex++), bottomTag, rc, rc, dc, 180f))
         project.tubes.add(Tube().init(universe1.id.value, (tubeAddressSpace * tubeIndex++), bottomTag, rc, -rc, dc, 180f))
-        project.tubes.add(Tube().init(universe1.id.value, (tubeAddressSpace * tubeIndex++), bottomTag, -rc, -rc, dc, 180f))
+        project.tubes.add(Tube().init(universe1.id.value, (tubeAddressSpace * tubeIndex), bottomTag, -rc, -rc, dc, 180f))
 
         // top
         tubeIndex = 0
         project.tubes.add(Tube().init(universe2.id.value, (tubeAddressSpace * tubeIndex++), topTag, -rc, rc, dc, 90f))
         project.tubes.add(Tube().init(universe2.id.value, (tubeAddressSpace * tubeIndex++), topTag, rc, rc, dc, 0f, -90f))
         project.tubes.add(Tube().init(universe2.id.value, (tubeAddressSpace * tubeIndex++), topTag, rc, -rc, dc, -90f))
-        project.tubes.add(Tube().init(universe2.id.value, (tubeAddressSpace * tubeIndex++), topTag, -rc, -rc, dc, 0f, 90f))
+        project.tubes.add(Tube().init(universe2.id.value, (tubeAddressSpace * tubeIndex), topTag, -rc, -rc, dc, 0f, 90f))
 
     }
 
