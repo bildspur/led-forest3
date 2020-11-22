@@ -24,8 +24,8 @@ class CubePattern : BaseClonePattern("Square with Cube") {
         val x = if (info.flipXY) index / tubeCountPerLine else index % tubeCountPerLine
         val y = if (info.flipXY) index % tubeCountPerLine else index / tubeCountPerLine
 
-        tube.position.value.x = (x * info.space) - ((tubeCountPerLine - 1) * info.space / 2f)
-        tube.position.value.y = (y * info.space) - ((tubeCountPerLine - 1) * info.space / 2f)
+        tube.position.value.x = (x * info.spaceWidth) - ((tubeCountPerLine - 1) * info.spaceWidth / 2f)
+        tube.position.value.y = (y * info.spaceWidth) - ((tubeCountPerLine - 1) * info.spaceWidth / 2f)
     }
 
     fun addCube(project: Project, info: SetupInformation) {

@@ -24,11 +24,12 @@ class SetupProjectView {
     lateinit var tubesPerUniverseCount: Spinner<Int>
     lateinit var isUniverseAutoFill: CheckBox
     lateinit var universesPerNode: Spinner<Int>
-    lateinit var space: Spinner<Double>
+    lateinit var spaceWidth: Spinner<Double>
+    lateinit var spaceHeight: Spinner<Double>
     lateinit var flipXY: CheckBox
     lateinit var clonePattern: ComboBox<ClonePattern>
 
-    private val clonePatterns = listOf(LinearPattern(), SquarePattern(), CircularPattern(), CubePattern())
+    private val clonePatterns = listOf(LinearPattern(), SquarePattern(), CircularPattern(), CubePattern(), StromPattern())
 
     data class PreCalculation(var ledCount: Int = 0, var tubeCount: Int = 0, var universeCount: Int = 0, var nodeCount: Int = 0)
 
@@ -78,8 +79,13 @@ class SetupProjectView {
             updateWindow()
         }
 
-        space.valueProperty().addListener { _, _, newValue ->
-            info.space = newValue.toFloat()
+        spaceWidth.valueProperty().addListener { _, _, newValue ->
+            info.spaceWidth = newValue.toFloat()
+            updateWindow()
+        }
+
+        spaceHeight.valueProperty().addListener { _, _, newValue ->
+            info.spaceHeight = newValue.toFloat()
             updateWindow()
         }
 
@@ -97,7 +103,8 @@ class SetupProjectView {
         isUniverseAutoFill.isSelected = info.isUniverseAutoFill
         universesPerNode.valueFactory.value = info.universesPerNode
         clonePattern.selectionModel.select(info.clonePattern)
-        space.valueFactory.value = info.space.toDouble()
+        spaceWidth.valueFactory.value = info.spaceWidth.toDouble()
+        spaceHeight.valueFactory.value = info.spaceHeight.toDouble()
         flipXY.isSelected = info.flipXY
 
         // set special unit values

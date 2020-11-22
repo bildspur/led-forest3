@@ -20,7 +20,7 @@ class CircularPattern : BaseClonePattern("Circular") {
         tube.position.value.rotate(PApplet.radians(angle.toFloat()))
 
         // translate
-        val position = ring * phi * info.space
+        val position = ring * phi * info.spaceWidth
         if (info.flipXY)
             tube.position.value.add(position.toFloat(), 0f)
         else

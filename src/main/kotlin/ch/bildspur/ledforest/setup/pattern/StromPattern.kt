@@ -3,7 +3,7 @@ package ch.bildspur.ledforest.setup.pattern
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.setup.SetupInformation
 
-class SquarePattern : BaseClonePattern("Square") {
+class StromPattern : BaseClonePattern("Strøm") {
 
     override fun setupPosition(index: Int, tube: Tube, info: SetupInformation) {
         val tubeCountPerLine = Math.floor(Math.sqrt(info.tubeCount.toDouble())).toInt()

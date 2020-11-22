@@ -277,6 +277,10 @@ class PrimaryView {
             project.value.autoNameLEDTubes()
             project.value = controller.project
 
+            // rescale map & auto-name rods
+            project.value.map.autoScaleMap()
+            project.value.autoNameLEDTubes()
+
             resetRenderer()
         }, { updateUI() }, "new project")
     }
