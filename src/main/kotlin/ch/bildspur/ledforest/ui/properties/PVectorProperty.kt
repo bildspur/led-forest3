@@ -3,8 +3,11 @@ package ch.bildspur.ledforest.ui.properties
 import ch.bildspur.ledforest.ui.control.RelationNumberField
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.fx.BaseFXFieldProperty
+import javafx.event.ActionEvent
+import javafx.scene.Cursor
 import javafx.scene.control.Label
 import javafx.scene.control.TextFormatter
+import javafx.scene.input.MouseButton
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import javafx.util.converter.FloatStringConverter
@@ -18,6 +21,8 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
     val yField = RelationNumberField<Float>(TextFormatter(FloatStringConverter()))
     val zField = RelationNumberField<Float>(TextFormatter(FloatStringConverter()))
 
+    var lastDraggedValue = 0.0
+
     val fields = mapOf(
             Pair("X", xField),
             Pair("Y", yField),
@@ -30,6 +35,27 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
         // setup fields
         fields.forEach {
             val label = Label("${it.key}:")
+            label.cursor = Cursor.H_RESIZE
+
+            label.setOnMouseDragged { event ->
+                var value = (lastDraggedValue - event.x) * -1.0
+                lastDraggedValue = event.x
+
+                // slow down
+                if(event.button == MouseButton.PRIMARY) {
+                    value /= 100.0
+                }
+
+                if(event.button == MouseButton.SECONDARY) {
+                    value /= 10.0
+                }
+
+                it.value.setValue(it.value.getValue() + value)
+                it.value.fireEvent(ActionEvent())
+            }
+            label.setOnMouseReleased {
+                lastDraggedValue = 0.0
+            }
 
             it.value.prefWidth = RelationNumberField.PREFERRED_WIDTH - 20.0
             it.value.isShowRange = false
