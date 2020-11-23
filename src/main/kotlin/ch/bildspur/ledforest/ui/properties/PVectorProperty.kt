@@ -16,6 +16,7 @@ import java.lang.reflect.Field
 
 class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) : BaseFXFieldProperty(field, obj) {
 
+    @Suppress("UNCHECKED_CAST")
     val model = field.get(obj) as DataModel<PVector>
     val xField = RelationNumberField<Float>(TextFormatter(FloatStringConverter()))
     val yField = RelationNumberField<Float>(TextFormatter(FloatStringConverter()))
