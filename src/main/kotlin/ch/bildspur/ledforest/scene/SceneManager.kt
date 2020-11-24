@@ -11,6 +11,7 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
     val starScene = StarPatternScene(project, tubes)
     val leapMotionScene = LeapMotionScene(project, tubes, sketch.leapMotion)
     val realSenseScene = RealSenseScene(project, tubes, sketch.realSense)
+    val poseScene = PoseScene(project, tubes, sketch.pose)
     val blackScene = BlackScene(project, tubes)
     val strobeScene = StrobeScene(project, tubes)
 
@@ -42,9 +43,16 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
                 && project.interaction.isRealSenseInteractionEnabled.value)
             initScene(realSenseScene)
 
+        if (activeScene != poseScene
+                && poseScene.isInteracting
+                && project.isSceneManagerEnabled.value
+                && project.interaction.isPoseInteractionEnabled.value)
+            initScene(poseScene)
+
         if (activeScene != starScene
                 && !leapMotionScene.isInteracting
                 && !realSenseScene.isInteracting
+                && !poseScene.isInteracting
                 && project.isSceneManagerEnabled.value)
             initScene(starScene)
 
@@ -72,6 +80,7 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
         blackScene.dispose()
         strobeScene.dispose()
         realSenseScene.dispose()
+        poseScene.dispose()
     }
 
     internal fun initScene(scene: BaseScene) {

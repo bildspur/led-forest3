@@ -1,10 +1,8 @@
 package ch.bildspur.ledforest.model.interaction
 
 import ch.bildspur.model.DataModel
-import ch.bildspur.ui.properties.BooleanParameter
-import ch.bildspur.ui.properties.NumberParameter
-import ch.bildspur.ui.properties.SliderParameter
-import ch.bildspur.ui.properties.StringParameter
+import ch.bildspur.model.NumberRange
+import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 
 class PoseInteraction {
@@ -28,6 +26,8 @@ class PoseInteraction {
     @NumberParameter("Port")
     var port = DataModel(7400)
 
+    @LabelParameter("Tracking")
+
     @Expose
     @SliderParameter("Min Score", 0.0, 5.0, 0.1, snap = true)
     var minScore = DataModel(2.0f)
@@ -44,6 +44,8 @@ class PoseInteraction {
     @SliderParameter("Max Delta", 1.0, 100.0, 1.0, snap = true)
     var maxDelta = DataModel(50f)
 
+    @LabelParameter("Interaction")
+
     // orientation
     @Expose
     @BooleanParameter("Flip X")
@@ -56,4 +58,16 @@ class PoseInteraction {
     @Expose
     @BooleanParameter("Flip Z")
     var flipZ = DataModel(false)
+
+    @Expose
+    @SliderParameter("Interaction Distance", 0.1, 50.0, 0.1, snap = true)
+    var interactionDistance = DataModel(5.0f)
+
+    @Expose
+    @BooleanParameter("Map Depth to Hue")
+    var mapDepthToColor = DataModel(true)
+
+    @Expose
+    @RangeSliderParameter("Hue Spectrum", 0.0, 360.0, 1.0, snap = true, roundInt = true)
+    var hueSpectrum = DataModel(NumberRange(180.0, 360.0))
 }

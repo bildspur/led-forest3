@@ -29,7 +29,7 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
     val poseCount: Int
         get() = simpleTracker.entities.size
 
-    var poseBuffer = emptyList<Pose>()
+    private var poseBuffer = emptyList<Pose>()
 
     var lastReceiveTimeStamp = 0L
 
