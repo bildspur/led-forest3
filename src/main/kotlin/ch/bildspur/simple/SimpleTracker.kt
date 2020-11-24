@@ -23,6 +23,7 @@ class SimpleTracker<T>(inline val position: (item: T) -> Float2, var maxDelta: F
                 d.matched = true
                 s.matched = true
                 d.position = position(s.item)
+                d.item = s.item
             }
         )
 

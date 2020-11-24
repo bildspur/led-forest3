@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.pose
 
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.util.toFloat2
 import ch.bildspur.model.DataModel
 import ch.bildspur.simple.SimpleTracker
@@ -23,16 +24,14 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
             maxDelta = project.value.poseInteraction.maxDelta.value)
 
     val poses: List<Pose>
-        get() = simpleTracker.entities.map {
-            // set specific tracking id
-            it.item.id = it.trackingId
-            it.item
-        }.toList()
+        get() = simpleTracker.entities.map { it.item }.toList()
 
     val poseCount: Int
         get() = simpleTracker.entities.size
 
     var poseBuffer = emptyList<Pose>()
+
+    var lastReceiveTimeStamp = 0L
 
     fun start() {
         if (isRunning.get()) return
@@ -42,6 +41,7 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
         client = PoseClient(project.value.poseInteraction.port.value)
         client.onPosesReceived += { rawPoses ->
             poseBuffer = rawPoses
+            lastReceiveTimeStamp = System.currentTimeMillis()
         }
 
         trackerThread = thread(start = true) {
@@ -54,10 +54,21 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 simpleTracker.maxDelta = project.value.poseInteraction.maxDelta.value
                 simpleTracker.track(validPoses)
 
+                // update id's
+                simpleTracker.entities.forEach {
+                    it.item.id = it.trackingId
+                }
+
                 // update ui
                 project.value.poseInteraction.poseCount.value = "${simpleTracker.entities.size}"
 
-                Thread.sleep(project.value.poseInteraction.trackingFPS.value)
+                // reset buffer if nothing received
+                if(System.currentTimeMillis() - lastReceiveTimeStamp >= project.value.poseInteraction.maxReceiveTimeout.value) {
+                    poseBuffer = emptyList()
+                    lastReceiveTimeStamp = System.currentTimeMillis()
+                }
+
+                Thread.sleep(1000 / project.value.poseInteraction.trackingFPS.value)
             }
         }
     }
@@ -79,24 +90,30 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
         g.background(0f, 100f)
 
         // render tracked poses
-        val psTracked = emptyList<Pose>()
-        for (pose in psTracked) {
-            g.noStroke()
-            g.fill(360.0f * (pose.id % 10) / 10.0f, 80f, 100f)
-            pose.keypoints.forEach {
-                g.circle(it.x * g.width, it.y * g.height, 20f)
+        if(project.value.poseInteraction.showTrackedPoses.value) {
+            val psTracked = poses
+            for (pose in psTracked) {
+                g.noStroke()
+                g.fill(360.0f * (pose.id % 10) / 10.0f, 80f, 100f)
+                pose.keypoints.forEach {
+                    g.circle(it.x * g.width, it.y * g.height, 20f)
+                }
+
+                g.fill(255)
+                g.textSize(20f)
+                g.text("#${pose.id} | ${pose.score.format(2)}", pose.neck.x * g.width + 10, pose.neck.y * g.height + 10)
             }
-
-
         }
 
-        // render detected poses
-        val validPoses = poseBuffer.filter { it.score >= project.value.poseInteraction.minScore.value }
-        for (pose in validPoses) {
-            g.noFill()
-            g.stroke(360.0f * pose.id / validPoses.size, 80f, 100f)
-            pose.keypoints.forEach {
-                g.circle(it.x * g.width, it.y * g.height, 25f)
+        // render raw poses
+        if(project.value.poseInteraction.showRawPoses.value) {
+            val validPoses = poseBuffer.filter { it.score >= project.value.poseInteraction.minScore.value }
+            for (pose in validPoses) {
+                g.noFill()
+                g.stroke(360.0f * pose.id / validPoses.size, 80f, 100f)
+                pose.keypoints.forEach {
+                    g.circle(it.x * g.width, it.y * g.height, 25f)
+                }
             }
         }
     }

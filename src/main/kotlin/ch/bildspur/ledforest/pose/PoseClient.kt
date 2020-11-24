@@ -13,7 +13,6 @@ class PoseClient(port: Int) : OSCPacketListener {
         val KEY_POINT_COUNT = 18
     }
 
-    //val poses: MutableList<Pose> = CopyOnWriteArrayList()
     val onPosesReceived = Event<MutableList<Pose>>()
 
     val socketAddress = InetSocketAddress("0.0.0.0", port)
