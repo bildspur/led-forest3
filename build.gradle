@@ -51,6 +51,9 @@ dependencies {
     // artnet
     compile 'ch.bildspur:artnet4j:0.6.2'
 
+    // illposed osc
+    compile group: 'com.illposed.osc', name: 'javaosc-core', version: '0.7'
+
     // javafx
     compile group: 'org.controlsfx', name: 'controlsfx', version: '11.0.0'
 

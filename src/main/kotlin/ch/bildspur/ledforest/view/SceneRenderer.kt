@@ -73,7 +73,7 @@ class SceneRenderer(val g: PGraphics,
         }
 
         // render poses
-        if (poseProvider.isRunning && project.interaction.isPoseInteractionEnabled.value) {
+        if (poseProvider.isRunning.get() && project.interaction.isPoseInteractionEnabled.value) {
             poseProvider.poses.forEach { renderPose(it) }
         }
 

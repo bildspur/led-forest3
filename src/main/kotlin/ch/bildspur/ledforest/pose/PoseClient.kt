@@ -1,66 +1,62 @@
 package ch.bildspur.ledforest.pose
 
 import ch.bildspur.event.Event
-import oscP5.OscMessage
-
-import oscP5.OscP5
-
+import com.illposed.osc.*
+import com.illposed.osc.transport.udp.OSCPortIn
+import com.illposed.osc.transport.udp.OSCPortInBuilder
+import java.net.InetSocketAddress
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.atomic.AtomicInteger
 
-class PoseClient(port: Int) {
+class PoseClient(port: Int) : OSCPacketListener {
     companion object {
         @JvmStatic
         val KEY_POINT_COUNT = 18
     }
 
-    val osc: OscP5
-    val poses: MutableList<Pose>
-
+    //val poses: MutableList<Pose> = CopyOnWriteArrayList()
     val onPosesReceived = Event<MutableList<Pose>>()
 
-    private var updatedPoses = AtomicInteger(0)
+    val socketAddress = InetSocketAddress("0.0.0.0", port)
+
+    val server: OSCPortIn = OSCPortInBuilder()
+            .setSocketAddress(socketAddress)
+            .addPacketListener(this)
+            .build()
 
     init {
-        poses = CopyOnWriteArrayList()
-        osc = OscP5(this, port)
+        server.startListening()
     }
 
-    fun oscEvent(msg: OscMessage) {
-        if (msg.checkAddrPattern("/poses")) {
-            preparePoses(msg)
+    override fun handlePacket(event: OSCPacketEvent?) {
+        if(event == null) return
+        val bundle = event.packet as OSCBundle
+        val messages = bundle.packets.filterNotNull().map { it as OSCMessage }
+
+        val headerMessage = messages.first()
+
+        if(headerMessage.address != "/poses")
             return
-        }
-        if (msg.checkAddrPattern("/pose")) {
-            updatePose(msg)
-            if(updatedPoses.incrementAndGet() >= poses.size) {
-                updatedPoses.set(0)
-                onPosesReceived(poses)
+
+        val poseMessages = messages.drop(1)
+        val poses = MutableList(poseMessages.size) { Pose() }
+        poseMessages.forEachIndexed { poseIndex, msg ->
+            val pose = poses[poseIndex]
+            pose.id = -1 // really necessary?
+            pose.score = msg.arguments[1] as Float
+
+            for (kp in 0 until KEY_POINT_COUNT) {
+                val index = 2 + kp * 2
+                pose.keypoints[kp].x = msg.arguments[index] as Float
+                pose.keypoints[kp].y = msg.arguments[index + 1] as Float
             }
-            return
         }
+
+        //this.poses = poses
+        onPosesReceived(poses)
     }
 
-    private fun preparePoses(msg: OscMessage) {
-        val poseCount = msg[0].intValue()
-        if (poseCount == poses.size) return
-        poses.clear()
-        for (i in 0 until poseCount) {
-            poses.add(Pose())
-        }
-        updatedPoses.set(0)
+    override fun handleBadData(event: OSCBadDataEvent?) {
+        println("bad osc data received!")
     }
 
-    private fun updatePose(msg: OscMessage) {
-        val id = msg[0].intValue()
-        val score = msg[1].floatValue()
-        val pose = poses[id]
-        pose.id = id
-        pose.score = score
-        for (i in 0 until KEY_POINT_COUNT) {
-            val index = 2 + i * 2
-            pose.keypoints[i].x = msg[index].floatValue()
-            pose.keypoints[i].y = msg[index + 1].floatValue()
-        }
-    }
 }

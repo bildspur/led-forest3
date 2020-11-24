@@ -21,12 +21,16 @@ class PoseInteraction {
     var port = DataModel(7400)
 
     @Expose
-    @SliderParameter("Max Delta", 1.0, 100.0, 1.0, snap = true)
-    var maxDelta = DataModel(50f)
-
-    @Expose
     @SliderParameter("Min Score", 0.0, 5.0, 0.1, snap = true)
     var minScore = DataModel(2.0f)
+
+    @Expose
+    @NumberParameter("Tracking FPS")
+    var trackingFPS = DataModel(30L)
+
+    @Expose
+    @SliderParameter("Max Delta", 1.0, 100.0, 1.0, snap = true)
+    var maxDelta = DataModel(50f)
 
     // orientation
     @Expose
