@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.pose
 
+import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.util.toFloat2
 import ch.bildspur.model.DataModel
@@ -60,11 +61,26 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
             return
 
         g.background(0f, 100f)
-        for (pose in poses) {
-            g.fill(360.0f * (pose.id.toFloat() / client.poses.size), 80f, 100f)
+
+        // render tracked poses
+        val psTracked = poses
+        for (pose in psTracked) {
+            g.noStroke()
+            g.fill(360.0f * (pose.id % 10) / 10.0f, 80f, 100f)
             pose.keypoints.forEach {
-                g.noStroke()
                 g.circle(it.x * g.width, it.y * g.height, 20f)
+            }
+
+
+        }
+
+        // render detected poses
+        val psDetected = poses.filter { it.score > project.value.poseInteraction.minScore.value }
+        for (pose in psDetected) {
+            g.noFill()
+            g.stroke(360.0f * pose.id / psDetected.size, 80f, 100f)
+            pose.keypoints.forEach {
+                g.circle(it.x * g.width, it.y * g.height, 25f)
             }
         }
     }
