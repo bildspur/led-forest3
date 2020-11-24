@@ -34,8 +34,8 @@ class PoseClient(port: Int) {
         if (msg.checkAddrPattern("/pose")) {
             updatePose(msg)
             if(updatedPoses.incrementAndGet() >= poses.size) {
-                onPosesReceived(poses)
                 updatedPoses.set(0)
+                onPosesReceived(poses)
             }
             return
         }

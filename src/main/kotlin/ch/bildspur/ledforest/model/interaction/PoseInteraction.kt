@@ -13,6 +13,10 @@ class PoseInteraction {
     var poseCount = DataModel("-")
 
     @Expose
+    @BooleanParameter("Debug")
+    var isDebug = DataModel(false)
+
+    @Expose
     @NumberParameter("Port")
     var port = DataModel(7400)
 
@@ -21,8 +25,8 @@ class PoseInteraction {
     var maxDelta = DataModel(50f)
 
     @Expose
-    @SliderParameter("Min Score", 0.0, 1.0, 0.05, snap = true)
-    var minScore = DataModel(0.5f)
+    @SliderParameter("Min Score", 0.0, 5.0, 0.1, snap = true)
+    var minScore = DataModel(2.0f)
 
     // orientation
     @Expose

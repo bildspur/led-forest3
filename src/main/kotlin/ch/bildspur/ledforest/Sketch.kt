@@ -242,8 +242,13 @@ class Sketch : PApplet() {
 
     fun showDebugInformation() {
         // render realsense information
-        if (project.value.realSenseInteraction.isDebug.value)
-            Sketch.instance.realSense.renderDebug(g)
+        if (project.value.realSenseInteraction.isDebug.value) {
+            realSense.renderDebug(g)
+        }
+
+        if(project.value.poseInteraction.isDebug.value) {
+            pose.renderDebug(g)
+        }
     }
 
     fun onProjectChanged() {

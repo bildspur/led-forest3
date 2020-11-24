@@ -159,7 +159,7 @@ class SceneRenderer(val g: PGraphics,
 
     private fun renderPose(pose : Pose) {
         g.pushMatrix()
-        g.translate(pose.position.x, pose.position.y, 0.5f)
+        g.translate(pose.position.x * 5f, 0.0f, (1.0f - pose.position.y) * 2f)
         g.noFill()
         g.sphereDetail(8)
         g.stroke(ColorMode.color(360.0f * (pose.id % 10) / 10.0f, 80f, 100f))
