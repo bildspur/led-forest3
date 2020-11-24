@@ -9,6 +9,7 @@ import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.leap.LeapDataProvider
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.realsense.RealSenseDataProvider
 import ch.bildspur.ledforest.scene.SceneManager
 import ch.bildspur.ledforest.util.LogBook
@@ -106,6 +107,8 @@ class Sketch : PApplet() {
 
     val realSense = RealSenseDataProvider(this, this.project)
 
+    val pose = PoseDataProvider(this, this.project)
+
     val artnet = ArtNetClient()
 
     lateinit var canvas: PGraphics
@@ -167,6 +170,14 @@ class Sketch : PApplet() {
                 realSense.stop()
         }
         project.value.interaction.isRealSenseInteractionEnabled.fireLatest()
+
+        project.value.interaction.isPoseInteractionEnabled.onChanged += {
+            if(it)
+                pose.start()
+            else
+                pose.stop()
+        }
+        project.value.interaction.isPoseInteractionEnabled.fireLatest()
 
         spaceInformation.setup()
 
