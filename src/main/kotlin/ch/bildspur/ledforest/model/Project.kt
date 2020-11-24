@@ -3,6 +3,7 @@ package ch.bildspur.ledforest.model
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.interaction.Interaction
 import ch.bildspur.ledforest.model.interaction.LeapInteraction
+import ch.bildspur.ledforest.model.interaction.PoseInteraction
 import ch.bildspur.ledforest.model.interaction.RealSenseInteraction
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
@@ -50,6 +51,9 @@ class Project {
 
     @Expose
     var realSenseInteraction = RealSenseInteraction()
+
+    @Expose
+    var poseInteraction = PoseInteraction()
 
     @Expose
     var visualisation = Visualisation()

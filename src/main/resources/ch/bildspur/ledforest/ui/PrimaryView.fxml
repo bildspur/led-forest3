@@ -41,6 +41,9 @@
                         <MenuItem id="realsenseMenuItem" mnemonicParsing="false"
                                   onAction="#onShowRealSenseInteractionSettings"
                                   text="RealSense"/>
+                        <MenuItem id="poseMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowPoseInteractionSettings"
+                                  text="Pose"/>
                     </items>
                 </Menu>
                 <Menu disable="true" mnemonicParsing="false" text="|"/>

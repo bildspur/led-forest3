@@ -410,6 +410,10 @@ class PrimaryView {
         initSettingsView(project.value.realSenseInteraction, "RealSense")
     }
 
+    fun onShowPoseInteractionSettings() {
+        initSettingsView(project.value.poseInteraction, "Pose")
+    }
+
     fun onShowProjectSettings() {
         initSettingsView(project.value, "Project")
     }

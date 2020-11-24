@@ -22,6 +22,10 @@ class Interaction {
     var isRealSenseInteractionEnabled = DataModel(false)
 
     @Expose
+    @BooleanParameter("Pose Interaction Enabled")
+    var isPoseInteractionEnabled = DataModel(false)
+
+    @Expose
     @PVectorParameter("Interaction Box")
     var interactionBox = DataModel(PVector(15f, 15f, 10f))
 
