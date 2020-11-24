@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.util
 
+import ch.bildspur.math.Float2
 import processing.core.*
 import processing.core.PConstants.QUAD_STRIP
 import java.util.*
@@ -20,6 +21,10 @@ fun Float.limit(min: Float, max: Float): Float {
 
 fun Boolean.toFloat(): Float {
     return if (this) 1f else 0f
+}
+
+fun PVector.toFloat2() : Float2 {
+    return Float2(this.x, this.y)
 }
 
 /**

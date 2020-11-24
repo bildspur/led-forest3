@@ -6,6 +6,7 @@ import oscP5.OscMessage
 import oscP5.OscP5
 
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.atomic.AtomicInteger
 
 class PoseClient(port: Int) {
     companion object {
@@ -17,6 +18,8 @@ class PoseClient(port: Int) {
     val poses: MutableList<Pose>
 
     val onPosesReceived = Event<MutableList<Pose>>()
+
+    private var updatedPoses = AtomicInteger(0)
 
     init {
         poses = CopyOnWriteArrayList()
@@ -30,6 +33,10 @@ class PoseClient(port: Int) {
         }
         if (msg.checkAddrPattern("/pose")) {
             updatePose(msg)
+            if(updatedPoses.incrementAndGet() >= poses.size) {
+                onPosesReceived(poses)
+                updatedPoses.set(0)
+            }
             return
         }
     }
@@ -41,6 +48,7 @@ class PoseClient(port: Int) {
         for (i in 0 until poseCount) {
             poses.add(Pose())
         }
+        updatedPoses.set(0)
     }
 
     private fun updatePose(msg: OscMessage) {

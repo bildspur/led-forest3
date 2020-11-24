@@ -287,7 +287,7 @@ class Sketch : PApplet() {
         renderer.clear()
 
         // add renderer
-        renderer.add(SceneRenderer(canvas, project.value.tubes, leapMotion, realSense, project.value))
+        renderer.add(SceneRenderer(canvas, project.value.tubes, leapMotion, realSense, pose, project.value))
         renderer.add(ArtNetRenderer(project.value, artnet, project.value.nodes, project.value.tubes))
         renderer.add(SceneManager(this, project.value, project.value.tubes))
 

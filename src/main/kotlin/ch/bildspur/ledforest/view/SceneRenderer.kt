@@ -5,6 +5,8 @@ import ch.bildspur.ledforest.leap.InteractionHand
 import ch.bildspur.ledforest.leap.LeapDataProvider
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.pose.Pose
+import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.realsense.RealSenseDataProvider
 import ch.bildspur.ledforest.realsense.tracking.ActiveRegion
 import ch.bildspur.ledforest.util.*
@@ -16,6 +18,7 @@ class SceneRenderer(val g: PGraphics,
                     val tubes: List<Tube>,
                     val leap: LeapDataProvider,
                     val realSense: RealSenseDataProvider,
+                    val poseProvider: PoseDataProvider,
                     val project: Project) : IRenderer {
     private val task = TimerTask(0, { render() }, "SceneRenderer")
     override val timerTask: TimerTask
@@ -67,6 +70,11 @@ class SceneRenderer(val g: PGraphics,
         // render active regions
         if (realSense.isRunning && project.interaction.isRealSenseInteractionEnabled.value) {
             realSense.activeRegions.forEach { renderActiveRegion(it) }
+        }
+
+        // render poses
+        if (poseProvider.isRunning && project.interaction.isPoseInteractionEnabled.value) {
+            poseProvider.poses.forEach { renderPose(it) }
         }
 
         // render leapInteraction box
@@ -146,6 +154,16 @@ class SceneRenderer(val g: PGraphics,
         g.strokeWeight(0.05f)
         g.sphereDetail(PApplet.map(hand.grabStrength.value, 0f, 1f, 5f, 20f).toInt())
         g.sphere(0.5f)
+        g.popMatrix()
+    }
+
+    private fun renderPose(pose : Pose) {
+        g.pushMatrix()
+        g.translate(pose.position.x, pose.position.y, 0.5f)
+        g.noFill()
+        g.sphereDetail(8)
+        g.stroke(ColorMode.color(360.0f * (pose.id % 10) / 10.0f, 80f, 100f))
+        g.sphere(0.2f)
         g.popMatrix()
     }
 
