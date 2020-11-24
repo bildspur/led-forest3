@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.pose
 
+import ch.bildspur.event.Event
 import oscP5.OscMessage
 
 import oscP5.OscP5
@@ -14,6 +15,8 @@ class PoseClient(port: Int) {
 
     val osc: OscP5
     val poses: MutableList<Pose>
+
+    val onPosesReceived = Event<MutableList<Pose>>()
 
     init {
         poses = CopyOnWriteArrayList()
