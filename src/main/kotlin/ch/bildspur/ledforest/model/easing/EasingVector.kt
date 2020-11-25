@@ -8,4 +8,10 @@ class EasingVector(var easing: Float = 0.1f) : PVector(), EasingObject {
     override fun update() {
         add(PVector.sub(target, this).mult(easing))
     }
+
+    fun init(v : PVector, easing : Float = 0.1f) {
+        this.set(v)
+        this.target.set(v)
+        this.easing = easing
+    }
 }

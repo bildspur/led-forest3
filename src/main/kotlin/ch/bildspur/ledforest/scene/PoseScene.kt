@@ -61,7 +61,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 
         for (pose in poses) {
             // get distance to led
-            val posePosition = pose.position.mapPose()
+            val posePosition = pose.easedPosition.mapPose()
             val distance = posePosition.dist(ledPosition)
 
             // check if is relevant for interaction

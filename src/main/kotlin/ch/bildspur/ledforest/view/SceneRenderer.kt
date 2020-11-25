@@ -159,7 +159,7 @@ class SceneRenderer(val g: PGraphics,
     }
 
     private fun renderPose(pose: Pose) {
-        val position = pose.position.mapPose()
+        val position = pose.easedPosition.mapPose()
         g.pushMatrix()
         g.translate(position.x, position.y, position.z)
         g.noFill()
