@@ -44,6 +44,10 @@ class PoseInteraction {
     @SliderParameter("Max Delta", 1.0, 100.0, 1.0, snap = true)
     var maxDelta = DataModel(50f)
 
+    @Expose
+    @SliderParameter("Position Easing", 0.01, 1.0, 0.01, snap = true)
+    var positionEasing = DataModel(0.2f)
+
     @LabelParameter("Interaction")
 
     // orientation

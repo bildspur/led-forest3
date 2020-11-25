@@ -29,7 +29,7 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
             },
             onAdd = {
                 // set initial easing position
-                it.item.easedPosition.init(it.item.position)
+                it.item.easedPosition.init(it.item.position, project.value.poseInteraction.positionEasing.value)
             },
             maxDelta = project.value.poseInteraction.maxDelta.value)
 
@@ -70,6 +70,7 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
 
                     // update easing
                     it.item.easedPosition.target.set(it.item.position)
+                    it.item.easedPosition.easing = project.value.poseInteraction.positionEasing.value
                     it.item.easedPosition.update()
                 }
 
