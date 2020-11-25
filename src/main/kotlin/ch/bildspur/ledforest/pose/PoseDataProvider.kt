@@ -31,7 +31,8 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 // set initial easing position
                 it.item.easedPosition.init(it.item.position, project.value.poseInteraction.positionEasing.value)
             },
-            maxDelta = project.value.poseInteraction.maxDelta.value)
+            maxDelta = project.value.poseInteraction.maxDelta.value,
+            maxDeadTime = project.value.poseInteraction.maxDeadTime.value)
 
     val poses: List<Pose>
         get() = simpleTracker.entities.map { it.item }.toList()
@@ -42,6 +43,12 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
     private var poseBuffer = emptyList<Pose>()
 
     var lastReceiveTimeStamp = 0L
+
+    init {
+        project.value.poseInteraction.maxDeadTime.onChanged += {
+            simpleTracker.maxDeadTime = it
+        }
+    }
 
     fun start() {
         if (isRunning.get()) return

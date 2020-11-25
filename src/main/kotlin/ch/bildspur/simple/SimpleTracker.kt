@@ -10,11 +10,13 @@ import java.util.concurrent.atomic.AtomicInteger
 class SimpleTracker<T>(inline val position: (item: T) -> Float2,
                        inline val onUpdate: (entity : TrackedEntity<T>, item: T) -> Unit = { e, i -> e.item = i },
                        inline val onAdd: (entity : TrackedEntity<T>) -> Unit = {},
-                       var maxDelta: Float = 10.0f) : Tracker<T> {
+                       var maxDelta: Float = 10.0f,
+                       var maxDeadTime : Long = 100) : Tracker<T> {
     private val trackingIdCounter = AtomicInteger(0)
     override val entities = mutableListOf<TrackedEntity<T>>()
 
     override fun track(detections: List<T>) {
+        val millis = System.currentTimeMillis()
         val detectedEntities = detections.map { PossibleEntity(it) }
         entities.forEach { it.matched = false }
 
@@ -26,12 +28,13 @@ class SimpleTracker<T>(inline val position: (item: T) -> Float2,
                 d.matched = true
                 s.matched = true
                 d.position = position(s.item)
+                d.lastMatchTimeStamp = millis
                 onUpdate(d, s.item)
             }
         )
 
         // clean up entities
-        entities.removeAll { !it.matched }
+        entities.removeAll { !it.matched && millis - it.lastMatchTimeStamp > maxDeadTime }
         entities.forEach { it.lifeTime++ }
         detectedEntities.filter { !it.matched }.forEach {
             val entity = TrackedEntity(it.item, position(it.item), trackingId = trackingIdCounter.getAndIncrement())
