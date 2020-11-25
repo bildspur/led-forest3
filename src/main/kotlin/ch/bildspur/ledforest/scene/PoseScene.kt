@@ -67,6 +67,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
             if (distance > config.interactionDistance.value) continue
 
             // todo: add mapping for values (more easing curves)
+            hue += 100f
             saturation += 80f
             brightness += 100f
 
@@ -84,8 +85,10 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 }
 
 fun PVector.mapPose(): PVector {
+    // todo: add flipping
+    // todo: think about how to set y (2d height)
     val box = Sketch.instance.project.value.interaction.interactionBox.value
     return PVector((this.x * 2.0f - 1.0f) * box.x / 2f,
-            (this.z * 2.0f - 1.0f) * box.y / 2f,
+            0.5f, //(this.z * 2.0f - 1.0f) * box.y / 2f,
             ((1.0f - this.y) * 2.0f - 1.0f) * box.z / 2f)
 }
