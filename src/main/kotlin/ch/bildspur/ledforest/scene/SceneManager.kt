@@ -30,6 +30,8 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
     }
 
     override fun render() {
+        // todo: clean up this mess!
+
         // check if hand is detected
         if (activeScene != leapMotionScene
                 && leapMotionScene.isInteracting
