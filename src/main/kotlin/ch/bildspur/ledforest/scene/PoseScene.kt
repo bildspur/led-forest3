@@ -9,6 +9,7 @@ import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
 import processing.core.PVector
+import java.lang.Integer.max
 
 class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataProvider)
     : BaseInteractionScene("Pose Scene", project, tubes) {
@@ -75,20 +76,25 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         }
 
         // prevent zero bug
-        if (relevantPoseCount == 0)
-            relevantPoseCount = 1
+        val divider = max(relevantPoseCount, 1)
 
         led.color.fadeH(hue, 0.1f)
-        led.color.fadeS(saturation / relevantPoseCount, 0.1f)
-        led.color.fadeB(brightness / relevantPoseCount, 0.1f)
+        led.color.fadeS(saturation / divider, 0.1f)
+        led.color.fadeB(brightness / divider, 0.1f)
     }
 }
 
 fun PVector.mapPose(): PVector {
-    // todo: add flipping
-    // todo: think about how to set y (2d height)
     val box = Sketch.instance.project.value.interaction.interactionBox.value
-    return PVector((this.x * 2.0f - 1.0f) * box.x / 2f,
-            0.5f, //(this.z * 2.0f - 1.0f) * box.y / 2f,
-            ((1.0f - this.y) * 2.0f - 1.0f) * box.z / 2f)
+    val config = Sketch.instance.project.value.poseInteraction
+
+    val v = PVector(if (config.flipX.value) 1f - this.x else this.x,
+            if (config.flipY.value) 1f - this.y else this.y,
+            if (config.flipZ.value) 1f - this.z else this.z)
+
+    // todo: think about how to set y (2d height)
+    return PVector((v.x * 2.0f - 1.0f) * box.x / 2f,
+            0.5f, //(v.z * 2.0f - 1.0f) * box.y / 2f,
+            // height: maybe not use -1 scaling cause of bounding box
+            (1.0f - v.y) * box.z / 2f)
 }

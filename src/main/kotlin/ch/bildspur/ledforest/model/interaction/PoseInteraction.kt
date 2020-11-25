@@ -60,8 +60,8 @@ class PoseInteraction {
     var flipZ = DataModel(false)
 
     @Expose
-    @SliderParameter("Interaction Distance", 0.1, 50.0, 0.1, snap = true)
-    var interactionDistance = DataModel(5.0f)
+    @SliderParameter("Interaction Distance", 0.01, 5.0, 0.01, snap = true)
+    var interactionDistance = DataModel(1.0f)
 
     @Expose
     @BooleanParameter("Map Depth to Hue")
