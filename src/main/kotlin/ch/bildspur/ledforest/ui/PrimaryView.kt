@@ -422,6 +422,10 @@ class PrimaryView {
         initSettingsView(project.value.light, "Art-Net")
     }
 
+    fun onShowstarPatternSettings() {
+        initSettingsView(project.value.starPattern, "Star Pattern")
+    }
+
     fun onClose() {
         sketch.exit()
         exitProcess(0)

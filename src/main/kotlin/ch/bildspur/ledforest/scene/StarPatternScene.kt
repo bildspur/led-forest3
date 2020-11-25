@@ -7,13 +7,10 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
+import kotlin.math.absoluteValue
 
 
 class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPattern Scene", project, tubes) {
-    private var randomOnFactor = 0.95f
-    private var randomOffFactor = 0.8f
-    private var fadeSpeed = 0.01f
-
     private val task = TimerTask(500, { update() })
 
     override val timerTask: TimerTask
@@ -22,11 +19,30 @@ class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPat
     var iaTubes = emptyList<Tube>()
     var cubeTubes = emptyList<Tube>()
 
+    init {
+        // allow on the fly change!
+        project.starPattern.color.onChanged += {
+            if(project.starPattern.overwriteColor.value) {
+                tubes.forEachLED {
+                    val hsv = project.starPattern.color.value.toHSV()
+                    it.color.fadeH(hsv.h.toFloat(), 0.05f)
+                    it.color.fadeS(hsv.s.toFloat(), 0.05f)
+                }
+            }
+        }
+    }
+
     override fun setup() {
         iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction }.toList()
         cubeTubes = tubes.filter { it.tag.value == TubeTag.CubeBottom || it.tag.value == TubeTag.CubeTop }.toList()
 
         tubes.forEachLED {
+            if(project.starPattern.overwriteColor.value) {
+                val hsv = project.starPattern.color.value.toHSV()
+                it.color.fadeH(hsv.h.toFloat(), 0.05f)
+                it.color.fadeS(hsv.s.toFloat(), 0.05f)
+            }
+
             it.color.fadeB(0f, 0.05f)
         }
 
@@ -41,18 +57,20 @@ class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPat
     }
 
     override fun update() {
+        val config = project.starPattern
+
         iaTubes.forEachLED {
             val ledBrightness = ColorMode.brightness(it.color.color)
 
             if (ledBrightness > 10) {
                 //led is ON
-                if (Sketch.instance.random(0f, 1f) > randomOffFactor) {
-                    it.color.fadeB(0f, fadeSpeed)
+                if (Sketch.instance.random(0f, 1f) > config.randomOffFactor.value) {
+                    it.color.fadeB(0f, config.fadeSpeed.value)
                 }
             } else {
                 //led is OFF
-                if (Sketch.instance.random(0f, 1f) > randomOnFactor) {
-                    it.color.fadeB(Sketch.instance.random(50f, 100f), fadeSpeed)
+                if (Sketch.instance.random(0f, 1f) > config.randomOnFactor.value) {
+                    it.color.fadeB(Sketch.instance.random(50f, 100f), config.fadeSpeed.value)
                 }
             }
         }

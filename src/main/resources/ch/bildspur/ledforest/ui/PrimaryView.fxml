@@ -34,6 +34,9 @@
                         <MenuItem id="audioMenuItem" mnemonicParsing="false"
                                   onAction="#onShowAudioSettings"
                                   text="Audio"/>
+                        <MenuItem id="starPatternMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowstarPatternSettings"
+                                  text="Star Pattern"/>
                         <MenuItem id="interactionMenuItem" mnemonicParsing="false" onAction="#onShowInteractionSettings"
                                   text="Interaction"/>
                         <MenuItem id="leapMenuItem" mnemonicParsing="false" onAction="#onShowLeapInteractionSettings"

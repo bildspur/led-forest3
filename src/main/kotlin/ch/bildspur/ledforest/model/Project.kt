@@ -56,6 +56,9 @@ class Project {
     var poseInteraction = PoseInteraction()
 
     @Expose
+    var starPattern = StarPatternConfig()
+
+    @Expose
     var visualisation = Visualisation()
 
     @Expose

@@ -34,6 +34,10 @@
     -fx-graphic: url("../images/Pose16.png");
 }
 
+#starPatternMenuItem > .label {
+    -fx-graphic: url("../images/Star16.png");
+}
+
 #mapMenuItem > .label {
     -fx-graphic: url("../images/MapIcon16.png");
 }
