@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.scene
 
+import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
@@ -7,14 +8,15 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
+import processing.core.PVector
 
 class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataProvider)
-: BaseInteractionScene("Pose Scene", project, tubes) {
+    : BaseInteractionScene("Pose Scene", project, tubes) {
 
     private val task = TimerTask(0, { update() })
 
     override val timerTask: TimerTask
-    get() = task
+        get() = task
 
     var iaTubes = emptyList<Tube>()
 
@@ -45,7 +47,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
     override val isInteracting: Boolean
         get() = poseProvider.poseCount != 0
 
-    private fun interactWithLED(index: Int, led: LED, tube: Tube, poses : List<Pose>) {
+    private fun interactWithLED(index: Int, led: LED, tube: Tube, poses: List<Pose>) {
         val config = project.poseInteraction
         val ledPosition = getLEDPosition(index, tube)
 
@@ -56,9 +58,10 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 
         var relevantPoseCount = 0
 
-        for(pose in poses) {
+        for (pose in poses) {
             // get distance to led
-            val distance = pose.position.dist(ledPosition)
+            val posePosition = pose.position.mapPose()
+            val distance = posePosition.dist(ledPosition)
 
             // check if is relevant for interaction
             if (distance > config.interactionDistance.value) continue
@@ -71,11 +74,18 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         }
 
         // prevent zero bug
-        if(relevantPoseCount == 0)
+        if (relevantPoseCount == 0)
             relevantPoseCount = 1
 
         led.color.fadeH(hue, 0.1f)
         led.color.fadeS(saturation / relevantPoseCount, 0.1f)
         led.color.fadeB(brightness / relevantPoseCount, 0.1f)
     }
+}
+
+fun PVector.mapPose(): PVector {
+    val box = Sketch.instance.project.value.interaction.interactionBox.value
+    return PVector((this.x * 2.0f - 1.0f) * box.x / 2f,
+            (this.z * 2.0f - 1.0f) * box.y / 2f,
+            ((1.0f - this.y) * 2.0f - 1.0f) * box.z / 2f)
 }

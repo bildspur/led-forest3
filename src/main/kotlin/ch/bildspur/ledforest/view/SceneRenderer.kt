@@ -9,6 +9,7 @@ import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.realsense.RealSenseDataProvider
 import ch.bildspur.ledforest.realsense.tracking.ActiveRegion
+import ch.bildspur.ledforest.scene.mapPose
 import ch.bildspur.ledforest.util.*
 import processing.core.PApplet
 import processing.core.PGraphics
@@ -157,9 +158,10 @@ class SceneRenderer(val g: PGraphics,
         g.popMatrix()
     }
 
-    private fun renderPose(pose : Pose) {
+    private fun renderPose(pose: Pose) {
+        val position = pose.position.mapPose()
         g.pushMatrix()
-        g.translate(pose.position.x * 5f, 0.0f, (1.0f - pose.position.y) * 2f)
+        g.translate(position.x, position.y, position.z)
         g.noFill()
         g.sphereDetail(8)
         g.stroke(ColorMode.color(360.0f * (pose.id % 10) / 10.0f, 80f, 100f))
