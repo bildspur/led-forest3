@@ -7,11 +7,10 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
-import kotlin.math.absoluteValue
 
 
 class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPattern Scene", project, tubes) {
-    private val task = TimerTask(project.starPattern.timerSpeed.value, { update() })
+    private val task = TimerTask(project.starPattern.timerInterval.value, { update() })
 
     override val timerTask: TimerTask
         get() = task
@@ -31,7 +30,7 @@ class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPat
             }
         }
 
-        project.starPattern.timerSpeed.onChanged += {
+        project.starPattern.timerInterval.onChanged += {
             task.interval = it
         }
     }

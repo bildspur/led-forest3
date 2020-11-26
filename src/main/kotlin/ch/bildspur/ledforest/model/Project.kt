@@ -80,6 +80,9 @@ class Project {
     var starPattern = StarPatternConfig()
 
     @Expose
+    var cloudScene = CloudSceneConfig()
+
+    @Expose
     var visualisation = Visualisation()
 
     @Expose

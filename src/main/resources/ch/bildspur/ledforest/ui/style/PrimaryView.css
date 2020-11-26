@@ -38,6 +38,10 @@
     -fx-graphic: url("../images/Star16.png");
 }
 
+#cloudSceneMenuItem > .label {
+    -fx-graphic: url("../images/Cloud16.png");
+}
+
 #mapMenuItem > .label {
     -fx-graphic: url("../images/MapIcon16.png");
 }

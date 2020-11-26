@@ -447,6 +447,10 @@ class PrimaryView {
         initSettingsView(project.value.interaction, "Interaction")
     }
 
+    fun onShowCloudSceneSettings() {
+        initSettingsView(project.value.cloudScene, "Cloud Scene")
+    }
+
     fun onPlayPauseClicked() {
         println("Play Pause")
     }

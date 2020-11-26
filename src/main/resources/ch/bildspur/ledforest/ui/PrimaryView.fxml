@@ -37,6 +37,9 @@
                         <MenuItem id="starPatternMenuItem" mnemonicParsing="false"
                                   onAction="#onShowstarPatternSettings"
                                   text="Star Pattern"/>
+                        <MenuItem id="cloudSceneMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowCloudSceneSettings"
+                                  text="Cloud Scene"/>
                         <MenuItem id="interactionMenuItem" mnemonicParsing="false" onAction="#onShowInteractionSettings"
                                   text="Interaction"/>
                         <MenuItem id="leapMenuItem" mnemonicParsing="false" onAction="#onShowLeapInteractionSettings"

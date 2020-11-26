@@ -9,6 +9,7 @@ import ch.bildspur.ledforest.view.IRenderer
 
 class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tube>) : IRenderer {
     val starScene = StarPatternScene(project, tubes)
+    val cloudScene = CloudScene(project, tubes)
     val leapMotionScene = LeapMotionScene(project, tubes, sketch.leapMotion)
     val realSenseScene = RealSenseScene(project, tubes, sketch.realSense)
     val poseScene = PoseScene(project, tubes, sketch.pose)
@@ -55,8 +56,17 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
                 && !leapMotionScene.isInteracting
                 && !realSenseScene.isInteracting
                 && !poseScene.isInteracting
-                && project.isSceneManagerEnabled.value)
+                && project.isSceneManagerEnabled.value
+                && !project.cloudScene.enabled.value)
             initScene(starScene)
+
+        if (activeScene != cloudScene
+                && !leapMotionScene.isInteracting
+                && !realSenseScene.isInteracting
+                && !poseScene.isInteracting
+                && project.isSceneManagerEnabled.value
+                && project.cloudScene.enabled.value)
+            initScene(cloudScene)
 
         if (activeScene != blackScene && !project.isSceneManagerEnabled.value)
             initScene(blackScene)
