@@ -1,11 +1,25 @@
 package ch.bildspur.ledforest.util
 
+import com.jogamp.opengl.math.FloatUtil.sin
+import processing.core.PApplet.cos
 import processing.core.PConstants.PI
 
 /**
  * Created by cansik on 08.06.17.
  */
 object Easing {
+    fun easeInSine(x: Float): Float {
+        return 1 - cos((x * PI) / 2f)
+    }
+
+    fun easeOutSine(x: Float): Float {
+        return sin((x * PI) / 2f)
+    }
+
+    fun easeInOutSine(x: Float): Float {
+        return -(cos(PI * x) - 1) / 2f
+    }
+
     // no easing} no acceleration
     fun linear(t: Float): Float {
         return t

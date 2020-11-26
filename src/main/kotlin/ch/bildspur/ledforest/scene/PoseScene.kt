@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.scene
 
+import ch.bildspur.color.HSV
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
@@ -8,6 +9,7 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
+import ch.bildspur.ledforest.util.Easing
 import processing.core.PVector
 import java.lang.Integer.max
 
@@ -70,7 +72,10 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
             // todo: add mapping for values (more easing curves)
             hue += 100f
             saturation += 80f
-            brightness += 100f
+
+            // brightness
+            val normDelta = distance / config.interactionDistance.value
+            brightness += 100f * Easing.easeOutSine(normDelta)
 
             relevantPoseCount++
         }
