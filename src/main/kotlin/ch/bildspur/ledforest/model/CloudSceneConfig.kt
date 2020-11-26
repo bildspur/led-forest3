@@ -43,7 +43,7 @@ class CloudSceneConfig {
     var fallOff = DataModel(0.65f)
 
     @Expose
-    @SliderParameter("Scale", 0.1, 4.0, 0.1, snap = true)
+    @SliderParameter("Scale", 0.01, 4.0, 0.01, snap = true)
     var scale = DataModel(1.0f)
 
     @Expose
@@ -63,6 +63,10 @@ class CloudSceneConfig {
     var modEasing = DataModel(false)
 
     @LabelParameter("Color")
+
+    @Expose
+    @SliderParameter("Contrast", 0.0, 1.0, 0.1, snap = true)
+    var contrast = DataModel(1.0f)
 
     @Expose
     @RangeSliderParameter("Hue Spectrum", 0.0, 360.0, 1.0, snap = true, roundInt = true)
