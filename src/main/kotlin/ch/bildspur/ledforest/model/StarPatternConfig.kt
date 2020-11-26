@@ -22,7 +22,7 @@ class StarPatternConfig {
     var fadeSpeed = DataModel(0.01f)
 
     @Expose
-    @SliderParameter("Timer Speed", 0.0, 1000.0, 10.0, snap = true)
+    @SliderParameter("Timer Interval", 0.0, 1000.0, 10.0, snap = true)
     var timerSpeed = DataModel(500L)
 
     @Expose
