@@ -26,6 +26,7 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
             onUpdate = { e, i ->
                 // just update the keypoints but keep the object
                 e.item.keypoints = i.keypoints
+                e.item.score = i.score
             },
             onAdd = {
                 // set initial easing position
