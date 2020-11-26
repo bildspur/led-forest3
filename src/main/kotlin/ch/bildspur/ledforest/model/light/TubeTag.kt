@@ -4,7 +4,8 @@ enum class TubeTag(val label: String) {
     None("None"),
     Interaction("Interaction"),
     CubeTop("Cube Top"),
-    CubeBottom("Cube Bottom");
+    CubeBottom("Cube Bottom"),
+    Static("Static");
 
     override fun toString(): String {
         return label
