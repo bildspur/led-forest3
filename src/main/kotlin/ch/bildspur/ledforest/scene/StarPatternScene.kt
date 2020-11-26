@@ -11,7 +11,7 @@ import kotlin.math.absoluteValue
 
 
 class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPattern Scene", project, tubes) {
-    private val task = TimerTask(500, { update() })
+    private val task = TimerTask(project.starPattern.timerSpeed.value, { update() })
 
     override val timerTask: TimerTask
         get() = task
@@ -29,6 +29,10 @@ class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPat
                     it.color.fadeS(hsv.s.toFloat(), 0.05f)
                 }
             }
+        }
+
+        project.starPattern.timerSpeed.onChanged += {
+            task.interval = it
         }
     }
 
