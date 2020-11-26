@@ -72,10 +72,6 @@ class PoseInteraction {
     var interactionDistance = DataModel(1.0f)
 
     @Expose
-    @BooleanParameter("Map Depth to Hue")
-    var mapDepthToColor = DataModel(true)
-
-    @Expose
     @RangeSliderParameter("Hue Spectrum", 0.0, 360.0, 1.0, snap = true, roundInt = true)
-    var hueSpectrum = DataModel(NumberRange(180.0, 360.0))
+    var hueSpectrum = DataModel(NumberRange(160.0, 320.0))
 }
