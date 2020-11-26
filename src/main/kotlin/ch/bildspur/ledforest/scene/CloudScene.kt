@@ -8,6 +8,7 @@ import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.util.Easing
 import ch.bildspur.ledforest.util.forEachLED
 import ch.bildspur.ledforest.util.limit
+import ch.bildspur.ledforest.util.modValue
 import ch.bildspur.model.NumberRange
 import processing.core.PVector
 
@@ -19,6 +20,7 @@ class CloudScene(project: Project, tubes: List<Tube>, override val isInteracting
         get() = task
 
     var iaTubes = emptyList<Tube>()
+    var setupTimeStamp = 0L
 
     init {
         project.cloudScene.timerInterval.onChanged += {
@@ -31,10 +33,10 @@ class CloudScene(project: Project, tubes: List<Tube>, override val isInteracting
 
         // set initial color
         iaTubes.forEachLED {
-            it.color.fadeH(project.cloudScene.hueSpectrum.value.low.toFloat(), 0.05f)
-            it.color.fadeS(project.cloudScene.saturationSpectrum.value.low.toFloat(), 0.05f)
-            it.color.fadeB(0f, 0.05f)
+            it.color.fadeB(0f, 0.1f)
         }
+
+        setupTimeStamp = System.currentTimeMillis()
     }
 
     private fun shiftedNoise(x: Float, y: Float, z: Float): Float {
@@ -43,6 +45,12 @@ class CloudScene(project: Project, tubes: List<Tube>, override val isInteracting
 
     override fun update() {
         val config = project.cloudScene
+
+        // check if already is time else do nothing
+        if(System.currentTimeMillis() - setupTimeStamp < config.initialWaitTime.value) {
+            return
+        }
+
         val time = Sketch.instance.millis() * config.noiseSpeed.value
 
         Sketch.instance.noiseDetail(config.lod.value, config.fallOff.value)
@@ -74,9 +82,5 @@ class CloudScene(project: Project, tubes: List<Tube>, override val isInteracting
 
     override fun dispose() {
 
-    }
-
-    private fun NumberRange.modValue(modulator: Float): Float {
-        return ((this.high - this.low).toFloat() * modulator) + this.low.toFloat()
     }
 }

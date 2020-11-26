@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.util
 
 import ch.bildspur.math.Float2
+import ch.bildspur.model.NumberRange
 import processing.core.*
 import processing.core.PConstants.QUAD_STRIP
 import java.util.*
@@ -154,4 +155,8 @@ fun PVector.flip(flipX: Boolean, flipY: Boolean, flipZ: Boolean) {
     this.x = this.x * flipX.toInvertSign()
     this.y = this.y * flipY.toInvertSign()
     this.z = this.z * flipZ.toInvertSign()
+}
+
+fun NumberRange.modValue(modulator: Float): Float {
+    return ((this.high - this.low).toFloat() * modulator) + this.low.toFloat()
 }

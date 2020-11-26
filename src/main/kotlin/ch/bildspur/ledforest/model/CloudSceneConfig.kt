@@ -15,6 +15,10 @@ class CloudSceneConfig {
     @LabelParameter("Speed")
 
     @Expose
+    @SliderParameter("Initial Wait Time", 0.0, 3000.0, 10.0, snap = true)
+    var initialWaitTime = DataModel(2000.0)
+
+    @Expose
     @SliderParameter("Timer Interval", 0.0, 1000.0, 10.0, snap = true)
     var timerInterval = DataModel(20L)
 

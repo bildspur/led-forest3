@@ -1,19 +1,18 @@
 package ch.bildspur.ledforest.scene
 
-import ch.bildspur.color.HSV
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
-import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.util.Easing
 import ch.bildspur.ledforest.util.limit
+import ch.bildspur.ledforest.util.modValue
+import processing.core.PApplet
 import processing.core.PVector
 import java.lang.Integer.max
-import kotlin.math.roundToInt
 
 class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataProvider)
     : BaseInteractionScene("Pose Scene", project, tubes) {
@@ -26,9 +25,10 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
     var iaTubes = emptyList<Tube>()
 
     data class Interactor(val position: PVector,
-                          val hue : Float,
-                          val saturation : Float,
-                          val brightness: Float)
+                          val hue: Float,
+                          val saturation: Float,
+                          val brightness: Float,
+                          val impactRadius: Float)
 
     override fun setup() {
         iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction }.toList()
@@ -46,16 +46,38 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         val interactors = mutableListOf<Interactor>()
         poses.forEach {
             interactors.add(Interactor(it.easedPosition,
-                    (config.hueSpectrum.value.high.toFloat() - config.hueSpectrum.value.low.toFloat()) * 0.5f + config.hueSpectrum.value.low.toFloat(),
-                80f, 100f))
+                    config.hueSpectrum.value.modValue(0.5f), config.saturation.value, config.brightness.value,
+                    config.interactionDistanceRange.value.low.toFloat()))
 
-            // todo: add hand interactors
+            // add hand interactors
+            createHandInteractor(interactors, it.leftShoulder, it.leftElbow, it.leftWrist)
+            createHandInteractor(interactors, it.rightShoulder, it.rightElbow, it.rightWrist)
         }
 
         // interaction tubes
         iaTubes.forEach {
             it.leds.forEachIndexed { i, led -> interactWithLED(i, led, it, interactors) }
         }
+    }
+
+    private fun createHandInteractor(interactors: MutableList<Interactor>, shoulder: PVector, elbow: PVector, wrist: PVector) {
+        // only do it if points are valid
+        if (shoulder.isInvalid() || elbow.isInvalid() || wrist.isInvalid()) return
+        val config = project.poseInteraction
+
+        // calculate ratio
+        val maxDistance = PVector.dist(shoulder, elbow) + PVector.dist(elbow, wrist)
+        val currentDistance = PVector.dist(shoulder, wrist)
+        val ratio = currentDistance / maxDistance
+
+        // todo: calculate angles for hue range modulation
+        val angle = PVector.angleBetween(PVector.sub(shoulder, elbow), PVector.sub(wrist, elbow))
+        val angleDegree = PApplet.degrees(angle)
+        val angleRatio = angleDegree / 180f
+
+        interactors.add(Interactor(wrist,
+                config.hueSpectrum.value.modValue(angleRatio), config.saturation.value, config.brightness.value,
+                config.interactionDistanceRange.value.modValue(ratio)))
     }
 
     override fun stop() {
@@ -86,10 +108,10 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
             val distance = posePosition.dist(ledPosition)
 
             // check if is relevant for interaction
-            if (distance > config.interactionDistance.value) continue
+            if (distance > interactor.impactRadius) continue
 
             // inversed norm delta 1.0 => very close
-            val normDelta = 1f - distance / config.interactionDistance.value
+            val normDelta = 1f - distance / interactor.impactRadius
             hue += interactor.hue
             saturation += interactor.saturation
             brightness += interactor.brightness * Easing.easeOutSine(normDelta)
@@ -103,9 +125,13 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         // limit hue
         val finalHue = hue.limit(config.hueSpectrum.value.low.toFloat(), config.hueSpectrum.value.high.toFloat())
 
-        led.color.fadeH(finalHue, 0.1f)
-        led.color.fadeS(saturation / divider, 0.1f)
-        led.color.fadeB(brightness / divider, 0.1f)
+        led.color.fadeH(finalHue, config.fadingSpeed.value)
+        led.color.fadeS(saturation / divider, config.fadingSpeed.value)
+        led.color.fadeB(brightness / divider, config.fadingSpeed.value)
+    }
+
+    private fun PVector.isInvalid(): Boolean {
+        return this.x == 0f && this.y == 0f
     }
 }
 

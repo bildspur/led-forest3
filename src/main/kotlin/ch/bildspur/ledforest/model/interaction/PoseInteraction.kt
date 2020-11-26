@@ -72,10 +72,22 @@ class PoseInteraction {
     var flipZ = DataModel(false)
 
     @Expose
-    @SliderParameter("Interaction Distance", 0.01, 5.0, 0.01, snap = true)
-    var interactionDistance = DataModel(1.0f)
+    @RangeSliderParameter("Interaction Distance", 0.01, 5.0, 0.01, snap = true)
+    var interactionDistanceRange = DataModel(NumberRange(1.0, 2.0))
 
     @Expose
     @RangeSliderParameter("Hue Spectrum", 0.0, 360.0, 1.0, snap = true, roundInt = true)
     var hueSpectrum = DataModel(NumberRange(160.0, 320.0))
+
+    @Expose
+    @SliderParameter("Saturation", 0.0, 100.0, 1.0, snap = true, roundInt = true)
+    var saturation = DataModel(100.0f)
+
+    @Expose
+    @SliderParameter("Brightness", 0.0, 100.0, 1.0, snap = true, roundInt = true)
+    var brightness = DataModel(100.0f)
+
+    @Expose
+    @SliderParameter("LED Fading Speed", 0.1, 1.0, 0.1, snap = true)
+    var fadingSpeed = DataModel(0.1f)
 }
