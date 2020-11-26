@@ -8,6 +8,7 @@ class Pose {
     var score: Float = -1f
     var keypoints: Array<PVector> = Array(PoseClient.KEY_POINT_COUNT) { PVector() }
 
+    var startTimestamp = System.currentTimeMillis()
     val easedPosition = EasingVector()
 
     val position : PVector

@@ -45,6 +45,10 @@ class PoseInteraction {
     var maxDelta = DataModel(50f)
 
     @Expose
+    @SliderParameter("Min Alive Time", 0.0, 1000.0, 1.0, snap = true)
+    var minAliveTime = DataModel(400L)
+
+    @Expose
     @SliderParameter("Max Dead Time", 0.0, 1000.0, 1.0, snap = true)
     var maxDeadTime = DataModel(400L)
 

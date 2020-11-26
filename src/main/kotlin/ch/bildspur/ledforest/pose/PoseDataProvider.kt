@@ -36,7 +36,9 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
             maxDeadTime = project.value.poseInteraction.maxDeadTime.value)
 
     val poses: List<Pose>
-        get() = simpleTracker.entities.map { it.item }.toList()
+        get() = simpleTracker.entities.map { it.item }
+                .filter { System.currentTimeMillis() - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
+                .toList()
 
     val poseCount: Int
         get() = simpleTracker.entities.size
