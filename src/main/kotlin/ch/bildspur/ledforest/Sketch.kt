@@ -12,10 +12,7 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.realsense.RealSenseDataProvider
 import ch.bildspur.ledforest.scene.SceneManager
-import ch.bildspur.ledforest.util.LogBook
-import ch.bildspur.ledforest.util.SpaceInformation
-import ch.bildspur.ledforest.util.draw
-import ch.bildspur.ledforest.util.format
+import ch.bildspur.ledforest.util.*
 import ch.bildspur.ledforest.view.ArtNetRenderer
 import ch.bildspur.ledforest.view.IRenderer
 import ch.bildspur.ledforest.view.SceneRenderer
@@ -263,6 +260,14 @@ class Sketch : PApplet() {
             it.address.onChanged.clear()
             it.address.onChanged += {
                 proposeResetRenderer()
+            }
+        }
+
+        project.value.solidLEDColor.onChanged += {
+            project.value.isSceneManagerEnabled.value = false
+            project.value.tubes.forEachLED {
+                val hsv = project.value.solidLEDColor.value.toHSV()
+                it.color.fade(ColorMode.color(hsv.h, hsv.s, hsv.v), 0.1f)
             }
         }
     }
