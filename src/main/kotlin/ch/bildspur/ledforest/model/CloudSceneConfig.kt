@@ -21,6 +21,10 @@ class CloudSceneConfig {
     var timerInterval = DataModel(20L)
 
     @Expose
+    @BooleanParameter("Enable Fading")
+    var enableFading = DataModel(false)
+
+    @Expose
     @SliderParameter("Fade Speed", 0.1, 1.0, 0.1, snap = true)
     var fadeSpeed = DataModel(0.5f)
 
@@ -53,6 +57,10 @@ class CloudSceneConfig {
     @Expose
     @BooleanParameter("Mod Z")
     var modZ = DataModel(false)
+
+    @Expose
+    @BooleanParameter("Mod Easing")
+    var modEasing = DataModel(false)
 
     @LabelParameter("Color")
 

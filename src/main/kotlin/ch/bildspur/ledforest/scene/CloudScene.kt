@@ -5,7 +5,9 @@ import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
+import ch.bildspur.ledforest.util.Easing
 import ch.bildspur.ledforest.util.forEachLED
+import ch.bildspur.ledforest.util.limit
 import ch.bildspur.model.NumberRange
 import processing.core.PVector
 
@@ -54,11 +56,22 @@ class CloudScene(project: Project, tubes: List<Tube>, override val isInteracting
                 val dy = if(config.modY.value) time else 0f
                 val dz = if(config.modZ.value) time else 0f
 
-                val modulator = shiftedNoise(ledPosition, dx, dy, dz)
+                var modulator = shiftedNoise(ledPosition, dx, dy, dz).limit(0.0f, 1.0f)
 
-                led.color.fadeH(config.hueSpectrum.value.modValue(modulator), config.fadeSpeed.value)
-                led.color.fadeS(config.saturationSpectrum.value.modValue(modulator), config.fadeSpeed.value)
-                led.color.fadeB(config.brightnessSpectrum.value.modValue(modulator), config.fadeSpeed.value)
+                if(config.modEasing.value) {
+                    println(modulator)
+                    modulator = Easing.easeInCubic(modulator)
+                }
+
+                if(config.enableFading.value) {
+                    led.color.fadeH(config.hueSpectrum.value.modValue(modulator), config.fadeSpeed.value)
+                    led.color.fadeS(config.saturationSpectrum.value.modValue(modulator), config.fadeSpeed.value)
+                    led.color.fadeB(config.brightnessSpectrum.value.modValue(modulator), config.fadeSpeed.value)
+                } else {
+                    led.color.current.x = (config.hueSpectrum.value.modValue(modulator))
+                    led.color.current.y = (config.saturationSpectrum.value.modValue(modulator))
+                    led.color.current.z = (config.brightnessSpectrum.value.modValue(modulator))
+                }
             }
         }
     }
