@@ -59,8 +59,7 @@ class CloudScene(project: Project, tubes: List<Tube>, override val isInteracting
                 var modulator = shiftedNoise(ledPosition, dx, dy, dz).limit(0.0f, 1.0f)
 
                 if(config.modEasing.value) {
-                    println(modulator)
-                    modulator = Easing.easeInCubic(modulator)
+                    modulator = Easing.easeInSine(modulator)
                 }
 
                 if(config.enableFading.value) {
