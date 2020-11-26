@@ -1,7 +1,7 @@
 package ch.bildspur.ledforest.util
 
 import com.jogamp.opengl.math.FloatUtil.sin
-import processing.core.PApplet.cos
+import processing.core.PApplet.*
 import processing.core.PConstants.PI
 
 /**
@@ -88,5 +88,9 @@ object Easing {
     fun easeInOutQuint(time: Float): Float {
         var t = time
         return if (t < .5) 16 * t * t * t * t * t else 1 + 16 * (--t) * t * t * t * t
+    }
+
+    fun easeInCirc(x: Float): Float {
+        return 1 - sqrt(1 - pow(x, 2f))
     }
 }
