@@ -1,11 +1,9 @@
 package ch.bildspur.ledforest.model
 
+import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
-import ch.bildspur.ui.properties.BooleanParameter
-import ch.bildspur.ui.properties.LabelParameter
-import ch.bildspur.ui.properties.RangeSliderParameter
-import ch.bildspur.ui.properties.SliderParameter
+import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 
 class CloudSceneConfig {
@@ -35,32 +33,20 @@ class CloudSceneConfig {
     var noiseSpeed = DataModel(0.0005f)
 
     @Expose
-    @SliderParameter("LOD", 1.0, 16.0, 1.0, snap = true, roundInt = true)
-    var lod = DataModel(8)
-
-    @Expose
-    @SliderParameter("Fall Off", 0.0, 1.0, 0.01, snap = true)
-    var fallOff = DataModel(0.65f)
-
-    @Expose
-    @SliderParameter("Scale", 0.01, 4.0, 0.01, snap = true)
+    @SliderParameter("Scale", 0.001, 2.0, 0.001, snap = true)
     var scale = DataModel(1.0f)
 
     @Expose
-    @BooleanParameter("Mod X")
-    var modX = DataModel(true)
+    @SliderParameter("LOD", 1.0, 16.0, 1.0, snap = true, roundInt = true)
+    var lod = DataModel(4)
 
     @Expose
-    @BooleanParameter("Mod Y")
-    var modY = DataModel(true)
+    @SliderParameter("Fall Off", 0.0, 1.0, 0.01, snap = true)
+    var fallOff = DataModel(0.50f)
 
     @Expose
-    @BooleanParameter("Mod Z")
-    var modZ = DataModel(false)
-
-    @Expose
-    @BooleanParameter("Mod Easing")
-    var modEasing = DataModel(false)
+    @EnumParameter("Mapping")
+    var mappingMode = DataModel(EasingMethod.Linear)
 
     @LabelParameter("Color")
 

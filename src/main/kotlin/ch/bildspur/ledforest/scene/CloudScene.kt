@@ -37,8 +37,8 @@ class CloudScene(project: Project, tubes: List<Tube>, override val isInteracting
         }
     }
 
-    private fun shiftedNoise(position: PVector, dx: Float, dy: Float, dz: Float): Float {
-        return Sketch.instance.noise(position.x + dx, position.y + dy, position.z + dz)
+    private fun shiftedNoise(x: Float, y: Float, z: Float): Float {
+        return Sketch.instance.noise(x, y, z)
     }
 
     override fun update() {
@@ -52,15 +52,8 @@ class CloudScene(project: Project, tubes: List<Tube>, override val isInteracting
                 val ledPosition = getLEDPosition(index, it)
                 ledPosition.mult(config.scale.value)
 
-                val dx = if(config.modX.value) time else 0f
-                val dy = if(config.modY.value) time else 0f
-                val dz = if(config.modZ.value) time else 0f
-
-                var modulator = (shiftedNoise(ledPosition, dx, dy, dz) * config.contrast.value).limit(0.0f, 1.0f)
-
-                if(config.modEasing.value) {
-                    modulator = Easing.easeInQuint(modulator)
-                }
+                var modulator = (shiftedNoise(ledPosition.x, ledPosition.y, time) * config.contrast.value).limit(0.0f, 1.0f)
+                modulator = config.mappingMode.value.method(modulator)
 
                 if(config.enableFading.value) {
                     led.color.fadeH(config.hueSpectrum.value.modValue(modulator), config.fadeSpeed.value)
