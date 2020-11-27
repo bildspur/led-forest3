@@ -21,10 +21,10 @@ import kotlin.reflect.jvm.internal.impl.load.java.lazy.ContextKt.child
 
 @Suppress("UNCHECKED_CAST")
 class ArrowControlAction(field: Field, obj: Any, val annotation: ArrowControlParameter) : BaseFXFieldProperty(field, obj) {
-    val upButton = Button("Up")
-    val downButton = Button("Down")
-    val leftButton = Button("Left")
-    val rightButton = Button("Right")
+    val upButton = Button("\u2191")
+    val downButton = Button("\u2193")
+    val leftButton = Button("\u2190")
+    val rightButton = Button("\u2192")
 
     val progress = ProgressIndicator()
     val errorText = Label()
@@ -47,6 +47,7 @@ class ArrowControlAction(field: Field, obj: Any, val annotation: ArrowControlPar
 
         BorderPane.setAlignment(errorBox, Pos.CENTER)
         BorderPane.setMargin(errorBox, Insets(5.0))
+        errorBox.alignment = Pos.CENTER
 
         buttons.forEach {
             val button = it.key
