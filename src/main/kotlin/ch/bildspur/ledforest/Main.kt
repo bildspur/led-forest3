@@ -1,10 +1,7 @@
 package ch.bildspur.ledforest
 
 import ch.bildspur.ledforest.ui.PrimaryView
-import ch.bildspur.ledforest.ui.properties.PVectorAngleParameter
-import ch.bildspur.ledforest.ui.properties.PVectorAngleProperty
-import ch.bildspur.ledforest.ui.properties.PVectorParameter
-import ch.bildspur.ledforest.ui.properties.PVectorProperty
+import ch.bildspur.ledforest.ui.properties.*
 import ch.bildspur.ui.fx.FXPropertyRegistry
 import ch.bildspur.ui.fx.properties.ColorProperty
 import ch.bildspur.ui.properties.ColorParameter
@@ -33,6 +30,7 @@ class Main : Application() {
         // register properties
         FXPropertyRegistry.properties.add(PropertiesRegistryEntry(PVectorParameter::class.java, PVectorParameter::name, ::PVectorProperty))
         FXPropertyRegistry.properties.add(PropertiesRegistryEntry(PVectorAngleParameter::class.java, PVectorAngleParameter::name, ::PVectorAngleProperty))
+        FXPropertyRegistry.properties.add(PropertiesRegistryEntry(ArrowControlParameter::class.java, ArrowControlParameter::name, ::ArrowControlAction))
 
         // start javafx
         val loader = FXMLLoader(javaClass.classLoader.getResource("ch/bildspur/ledforest/ui/PrimaryView.fxml"))
