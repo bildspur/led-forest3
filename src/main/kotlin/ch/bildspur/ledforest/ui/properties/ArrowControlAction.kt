@@ -14,22 +14,19 @@ import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
 import java.lang.reflect.Field
 import kotlin.concurrent.thread
-import kotlin.reflect.jvm.internal.impl.load.java.lazy.ContextKt.child
-
-
 
 
 @Suppress("UNCHECKED_CAST")
 class ArrowControlAction(field: Field, obj: Any, val annotation: ArrowControlParameter) : BaseFXFieldProperty(field, obj) {
-    val upButton = Button("\u2191")
-    val downButton = Button("\u2193")
-    val leftButton = Button("\u2190")
-    val rightButton = Button("\u2192")
+    private val upButton = Button("\u2191")
+    private val downButton = Button("\u2193")
+    private val leftButton = Button("\u2190")
+    private val rightButton = Button("\u2192")
 
-    val progress = ProgressIndicator()
-    val errorText = Label()
-    val errorBox = HBox(progress, errorText)
-    val box = BorderPane(errorBox, upButton, rightButton, downButton, leftButton)
+    private val progress = ProgressIndicator()
+    private val errorText = Label()
+    private val errorBox = HBox(progress, errorText)
+    private val box = BorderPane(errorBox, upButton, rightButton, downButton, leftButton)
 
     var buttons = mapOf(upButton to KeyCode.UP,
             downButton to KeyCode.DOWN,
@@ -84,7 +81,6 @@ class ArrowControlAction(field: Field, obj: Any, val annotation: ArrowControlPar
             }
         }
 
-        //box.spacing = 10.0
         children.add(box)
     }
 }
