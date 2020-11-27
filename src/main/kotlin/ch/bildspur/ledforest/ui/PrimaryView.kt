@@ -83,6 +83,9 @@ class PrimaryView {
     @FXML
     lateinit var interactionSceneManager: CheckMenuItem
 
+    @FXML
+    lateinit var disableRenderingMenuItem: CheckMenuItem
+
     private val appIcon = Image(javaClass.getResourceAsStream("images/LEDForestIcon.png"))
     private val nodeIcon = Image(javaClass.getResourceAsStream("images/ArtnetIcon32.png"))
     private val dmxIcon = Image(javaClass.getResourceAsStream("images/DmxFront16.png"))
@@ -229,6 +232,10 @@ class PrimaryView {
         createBidirectionalMapping(project.interaction.isInteractionDataEnabled,
                 interactionSceneManager.onActionProperty(),
                 interactionSceneManager.selectedProperty())
+
+        createBidirectionalMapping(project.visualisation.disableRendering,
+                disableRenderingMenuItem.onActionProperty(),
+                disableRenderingMenuItem.selectedProperty())
 
         // add redraw of ui
         project.map.mapScaleFactor.onChanged += {

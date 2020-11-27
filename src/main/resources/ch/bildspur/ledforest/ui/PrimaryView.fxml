@@ -62,6 +62,7 @@
                     <items>
                         <CheckMenuItem fx:id="sceneManagerMenuItem" mnemonicParsing="false" text="Scene Manager On"/>
                         <CheckMenuItem fx:id="interactionSceneManager" mnemonicParsing="false" text="Interaction On"/>
+                        <CheckMenuItem fx:id="disableRenderingMenuItem" mnemonicParsing="false" text="Disable Rendering"/>
                     </items>
                 </Menu>
                 <Menu disable="true" mnemonicParsing="false" text="|"/>
