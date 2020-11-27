@@ -7,8 +7,6 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
-import ch.bildspur.ledforest.setup.SetupInformation
-import ch.bildspur.ledforest.setup.pattern.StromPattern
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
@@ -233,7 +231,7 @@ class PrimaryView {
                 interactionSceneManager.onActionProperty(),
                 interactionSceneManager.selectedProperty())
 
-        createBidirectionalMapping(project.visualisation.disableRendering,
+        createBidirectionalMapping(project.visualisation.disableViewRendering,
                 disableRenderingMenuItem.onActionProperty(),
                 disableRenderingMenuItem.selectedProperty())
 

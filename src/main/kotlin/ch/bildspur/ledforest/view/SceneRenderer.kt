@@ -46,6 +46,10 @@ class SceneRenderer(val g: PGraphics,
     }
 
     override fun render() {
+        if(project.visualisation.disableViewRendering.value) {
+            return
+        }
+
         // apply scale to everything
         g.pushMatrix()
         g.scale(project.visualisation.globalScaleFactor.value)

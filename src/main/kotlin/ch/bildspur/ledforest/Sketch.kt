@@ -212,15 +212,6 @@ class Sketch : PApplet() {
         // update tubes
         updateLEDColors()
 
-        // production mode
-        if(project.value.visualisation.disableRendering.value) {
-            peasy.hud {
-                showDebugInformation()
-                drawFPS(g)
-            }
-            return
-        }
-
         canvas.draw {
             it.background(project.value.visualisation.clearColorBrightness.value.toInt())
 

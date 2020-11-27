@@ -28,8 +28,8 @@ class Visualisation {
     var fullScreenDisplay = DataModel(0)
 
     @Expose
-    @BooleanParameter("Disable Rendering for Production")
-    var disableRendering = DataModel(false)
+    @BooleanParameter("Disable 3D-Rendering for Production")
+    var disableViewRendering = DataModel(false)
 
     @Expose
     @SliderParameter("Bloom BrightPass Threshold", 0.0, 1.0, 0.05)
