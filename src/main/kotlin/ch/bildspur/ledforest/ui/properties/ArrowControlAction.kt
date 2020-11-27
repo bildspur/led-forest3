@@ -2,6 +2,8 @@ package ch.bildspur.ledforest.ui.properties
 
 import ch.bildspur.ui.fx.BaseFXFieldProperty
 import javafx.application.Platform
+import javafx.geometry.Insets
+import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -12,6 +14,10 @@ import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
 import java.lang.reflect.Field
 import kotlin.concurrent.thread
+import kotlin.reflect.jvm.internal.impl.load.java.lazy.ContextKt.child
+
+
+
 
 @Suppress("UNCHECKED_CAST")
 class ArrowControlAction(field: Field, obj: Any, val annotation: ArrowControlParameter) : BaseFXFieldProperty(field, obj) {
@@ -22,7 +28,8 @@ class ArrowControlAction(field: Field, obj: Any, val annotation: ArrowControlPar
 
     val progress = ProgressIndicator()
     val errorText = Label()
-    val box = BorderPane(HBox(progress, errorText), upButton, rightButton, downButton, leftButton)
+    val errorBox = HBox(progress, errorText)
+    val box = BorderPane(errorBox, upButton, rightButton, downButton, leftButton)
 
     var buttons = mapOf(upButton to KeyCode.UP,
             downButton to KeyCode.DOWN,
@@ -38,9 +45,16 @@ class ArrowControlAction(field: Field, obj: Any, val annotation: ArrowControlPar
         errorText.isVisible = false
         errorText.textFill = Color.web("#FF0000")
 
+        BorderPane.setAlignment(errorBox, Pos.CENTER)
+        BorderPane.setMargin(errorBox, Insets(5.0))
+
         buttons.forEach {
             val button = it.key
             val code = it.value
+
+            // center
+            BorderPane.setAlignment(button, Pos.CENTER)
+            BorderPane.setMargin(button, Insets(5.0))
 
             button.setOnAction {
                 progress.isVisible = true
