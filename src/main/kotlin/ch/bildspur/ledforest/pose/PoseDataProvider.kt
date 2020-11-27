@@ -3,7 +3,6 @@ package ch.bildspur.ledforest.pose
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.util.toFloat2
-import ch.bildspur.ledforest.util.toPolar
 import ch.bildspur.model.DataModel
 import ch.bildspur.simple.SimpleTracker
 import processing.core.PApplet
@@ -33,7 +32,7 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 it.item.easedPosition.init(it.item.position, project.value.poseInteraction.positionEasing.value)
             },
             maxDelta = project.value.poseInteraction.maxDelta.value,
-            maxDeadTime = project.value.poseInteraction.maxDeadTime.value)
+            maxUntrackedTime = project.value.poseInteraction.maxDeadTime.value)
 
     val poses: List<Pose>
         get() = simpleTracker.entities.map { it.item }
@@ -49,7 +48,7 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
 
     init {
         project.value.poseInteraction.maxDeadTime.onChanged += {
-            simpleTracker.maxDeadTime = it
+            simpleTracker.maxUntrackedTime = it
         }
     }
 

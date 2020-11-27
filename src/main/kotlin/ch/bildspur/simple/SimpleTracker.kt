@@ -11,7 +11,7 @@ class SimpleTracker<T>(inline val position: (item: T) -> Float2,
                        inline val onUpdate: (entity : TrackedEntity<T>, item: T) -> Unit = { e, i -> e.item = i },
                        inline val onAdd: (entity : TrackedEntity<T>) -> Unit = {},
                        var maxDelta: Float = 10.0f,
-                       var maxDeadTime : Long = 100) : Tracker<T> {
+                       var maxUntrackedTime : Long = 100) : Tracker<T> {
     private val trackingIdCounter = AtomicInteger(0)
     override val entities = mutableListOf<TrackedEntity<T>>()
 
@@ -34,7 +34,7 @@ class SimpleTracker<T>(inline val position: (item: T) -> Float2,
         )
 
         // clean up entities
-        entities.removeAll { !it.matched && millis - it.lastMatchTimeStamp > maxDeadTime }
+        entities.removeAll { !it.matched && millis - it.lastMatchTimeStamp > maxUntrackedTime }
         entities.forEach { it.lifeTime++ }
         detectedEntities.filter { !it.matched }.forEach {
             val entity = TrackedEntity(it.item, position(it.item), trackingId = trackingIdCounter.getAndIncrement())
