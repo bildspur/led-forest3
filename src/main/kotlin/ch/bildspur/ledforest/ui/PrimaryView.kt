@@ -95,8 +95,6 @@ class PrimaryView {
     fun setupView() {
         root.center = tubeMap
         propertiesPane.content = propertiesControl
-        //propertiesControl.prefWidth = 320.0
-        //propertiesControl.maxWidth = 320.0
 
         // setup ui task
         UITask.status.addListener { _ -> statusLabel.text = UITask.status.value }
