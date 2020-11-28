@@ -37,8 +37,8 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
     // bildspur libs
-    implementation "com.github.cansik:bildspur-base:7a2701c0c6"
-    implementation 'com.github.cansik:bildspur-ui:fdbba863da'
+    compile "com.github.cansik:bildspur-base:0.3.0"
+    compile 'com.github.cansik:bildspur-ui:0.3.0'
 
     // processing
     compile files("lib/processing/core.jar")
@@ -78,10 +78,6 @@ dependencies {
     compile files('lib/plugins/minim/library/mp3spi1.9.5.jar')
     compile files('lib/plugins/minim/library/tritonus_aos.jar')
     compile files('lib/plugins/minim/library/tritonus_share.jar')
-
-    // bildspur libs
-    implementation "com.github.cansik:bildspur-base:7436a637a5"
-    implementation 'com.github.cansik:bildspur-ui:fdbba863da'
 
     // deep vision
     implementation 'com.github.cansik:deep-vision-processing:9eebd0c440'
