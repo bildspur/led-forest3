@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="720.0" prefWidth="1221.0" xmlns="http://javafx.com/javafx/8.0.111"
+            prefHeight="720.0" prefWidth="1236.0" xmlns="http://javafx.com/javafx/8.0.111"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.bildspur.ledforest.ui.PrimaryView">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
@@ -101,9 +101,9 @@
     <center>
     </center>
     <right>
-        <ScrollPane prefHeight="200.0" prefWidth="310.0" BorderPane.alignment="CENTER">
+        <ScrollPane prefHeight="200.0" prefWidth="325.0" BorderPane.alignment="CENTER" hbarPolicy="NEVER">
             <content>
-                <TitledPane fx:id="propertiesPane" animated="false" collapsible="false" prefWidth="308.0"
+                <TitledPane fx:id="propertiesPane" animated="false" collapsible="false" maxWidth="320" prefWidth="320"
                             text="Properties"/>
             </content>
         </ScrollPane>
