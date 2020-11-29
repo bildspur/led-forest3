@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.pose
 
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.util.toFloat2
 import ch.bildspur.model.DataModel
@@ -127,8 +128,8 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 g.rectMode(CENTER)
                 g.square(pose.easedPosition.x * g.width, pose.easedPosition.y * g.height, 20f)
 
-                g.fill(255)
-                g.textSize(20f)
+                g.fill(ColorMode.color(255))
+                g.textSize(15f)
                 g.text("#${pose.id} | ${pose.score.format(2)}", pose.neck.x * g.width + 10, pose.neck.y * g.height + 10)
             }
         }
@@ -142,6 +143,11 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 pose.keypoints.forEach {
                     g.circle(it.x * g.width, it.y * g.height, 25f)
                 }
+
+                g.stroke(ColorMode.color(255))
+                g.strokeWeight(2f)
+                val maxDelta = project.value.poseInteraction.maxDelta.value
+                g.ellipse(pose.position.x * g.width, pose.position.y * g.height, g.width * maxDelta, g.height * maxDelta)
             }
         }
     }
