@@ -4,6 +4,7 @@ import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
 import ch.bildspur.ui.properties.*
+import ch.bildspur.util.Mapping
 import com.google.gson.annotations.Expose
 
 class CloudSceneConfig {
@@ -33,11 +34,11 @@ class CloudSceneConfig {
     @LabelParameter("Noise")
 
     @Expose
-    @SliderParameter("Noise Speed", 0.0001, 0.001, 0.0001, snap = true)
-    var noiseSpeed = DataModel(0.0005f)
+    @SliderParameter("Noise Speed", 0.0005, 0.1, 0.0001, mapping = Mapping.Quart, labelDigits = 4)
+    var noiseSpeed = DataModel(0.001f)
 
     @Expose
-    @SliderParameter("Scale", 0.001, 2.0, 0.001, snap = true)
+    @SliderParameter("Scale", 0.001, 2.0, 0.001, mapping = Mapping.Cube, labelDigits = 3)
     var scale = DataModel(1.0f)
 
     @Expose

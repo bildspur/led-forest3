@@ -3,6 +3,7 @@ package ch.bildspur.ledforest.model.interaction
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
 import ch.bildspur.ui.properties.*
+import ch.bildspur.util.Mapping
 import com.google.gson.annotations.Expose
 
 class PoseInteraction {
@@ -53,7 +54,7 @@ class PoseInteraction {
     var maxDeadTime = DataModel(400L)
 
     @Expose
-    @SliderParameter("Position Easing", 0.01, 1.0, 0.01, snap = true)
+    @SliderParameter("Position Easing", 0.01, 1.0, mapping = Mapping.Quad)
     var positionEasing = DataModel(0.2f)
 
     @LabelParameter("Interaction")
