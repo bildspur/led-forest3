@@ -85,6 +85,9 @@ class PrimaryView {
     @FXML
     lateinit var disableRenderingMenuItem: CheckMenuItem
 
+    @FXML
+    lateinit var display2DMapMenuItem: CheckMenuItem
+
     private val appIcon = Image(javaClass.getResourceAsStream("images/LEDForestIcon.png"))
     private val nodeIcon = Image(javaClass.getResourceAsStream("images/ArtnetIcon32.png"))
     private val dmxIcon = Image(javaClass.getResourceAsStream("images/DmxFront16.png"))
@@ -235,6 +238,19 @@ class PrimaryView {
         createBidirectionalMapping(project.visualisation.disableViewRendering,
                 disableRenderingMenuItem.onActionProperty(),
                 disableRenderingMenuItem.selectedProperty())
+
+        display2DMapMenuItem.setOnAction {
+            if(tubeMap.isVisible) {
+                tubeMap.isVisible = false
+                primaryStage.width = root.width - tubeMap.width
+                root.prefWidth = primaryStage.width
+                root.children.remove(tubeMap)
+            } else {
+                tubeMap.isVisible = true
+                primaryStage.width = root.width + tubeMap.width
+                root.center = tubeMap
+            }
+        }
 
         // add redraw of ui
         project.map.mapScaleFactor.onChanged += {

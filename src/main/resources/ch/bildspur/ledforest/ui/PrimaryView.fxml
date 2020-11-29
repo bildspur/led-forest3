@@ -66,8 +66,9 @@
                     </items>
                 </Menu>
                 <Menu disable="true" mnemonicParsing="false" text="|"/>
-                <Menu mnemonicParsing="false" text="Help">
+                <Menu mnemonicParsing="false" text="Interface">
                     <items>
+                        <CheckMenuItem fx:id="display2DMapMenuItem" mnemonicParsing="false" text="Display 2D Map" selected="true"/>
                         <MenuItem mnemonicParsing="false" onAction="#onShowAbout" text="About"/>
                     </items>
                 </Menu>
