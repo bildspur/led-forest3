@@ -60,15 +60,15 @@ class PoseInteraction {
 
     // orientation
     @Expose
-    @BooleanParameter("Flip X")
+    @BooleanParameter("Flip X", useToggleSwitch = true)
     var flipX = DataModel(false)
 
     @Expose
-    @BooleanParameter("Flip Y")
+    @BooleanParameter("Flip Y", useToggleSwitch = true)
     var flipY = DataModel(false)
 
     @Expose
-    @BooleanParameter("Flip Z")
+    @BooleanParameter("Flip Z", useToggleSwitch = true)
     var flipZ = DataModel(false)
 
     @Expose

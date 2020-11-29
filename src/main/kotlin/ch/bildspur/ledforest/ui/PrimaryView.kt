@@ -21,6 +21,7 @@ import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
+import javafx.geometry.Insets
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.*
@@ -114,7 +115,7 @@ class PrimaryView {
         project.onChanged += { onProjectChanged(it) }
 
         // setup ui
-        UITask.run({
+        UITask.run({ _ ->
             // init canvas
             tubeMap.setupMap(TubeMap.CANVAS_WIDTH, TubeMap.CANVAS_HEIGHT)
             tubeMap.activeTool = moveTool

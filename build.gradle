@@ -38,7 +38,7 @@ dependencies {
 
     // bildspur libs
     compile "com.github.cansik:bildspur-base:0.3.0"
-    compile 'com.github.cansik:bildspur-ui:0.3.0'
+    compile 'com.github.cansik:bildspur-ui:0.3.1'
 
     // processing
     compile files("lib/processing/core.jar")

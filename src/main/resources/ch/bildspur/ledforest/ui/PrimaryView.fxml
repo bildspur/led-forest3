@@ -101,7 +101,7 @@
     <center>
     </center>
     <right>
-        <ScrollPane prefHeight="200.0" prefWidth="325.0" BorderPane.alignment="CENTER" hbarPolicy="NEVER">
+        <ScrollPane prefHeight="200.0" prefWidth="325.0" BorderPane.alignment="CENTER" hbarPolicy="NEVER" fitToWidth="true">
             <content>
                 <TitledPane fx:id="propertiesPane" animated="false" collapsible="false" maxWidth="320" prefWidth="320"
                             text="Properties"/>
