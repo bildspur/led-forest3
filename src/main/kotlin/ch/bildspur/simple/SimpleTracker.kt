@@ -8,10 +8,10 @@ import ch.bildspur.tracking.Tracker
 import java.util.concurrent.atomic.AtomicInteger
 
 class SimpleTracker<T>(inline val position: (item: T) -> Float2,
+                       var maxDelta: Float,
+                       var maxUntrackedTime : Long = 100,
                        inline val onUpdate: (entity : TrackedEntity<T>, item: T) -> Unit = { e, i -> e.item = i },
-                       inline val onAdd: (entity : TrackedEntity<T>) -> Unit = {},
-                       var maxDelta: Float = 10.0f,
-                       var maxUntrackedTime : Long = 100) : Tracker<T> {
+                       inline val onAdd: (entity : TrackedEntity<T>) -> Unit = {}) : Tracker<T> {
     private val trackingIdCounter = AtomicInteger(0)
     override val entities = mutableListOf<TrackedEntity<T>>()
 

@@ -42,8 +42,8 @@ class PoseInteraction {
     var maxReceiveTimeout = DataModel(300L)
 
     @Expose
-    @SliderParameter("Max Delta", 1.0, 100.0, 1.0, snap = true)
-    var maxDelta = DataModel(50f)
+    @SliderParameter("Max Delta", 0.01, 1.0, 0.01, mapping = Mapping.Quad, labelDigits = 3)
+    var maxDelta = DataModel(0.1f)
 
     @Expose
     @SliderParameter("Min Alive Time", 0.0, 1000.0, 1.0, snap = true)
