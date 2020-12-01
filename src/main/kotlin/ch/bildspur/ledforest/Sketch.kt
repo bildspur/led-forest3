@@ -34,11 +34,13 @@ class Sketch : PApplet() {
     companion object {
         @JvmStatic
         val HIGH_RES_FRAME_RATE = 60f
+
         @JvmStatic
         val LOW_RES_FRAME_RATE = 30f
 
         @JvmStatic
         val WINDOW_WIDTH = 1024
+
         @JvmStatic
         val WINDOW_HEIGHT = 768
 
@@ -153,7 +155,7 @@ class Sketch : PApplet() {
         artnet.open()
 
         project.value.interaction.isLeapInteractionEnabled.onChanged += {
-            if(it)
+            if (it)
                 leapMotion.start()
             else
                 leapMotion.stop()
@@ -161,7 +163,7 @@ class Sketch : PApplet() {
         project.value.interaction.isLeapInteractionEnabled.fireLatest()
 
         project.value.interaction.isRealSenseInteractionEnabled.onChanged += {
-            if(it)
+            if (it)
                 realSense.start()
             else
                 realSense.stop()
@@ -169,7 +171,7 @@ class Sketch : PApplet() {
         project.value.interaction.isRealSenseInteractionEnabled.fireLatest()
 
         project.value.interaction.isPoseInteractionEnabled.onChanged += {
-            if(it)
+            if (it)
                 pose.start()
             else
                 pose.stop()
@@ -233,7 +235,7 @@ class Sketch : PApplet() {
                 image(canvas, 0f, 0f)
 
             showDebugInformation()
-            drawFPS(g)
+            drawSketchInformation(g)
         }
     }
 
@@ -243,7 +245,7 @@ class Sketch : PApplet() {
             realSense.renderDebug(g)
         }
 
-        if(project.value.poseInteraction.isDebug.value) {
+        if (project.value.poseInteraction.isDebug.value) {
             pose.renderDebug(g)
         }
     }
@@ -358,7 +360,7 @@ class Sketch : PApplet() {
         return false
     }
 
-    fun drawFPS(pg: PGraphics) {
+    fun drawSketchInformation(pg: PGraphics) {
         // draw fps
         fpsOverTime += frameRate
         val averageFPS = fpsOverTime / frameCount.toFloat()
@@ -366,7 +368,10 @@ class Sketch : PApplet() {
         pg.textAlign(PApplet.LEFT, PApplet.BOTTOM)
         pg.fill(255)
         pg.textSize(12f)
-        pg.text("FPS: ${frameRate.format(2)}\nFOT: ${averageFPS.format(2)}", 10f, height - 5f)
+        pg.text((if (project.value.visualisation.disableViewRendering.value) "View Disabled\n" else "") +
+                (if (project.value.poseInteraction.isDebug.value) "Pose Debug\n" else "") +
+                "FPS: ${frameRate.format(2)}\n" +
+                "FOT: ${averageFPS.format(2)}", 10f, height - 5f)
     }
 
     fun prepareExitHandler() {

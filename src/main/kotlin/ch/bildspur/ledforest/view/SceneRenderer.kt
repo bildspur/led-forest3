@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.view
 
+import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.leap.InteractionHand
 import ch.bildspur.ledforest.leap.LeapDataProvider
@@ -48,9 +49,6 @@ class SceneRenderer(val g: PGraphics,
 
     override fun render() {
         if(project.visualisation.disableViewRendering.value) {
-            g.textAlign(CENTER, CENTER)
-            g.textSize(40f)
-            g.text("Rendering disabled!", g.width / 2f, g.height / 2f)
             return
         }
 
