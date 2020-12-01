@@ -189,7 +189,7 @@ class Sketch : PApplet() {
 
         // timer for logbook
         timer.addTask(TimerTask(LOGBOOK_UPDATE_TIME, {
-            LogBook.log("Update", leapMotion.handCount)
+            LogBook.log("Update", leapMotion.handCount, pose.totalPoseCount.getAndSet(0))
             leapMotion.handCount = 0
         }))
 
@@ -383,7 +383,7 @@ class Sketch : PApplet() {
             osc.osc.stop()
             artnet.close()
 
-            LogBook.log("Stop", leapMotion.handCount)
+            LogBook.log("Stop", leapMotion.handCount, pose.totalPoseCount.getAndSet(0))
         })
     }
 

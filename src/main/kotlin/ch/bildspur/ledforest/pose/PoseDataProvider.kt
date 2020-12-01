@@ -10,6 +10,7 @@ import processing.core.PApplet
 import processing.core.PConstants.CENTER
 import processing.core.PGraphics
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.concurrent.thread
 
@@ -21,7 +22,9 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
     lateinit var client: PoseClient
     lateinit var trackerThread: Thread
 
-    var isRunning = AtomicBoolean()
+    val isRunning = AtomicBoolean()
+
+    val totalPoseCount = AtomicInteger(0)
 
     private val simpleTracker = SimpleTracker<Pose>({ it.neck.toFloat2() },
             onUpdate = { e, i ->
@@ -32,6 +35,7 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
             onAdd = {
                 // set initial easing position
                 it.item.easedPosition.init(it.item.position, project.value.poseInteraction.positionEasing.value)
+                totalPoseCount.incrementAndGet()
             },
             maxDelta = project.value.poseInteraction.maxDelta.value,
             maxUntrackedTime = project.value.poseInteraction.maxDeadTime.value)
