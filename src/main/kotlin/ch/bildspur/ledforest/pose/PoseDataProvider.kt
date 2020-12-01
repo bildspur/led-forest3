@@ -10,6 +10,7 @@ import processing.core.PApplet
 import processing.core.PConstants.CENTER
 import processing.core.PGraphics
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.concurrent.thread
 
 
@@ -35,13 +36,10 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
             maxDelta = project.value.poseInteraction.maxDelta.value,
             maxUntrackedTime = project.value.poseInteraction.maxDeadTime.value)
 
-    val poses: List<Pose>
-        get() = simpleTracker.entities.map { it.item }
-                .filter { System.currentTimeMillis() - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
-                .toList()
+    private val relevantPoses = AtomicReference<List<Pose>>(listOf())
 
-    val poseCount: Int
-        get() = simpleTracker.entities.size
+    val poses: List<Pose>
+        get() = relevantPoses.get()
 
     private var poseBuffer = emptyList<Pose>()
 
@@ -83,6 +81,11 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                     it.item.easedPosition.easing = project.value.poseInteraction.positionEasing.value
                     it.item.easedPosition.update()
                 }
+
+                // update poses (make this once in the loop)
+                relevantPoses.set(simpleTracker.entities.map { it.item }
+                        .filter { System.currentTimeMillis() - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
+                        .toList())
 
                 // update ui
                 project.value.poseInteraction.poseCount.value = "${simpleTracker.entities.size}"

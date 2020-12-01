@@ -89,7 +89,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
     }
 
     override val isInteracting: Boolean
-        get() = poseProvider.poseCount != 0
+        get() = poseProvider.poses.isNotEmpty()
 
     private fun interactWithLED(index: Int, led: LED, tube: Tube, interactors: List<Interactor>) {
         val config = project.poseInteraction
