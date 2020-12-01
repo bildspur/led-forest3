@@ -30,6 +30,7 @@ class PoseInteraction {
     @LabelParameter("Tracking")
 
     @Expose
+    @ParameterInformation("Minimal score a pose needs to be valid.")
     @SliderParameter("Min Score", 0.0, 5.0, 0.1, snap = true)
     var minScore = DataModel(2.0f)
 
@@ -38,19 +39,23 @@ class PoseInteraction {
     var trackingFPS = DataModel(30L)
 
     @Expose
-    @NumberParameter("Max Receive Timeout", "ms")
+    @ParameterInformation("Time to reset the incoming pose buffer if nothing is received.")
+    @SliderParameter("Max Receive Timeout", 0.0, 2000.0, 1.0, snap = true)
     var maxReceiveTimeout = DataModel(300L)
 
     @Expose
+    @ParameterInformation("Distance a pose is allowed to travel in one frame.")
     @SliderParameter("Max Delta", 0.01, 1.0, 0.01, mapping = Mapping.Quad, labelDigits = 3)
     var maxDelta = DataModel(0.1f)
 
     @Expose
-    @SliderParameter("Min Alive Time", 0.0, 1000.0, 1.0, snap = true)
+    @ParameterInformation("Time how long a pose has to be tracked until it is valid.")
+    @SliderParameter("Min Alive Time", 0.0, 2000.0, 1.0, snap = true)
     var minAliveTime = DataModel(400L)
 
     @Expose
-    @SliderParameter("Max Dead Time", 0.0, 1000.0, 1.0, snap = true)
+    @ParameterInformation("Time how long a pose can be untracked an still is valid.")
+    @SliderParameter("Max Dead Time", 0.0, 2000.0, 1.0, snap = true)
     var maxDeadTime = DataModel(400L)
 
     @Expose
