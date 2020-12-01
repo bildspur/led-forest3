@@ -12,6 +12,7 @@ import ch.bildspur.ledforest.realsense.tracking.ActiveRegion
 import ch.bildspur.ledforest.scene.mapPose
 import ch.bildspur.ledforest.util.*
 import processing.core.PApplet
+import processing.core.PConstants.CENTER
 import processing.core.PGraphics
 import processing.core.PShape
 
@@ -47,6 +48,9 @@ class SceneRenderer(val g: PGraphics,
 
     override fun render() {
         if(project.visualisation.disableViewRendering.value) {
+            g.textAlign(CENTER, CENTER)
+            g.textSize(40f)
+            g.text("Rendering disabled!", g.width / 2f, g.height / 2f)
             return
         }
 
