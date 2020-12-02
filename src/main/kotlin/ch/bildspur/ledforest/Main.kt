@@ -51,7 +51,6 @@ class Main : Application() {
         //StyleManager.getInstance().addUserAgentStylesheet(javaClass.classLoader.getResource("ch/bildspur/ledforest/ui/style/ledforest.css").toExternalForm())
         root.stylesheets.add("ch/bildspur/ledforest/ui/style/PrimaryView.css")
 
-        primaryStage.setOnShown { controller.setupView() }
         primaryStage.setOnCloseRequest {
             controller.sketch.stop()
             controller.processingThread.join(5000)
