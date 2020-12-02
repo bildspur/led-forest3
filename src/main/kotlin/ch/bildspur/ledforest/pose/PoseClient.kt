@@ -23,6 +23,7 @@ class PoseClient(port: Int) : OSCPacketListener {
             .build()
 
     init {
+
         server.startListening()
     }
 

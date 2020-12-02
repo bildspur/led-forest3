@@ -1,4 +1,4 @@
-package ch.bildspur.simple
+package ch.bildspur.tracking.simple
 
 import ch.bildspur.math.Float2
 import ch.bildspur.math.distance
@@ -36,12 +36,11 @@ class SimpleTracker<T>(inline val position: (item: T) -> Float2,
 
         // clean up entities
         // todo: optimize this step to use less loops
-        val entitiesToRemove = entities.filter { !it.matched && millis - it.lastMatchTimeStamp > maxUntrackedTime }
+        val entitiesToRemove = entities.filter { !it.matched && it.getLifeTime(millis) > maxUntrackedTime }
         entitiesToRemove.forEach { onRemove(it) }
         entities.removeAll(entitiesToRemove)
 
-        // update lifetime
-        entities.forEach { it.lifeTime++ }
+        // add new entities
         detectedEntities.filter { !it.matched }.forEach {
             val entity = TrackedEntity(it.item, position(it.item), trackingId = trackingIdCounter.getAndIncrement())
             entities.add(entity)

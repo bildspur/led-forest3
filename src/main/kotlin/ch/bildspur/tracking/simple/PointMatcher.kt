@@ -1,4 +1,4 @@
-package ch.bildspur.simple
+package ch.bildspur.tracking.simple
 
 data class MinDistance(val index : Int, val distance : Double)
 
