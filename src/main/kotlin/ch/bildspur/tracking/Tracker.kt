@@ -1,6 +1,6 @@
 package ch.bildspur.tracking
 
-interface Tracker<T> {
-    val entities : List<TrackedEntity<T>>
-    fun track(detections : List<T>)
+interface Tracker<TEntity : TrackedEntity<TItem>, TItem> {
+    val entities : List<TEntity>
+    fun track(detections : List<TItem>)
 }
