@@ -10,12 +10,13 @@ class SimpleTracker<TItem>(inline val position: (item: TItem) -> Float2,
                            var maxUntrackedTime: Long = 100,
                            inline val onAdd: (entity: SimpleTrackedEntity<TItem>) -> Unit = {},
                            inline val onUpdate: (entity: SimpleTrackedEntity<TItem>, item: TItem) -> Unit = { e, i -> e.item = i },
-                           inline val onRemove: (entity: SimpleTrackedEntity<TItem>) -> Unit = {}) : Tracker<SimpleTrackedEntity<TItem>, TItem> {
+                           inline val onRemove: (entity: SimpleTrackedEntity<TItem>) -> Unit = {},
+                           inline val getTime: () -> Long = { System.currentTimeMillis() }) : Tracker<SimpleTrackedEntity<TItem>, TItem> {
     private val trackingIdCounter = AtomicInteger(0)
     override val entities = mutableListOf<SimpleTrackedEntity<TItem>>()
 
     override fun track(detections: List<TItem>) {
-        val millis = System.currentTimeMillis()
+        val millis = getTime()
         val detectedEntities = detections.map { SimplePossibleEntity(it) }
         entities.forEach { it.matched = false }
 
@@ -32,12 +33,21 @@ class SimpleTracker<TItem>(inline val position: (item: TItem) -> Float2,
                 }
         )
 
+        // get untracked entities
+        val (expiredEntities, untrackedEntities) = entities.partition { !it.matched && it.getLifeTime(millis) > maxUntrackedTime }
+
+        // predict position of untracked entities
+        /*
+        untrackedEntities.forEach {
+            it.predictNextPosition()
+        }
+         */
+
         // clean up entities
-        entities.removeAll(entities.filter { !it.matched && it.getLifeTime(millis) > maxUntrackedTime }
-                .map {
-                    onRemove(it)
-                    it
-                })
+        entities.removeAll(expiredEntities.map {
+            onRemove(it)
+            it
+        })
 
         // add new entities
         detectedEntities.filter { !it.matched }.forEach {

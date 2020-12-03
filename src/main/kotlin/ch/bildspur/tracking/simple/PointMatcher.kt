@@ -17,7 +17,7 @@ inline fun <S, D> List<S>.matchNearest(destinations :  List<D>,
         }
     }
 
-    // match best source to target
+    // match best source to target (greedy)
     this.forEachIndexed { i, source ->
         val minDelta = distances[i]
             .mapIndexed { index, distance -> MinDistance(index, distance) }
