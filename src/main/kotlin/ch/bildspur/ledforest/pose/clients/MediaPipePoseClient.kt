@@ -43,19 +43,42 @@ class MediaPipePoseClient : OSCPacketListener, PoseClient {
 
         val pose = Pose()
         val keypoints = Array(KEY_POINT_COUNT) { PVector() }
+        var score = 0f
 
         for (i in 0 until KEY_POINT_COUNT) {
             var index = 1 + i * 4
 
             keypoints[i].x = message.arguments[index++] as Float
             keypoints[i].y = message.arguments[index++] as Float
-            keypoints[i].z = message.arguments[index] as Float
+            keypoints[i].z = message.arguments[index++] as Float
 
-            //pose.keypoints.get(i).visibility = msg.get(index++).floatValue()
+            val visibility = message.arguments[index] as Float
+            score += visibility
         }
 
-        // ugly mapping to full body pose system
+        score /= KEY_POINT_COUNT
+        pose.score = score
 
+        // ugly mapping to full body pose system
+        // upper pose 25 to coco 18
+        pose.keypoints[0] = keypoints[0]
+        pose.keypoints[1] = PVector.lerp(keypoints[11], keypoints[12], 0.5f)
+
+        pose.keypoints[2] = keypoints[11]
+        pose.keypoints[3] = keypoints[13]
+        pose.keypoints[4] = keypoints[15]
+
+        pose.keypoints[5] = keypoints[12]
+        pose.keypoints[6] = keypoints[14]
+        pose.keypoints[7] = keypoints[16]
+
+        pose.keypoints[8] = keypoints[23]
+        pose.keypoints[11] = keypoints[24]
+
+        pose.keypoints[14] = keypoints[2]
+        pose.keypoints[15] = keypoints[5]
+        pose.keypoints[16] = keypoints[7]
+        pose.keypoints[17] = keypoints[8]
 
         onPosesReceived(mutableListOf(pose))
     }
