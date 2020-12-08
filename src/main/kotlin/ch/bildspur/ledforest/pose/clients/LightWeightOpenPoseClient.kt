@@ -1,29 +1,33 @@
-package ch.bildspur.ledforest.pose
+package ch.bildspur.ledforest.pose.clients
 
 import ch.bildspur.event.Event
+import ch.bildspur.ledforest.pose.Pose
 import com.illposed.osc.*
 import com.illposed.osc.transport.udp.OSCPortIn
 import com.illposed.osc.transport.udp.OSCPortInBuilder
 import java.net.InetSocketAddress
-import java.util.concurrent.CopyOnWriteArrayList
 
-class PoseClient(port: Int) : OSCPacketListener {
+class LightWeightOpenPoseClient : OSCPacketListener, PoseClient {
     companion object {
         @JvmStatic
         val KEY_POINT_COUNT = 18
     }
 
-    val onPosesReceived = Event<MutableList<Pose>>()
+    override val onPosesReceived = Event<MutableList<Pose>>()
 
-    val socketAddress = InetSocketAddress("0.0.0.0", port)
+    lateinit var server: OSCPortIn
 
-    val server: OSCPortIn = OSCPortInBuilder()
-            .setSocketAddress(socketAddress)
-            .addPacketListener(this)
-            .build()
-
-    init {
+    override fun start(port: Int) {
+        val socketAddress = InetSocketAddress("0.0.0.0", port)
+        server = OSCPortInBuilder()
+                .setSocketAddress(socketAddress)
+                .addPacketListener(this)
+                .build()
         server.startListening()
+    }
+
+    override fun close() {
+        server.close()
     }
 
     override fun handlePacket(event: OSCPacketEvent?) {
@@ -57,5 +61,4 @@ class PoseClient(port: Int) : OSCPacketListener {
     override fun handleBadData(event: OSCBadDataEvent?) {
         println("bad osc data received!")
     }
-
 }

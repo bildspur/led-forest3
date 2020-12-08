@@ -1,6 +1,8 @@
 package ch.bildspur.ledforest.pose
 
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.pose.clients.PoseClient
+import ch.bildspur.ledforest.pose.clients.LightWeightOpenPoseClient
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.util.toFloat2
@@ -60,11 +62,12 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
 
         println("pose client starting up...")
 
-        client = PoseClient(project.value.poseInteraction.port.value)
+        client = project.value.poseInteraction.poseClient.value.client
         client.onPosesReceived += { rawPoses ->
             poseBuffer = rawPoses
             lastReceiveTimeStamp = System.currentTimeMillis()
         }
+        client.start(project.value.poseInteraction.port.value)
 
         trackerThread = thread(start = true) {
             isRunning.set(true)
@@ -109,7 +112,7 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
         if (!isRunning.get()) return
 
         println("pose client stopping...")
-        client.server.close()
+        client.close()
 
         isRunning.set(false)
         trackerThread.join(5000)

@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.model.interaction
 
+import ch.bildspur.ledforest.pose.clients.PoseClientTypes
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
 import ch.bildspur.ui.properties.*
@@ -26,6 +27,11 @@ class PoseInteraction {
     @Expose
     @NumberParameter("Port")
     var port = DataModel(7400)
+
+    @Expose
+    @EnumParameter("Pose Client*")
+    @ParameterInformation("The pose client that is used to read poses. Requires restart!")
+    var poseClient = DataModel(PoseClientTypes.LightWeightOpenPose)
 
     @LabelParameter("Tracking")
 

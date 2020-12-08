@@ -1,6 +1,7 @@
-package ch.bildspur.ledforest.pose
+package ch.bildspur.ledforest.pose.clients
 
 import ch.bildspur.event.Event
+import ch.bildspur.ledforest.pose.Pose
 import oscP5.OscMessage
 
 import oscP5.OscP5
@@ -8,22 +9,26 @@ import oscP5.OscP5
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicInteger
 
-class PoseClientP5(port: Int) {
+class LightWeightOpenPoseClientP5 : PoseClient {
     companion object {
         @JvmStatic
         val KEY_POINT_COUNT = 18
     }
 
-    val osc: OscP5
-    val poses: MutableList<Pose>
+    lateinit var osc: OscP5
+    lateinit var poses: MutableList<Pose>
 
-    val onPosesReceived = Event<MutableList<Pose>>()
+    override val onPosesReceived = Event<MutableList<Pose>>()
 
     private var updatedPoses = AtomicInteger(0)
 
-    init {
+    override fun start(port: Int) {
         poses = CopyOnWriteArrayList()
         osc = OscP5(this, port)
+    }
+
+    override fun close() {
+        osc.stop()
     }
 
     fun oscEvent(msg: OscMessage) {

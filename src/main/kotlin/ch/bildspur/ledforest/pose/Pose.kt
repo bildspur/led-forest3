@@ -1,12 +1,13 @@
 package ch.bildspur.ledforest.pose
 
 import ch.bildspur.ledforest.model.easing.EasingVector
+import ch.bildspur.ledforest.pose.clients.LightWeightOpenPoseClient
 import processing.core.PVector
 
 class Pose {
     var id = 0
     var score: Float = -1f
-    var keypoints: Array<PVector> = Array(PoseClient.KEY_POINT_COUNT) { PVector() }
+    var keypoints: Array<PVector> = Array(LightWeightOpenPoseClient.KEY_POINT_COUNT) { PVector() }
 
     var startTimestamp = System.currentTimeMillis()
     val easedPosition = EasingVector()
