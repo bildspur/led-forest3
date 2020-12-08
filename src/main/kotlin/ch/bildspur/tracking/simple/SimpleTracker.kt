@@ -44,10 +44,10 @@ class SimpleTracker<TItem>(inline val position: (item: TItem) -> Float2,
          */
 
         // clean up entities
-        entities.removeAll(expiredEntities.map {
+        expiredEntities.forEach {
             onRemove(it)
-            it
-        })
+            entities.remove(it)
+        }
 
         // add new entities
         detectedEntities.filter { !it.matched }.forEach {
