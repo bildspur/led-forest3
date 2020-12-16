@@ -7,7 +7,7 @@ import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.util.toFloat2
 import ch.bildspur.model.DataModel
-import ch.bildspur.simple.SimpleTracker
+import ch.bildspur.tracking.simple.SimpleTracker
 import processing.core.PApplet
 import processing.core.PConstants.CENTER
 import processing.core.PGraphics
