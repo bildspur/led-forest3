@@ -11,7 +11,9 @@ class RemoteController(internal var sketch: Sketch) {
             'p' -> sketch.peasy.perspective()
             '1' -> sketch.peasy.topView()
             '2' -> sketch.peasy.frontView()
-            '3' -> sketch.peasy.sideView()
+            '3' -> sketch.peasy.leftView()
+            '4' -> sketch.peasy.rightView()
+            '0' -> sketch.peasy.defaultView()
         }
     }
 }
