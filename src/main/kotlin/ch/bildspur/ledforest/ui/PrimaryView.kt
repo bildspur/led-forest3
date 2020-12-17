@@ -431,9 +431,11 @@ class PrimaryView {
         val position = Point2D(box.x.toDouble() * -0.5, box.y.toDouble() * -0.5).multiply(scale.toDouble()).add(transform.x.toDouble(), transform.y.toDouble())
         val dimension = Dimension2D(box.x.toDouble() * scale, box.y.toDouble() * scale)
         val bounds = RectangleShape(position, dimension)
+        bounds.selectable = false
         bounds.stroke = Color.WHITE
         bounds.strokeWeight = 0.8
         bounds.noFill()
+
         tubeMap.activeLayer.shapes.add(bounds)
 
         // add all tubes

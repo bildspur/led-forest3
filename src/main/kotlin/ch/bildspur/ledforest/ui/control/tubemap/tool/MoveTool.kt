@@ -20,7 +20,7 @@ class MoveTool : BaseEditorTool() {
 
     override fun onCanvasMouseMoved(tubeMap: TubeMap, event: MouseEvent) {
         val point = Point2D(event.x, event.y)
-        val shapes = tubeMap.activeLayer.shapes.filter { it.visible }.filter { it.contains(point) }
+        val shapes = tubeMap.activeLayer.shapes.filter { it.visible && it.selectable }.filter { it.contains(point) }
 
         if (shapes.isNotEmpty())
             tubeMap.cursor = Cursor.HAND
@@ -37,7 +37,7 @@ class MoveTool : BaseEditorTool() {
         dragStart = Point2D(event.x, event.y)
         shapes = tubeMap.activeLayer.shapes
                 .filterIsInstance<TubeShape>()
-                .filter { it.visible }
+                .filter { it.visible && it.selectable }
                 .filter { it.contains(dragStart) }
 
         shapes.forEach { it.marked = true }
@@ -70,7 +70,7 @@ class MoveTool : BaseEditorTool() {
     override fun onCanvasMouseClicked(tubeMap: TubeMap, event: MouseEvent) {
         // check if items selected
         val point = Point2D(event.x, event.y)
-        val shapes = tubeMap.activeLayer.shapes.filter { it.visible }.filter { it.contains(point) }
+        val shapes = tubeMap.activeLayer.shapes.filter { it.visible && it.selectable }.filter { it.contains(point) }
 
         shapesSelected(shapes)
     }

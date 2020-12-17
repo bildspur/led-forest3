@@ -17,6 +17,7 @@ abstract class BaseShape {
 
     var strokeWeight = 1.0
     var visible = true
+    var selectable = true
     var marked = false
 
     fun noFill() {
