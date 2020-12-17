@@ -91,7 +91,7 @@ class SceneRenderer(val g: PGraphics,
 
     private fun renderFloor() {
         g.pushMatrix()
-        g.fill(28f, 20f)
+        g.fill(28f)
         g.noStroke()
         g.translate(0f, 0f, project.visualisation.floorZHeight.value / -2f)
         g.box(project.interaction.interactionBox.value.x,
