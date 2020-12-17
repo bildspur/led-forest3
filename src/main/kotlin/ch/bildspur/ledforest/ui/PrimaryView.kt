@@ -112,6 +112,12 @@ class PrimaryView {
             Platform.runLater {
                 if (item != null) {
                     selectedItem = item.value!!.item!!
+
+                    // select tube (and deselect all others)
+                    project.value.tubes.forEach { tube ->
+                        tube.isSelected.value = tube == item.value!!.item!!
+                    }
+
                     initSettingsView(item.value!!.item!!, item.value!!.item!!.toString())
                 }
             }
@@ -139,11 +145,6 @@ class PrimaryView {
                                     }
                                 }
                             }
-                        }
-
-                        // select tuben (and deselect all others)
-                        project.value.tubes.forEach { tube ->
-                            tube.isSelected.value = tube == t
                         }
                     }
                 } else {
