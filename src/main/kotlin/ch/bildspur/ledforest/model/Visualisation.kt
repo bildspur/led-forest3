@@ -28,6 +28,14 @@ class Visualisation {
     var fullScreenDisplay = DataModel(0)
 
     @Expose
+    @BooleanParameter("Debug Information")
+    var displayDebugInformation = DataModel(true)
+
+    @Expose
+    @BooleanParameter("Cage Tubes")
+    var displayCubeCage = DataModel(false)
+
+    @Expose
     @BooleanParameter("Disable 3D-Rendering for Production")
     var disableViewRendering = DataModel(false)
 
@@ -62,8 +70,4 @@ class Visualisation {
     @Expose
     @SliderParameter("Floor Z-Height", 0.1, 10.0, 0.1)
     var floorZHeight = DataModel(0.2f)
-
-    @Expose
-    @BooleanParameter("Display Debug Information")
-    var displayDebugInformation = DataModel(true)
 }

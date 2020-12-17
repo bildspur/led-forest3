@@ -156,9 +156,10 @@ class SceneRenderer(val g: PGraphics,
         g.popMatrix()
 
         // render rect around selected tube
-        if (tube.isSelected.value) {
+        if (project.visualisation.displayCubeCage.value || tube.isSelected.value) {
             g.noFill()
-            g.stroke(ColorMode.color(160f, 80f, 100f))
+            val hue = if(tube.isSelected.value) 160f else 30f
+            g.stroke(ColorMode.color(hue, 80f, 100f))
 
             val cageWidth = project.visualisation.ledWidth.value * 2f
             val cageHeight = (project.visualisation.ledHeight.value * tube.ledCount.value) + cageWidth
