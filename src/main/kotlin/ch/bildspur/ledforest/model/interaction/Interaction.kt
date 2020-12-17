@@ -42,8 +42,4 @@ class Interaction {
                 Math.ceil(Math.max(Math.abs(ranges.z.low), ranges.z.high) * scaleFactor).toFloat()
         )
     }
-
-    @Expose
-    @BooleanParameter("Show Interaction Box")
-    var showInteractionInfo = DataModel(false)
 }

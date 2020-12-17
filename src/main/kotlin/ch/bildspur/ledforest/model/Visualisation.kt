@@ -62,4 +62,8 @@ class Visualisation {
     @Expose
     @SliderParameter("Floor Z-Height", 0.1, 10.0, 0.1)
     var floorZHeight = DataModel(0.2f)
+
+    @Expose
+    @BooleanParameter("Display Debug Information")
+    var displayDebugInformation = DataModel(true)
 }

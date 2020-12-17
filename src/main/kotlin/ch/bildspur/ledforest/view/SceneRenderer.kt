@@ -1,6 +1,5 @@
 package ch.bildspur.ledforest.view
 
-import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.leap.InteractionHand
 import ch.bildspur.ledforest.leap.LeapDataProvider
@@ -13,7 +12,6 @@ import ch.bildspur.ledforest.realsense.tracking.ActiveRegion
 import ch.bildspur.ledforest.scene.mapPose
 import ch.bildspur.ledforest.util.*
 import processing.core.PApplet
-import processing.core.PConstants.CENTER
 import processing.core.PGraphics
 import processing.core.PShape
 
@@ -85,7 +83,7 @@ class SceneRenderer(val g: PGraphics,
         }
 
         // render leapInteraction box
-        if (project.interaction.showInteractionInfo.value)
+        if (project.visualisation.displayDebugInformation.value)
             renderInteractionBox()
 
         g.popMatrix()
@@ -93,7 +91,7 @@ class SceneRenderer(val g: PGraphics,
 
     private fun renderFloor() {
         g.pushMatrix()
-        g.fill(28)
+        g.fill(28f, 20f)
         g.noStroke()
         g.translate(0f, 0f, project.visualisation.floorZHeight.value / -2f)
         g.box(project.interaction.interactionBox.value.x,
@@ -105,6 +103,7 @@ class SceneRenderer(val g: PGraphics,
     private fun renderTube(tube: Tube) {
         // draw every LED
         for (i in tube.leds.indices) {
+            // todo: only do translation once and not for every LED!
             g.pushMatrix()
 
             // translate normalizedPosition
@@ -133,6 +132,42 @@ class SceneRenderer(val g: PGraphics,
 
             g.popMatrix()
         }
+
+        // render rect around selected tube
+        if(!project.visualisation.displayDebugInformation.value) return
+
+        g.pushMatrix()
+
+        // translate normalizedPosition
+        g.translate(tube.position.value)
+
+        // global rotation
+        g.rotateX(tube.rotation.value.x)
+        g.rotateY(tube.rotation.value.y)
+        g.rotateZ(tube.rotation.value.z)
+
+        // render origin indicator
+        g.noFill()
+        g.stroke(ColorMode.color(280f, 80f, 100f))
+        g.pushMatrix()
+        val originBoxWidth = project.visualisation.ledWidth.value * 3f
+        g.translate(0f, 0f, originBoxWidth * 0.5f)
+        g.box(originBoxWidth)
+        g.popMatrix()
+
+        // render rect around selected tube
+        if (tube.isSelected.value) {
+            g.noFill()
+            g.stroke(ColorMode.color(160f, 80f, 100f))
+
+            val cageWidth = project.visualisation.ledWidth.value * 2f
+            val cageHeight = (project.visualisation.ledHeight.value * tube.ledCount.value) + cageWidth
+
+            g.translate(0f, 0f, cageHeight * 0.5f)
+            g.box(cageWidth, cageWidth, cageHeight)
+        }
+
+        g.popMatrix()
     }
 
     private fun setupRod() {

@@ -129,6 +129,7 @@ class PrimaryView {
             // on map select
             moveTool.shapesSelected += {
                 it.filterIsInstance<TubeShape>().map { it.tube }.forEach { t ->
+                    // select element in tree view
                     elementTreeView.root.children.forEach { a ->
                         a.children.forEach { u ->
                             u.children.forEach { n ->
@@ -137,6 +138,11 @@ class PrimaryView {
                                 }
                             }
                         }
+                    }
+
+                    // select tuben (and deselect all others)
+                    project.value.tubes.forEach { tube ->
+                        tube.isSelected.value = tube == t
                     }
                 }
             }

@@ -369,7 +369,7 @@ class Sketch : PApplet() {
         fpsOverTime += frameRate
         val averageFPS = fpsOverTime / frameCount.toFloat()
 
-        pg.textAlign(PApplet.LEFT, PApplet.BOTTOM)
+        pg.textAlign(LEFT, BOTTOM)
         pg.fill(255)
         pg.textSize(12f)
         pg.text((if (project.value.visualisation.disableViewRendering.value) "View Disabled\n" else "") +
