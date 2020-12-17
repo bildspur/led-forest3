@@ -58,8 +58,6 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
                 lastDraggedValue = 0.0
             }
 
-            //it.value.prefWidth = RelationNumberField.PREFERRED_WIDTH - 20.0
-            // it.value.isShowRange = false
             label.prefWidth = 20.0
 
             it.value.setOnAction {
