@@ -188,6 +188,7 @@ class TubeMap : Pane() {
         layer.shapes.filter { it.visible }.forEach {
             gc.fill = it.fill
             gc.stroke = it.stroke
+            gc.lineWidth = it.strokeWeight
 
             it.render(gc)
 
