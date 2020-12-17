@@ -272,7 +272,6 @@ class PrimaryView {
     }
 
     fun onNewProject() {
-
         val loader = FXMLLoader(javaClass.getResource("SetupProjectView.fxml"))
         val root1 = loader.load<Any>() as Parent
         val controller = loader.getController<Any>() as SetupProjectView

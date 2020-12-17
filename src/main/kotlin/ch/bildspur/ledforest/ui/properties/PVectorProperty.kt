@@ -65,6 +65,7 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
                         xField.value.toFloat(),
                         yField.value.toFloat(),
                         zField.value.toFloat())
+                propertyChanged(this)
             }
 
             box.children.add(HBox(label, it.value))
@@ -75,7 +76,6 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
             xField.value = model.value.x.toDouble()
             yField.value = model.value.y.toDouble()
             zField.value = model.value.z.toDouble()
-
         }
         model.fireLatest()
         children.add(box)

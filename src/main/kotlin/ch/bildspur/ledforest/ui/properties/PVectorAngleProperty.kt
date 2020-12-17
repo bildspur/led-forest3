@@ -50,12 +50,14 @@ class PVectorAngleProperty(field: Field, obj: Any, val annotation: PVectorAngleP
                             xField.value.toFloat().toRadians(),
                             yField.value.toFloat().toRadians(),
                             zField.value.toFloat().toRadians())
+                    propertyChanged(this)
                 }
             }
 
             slider.setOnMouseClicked { event ->
                 if (event.clickCount == 2) {
                     slider.value = initValue
+                    propertyChanged(this)
                 }
             }
 
