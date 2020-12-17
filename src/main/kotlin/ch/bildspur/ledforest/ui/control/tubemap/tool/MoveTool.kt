@@ -72,7 +72,6 @@ class MoveTool : BaseEditorTool() {
         val point = Point2D(event.x, event.y)
         val shapes = tubeMap.activeLayer.shapes.filter { it.visible }.filter { it.contains(point) }
 
-        if (shapes.isNotEmpty())
-            shapesSelected(shapes)
+        shapesSelected(shapes)
     }
 }
