@@ -400,18 +400,4 @@ class Sketch : PApplet() {
         cursor()
         lastCursorMoveTime = millis()
     }
-
-    override fun mouseWheel(event: MouseEvent) {
-        val e = event.count.toFloat()
-        var zoomRatio = peasy.zoomRatio + (e / 20.0f)
-
-        if (zoomRatio > 1.2) {
-            zoomRatio = 1.2f
-        }
-        if (zoomRatio < 0.1) {
-            zoomRatio = 0.1f
-        }
-
-        peasy.zoomRatio = zoomRatio
-    }
 }

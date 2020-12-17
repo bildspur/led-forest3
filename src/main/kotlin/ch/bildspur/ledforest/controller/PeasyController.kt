@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.controller
 
 import ch.bildspur.ledforest.Sketch
+import ch.bildspur.math.max
 import peasy.CameraState
 import peasy.PeasyCam
 import processing.core.PApplet
@@ -15,29 +16,32 @@ class PeasyController(internal var sketch: Sketch) {
     lateinit var cam: PeasyCam
 
     var isOrtho = false
-    var zoomRatio = 1.0f
     var stateSwitchSpeed = 200L
 
-    private lateinit var defaultState : CameraState
+    private lateinit var defaultState: CameraState
 
-    private lateinit var topState : CameraState
-    private lateinit var frontState : CameraState
-    private lateinit var leftState : CameraState
-    private lateinit var rightState : CameraState
+    private lateinit var topState: CameraState
+    private lateinit var frontState: CameraState
+    private lateinit var leftState: CameraState
+    private lateinit var rightState: CameraState
+
+    private val minDistance = 0.0
+    private val maxDistance = 500.0
 
     fun setup() {
-        cam = PeasyCam(sketch, 0.0, 0.0, 0.0, 400.0)
+        cam = PeasyCam(sketch, 0.0, 0.0, 0.0, maxDistance * 0.8)
 
-        cam.setMinimumDistance(0.0)
-        cam.setMaximumDistance(500.0)
+        cam.setMinimumDistance(minDistance)
+        cam.setMaximumDistance(maxDistance)
 
         initStates()
         defaultView()
     }
 
     fun applyTo(canvas: PGraphics) {
-        if(isOrtho) {
-            sketch.canvas.ortho(-sketch.width / 2 * zoomRatio,sketch.width / 2 * zoomRatio, -sketch.height / 2 * zoomRatio, sketch.height / 2*zoomRatio, -100f, 1000f)
+        if (isOrtho) {
+            val zoom = ((cam.distance - minDistance) / (maxDistance - minDistance)).toFloat()
+            sketch.canvas.ortho(-sketch.width / 2 * zoom, sketch.width / 2 * zoom, -sketch.height / 2 * zoom, sketch.height / 2 * zoom, -100f, 1000f)
         } else {
             sketch.canvas.perspective(PI / 2.5f, sketch.width.toFloat() / sketch.height, 0.001f, 1000f)
         }
