@@ -23,6 +23,7 @@ import ddf.minim.Minim
 import processing.core.PApplet
 import processing.core.PConstants
 import processing.core.PGraphics
+import processing.event.MouseEvent
 import processing.opengl.PJOGL
 import kotlin.math.roundToInt
 
@@ -323,6 +324,9 @@ class Sketch : PApplet() {
         // retina screen
         if (project.value.visualisation.highResMode.value)
             canvas.pixelDensity = 2
+
+        // view angle
+        peasy.perspective()
     }
 
     fun skipFirstFrames(): Boolean {
@@ -397,5 +401,17 @@ class Sketch : PApplet() {
         lastCursorMoveTime = millis()
     }
 
+    override fun mouseWheel(event: MouseEvent) {
+        val e = event.count.toFloat()
+        var zoomRatio = peasy.zoomRatio + (e / 20.0f)
 
+        if (zoomRatio > 1.2) {
+            zoomRatio = 1.2f
+        }
+        if (zoomRatio < 0.1) {
+            zoomRatio = 0.1f
+        }
+
+        peasy.zoomRatio = zoomRatio
+    }
 }

@@ -1,20 +1,20 @@
 package ch.bildspur.ledforest.controller
 
+import ch.bildspur.ledforest.Sketch
 import peasy.PeasyCam
 import processing.core.PApplet
 import processing.core.PConstants.PI
 import processing.core.PGraphics
-import javax.swing.Spring.height
-
-
-
 
 
 /**
  * Created by cansik on 08.06.17.
  */
-class PeasyController(internal var sketch: PApplet) {
+class PeasyController(internal var sketch: Sketch) {
     lateinit var cam: PeasyCam
+
+    var isOrtho = false
+    var zoomRatio = 1.0f
 
     fun setup() {
         cam = PeasyCam(sketch, 0.0, 0.0, 0.0, 200.0)
@@ -24,12 +24,15 @@ class PeasyController(internal var sketch: PApplet) {
 
         //cam.rotateZ(PApplet.radians(-90f).toDouble())
         cam.rotateX(PApplet.radians(-75f).toDouble())
-
-        // remove clipping in scene
-        sketch.perspective(PI / 2.5f, sketch.width.toFloat() / sketch.height, 0.001f, 1000f)
     }
 
     fun applyTo(canvas: PGraphics) {
+        if(isOrtho) {
+            sketch.canvas.ortho(-sketch.width / 2 * zoomRatio,sketch.width / 2 * zoomRatio, -sketch.height / 2 * zoomRatio, sketch.height / 2*zoomRatio, -100f, 1000f)
+        } else {
+            sketch.canvas.perspective(PI / 2.5f, sketch.width.toFloat() / sketch.height, 0.001f, 1000f)
+        }
+
         cam.state.apply(canvas)
     }
 
@@ -45,5 +48,27 @@ class PeasyController(internal var sketch: PApplet) {
 
     fun enable() {
         cam.isActive = true
+    }
+
+    // view settings
+    fun perspective() {
+        isOrtho = false
+    }
+
+    fun ortho() {
+        isOrtho = true
+    }
+
+    // predefined view
+    fun topView() {
+
+    }
+
+    fun frontView() {
+
+    }
+
+    fun sideView() {
+
     }
 }

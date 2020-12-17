@@ -23,7 +23,6 @@ import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.geometry.Dimension2D
-import javafx.geometry.Insets
 import javafx.geometry.Point2D
 import javafx.scene.Parent
 import javafx.scene.Scene
@@ -224,7 +223,7 @@ class PrimaryView {
         }
 
         elementTreeView.root = rootItem
-        updateTubeMap()
+        recreateTubeMap()
     }
 
     fun onProjectChanged(project: Project) {
@@ -258,12 +257,12 @@ class PrimaryView {
 
         // add redraw of ui
         project.map.mapScaleFactor.onChanged += {
-            updateTubeMap()
+            recreateTubeMap()
         }
 
         // redraw of ui if setting changes
         project.map.showExtendedName.onChanged += {
-            updateTubeMap()
+            recreateTubeMap()
         }
     }
 
@@ -407,7 +406,7 @@ class PrimaryView {
         }
     }
 
-    fun updateTubeMap() {
+    fun recreateTubeMap() {
         tubeMap.activeLayer.shapes.clear()
 
         // transform
@@ -420,7 +419,7 @@ class PrimaryView {
         val dimension = Dimension2D(box.x.toDouble() * scale, box.y.toDouble() * scale)
         val bounds = RectangleShape(position, dimension)
         bounds.stroke = Color.WHITE
-        bounds.strokeWeight = 0.5
+        bounds.strokeWeight = 0.8
         bounds.noFill()
         tubeMap.activeLayer.shapes.add(bounds)
 
@@ -429,6 +428,10 @@ class PrimaryView {
             tubeMap.activeLayer.shapes.add(TubeShape(it, transform, scale))
         }
 
+        redrawTubeMap()
+    }
+
+    fun redrawTubeMap() {
         tubeMap.redraw()
     }
 
