@@ -7,6 +7,8 @@ import ch.bildspur.ui.properties.ActionParameter
 import ch.bildspur.ui.properties.BooleanParameter
 import ch.bildspur.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose
+import kotlin.math.abs
+import kotlin.math.floor
 
 class Map {
 
@@ -20,15 +22,20 @@ class Map {
 
     @ActionParameter("Map", "Auto Scale")
     val autoScaleMap = {
-        val scaleFactor = 1.2
+        val scaleFactor = 0.8
 
         val ranges = Sketch.instance.spaceInformation.calculateTubeDimensions(Sketch.instance.project.value.tubes)
-        val maxX = Math.max(Math.abs(ranges.x.low), ranges.x.high)
-        val maxY = Math.max(Math.abs(ranges.y.low), ranges.y.high)
+        val maxX = abs(ranges.x.low).coerceAtLeast(ranges.x.high)
+        val maxY = abs(ranges.y.low).coerceAtLeast(ranges.y.high)
 
-        val maxFactor = Math.max(TubeMap.CANVAS_WIDTH / 2.0 / maxX, TubeMap.CANVAS_HEIGHT / 2.0 / maxY)
 
-        if (maxFactor > 0)
-            mapScaleFactor.value = Math.floor(maxFactor / scaleFactor).toFloat()
+        val ratio = if(maxX >= maxY) {
+            TubeMap.CANVAS_WIDTH / (2.0 * maxX)
+        } else {
+            TubeMap.CANVAS_HEIGHT / (2.0 * maxY)
+        }
+
+        if (ratio > 0)
+            mapScaleFactor.value = floor(ratio * scaleFactor).toFloat()
     }
 }
