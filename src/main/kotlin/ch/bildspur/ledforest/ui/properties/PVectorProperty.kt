@@ -1,8 +1,8 @@
 package ch.bildspur.ledforest.ui.properties
 
-import ch.bildspur.ledforest.ui.control.RelationNumberField
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.fx.BaseFXFieldProperty
+import ch.bildspur.ui.fx.controls.NumberField
 import javafx.event.ActionEvent
 import javafx.scene.Cursor
 import javafx.scene.control.Label
@@ -18,9 +18,9 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
 
     @Suppress("UNCHECKED_CAST")
     val model = field.get(obj) as DataModel<PVector>
-    val xField = RelationNumberField<Float>(TextFormatter(FloatStringConverter()))
-    val yField = RelationNumberField<Float>(TextFormatter(FloatStringConverter()))
-    val zField = RelationNumberField<Float>(TextFormatter(FloatStringConverter()))
+    val xField = NumberField<Float>(TextFormatter(FloatStringConverter()))
+    val yField = NumberField<Float>(TextFormatter(FloatStringConverter()))
+    val zField = NumberField<Float>(TextFormatter(FloatStringConverter()))
 
     var lastDraggedValue = 0.0
 
@@ -51,22 +51,22 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
                     value /= 10.0
                 }
 
-                it.value.setValue(it.value.getValue() + value)
+                it.value.value = it.value.value + value
                 it.value.fireEvent(ActionEvent())
             }
             label.setOnMouseReleased {
                 lastDraggedValue = 0.0
             }
 
-            it.value.prefWidth = RelationNumberField.PREFERRED_WIDTH - 20.0
-            it.value.isShowRange = false
+            //it.value.prefWidth = RelationNumberField.PREFERRED_WIDTH - 20.0
+            // it.value.isShowRange = false
             label.prefWidth = 20.0
 
             it.value.setOnAction {
                 model.value = PVector(
-                        xField.getValue().toFloat(),
-                        yField.getValue().toFloat(),
-                        zField.getValue().toFloat())
+                        xField.value.toFloat(),
+                        yField.value.toFloat(),
+                        zField.value.toFloat())
             }
 
             box.children.add(HBox(label, it.value))
@@ -74,9 +74,9 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
 
         // setup binding
         model.onChanged += {
-            xField.setValue(model.value.x.toDouble())
-            yField.setValue(model.value.y.toDouble())
-            zField.setValue(model.value.z.toDouble())
+            xField.value = model.value.x.toDouble()
+            yField.value = model.value.y.toDouble()
+            zField.value = model.value.z.toDouble()
 
         }
         model.fireLatest()
