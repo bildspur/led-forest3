@@ -388,6 +388,7 @@ class PrimaryView {
                 configuration.saveProject(result.path, project.value)
                 appConfig.projectFile = result.path
                 configuration.saveAppConfig(appConfig)
+                hotReloadWatcher.reset(Paths.get(result.path))
             }, { updateUI() }, "save project")
         }
     }
@@ -397,6 +398,7 @@ class PrimaryView {
             UITask.run({
                 configuration.saveProject(appConfig.projectFile, project.value)
                 configuration.saveAppConfig(appConfig)
+                hotReloadWatcher.reset(Paths.get(appConfig.projectFile))
             }, { updateUI() }, "save project")
         } else {
             onSaveProjectAs()
