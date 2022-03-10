@@ -12,6 +12,7 @@ import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
 import ch.bildspur.ledforest.ui.util.TagItem
 import ch.bildspur.ledforest.ui.util.UITask
+import ch.bildspur.ledforest.util.FileWatcher
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.fx.PropertiesControl
 import ch.fhnw.afpars.ui.control.editor.shapes.RectangleShape
@@ -96,6 +97,8 @@ class PrimaryView {
     private val dmxIcon = Image(javaClass.getResourceAsStream("images/DmxFront16.png"))
     private val tubeIcon = Image(javaClass.getResourceAsStream("images/SimpleTube16.png"))
 
+    private var hotReloadWatcher = FileWatcher()
+
     init {
     }
 
@@ -121,6 +124,17 @@ class PrimaryView {
                     initSettingsView(item.value!!.item!!, item.value!!.item!!.toString())
                 }
             }
+        }
+
+        // setup hot reload handler
+        hotReloadWatcher.onChange += { path ->
+            UITask.run({
+                appConfig.projectFile = path.toString()
+                project.value = configuration.loadProject(path.toString())
+                configuration.saveAppConfig(appConfig)
+
+                resetRenderer()
+            }, { updateUI() }, "hot-reloaded project")
         }
 
         // setup project changed handler
@@ -278,6 +292,9 @@ class PrimaryView {
         project.map.showExtendedName.onChanged += {
             recreateTubeMap()
         }
+
+        // add hot-reload support
+        hotReloadWatcher.reset(Paths.get(appConfig.projectFile))
     }
 
     fun <T> createBidirectionalMapping(dataModel: DataModel<T>,
@@ -337,8 +354,8 @@ class PrimaryView {
 
         if (result != null) {
             UITask.run({
-                project.value = configuration.loadProject(result.path)
                 appConfig.projectFile = result.path
+                project.value = configuration.loadProject(result.path)
                 configuration.saveAppConfig(appConfig)
 
                 resetRenderer()
