@@ -57,7 +57,7 @@ class Visualisation {
 
     @Expose
     @SliderParameter("LED Height", 0.01, 0.1, 0.01)
-    var ledHeight = DataModel(0.06f)
+    var ledHeight = DataModel(0.0625f)
 
     @Expose
     @SliderParameter("LED Detail", 2.0, 10.0)

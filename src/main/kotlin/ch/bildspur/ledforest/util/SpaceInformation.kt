@@ -2,6 +2,7 @@ package ch.bildspur.ledforest.util
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.model.light.TubeOrigin
 import ch.bildspur.model.NumberRange
 import processing.core.PApplet
 import processing.core.PGraphics
@@ -46,8 +47,19 @@ class SpaceInformation(val sketch: Sketch) {
             it.rotateY(tube.rotation.value.y)
             it.rotateZ(tube.rotation.value.z)
 
+            // led size
+            val ledHeight = sketch.project.value.visualisation.ledHeight.value
+            val tubeLength = tube.ledCount.value * ledHeight
+
+            // delta
+            val delta = when (tube.origin.value) {
+                TubeOrigin.Bottom -> 0f
+                TubeOrigin.Center -> -(tubeLength * 0.5f - ledHeight * 0.5f)
+                TubeOrigin.Top -> -(tubeLength - ledHeight)
+            }
+
             // translate height
-            it.translate(0f, 0f, (if (tube.inverted.value) -1 else 1) * (index * sketch.project.value.visualisation.ledHeight.value))
+            it.translate(0f, 0f, (index * ledHeight) + delta)
 
             // rotate shape
             it.rotateX(PApplet.radians(90f))

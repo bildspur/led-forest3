@@ -5,6 +5,7 @@ import ch.bildspur.ledforest.leap.InteractionHand
 import ch.bildspur.ledforest.leap.LeapDataProvider
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.model.light.TubeOrigin
 import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.realsense.RealSenseDataProvider
@@ -114,8 +115,19 @@ class SceneRenderer(val g: PGraphics,
             g.rotateY(tube.rotation.value.y)
             g.rotateZ(tube.rotation.value.z)
 
+            // led size
+            val ledHeight = project.visualisation.ledHeight.value
+            val tubeLength = tube.ledCount.value * ledHeight
+
+            // delta
+            val delta = when (tube.origin.value) {
+                TubeOrigin.Bottom -> 0f
+                TubeOrigin.Center -> -(tubeLength * 0.5f - ledHeight * 0.5f)
+                TubeOrigin.Top -> -(tubeLength - ledHeight)
+            }
+
             // translate height
-            g.translate(0f, 0f, (if (tube.inverted.value) -1 else 1) * (i * project.visualisation.ledHeight.value))
+            g.translate(0f, 0f, (i * ledHeight) + delta)
 
             // rotate shape
             g.rotateX(PApplet.radians(90f))

@@ -10,5 +10,4 @@ class LED(var address: Int, color: Int) {
     }
 
     var color: FadeColor = FadeColor(color)
-
 }

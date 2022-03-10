@@ -21,9 +21,9 @@ class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = D
     @StringParameter("Name")
     var name = DataModel("")
 
-    @BooleanParameter("Inverted")
+    @EnumParameter("Origin")
     @Expose
-    var inverted = DataModel(false)
+    var origin = DataModel(TubeOrigin.Bottom)
 
     @Expose
     @NumberParameter("LED Count")
@@ -70,7 +70,9 @@ class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = D
     }
 
     fun initLEDs() {
-        leds = (0 until ledCount.value).map { LED(addressStart.value + it * LED.LED_ADDRESS_SIZE, ColorMode.color(0, 100, 100)) }
+        leds = (0 until ledCount.value).map {
+            LED(addressStart.value + it * LED.LED_ADDRESS_SIZE, ColorMode.color(0, 100, 100))
+        }
     }
 
     override fun toString(): String {
