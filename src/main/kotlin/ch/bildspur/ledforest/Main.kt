@@ -9,6 +9,7 @@ import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.Scene
+import javafx.scene.image.Image
 import javafx.stage.Stage
 import jfxtras.styles.jmetro.JMetro
 import jfxtras.styles.jmetro.Style
@@ -42,6 +43,7 @@ class Main : Application() {
 
         primaryStage.title = Sketch.NAME
         primaryStage.scene = Scene(root)
+        primaryStage.icons.add(Image(javaClass.getResourceAsStream("ui/images/LEDForestIcon.png")))
 
         val jMetro = JMetro(Style.DARK)
         jMetro.scene = primaryStage.scene
