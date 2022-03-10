@@ -3,8 +3,6 @@ package ch.bildspur.ledforest
 import ch.bildspur.ledforest.ui.PrimaryView
 import ch.bildspur.ledforest.ui.properties.*
 import ch.bildspur.ui.fx.FXPropertyRegistry
-import ch.bildspur.ui.fx.properties.ColorProperty
-import ch.bildspur.ui.properties.ColorParameter
 import ch.bildspur.ui.properties.PropertiesRegistryEntry
 import com.sun.javafx.application.PlatformImpl
 import javafx.application.Application
@@ -12,9 +10,12 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
+import jfxtras.styles.jmetro.JMetro
+import jfxtras.styles.jmetro.Style
 import org.apache.log4j.BasicConfigurator
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
+
 
 /**
  * Created by cansik on 04.02.17.
@@ -41,6 +42,9 @@ class Main : Application() {
 
         primaryStage.title = Sketch.NAME
         primaryStage.scene = Scene(root)
+
+        val jMetro = JMetro(Style.DARK)
+        jMetro.scene = primaryStage.scene
 
         // setup on shown event
         primaryStage.setOnShown { controller.setupView() }

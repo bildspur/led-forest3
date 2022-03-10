@@ -55,7 +55,7 @@ class Sketch : PApplet() {
         val NAME = "LED Forest 3"
 
         @JvmStatic
-        val VERSION = "2.2.0"
+        val VERSION = "3.0.0"
 
         @JvmStatic
         val URI_NAME = "ledforest"
