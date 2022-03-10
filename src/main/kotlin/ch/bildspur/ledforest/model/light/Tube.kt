@@ -12,7 +12,7 @@ import processing.core.PVector
 class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = DataModel(0),
            @NumberParameter("Start") @Expose val addressStart: DataModel<Int> = DataModel(0),
            @PVectorParameter("Position") @Expose val position: DataModel<PVector> = DataModel(PVector()),
-           @PVectorParameter("Rotation") @Expose val rotation: DataModel<PVector> = DataModel(PVector()))
+           @PVectorAngleParameter("Rotation") @Expose val rotation: DataModel<PVector> = DataModel(PVector()))
     : PostProcessable {
 
     var isSelected = DataModel(false)

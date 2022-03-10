@@ -14,7 +14,7 @@ import javafx.util.converter.FloatStringConverter
 import processing.core.PVector
 import java.lang.reflect.Field
 
-class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) : BaseFXFieldProperty(field, obj) {
+open class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter?) : BaseFXFieldProperty(field, obj) {
 
     @Suppress("UNCHECKED_CAST")
     val model = field.get(obj) as DataModel<PVector>
@@ -23,6 +23,9 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
     val zField = NumberField<Float>(TextFormatter(FloatStringConverter()))
 
     var lastDraggedValue = 0.0
+
+    var slowSpeed = 100.0
+    var highSpeed = 10.0
 
     val fields = mapOf(
             Pair("X", xField),
@@ -43,12 +46,12 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
                 lastDraggedValue = event.x
 
                 // slow down
-                if(event.button == MouseButton.PRIMARY) {
-                    value /= 100.0
+                if (event.button == MouseButton.PRIMARY) {
+                    value /= slowSpeed
                 }
 
-                if(event.button == MouseButton.SECONDARY) {
-                    value /= 10.0
+                if (event.button == MouseButton.SECONDARY) {
+                    value /= highSpeed
                 }
 
                 it.value.value = it.value.value + value
@@ -62,9 +65,9 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
 
             it.value.setOnAction {
                 model.value = PVector(
-                        xField.value.toFloat(),
-                        yField.value.toFloat(),
-                        zField.value.toFloat())
+                        outMap(xField.value),
+                        outMap(yField.value),
+                        outMap(zField.value))
                 propertyChanged(this)
             }
 
@@ -73,11 +76,19 @@ class PVectorProperty(field: Field, obj: Any, val annotation: PVectorParameter) 
 
         // setup binding
         model.onChanged += {
-            xField.value = model.value.x.toDouble()
-            yField.value = model.value.y.toDouble()
-            zField.value = model.value.z.toDouble()
+            xField.value = inMap(model.value.x)
+            yField.value = inMap(model.value.y)
+            zField.value = inMap(model.value.z)
         }
         model.fireLatest()
         children.add(box)
+    }
+
+    internal open fun inMap(value: Float): Double {
+        return value.toDouble()
+    }
+
+    internal open fun outMap(value: Double): Float {
+        return value.toFloat()
     }
 }

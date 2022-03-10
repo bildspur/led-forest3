@@ -65,7 +65,7 @@ class Visualisation {
 
     @Expose
     @BooleanParameter("Display Floor")
-    var displayFloor = DataModel(true)
+    var displayFloor = DataModel(false)
 
     @Expose
     @SliderParameter("Floor Z-Height", 0.1, 10.0, 0.1)
