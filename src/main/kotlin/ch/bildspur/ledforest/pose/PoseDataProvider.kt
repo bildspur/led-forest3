@@ -75,24 +75,28 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
             while (isRunning.get()) {
                 val validPoses = poseBuffer.filter { it.score >= project.value.poseInteraction.minScore.value }
 
-                // run tracking
-                simpleTracker.maxDelta = project.value.poseInteraction.maxDelta.value
-                simpleTracker.track(validPoses)
+                if (project.value.poseInteraction.useTracking.value) {
+                    // run tracking
+                    simpleTracker.maxDelta = project.value.poseInteraction.maxDelta.value
+                    simpleTracker.track(validPoses)
 
-                // update id's and easing
-                simpleTracker.entities.forEach {
-                    it.item.id = it.trackingId
+                    // update id's and easing
+                    simpleTracker.entities.forEach {
+                        it.item.id = it.trackingId
 
-                    // update easing
-                    it.item.easedPosition.target.set(it.item.position)
-                    it.item.easedPosition.easing = project.value.poseInteraction.positionEasing.value
-                    it.item.easedPosition.update()
+                        // update easing
+                        it.item.easedPosition.target.set(it.item.position)
+                        it.item.easedPosition.easing = project.value.poseInteraction.positionEasing.value
+                        it.item.easedPosition.update()
+                    }
+
+                    // update poses (make this once in the loop)
+                    relevantPoses.set(simpleTracker.entities.map { it.item }
+                            .filter { System.currentTimeMillis() - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
+                            .toList())
+                } else {
+                    relevantPoses.set(validPoses)
                 }
-
-                // update poses (make this once in the loop)
-                relevantPoses.set(simpleTracker.entities.map { it.item }
-                        .filter { System.currentTimeMillis() - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
-                        .toList())
 
                 // update ui
                 project.value.poseInteraction.poseCount.value = "${simpleTracker.entities.size}"

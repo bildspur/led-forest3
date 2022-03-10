@@ -88,6 +88,8 @@ class SARMotionPoseClient : OSCPacketListener, PoseClient {
             // pose.keypoints[16] = keypoints[7]
             // pose.keypoints[17] = keypoints[8]
 
+            pose.easedPosition.set(pose.keypoints[1])
+
             pose
         }.toMutableList()
 
