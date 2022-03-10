@@ -128,13 +128,7 @@ class PrimaryView {
 
         // setup hot reload handler
         hotReloadWatcher.onChange += { path ->
-            UITask.run({
-                appConfig.projectFile = path.toString()
-                project.value = configuration.loadProject(path.toString())
-                configuration.saveAppConfig(appConfig)
-
-                resetRenderer()
-            }, { updateUI() }, "hot-reloaded project")
+            reloadProjectFromFile(path.toString())
         }
 
         // setup project changed handler
@@ -148,7 +142,7 @@ class PrimaryView {
 
             // on map select
             moveTool.shapesSelected += {
-                if(it.isNotEmpty()) {
+                if (it.isNotEmpty()) {
                     it.filterIsInstance<TubeShape>().map { it.tube }.forEach { t ->
                         // select element in tree view
                         elementTreeView.root.children.forEach { a ->
@@ -271,7 +265,7 @@ class PrimaryView {
                 disableRenderingMenuItem.selectedProperty())
 
         display2DMapMenuItem.setOnAction {
-            if(tubeMap.isVisible) {
+            if (tubeMap.isVisible) {
                 tubeMap.isVisible = false
                 primaryStage.width = root.width - tubeMap.width
                 root.prefWidth = primaryStage.width
@@ -353,14 +347,24 @@ class PrimaryView {
         val result = fileChooser.showOpenDialog(primaryStage)
 
         if (result != null) {
-            UITask.run({
-                appConfig.projectFile = result.path
-                project.value = configuration.loadProject(result.path)
-                configuration.saveAppConfig(appConfig)
-
-                resetRenderer()
-            }, { updateUI() }, "load project")
+            reloadProjectFromFile(result.path)
         }
+    }
+
+    private fun reloadProjectFromFile(file: String) {
+        UITask.run({
+            val currentProjectFile = appConfig.projectFile
+            try {
+                appConfig.projectFile = file
+                project.value = configuration.loadProject(file)
+                configuration.saveAppConfig(appConfig)
+                resetRenderer()
+            } catch (ex: Exception) {
+                System.err.println("An error happened on loading the project file ${file}: ${ex.message}")
+                ex.printStackTrace()
+                appConfig.projectFile = currentProjectFile
+            }
+        }, { updateUI() }, "load project")
     }
 
     fun resetRenderer() {
