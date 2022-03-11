@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+<BorderPane fx:id="root" minHeight="100" minWidth="100"
             prefHeight="720.0" prefWidth="1236.0" xmlns="http://javafx.com/javafx/8.0.111"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.bildspur.ledforest.ui.PrimaryView">
     <top>
@@ -78,7 +78,7 @@
     <left>
         <TitledPane collapsible="false" prefWidth="260" text="Scene">
             <VBox prefWidth="200.0" style="-fx-border-style: none;" BorderPane.alignment="CENTER">
-                <TreeView fx:id="elementTreeView" prefHeight="800.0" prefWidth="300.0"/>
+                <TreeView fx:id="elementTreeView" prefHeight="10000.0" prefWidth="300.0"/>
                 <HBox prefWidth="200.0" spacing="10.0">
                     <padding>
                         <Insets top="10.0"/>
