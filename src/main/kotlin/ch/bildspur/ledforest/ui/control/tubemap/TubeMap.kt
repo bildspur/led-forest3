@@ -76,7 +76,7 @@ class TubeMap : Pane() {
         layers.add(activeLayer)
 
         // make background gray
-        style = "-fx-background-color: #32CD32;"
+        style = "-fx-background-color: #000000;" // #32CD32
 
         // setup resize
         widthProperty().addListener { _ -> resize() }

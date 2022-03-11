@@ -282,6 +282,14 @@ class PrimaryView {
             recreateTubeMap()
         }
 
+        primaryStage.widthProperty().addListener { _, _, _ ->
+            recreateTubeMap()
+        }
+
+        primaryStage.heightProperty().addListener { _, _, _ ->
+            recreateTubeMap()
+        }
+
         // redraw of ui if setting changes
         project.map.showExtendedName.onChanged += {
             recreateTubeMap()

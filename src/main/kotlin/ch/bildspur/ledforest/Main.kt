@@ -50,7 +50,7 @@ class Main : Application() {
 
         // setup on shown event
         primaryStage.setOnShown { controller.setupView() }
-        primaryStage.isResizable = false
+        primaryStage.isResizable = true
 
         // style
         PlatformImpl.setDefaultPlatformUserAgentStylesheet()
