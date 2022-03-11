@@ -142,6 +142,7 @@ class Sketch : PApplet() {
 
     override fun setup() {
         Sketch.instance = this
+        surface.setResizable(true)
 
         frameRate(if (project.value.visualisation.highFPSMode.value) HIGH_RES_FRAME_RATE else LOW_RES_FRAME_RATE)
         colorMode(HSB, 360f, 100f, 100f)
