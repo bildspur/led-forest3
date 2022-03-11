@@ -33,10 +33,10 @@ class TubeMap : Pane() {
         val BACKGROUND_LAYER = "background"
 
         @JvmStatic
-        val CANVAS_WIDTH = 400.0
+        val CANVAS_WIDTH = 800.0
 
         @JvmStatic
-        val CANVAS_HEIGHT = 400.0
+        val CANVAS_HEIGHT = 800.0
     }
 
     var canvas = ResizableCanvas(CANVAS_WIDTH, CANVAS_HEIGHT)
