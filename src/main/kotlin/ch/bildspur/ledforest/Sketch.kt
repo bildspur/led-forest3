@@ -94,6 +94,9 @@ class Sketch : PApplet() {
     @Volatile
     var isResetRendererProposed = false
 
+    @Volatile
+    var running = true
+
     var isRendering = DataModel(true)
 
     var isInteractionOn = DataModel(true)
@@ -135,7 +138,7 @@ class Sketch : PApplet() {
         if (project.value.visualisation.isFullScreenMode.value) {
             fullScreen(PConstants.P3D, project.value.visualisation.fullScreenDisplay.value)
         } else {
-            if(project.value.visualisation.disablePreview.value) {
+            if (project.value.visualisation.disablePreview.value) {
                 size(100, 100, PConstants.P3D)
             } else {
                 size(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
@@ -154,7 +157,7 @@ class Sketch : PApplet() {
         Sketch.instance = this
         surface.setResizable(true)
 
-        if(project.value.visualisation.disablePreview.value) {
+        if (project.value.visualisation.disablePreview.value) {
             frameRate(40f)
         } else {
             frameRate(if (project.value.visualisation.highFPSMode.value) HIGH_RES_FRAME_RATE else LOW_RES_FRAME_RATE)
@@ -218,8 +221,6 @@ class Sketch : PApplet() {
         background(0)
 
         if (skipFirstFrames()) {
-            // todo: not rendering in background
-            // surface.setVisible(false)
             return
         }
 
@@ -244,11 +245,6 @@ class Sketch : PApplet() {
             peasy.applyTo(canvas)
         }
 
-        if(project.value.visualisation.disablePreview.value) {
-            timer.update()
-            return
-        }
-
         // add hud
         peasy.hud {
             // output image
@@ -261,6 +257,26 @@ class Sketch : PApplet() {
 
             showDebugInformation()
             drawSketchInformation(g)
+        }
+
+        // first frame is draw
+        if (project.value.visualisation.disablePreview.value) {
+            println("starting renderer...")
+            surface.setVisible(false)
+            kotlin.concurrent.thread(isDaemon = true, block = { this.backgroundRenderer() })
+            noLoop()
+        }
+    }
+
+    fun backgroundRenderer() {
+        while (running) {
+            // reset renderer if needed
+            if (isResetRendererProposed)
+                resetRenderer()
+
+            updateLEDColors()
+            timer.update()
+            Thread.sleep(25)
         }
     }
 
@@ -409,6 +425,7 @@ class Sketch : PApplet() {
     fun prepareExitHandler() {
         Runtime.getRuntime().addShutdownHook(Thread {
             println("shutting down...")
+            running = false
             renderer.forEach { it.dispose() }
             leapMotion.stop()
             realSense.stop()
