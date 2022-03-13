@@ -3,8 +3,8 @@ package ch.bildspur.ledforest.pose.clients
 import ch.bildspur.event.Event
 import ch.bildspur.ledforest.pose.Pose
 import com.illposed.osc.*
-import com.illposed.osc.transport.udp.OSCPortIn
-import com.illposed.osc.transport.udp.OSCPortInBuilder
+import com.illposed.osc.transport.OSCPortIn
+import com.illposed.osc.transport.OSCPortInBuilder
 import processing.core.PVector
 import java.net.InetSocketAddress
 
