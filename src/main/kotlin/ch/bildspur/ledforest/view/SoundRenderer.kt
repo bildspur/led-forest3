@@ -56,7 +56,7 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
         // enable if leap is there
         if (!hands.isEmpty()) {
             handPlayer.volume.target = project.audio.rattleGain.value.toFloat()
-            val average = (hands.sumByDouble { it.position.x.toDouble() } / hands.size.toDouble()).toFloat()
+            val average = (hands.sumOf { it.position.x.toDouble() } / hands.size.toDouble()).toFloat()
             handPlayer.player.pan = PApplet.map(average, 0f, project.interaction.interactionBox.value.x, 0f, 1f).limit(-1f, 1f)
         }
 

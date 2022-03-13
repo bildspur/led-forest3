@@ -32,7 +32,7 @@ fun PVector.toFloat2() : Float2 {
  * Returns a single list of all elements from all arrays in the given array.
  */
 fun <T> Array<out Array<out T>>.flatten(): List<T> {
-    val result = ArrayList<T>(sumBy { it.size })
+    val result = ArrayList<T>(sumOf { it.size })
     for (element in this) {
         result.addAll(element)
     }

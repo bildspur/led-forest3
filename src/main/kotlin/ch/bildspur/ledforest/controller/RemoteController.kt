@@ -5,7 +5,7 @@ import ch.bildspur.ledforest.Sketch
 class RemoteController(internal var sketch: Sketch) {
 
     fun processCommand(key: Char) {
-        when (key.toLowerCase()) {
+        when (key.lowercaseChar()) {
             'i' -> sketch.isStatusViewShown = !sketch.isStatusViewShown
             'o' -> sketch.peasy.ortho()
             'p' -> sketch.peasy.perspective()

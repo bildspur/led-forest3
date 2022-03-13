@@ -347,13 +347,13 @@ object ColorMode {
     }
 
     fun lerpColor(c1: Int, c2: Int, amt: Float, mode: Int): Int {
-        var amt = amt
-        if (amt < 0.0f) {
-            amt = 0.0f
+        var iamt = amt
+        if (iamt < 0.0f) {
+            iamt = 0.0f
         }
 
-        if (amt > 1.0f) {
-            amt = 1.0f
+        if (iamt > 1.0f) {
+            iamt = 1.0f
         }
 
         val a1: Float
@@ -370,7 +370,7 @@ object ColorMode {
             bo = (c2 shr 16 and 255).toFloat()
             val g2 = (c2 shr 8 and 255).toFloat()
             val b2 = (c2 and 255).toFloat()
-            return PApplet.round(a1 + (so - a1) * amt) shl 24 or (PApplet.round(a2 + (bo - a2) * amt) shl 16) or (PApplet.round(g1 + (g2 - g1) * amt) shl 8) or PApplet.round(ho + (b2 - ho) * amt)
+            return PApplet.round(a1 + (so - a1) * iamt) shl 24 or (PApplet.round(a2 + (bo - a2) * iamt) shl 16) or (PApplet.round(g1 + (g2 - g1) * iamt) shl 8) or PApplet.round(ho + (b2 - ho) * iamt)
         } else if (mode == 3) {
             if (lerpColorHSB1 == null) {
                 lerpColorHSB1 = FloatArray(3)
@@ -379,12 +379,12 @@ object ColorMode {
 
             a1 = (c1 shr 24 and 255).toFloat()
             a2 = (c2 shr 24 and 255).toFloat()
-            val alfa = PApplet.round(a1 + (a2 - a1) * amt) shl 24
+            val alfa = PApplet.round(a1 + (a2 - a1) * iamt) shl 24
             Color.RGBtoHSB(c1 shr 16 and 255, c1 shr 8 and 255, c1 and 255, lerpColorHSB1)
             Color.RGBtoHSB(c2 shr 16 and 255, c2 shr 8 and 255, c2 and 255, lerpColorHSB2)
-            ho = PApplet.lerp(lerpColorHSB1!![0], lerpColorHSB2[0], amt)
-            so = PApplet.lerp(lerpColorHSB1!![1], lerpColorHSB2[1], amt)
-            bo = PApplet.lerp(lerpColorHSB1!![2], lerpColorHSB2[2], amt)
+            ho = PApplet.lerp(lerpColorHSB1!![0], lerpColorHSB2[0], iamt)
+            so = PApplet.lerp(lerpColorHSB1!![1], lerpColorHSB2[1], iamt)
+            bo = PApplet.lerp(lerpColorHSB1!![2], lerpColorHSB2[2], iamt)
             return alfa or (Color.HSBtoRGB(ho, so, bo) and 16777215)
         } else {
             return 0

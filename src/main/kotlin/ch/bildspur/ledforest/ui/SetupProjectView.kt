@@ -134,9 +134,9 @@ class SetupProjectView {
         info.clonePattern.create(tempProject, info)
 
         // create output
-        result.ledCount = tempProject.tubes.sumBy { it.leds.size }
+        result.ledCount = tempProject.tubes.sumOf { it.leds.size }
         result.tubeCount = tempProject.tubes.size
-        result.universeCount = tempProject.nodes.sumBy { it.universes.size }
+        result.universeCount = tempProject.nodes.sumOf { it.universes.size }
         result.nodeCount = tempProject.nodes.size
 
         return result

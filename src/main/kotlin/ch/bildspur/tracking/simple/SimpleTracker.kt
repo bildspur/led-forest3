@@ -34,7 +34,7 @@ class SimpleTracker<TItem>(inline val position: (item: TItem) -> Float2,
         )
 
         // get untracked entities
-        val (expiredEntities, untrackedEntities) = entities.partition { !it.matched && it.getLifeTime(millis) > maxUntrackedTime }
+        val (expiredEntities, _) = entities.partition { !it.matched && it.getLifeTime(millis) > maxUntrackedTime }
 
         // predict position of untracked entities
         /*

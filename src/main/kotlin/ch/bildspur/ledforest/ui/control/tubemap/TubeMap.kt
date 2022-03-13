@@ -92,7 +92,7 @@ class TubeMap : Pane() {
 
         // set cursor
         cursor = activeTool.cursor
-        activeToolProperty.addListener { o -> cursor = activeTool.cursor }
+        activeToolProperty.addListener { _ -> cursor = activeTool.cursor }
 
         // tool listeners
         // canvas
