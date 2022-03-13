@@ -23,7 +23,6 @@ import ddf.minim.Minim
 import processing.core.PApplet
 import processing.core.PConstants
 import processing.core.PGraphics
-import processing.event.MouseEvent
 import processing.opengl.PJOGL
 import kotlin.math.roundToInt
 
@@ -70,7 +69,13 @@ class Sketch : PApplet() {
 
         @JvmStatic
         fun map(value: Int, start1: Int, stop1: Int, start2: Int, stop2: Int): Int {
-            return map(value.toDouble(), start1.toDouble(), stop1.toDouble(), start2.toDouble(), stop2.toDouble()).roundToInt()
+            return map(
+                value.toDouble(),
+                start1.toDouble(),
+                stop1.toDouble(),
+                start2.toDouble(),
+                stop2.toDouble()
+            ).roundToInt()
         }
     }
 
@@ -127,10 +132,15 @@ class Sketch : PApplet() {
     }
 
     override fun settings() {
-        if (project.value.visualisation.isFullScreenMode.value)
+        if (project.value.visualisation.isFullScreenMode.value) {
             fullScreen(PConstants.P3D, project.value.visualisation.fullScreenDisplay.value)
-        else
-            size(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
+        } else {
+            if(project.value.visualisation.disablePreview.value) {
+                size(100, 100, PConstants.P3D)
+            } else {
+                size(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
+            }
+        }
 
         PJOGL.profile = 1
         smooth()
@@ -144,7 +154,12 @@ class Sketch : PApplet() {
         Sketch.instance = this
         surface.setResizable(true)
 
-        frameRate(if (project.value.visualisation.highFPSMode.value) HIGH_RES_FRAME_RATE else LOW_RES_FRAME_RATE)
+        if(project.value.visualisation.disablePreview.value) {
+            frameRate(40f)
+        } else {
+            frameRate(if (project.value.visualisation.highFPSMode.value) HIGH_RES_FRAME_RATE else LOW_RES_FRAME_RATE)
+        }
+
         colorMode(HSB, 360f, 100f, 100f)
 
         project.onChanged += {
@@ -202,8 +217,11 @@ class Sketch : PApplet() {
     override fun draw() {
         background(0)
 
-        if (skipFirstFrames())
+        if (skipFirstFrames()) {
+            // todo: not rendering in background
+            // surface.setVisible(false)
             return
+        }
 
         // setup long loading controllers
         if (initControllers())
@@ -226,13 +244,18 @@ class Sketch : PApplet() {
             peasy.applyTo(canvas)
         }
 
+        if(project.value.visualisation.disablePreview.value) {
+            timer.update()
+            return
+        }
+
         // add hud
         peasy.hud {
             // output image
             if (project.value.visualisation.highResMode.value)
                 fx.render(canvas)
-                        .bloom(project.value.visualisation.bloomBrightPassThreshold.value.toFloat(), 20, 40f)
-                        .compose()
+                    .bloom(project.value.visualisation.bloomBrightPassThreshold.value.toFloat(), 20, 40f)
+                    .compose()
             else
                 image(canvas, 0f, 0f)
 
@@ -301,7 +324,9 @@ class Sketch : PApplet() {
         renderer.clear()
 
         // add renderer
-        renderer.add(SceneRenderer(canvas, project.value.tubes, leapMotion, realSense, pose, project.value))
+        if (!project.value.visualisation.disablePreview.value) {
+            renderer.add(SceneRenderer(canvas, project.value.tubes, leapMotion, realSense, pose, project.value))
+        }
         renderer.add(ArtNetRenderer(project.value, artnet, project.value.nodes, project.value.tubes))
         renderer.add(SceneManager(this, project.value, project.value.tubes))
 
@@ -373,10 +398,12 @@ class Sketch : PApplet() {
         pg.textAlign(LEFT, BOTTOM)
         pg.fill(255)
         pg.textSize(12f)
-        pg.text((if (project.value.visualisation.disableViewRendering.value) "View Disabled\n" else "") +
-                (if (project.value.poseInteraction.isDebug.value) "Pose Debug\n" else "") +
-                "FPS: ${frameRate.format(2)}\n" +
-                "FOT: ${averageFPS.format(2)}", 10f, height - 5f)
+        pg.text(
+            (if (project.value.visualisation.disableViewRendering.value) "View Disabled\n" else "") +
+                    (if (project.value.poseInteraction.isDebug.value) "Pose Debug\n" else "") +
+                    "FPS: ${frameRate.format(2)}\n" +
+                    "FOT: ${averageFPS.format(2)}", 10f, height - 5f
+        )
     }
 
     fun prepareExitHandler() {
