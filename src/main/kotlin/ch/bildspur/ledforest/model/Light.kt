@@ -11,14 +11,14 @@ class Light {
     var isArtNetRendering = DataModel(true)
 
     @Expose
-    @SliderParameter("Luminosity", 0.0, 1.0)
+    @SliderParameter("Luminosity", 0.0, 1.0, 0.01)
     var luminosity = DataModel(1f)
 
     @Expose
-    @SliderParameter("Response", 0.0, 1.0)
+    @SliderParameter("Response", 0.0, 1.0, 0.01)
     var response = DataModel(0.5f)
 
     @Expose
-    @SliderParameter("Trace", 0.0, 1.0)
+    @SliderParameter("Trace", 0.0, 1.0, 0.01)
     var trace = DataModel(0f)
 }
