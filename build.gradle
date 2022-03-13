@@ -4,7 +4,7 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.12'
     id 'application'
     id 'org.bytedeco.gradle-javacpp-platform' version "$javacppVersion"
-    id "org.beryx.jlink" version "2.25.0"
+    id 'org.beryx.runtime' version '1.12.5'
 }
 
 group 'ch.bildspur'
@@ -32,18 +32,23 @@ switch (OperatingSystem.current()) {
 }
 
 def applicationJvmArgs = ["-Djava.library.path=$defaultJvmArgs",
-                             "--add-opens", "javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED",
-                             "--add-opens", "javafx.graphics/javafx.stage=ALL-UNNAMED",
-                             "--add-opens", "javafx.graphics/com.sun.javafx.tk.quantum=ALL-UNNAMED",
-                             "--add-opens", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
-                             "--add-opens", "javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
-                             "--add-opens", "javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED",
-                             "--add-opens", "javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
-                             "--add-opens", "javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"]
+                          "--add-opens", "javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED",
+                          "--add-opens", "javafx.graphics/javafx.stage=ALL-UNNAMED",
+                          "--add-opens", "javafx.graphics/com.sun.javafx.tk.quantum=ALL-UNNAMED",
+                          "--add-opens", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
+                          "--add-opens", "javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
+                          "--add-opens", "javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED",
+                          "--add-opens", "javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
+                          "--add-opens", "javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"]
 
 wrapper {
     gradleVersion = '7.4.1'
     distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-bin.zip"
+}
+
+compileJava {
+    sourceCompatibility = 11
+    targetCompatibility = 11
 }
 
 javafx {
@@ -58,7 +63,9 @@ repositories {
 
 dependencies {
     // jmetro
-    implementation 'org.jfxtras:jmetro:11.6.15'
+    implementation 'org.jfxtras:jmetro:11.6.15', {
+        exclude group: 'org.openjfx'
+    }
 
     // json
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
@@ -89,6 +96,7 @@ dependencies {
 
     // javafx
     implementation group: 'org.controlsfx', name: 'controlsfx', version: '11.1.1'
+    implementation group: 'com.sun.activation', name: 'javax.activation', version: '1.2.0'
 
     // leap motion java
     implementation files('lib/LeapMotion/library/LeapJava.jar')
@@ -143,9 +151,13 @@ task fatJar(type: Jar) {
     }
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
     manifest {
-        attributes (
+        attributes(
                 'Main-Class': applicationMainClass
         )
     }
     with jar
+}
+
+runtime {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
 }
