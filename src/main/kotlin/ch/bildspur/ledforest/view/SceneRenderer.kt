@@ -102,6 +102,17 @@ class SceneRenderer(val g: PGraphics,
     }
 
     private fun renderTube(tube: Tube) {
+        // led size
+        val ledHeight = project.visualisation.ledHeight.value
+        val tubeLength = tube.ledCount.value * ledHeight
+
+        // delta
+        val delta = when (tube.origin.value) {
+            TubeOrigin.Bottom -> 0f
+            TubeOrigin.Center -> -(tubeLength * 0.5f - ledHeight * 0.5f)
+            TubeOrigin.Top -> -(tubeLength - ledHeight)
+        }
+
         // draw every LED
         for (i in tube.leds.indices) {
             // todo: only do translation once and not for every LED!
@@ -114,17 +125,6 @@ class SceneRenderer(val g: PGraphics,
             g.rotateX(tube.rotation.value.x)
             g.rotateY(tube.rotation.value.y)
             g.rotateZ(tube.rotation.value.z)
-
-            // led size
-            val ledHeight = project.visualisation.ledHeight.value
-            val tubeLength = tube.ledCount.value * ledHeight
-
-            // delta
-            val delta = when (tube.origin.value) {
-                TubeOrigin.Bottom -> 0f
-                TubeOrigin.Center -> -(tubeLength * 0.5f - ledHeight * 0.5f)
-                TubeOrigin.Top -> -(tubeLength - ledHeight)
-            }
 
             // translate height
             g.translate(0f, 0f, (i * ledHeight) + delta)
@@ -177,7 +177,7 @@ class SceneRenderer(val g: PGraphics,
             val cageWidth = project.visualisation.ledWidth.value * 2f
             val cageHeight = (project.visualisation.ledHeight.value * tube.ledCount.value) + cageWidth
 
-            g.translate(0f, 0f, cageHeight * 0.5f)
+            g.translate(0f, 0f, cageHeight * 0.5f + delta)
             g.box(cageWidth, cageWidth, cageHeight)
         }
 
