@@ -4,7 +4,6 @@ import ch.bildspur.ledforest.ui.PrimaryView
 import ch.bildspur.ledforest.ui.properties.*
 import ch.bildspur.ui.fx.FXPropertyRegistry
 import ch.bildspur.ui.properties.PropertiesRegistryEntry
-import com.sun.javafx.application.PlatformImpl
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
@@ -53,7 +52,7 @@ class Main : Application() {
         primaryStage.isResizable = true
 
         // style
-        PlatformImpl.setDefaultPlatformUserAgentStylesheet()
+        // PlatformImpl.setDefaultPlatformUserAgentStylesheet()
         //StyleManager.getInstance().addUserAgentStylesheet(javaClass.classLoader.getResource("ch/bildspur/ledforest/ui/style/ledforest.css").toExternalForm())
         root.stylesheets.add("ch/bildspur/ledforest/ui/style/PrimaryView.css")
 

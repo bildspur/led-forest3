@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.6.10'
     id 'org.openjfx.javafxplugin' version '0.0.12'
-    id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
     id 'application'
     id 'org.bytedeco.gradle-javacpp-platform' version "$javacppVersion"
 }
@@ -40,8 +39,8 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 
     // bildspur libs
-    implementation "com.github.cansik:bildspur-base:0.3.0"
-    implementation 'com.github.cansik:bildspur-ui:0.3.2'
+    implementation "com.github.cansik:bildspur-base:0.3.5"
+    implementation 'com.github.cansik:bildspur-ui:0.4.2'
 
     // processing
     implementation files("lib/processing/core.jar")
@@ -99,7 +98,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "ch.bildspur.ledforest.Main"
+    mainClass = "ch.bildspur.ledforest.Main"
 
     // find jvm args
     def defaultJvmArgs = ''
@@ -130,9 +129,11 @@ application {
 }
 
 task fatJar(type: Jar) {
-    baseName = project.name + '-all'
+    archiveBaseName = project.name + '-all'
     doFirst {
-        from { configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) } }
+        from {
+            configurations.compileClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+        }
     }
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
     with jar
