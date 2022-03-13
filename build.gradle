@@ -130,11 +130,18 @@ application {
 
 task fatJar(type: Jar) {
     archiveBaseName = project.name + '-all'
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     doFirst {
         from {
             configurations.compileClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+            configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
         }
     }
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    manifest {
+        attributes (
+                'Main-Class': 'ch.bildspur.ledforest.Main'
+        )
+    }
     with jar
 }
