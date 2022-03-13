@@ -4,12 +4,42 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.12'
     id 'application'
     id 'org.bytedeco.gradle-javacpp-platform' version "$javacppVersion"
+    id "org.beryx.jlink" version "2.25.0"
 }
 
 group 'ch.bildspur'
 version '3.1'
 
 import org.gradle.internal.os.OperatingSystem
+
+def applicationMainClass = "ch.bildspur.ledforest.Main"
+
+// find jvm args
+def defaultJvmArgs = ''
+switch (OperatingSystem.current()) {
+    case OperatingSystem.LINUX:
+        project.ext.osName = "linux"
+        defaultJvmArgs = "lib/LeapMotion/library/linux64"
+        break
+    case OperatingSystem.MAC_OS:
+        project.ext.osName = "macos"
+        defaultJvmArgs = "lib/LeapMotion/library/macosx"
+        break
+    case OperatingSystem.WINDOWS:
+        project.ext.osName = "windows"
+        defaultJvmArgs = "lib/LeapMotion/library/windows64"
+        break
+}
+
+def applicationJvmArgs = ["-Djava.library.path=$defaultJvmArgs",
+                             "--add-opens", "javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED",
+                             "--add-opens", "javafx.graphics/javafx.stage=ALL-UNNAMED",
+                             "--add-opens", "javafx.graphics/com.sun.javafx.tk.quantum=ALL-UNNAMED",
+                             "--add-opens", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
+                             "--add-opens", "javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
+                             "--add-opens", "javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED",
+                             "--add-opens", "javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
+                             "--add-opens", "javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"]
 
 wrapper {
     gradleVersion = '7.4.1'
@@ -98,34 +128,8 @@ dependencies {
 }
 
 application {
-    mainClass = "ch.bildspur.ledforest.Main"
-
-    // find jvm args
-    def defaultJvmArgs = ''
-    switch (OperatingSystem.current()) {
-        case OperatingSystem.LINUX:
-            project.ext.osName = "linux"
-            defaultJvmArgs = "lib/LeapMotion/library/linux64"
-            break
-        case OperatingSystem.MAC_OS:
-            project.ext.osName = "macos"
-            defaultJvmArgs = "lib/LeapMotion/library/macosx"
-            break
-        case OperatingSystem.WINDOWS:
-            project.ext.osName = "windows"
-            defaultJvmArgs = "lib/LeapMotion/library/windows64"
-            break
-    }
-
-    applicationDefaultJvmArgs = ["-Djava.library.path=$defaultJvmArgs",
-                                 "--add-opens", "javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED",
-                                 "--add-opens", "javafx.graphics/javafx.stage=ALL-UNNAMED",
-                                 "--add-opens", "javafx.graphics/com.sun.javafx.tk.quantum=ALL-UNNAMED",
-                                 "--add-opens", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
-                                 "--add-opens", "javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
-                                 "--add-opens", "javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED",
-                                 "--add-opens", "javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
-                                 "--add-opens", "javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"]
+    mainClass = applicationMainClass
+    applicationDefaultJvmArgs = applicationJvmArgs
 }
 
 task fatJar(type: Jar) {
@@ -133,14 +137,14 @@ task fatJar(type: Jar) {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     doFirst {
         from {
-            configurations.compileClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
-            configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+            configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
         }
     }
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
     manifest {
         attributes (
-                'Main-Class': 'ch.bildspur.ledforest.Main'
+                'Main-Class': applicationMainClass
         )
     }
     with jar
