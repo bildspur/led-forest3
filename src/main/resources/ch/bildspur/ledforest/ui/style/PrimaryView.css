@@ -34,6 +34,10 @@
     -fx-graphic: url("../images/Pose16.png");
 }
 
+#pulseMenuItem > .label {
+    -fx-graphic: url("../images/Pulse16.png");
+}
+
 #starPatternMenuItem > .label {
     -fx-graphic: url("../images/Star16.png");
 }

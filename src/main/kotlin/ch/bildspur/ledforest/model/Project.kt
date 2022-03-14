@@ -9,7 +9,6 @@ import ch.bildspur.ledforest.model.interaction.RealSenseInteraction
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.ui.properties.ArrowControlParameter
-import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.*
@@ -96,6 +95,9 @@ class Project {
 
     @Expose
     var cloudScene = CloudSceneConfig()
+
+    @Expose
+    var pulseScene = PulseSceneConfig()
 
     @Expose
     var visualisation = Visualisation()

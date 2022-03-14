@@ -50,6 +50,9 @@
                         <MenuItem id="poseMenuItem" mnemonicParsing="false"
                                   onAction="#onShowPoseInteractionSettings"
                                   text="Pose"/>
+                        <MenuItem id="pulseMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowPulseSceneSettings"
+                                  text="Pulse"/>
                     </items>
                 </Menu>
                 <Menu disable="true" mnemonicParsing="false" text="|"/>

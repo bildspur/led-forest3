@@ -499,6 +499,10 @@ class PrimaryView {
         initSettingsView(project.value.poseInteraction, "Pose")
     }
 
+    fun onShowPulseSceneSettings() {
+        initSettingsView(project.value.pulseScene, "Pulse")
+    }
+
     fun onShowProjectSettings() {
         initSettingsView(project.value, "Project")
     }
