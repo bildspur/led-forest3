@@ -4,7 +4,9 @@ import ch.bildspur.math.Float2
 import ch.bildspur.model.NumberRange
 import processing.core.*
 import processing.core.PConstants.QUAD_STRIP
+import java.lang.Math.sin
 import java.util.*
+import kotlin.math.PI
 
 
 /**
@@ -159,4 +161,12 @@ fun PVector.flip(flipX: Boolean, flipY: Boolean, flipZ: Boolean) {
 
 fun NumberRange.modValue(modulator: Float): Float {
     return ((this.high - this.low).toFloat() * modulator) + this.low.toFloat()
+}
+
+fun windowedSine(x : Float): Float {
+    if (x < 0.0f || x > 1.0f)
+        return 0.0f
+
+    // calculate sine
+    return (0.5 * (1 + kotlin.math.sin(2 * PI * x - (PI / 2)))).toFloat()
 }

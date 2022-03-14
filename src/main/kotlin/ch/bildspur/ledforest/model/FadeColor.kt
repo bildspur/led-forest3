@@ -61,6 +61,21 @@ class FadeColor() {
         target.z = b
     }
 
+    fun setH(v: Float) {
+        current.x = v
+        target.x = v
+    }
+
+    fun setS(v: Float) {
+        current.y = v
+        target.y = v
+    }
+
+    fun setB(v: Float) {
+        current.z = v
+        target.z = v
+    }
+
     val isFading: Boolean
         get() = PVector.sub(target, current).mag() > minimumDistance
 
