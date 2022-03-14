@@ -20,6 +20,9 @@
                         <MenuItem mnemonicParsing="false" onAction="#onClose" text="Close"/>
                     </items>
                 </Menu>
+
+                <Menu disable="true" mnemonicParsing="false" text="|"/>
+
                 <Menu mnemonicParsing="false" text="Settings">
                     <items>
                         <MenuItem id="projectMenuItem" mnemonicParsing="false" onAction="#onShowProjectSettings"
@@ -34,14 +37,13 @@
                         <MenuItem id="audioMenuItem" mnemonicParsing="false"
                                   onAction="#onShowAudioSettings"
                                   text="Audio"/>
-                        <MenuItem id="starPatternMenuItem" mnemonicParsing="false"
-                                  onAction="#onShowstarPatternSettings"
-                                  text="Star Pattern"/>
-                        <MenuItem id="cloudSceneMenuItem" mnemonicParsing="false"
-                                  onAction="#onShowCloudSceneSettings"
-                                  text="Cloud Scene"/>
+                    </items>
+                </Menu>
+
+                <Menu mnemonicParsing="false" text="Interaction">
+                    <items>
                         <MenuItem id="interactionMenuItem" mnemonicParsing="false" onAction="#onShowInteractionSettings"
-                                  text="Interaction"/>
+                                  text="General"/>
                         <MenuItem id="leapMenuItem" mnemonicParsing="false" onAction="#onShowLeapInteractionSettings"
                                   text="LeapMotion"/>
                         <MenuItem id="realsenseMenuItem" mnemonicParsing="false"
@@ -50,22 +52,34 @@
                         <MenuItem id="poseMenuItem" mnemonicParsing="false"
                                   onAction="#onShowPoseInteractionSettings"
                                   text="Pose"/>
+                    </items>
+                </Menu>
+
+                <Menu mnemonicParsing="false" text="Scenes">
+                    <items>
+                        <MenuItem id="starPatternMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowstarPatternSettings"
+                                  text="Star Pattern"/>
+                        <MenuItem id="cloudSceneMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowCloudSceneSettings"
+                                  text="Cloud Scene"/>
                         <MenuItem id="pulseMenuItem" mnemonicParsing="false"
                                   onAction="#onShowPulseSceneSettings"
-                                  text="Pulse"/>
+                                  text="Pulse Scene"/>
                     </items>
                 </Menu>
+
                 <Menu disable="true" mnemonicParsing="false" text="|"/>
-                <Menu mnemonicParsing="false" text="Renderer">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onResetRenderer" text="Reset"/>
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Scene">
+                <Menu mnemonicParsing="false" text="Scene Manager">
                     <items>
                         <CheckMenuItem fx:id="sceneManagerMenuItem" mnemonicParsing="false" text="Scene Manager On"/>
                         <CheckMenuItem fx:id="interactionSceneManager" mnemonicParsing="false" text="Interaction On"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Renderer">
+                    <items>
                         <CheckMenuItem fx:id="disableRenderingMenuItem" mnemonicParsing="false" text="Disable Rendering"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onResetRenderer" text="Reset"/>
                     </items>
                 </Menu>
                 <Menu disable="true" mnemonicParsing="false" text="|"/>

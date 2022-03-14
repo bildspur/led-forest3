@@ -487,6 +487,10 @@ class PrimaryView {
         propertiesControl.initView(value)
     }
 
+    fun onMenuClicked() {
+        println("hello world")
+    }
+
     fun onShowLeapInteractionSettings() {
         initSettingsView(project.value.leapInteraction, "LeapMotion")
     }
