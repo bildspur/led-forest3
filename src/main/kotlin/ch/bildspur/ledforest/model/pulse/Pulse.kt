@@ -7,4 +7,8 @@ class Pulse(val startTime : Long,
             val width : PVector = PVector(1f, 1f, 1f),
             val location : PVector = PVector()) {
 
+
+    fun getPulseRadius(timesStamp: Long): PVector {
+        return PVector.mult(PVector.mult(speed, 0.001f), (timesStamp - startTime).toFloat())
+    }
 }
