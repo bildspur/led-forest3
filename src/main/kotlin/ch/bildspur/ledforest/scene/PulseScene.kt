@@ -8,7 +8,6 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.util.windowedSine
 import processing.core.PVector
-import java.util.concurrent.CopyOnWriteArrayList
 
 class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene", project, tubes) {
 
@@ -24,6 +23,8 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
     override fun update() {
         // todo: cleanup waves
         val pulses = project.pulseScene.pulses
+
+        project.pulseScene.pulseCount.value = "${pulses.size}"
 
         val currentTime = System.currentTimeMillis()
 
@@ -45,19 +46,15 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
 
         for(pulse in pulses) {
             val distance = position.dist(pulse.location)
-            val pulseRadius = PVector.mult(pulse.speed, (currentTime - pulse.startTime).toFloat())
+            val pulseRadius = PVector.mult(PVector.mult(pulse.speed, 0.001f), (currentTime - pulse.startTime).toFloat())
             val pulseDistance = pulseRadius.dist(pulse.location)
 
-            val applyDist = kotlin.math.abs(distance - pulseDistance)
+            val applyDist = (distance - pulseDistance)
             val factors = PVector(
                     windowedSine(applyDist / pulse.width.x),
                     windowedSine(applyDist / pulse.width.y),
                     windowedSine(applyDist / pulse.width.z)
             )
-
-            if(tube.name.value == "Tube A0" && index == 12) {
-                println("T: ${currentTime - pulse.startTime} D: ${distance} PR: ${pulseRadius} PD: ${pulseDistance} APD: ${applyDist} Factors: ${factors}")
-            }
 
             led.color.setB(factors.x * 100.0f)
         }
