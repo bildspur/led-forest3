@@ -24,6 +24,7 @@ class PeasyController(internal var sketch: Sketch) {
     private lateinit var frontState: CameraState
     private lateinit var leftState: CameraState
     private lateinit var rightState: CameraState
+    private lateinit var isometricState: CameraState
 
     private val minDistance = 0.0
     private val maxDistance = 500.0
@@ -73,6 +74,10 @@ class PeasyController(internal var sketch: Sketch) {
     }
 
     // predefined views
+    fun isometricView() {
+        cam.setState(isometricState, stateSwitchSpeed)
+    }
+
     fun topView() {
         cam.setState(topState, stateSwitchSpeed)
     }
@@ -101,6 +106,15 @@ class PeasyController(internal var sketch: Sketch) {
         cam.rotateX(PApplet.radians(-75f).toDouble())
         defaultState = cam.state
         cam.rotateX(PApplet.radians(75f).toDouble())
+
+        // ismoetric state
+        cam.rotateX(PApplet.radians(-90f).toDouble())
+        cam.rotateY(PApplet.radians(45f).toDouble())
+        cam.rotateX(PApplet.radians(45f).toDouble())
+        isometricState = cam.state
+        cam.rotateX(PApplet.radians(-45f).toDouble())
+        cam.rotateY(PApplet.radians(-45f).toDouble())
+        cam.rotateX(PApplet.radians(90f).toDouble())
 
         // front state
         cam.rotateX(PApplet.radians(-90f).toDouble())

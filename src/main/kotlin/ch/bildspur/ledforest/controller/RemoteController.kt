@@ -13,7 +13,9 @@ class RemoteController(internal var sketch: Sketch) {
             '2' -> sketch.peasy.frontView()
             '3' -> sketch.peasy.leftView()
             '4' -> sketch.peasy.rightView()
+            '5' -> sketch.peasy.isometricView()
             '0' -> sketch.peasy.defaultView()
+            ' ' -> println(sketch.peasy.cam.state)
         }
     }
 }
