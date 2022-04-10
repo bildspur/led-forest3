@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.model.interaction
 
+import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.pose.clients.PoseClientTypes
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
@@ -33,7 +34,14 @@ class PoseInteraction {
     @ParameterInformation("The pose client that is used to read poses. Requires restart!")
     var poseClient = DataModel(PoseClientTypes.LightWeightOpenPose)
 
+    @ActionParameter("Pose Client", "Reset")
+   private val resetPoseClient = {
+        Sketch.instance.pose.stop()
+        Sketch.instance.pose.start()
+    }
+
     @LabelParameter("Tracking")
+    private var trackingTitle = ""
 
     @Expose
     @ParameterInformation("Minimal score a pose needs to be valid.")
@@ -73,6 +81,7 @@ class PoseInteraction {
     var positionEasing = DataModel(0.2f)
 
     @LabelParameter("Interaction")
+    private var interactionTitle = ""
 
     // orientation
     @Expose
@@ -86,6 +95,9 @@ class PoseInteraction {
     @Expose
     @BooleanParameter("Flip Z", useToggleSwitch = true)
     var flipZ = DataModel(false)
+
+    @LabelParameter("Scene")
+    private var sceneTitle = ""
 
     @Expose
     @RangeSliderParameter("Interaction Distance", 0.01, 5.0, 0.01, snap = true)
