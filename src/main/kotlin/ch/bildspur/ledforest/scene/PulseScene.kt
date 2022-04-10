@@ -7,11 +7,9 @@ import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.util.limit
-import ch.bildspur.ledforest.util.windowedSine
-import ch.bildspur.ledforest.util.windowedSineIn
-import ch.bildspur.ledforest.util.windowedSineOut
+import ch.bildspur.ledforest.util.windowedInOut
+import ch.bildspur.util.Easing
 import processing.core.PVector
-import java.lang.Math.abs
 
 class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene", project, tubes) {
 
@@ -50,31 +48,23 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
 
         var brightness = 0f
 
-        for(pulse in pulses) {
+        for (pulse in pulses) {
             val distance = position.dist(pulse.location)
             val pulseRadius = pulse.getPulseRadius(currentTime)
 
             val applyDist = PVector(
-                    kotlin.math.abs(distance - pulseRadius.x),
-                    kotlin.math.abs(distance - pulseRadius.y),
-                    kotlin.math.abs(distance - pulseRadius.z)
+                    pulseRadius.x - distance,
+                    pulseRadius.y - distance,
+                    pulseRadius.z - distance
             )
 
             val factors = PVector(
-                    windowedSineOut(applyDist.x / pulse.width.x),
-                    windowedSineOut(applyDist.y / pulse.width.y),
-                    windowedSineOut(applyDist.z / pulse.width.z)
+                    (applyDist.x + (pulse.width.x * 0.5f)) / pulse.width.x,
+                    (applyDist.y + (pulse.width.y * 0.5f)) / pulse.width.y,
+                    (applyDist.z + (pulse.width.z * 0.5f)) / pulse.width.z
             )
 
-            // debug info
-            if(index == 10 && tube.universe.value == 4 && tube.addressStart.value == 0) {
-                Sketch.instance.peasy.hud {
-                    Sketch.instance.text("ApplyD: ${applyDist.x}", 20f, 20f)
-                    Sketch.instance.text("Factor: ${factors.x}", 20f, 50f)
-                }
-            }
-
-            brightness += factors.x // (factors.x + factors.y + factors.z) / 3f
+            brightness += Easing.EaseOutCubic(windowedInOut(factors.x))
         }
 
         led.color.brightness = brightness.limit(0f, 1f) * 100f
