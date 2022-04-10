@@ -6,6 +6,7 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
+import ch.bildspur.ledforest.util.ColorUtil
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.windowedMappedInOut
 import ch.bildspur.math.pow
@@ -46,7 +47,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
     private fun applyToLED(index: Int, led: LED, tube: Tube, currentTime: Long, pulses: List<Pulse>) {
         val position = Sketch.instance.spaceInformation.getLEDPosition(index, tube)
 
-        var hue = 0f
+        val huesAndWeights = mutableListOf<ColorUtil.HueAndWeight>()
         var saturation = 0f
         var brightness = 0f
 
@@ -64,22 +65,13 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
             brightness += factor
 
             if(factor > 0f) {
-                // correctly mix hue
-                var hval = pulse.hue.value
-                if (hval >= 180.0)
-                    hval -= 360.0f
-
-                hue += hval
+                huesAndWeights.add(ColorUtil.HueAndWeight(pulse.hue.value, factor))
                 saturation += pow(pulse.saturation.value, 2f)
                 applyCount++
             }
         }
 
-        var hval = hue / applyCount
-        if (hval < 0)
-            hval += 360f
-
-        led.color.hue = hval
+        led.color.hue = ColorUtil.mixHueWeighted(huesAndWeights)
         led.color.saturation = sqrt(saturation / applyCount)
         led.color.brightness = brightness.limit(0f, 1f) * 100f
     }
