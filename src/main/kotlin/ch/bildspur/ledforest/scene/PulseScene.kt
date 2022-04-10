@@ -32,7 +32,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
         }
 
         // cleanup
-        pulses.removeIf { it.getPulseRadius(currentTime).magSq() > project.interaction.interactionBox.value.magSq() }
+        pulses.removeIf { it.getPulseRadius(currentTime).magSq() > project.interaction.interactionBox.value.magSq() * 2 }
     }
 
     override fun stop() {
@@ -50,10 +50,9 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
 
         for(pulse in pulses) {
             val distance = position.dist(pulse.location)
-            val pulseRadius = pulse.getPulseRadius(currentTime)
-            val pulseDistance = pulseRadius.dist(pulse.location)
 
-            val applyDist = (distance - pulseDistance)
+            val pulseRadius = pulse.getPulseRadius(currentTime)
+            val applyDist = kotlin.math.abs(distance - pulseRadius.x)
 
             /*
             val applyDist = PVector(
@@ -72,6 +71,6 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
             brightness += factors.x // (factors.x + factors.y + factors.z) / 3f
         }
 
-        led.color.setB(brightness.limit(0f, 1f) * 100f)
+        led.color.brightness = brightness.limit(0f, 1f) * 100f
     }
 }

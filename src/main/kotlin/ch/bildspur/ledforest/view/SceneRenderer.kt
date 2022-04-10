@@ -83,6 +83,24 @@ class SceneRenderer(val g: PGraphics,
             poseProvider.poses.forEach { renderPose(it) }
         }
 
+        // visualize pulses
+        if(project.pulseScene.enabled.value && project.pulseScene.visualize.value) {
+            project.pulseScene.pulses.forEach {
+                g.push()
+
+                g.translate(it.location)
+                val radius = it.getPulseRadius(System.currentTimeMillis()).x
+
+                g.noFill()
+                g.stroke(0f, 255f, 100f)
+                g.strokeWeight(0.02f)
+
+                g.sphereDetail(25)
+                g.sphere(radius)
+                g.pop()
+            }
+        }
+
         // render leapInteraction box
         if (project.visualisation.displayDebugInformation.value)
             renderInteractionBox()
