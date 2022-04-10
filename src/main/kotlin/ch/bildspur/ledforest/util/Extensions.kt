@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.util
 
+import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.math.Float2
 import ch.bildspur.model.NumberRange
 import processing.core.*
@@ -201,4 +202,14 @@ fun windowedInOut(x: Float) : Float {
         return (1.0f - x) * 2f
 
     return x * 2f
+}
+
+fun windowedMappedInOut(x: Float, inMapping: EasingMethod, outMapping: EasingMethod) : Float {
+    if (x < 0.0f || x > 1.0f)
+        return 0.0f
+
+    if(x > 0.5f)
+        return outMapping.method((1.0f - x) * 2f)
+
+    return inMapping.method(x * 2f)
 }

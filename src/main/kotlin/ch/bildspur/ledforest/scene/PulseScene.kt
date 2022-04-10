@@ -7,8 +7,7 @@ import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.util.limit
-import ch.bildspur.ledforest.util.windowedInOut
-import ch.bildspur.util.Easing
+import ch.bildspur.ledforest.util.windowedMappedInOut
 import processing.core.PVector
 
 class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene", project, tubes) {
@@ -59,12 +58,12 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
             )
 
             val factors = PVector(
-                    (applyDist.x + (pulse.width.x * 0.5f)) / pulse.width.x,
-                    (applyDist.y + (pulse.width.y * 0.5f)) / pulse.width.y,
-                    (applyDist.z + (pulse.width.z * 0.5f)) / pulse.width.z
+                    windowedMappedInOut((applyDist.x + (pulse.width.x * 0.5f)) / pulse.width.x, pulse.attackCurve, pulse.releaseCurve),
+                    windowedMappedInOut((applyDist.y + (pulse.width.y * 0.5f)) / pulse.width.y, pulse.attackCurve, pulse.releaseCurve),
+                    windowedMappedInOut((applyDist.z + (pulse.width.z * 0.5f)) / pulse.width.z, pulse.attackCurve, pulse.releaseCurve)
             )
 
-            brightness += Easing.EaseOutCubic(windowedInOut(factors.x))
+            brightness += factors.x
         }
 
         led.color.brightness = brightness.limit(0f, 1f) * 100f

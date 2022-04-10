@@ -1,26 +1,25 @@
 package ch.bildspur.ledforest.model.easing
 
-import ch.bildspur.ledforest.util.Easing
-import com.jogamp.opengl.math.FloatUtil
-import processing.core.PApplet
-import processing.core.PConstants
+import ch.bildspur.ledforest.util.EasingCurves
 
 enum class EasingMethod(val method : (Float) -> Float) {
-    Linear({Easing.linear(it)}),
-    EaseInSine({Easing.easeInSine(it)}),
-    EaseOutSine({Easing.easeOutSine(it)}),
-    EaseInOutSine({Easing.easeInOutSine(it)}),
-    EaseInQuad({Easing.easeInQuad(it)}),
-    EaseOutQuad({Easing.easeOutQuad(it)}),
-    EaseInOutQuad({Easing.easeInOutQuad(it)}),
-    EaseInCubic({Easing.easeInCubic(it)}),
-    EaseOutCubic({Easing.easeOutCubic(it)}),
-    EaseInOutCubic({Easing.easeInOutCubic(it)}),
-    EaseInQuart({Easing.easeInQuart(it)}),
-    EaseOutQuart({Easing.easeOutQuart(it)}),
-    EaseInQuint({Easing.easeInQuint(it)}),
-    EaseOutQuint({Easing.easeOutQuint(it)}),
-    EaseInOutQuint({Easing.easeInOutQuint(it)}),
-    EaseInCirc({Easing.easeInCirc(it)}),
+    Linear({EasingCurves.linear(it)}),
+    Step({EasingCurves.step(it)}),
+    EaseInSine({EasingCurves.easeInSine(it)}),
+    EaseOutSine({EasingCurves.easeOutSine(it)}),
+    EaseInOutSine({EasingCurves.easeInOutSine(it)}),
+    EaseInQuad({EasingCurves.easeInQuad(it)}),
+    EaseOutQuad({EasingCurves.easeOutQuad(it)}),
+    EaseInOutQuad({EasingCurves.easeInOutQuad(it)}),
+    EaseInCubic({EasingCurves.easeInCubic(it)}),
+    EaseOutCubic({EasingCurves.easeOutCubic(it)}),
+    EaseInOutCubic({EasingCurves.easeInOutCubic(it)}),
+    EaseInQuart({EasingCurves.easeInQuart(it)}),
+    EaseOutQuart({EasingCurves.easeOutQuart(it)}),
+    EaseInOutQuart({EasingCurves.easeInOutQuart(it)}),
+    EaseInQuint({EasingCurves.easeInQuint(it)}),
+    EaseOutQuint({EasingCurves.easeOutQuint(it)}),
+    EaseInOutQuint({EasingCurves.easeInOutQuint(it)}),
+    EaseInCirc({EasingCurves.easeInCirc(it)}),
     ;
 }

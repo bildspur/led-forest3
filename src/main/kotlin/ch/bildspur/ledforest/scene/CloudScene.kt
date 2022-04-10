@@ -5,12 +5,9 @@ import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
-import ch.bildspur.ledforest.util.Easing
 import ch.bildspur.ledforest.util.forEachLED
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.modValue
-import ch.bildspur.model.NumberRange
-import processing.core.PVector
 
 
 class CloudScene(project: Project, tubes: List<Tube>, override val isInteracting: Boolean = true) : BaseInteractionScene("Cloud Scene", project, tubes) {

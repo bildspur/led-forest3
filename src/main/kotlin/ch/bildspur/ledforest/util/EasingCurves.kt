@@ -7,7 +7,7 @@ import processing.core.PConstants.PI
 /**
  * Created by cansik on 08.06.17.
  */
-object Easing {
+object EasingCurves {
     fun easeInSine(x: Float): Float {
         return 1 - cos((x * PI) / 2f)
     }
@@ -23,6 +23,11 @@ object Easing {
     // no easing} no acceleration
     fun linear(t: Float): Float {
         return t
+    }
+
+    fun step(t: Float): Float {
+        if(t > 0.5f) return 1.0f
+        return 0.0f
     }
 
     // accelerating from zero velocity

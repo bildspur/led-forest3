@@ -7,7 +7,7 @@ import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.pose.PoseDataProvider
-import ch.bildspur.ledforest.util.Easing
+import ch.bildspur.ledforest.util.EasingCurves
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.modValue
 import processing.core.PApplet
@@ -114,7 +114,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
             val normDelta = 1f - distance / interactor.impactRadius
             hue += interactor.hue
             saturation += interactor.saturation
-            brightness += interactor.brightness * Easing.easeOutSine(normDelta)
+            brightness += interactor.brightness * EasingCurves.easeOutSine(normDelta)
 
             relevantPoseCount++
         }
