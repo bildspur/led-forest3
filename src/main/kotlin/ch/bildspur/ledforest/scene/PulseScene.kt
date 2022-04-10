@@ -48,7 +48,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
         var brightness = 0f
 
         for (pulse in pulses) {
-            val distance = position.dist(pulse.location)
+            val distance = position.dist(pulse.location.value)
             val pulseRadius = pulse.getPulseRadius(currentTime)
 
             val applyDist = PVector(
@@ -57,10 +57,11 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
                     pulseRadius.z - distance
             )
 
+            val width = pulse.width.value
             val factors = PVector(
-                    windowedMappedInOut((applyDist.x + (pulse.width.x * 0.5f)) / pulse.width.x, pulse.attackCurve, pulse.releaseCurve),
-                    windowedMappedInOut((applyDist.y + (pulse.width.y * 0.5f)) / pulse.width.y, pulse.attackCurve, pulse.releaseCurve),
-                    windowedMappedInOut((applyDist.z + (pulse.width.z * 0.5f)) / pulse.width.z, pulse.attackCurve, pulse.releaseCurve)
+                    windowedMappedInOut((applyDist.x + (width.x * 0.5f)) / width.x, pulse.attackCurve.value, pulse.releaseCurve.value),
+                    windowedMappedInOut((applyDist.y + (width.y * 0.5f)) / width.y, pulse.attackCurve.value, pulse.releaseCurve.value),
+                    windowedMappedInOut((applyDist.z + (width.z * 0.5f)) / width.z, pulse.attackCurve.value, pulse.releaseCurve.value)
             )
 
             brightness += factors.x
