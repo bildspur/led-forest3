@@ -89,7 +89,7 @@ class SceneRenderer(val g: PGraphics,
                 g.push()
 
                 g.translate(it.location.value)
-                val radius = it.getPulseRadius(System.currentTimeMillis()).x
+                val radius = it.getPulseRadius(System.currentTimeMillis())
 
                 g.noFill()
                 g.stroke(0f, 255f, 100f)

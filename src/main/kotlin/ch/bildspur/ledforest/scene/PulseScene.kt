@@ -8,7 +8,9 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.windowedMappedInOut
-import processing.core.PVector
+import ch.bildspur.math.pow
+import ch.bildspur.math.sqr
+import kotlin.math.sqrt
 
 class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene", project, tubes) {
 
@@ -31,7 +33,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
         }
 
         // cleanup
-        pulses.removeIf { it.getPulseRadius(currentTime).magSq() > project.interaction.interactionBox.value.magSq() * 4 }
+        pulses.removeIf { it.getPulseRadius(currentTime) > project.interaction.interactionBox.value.mag() }
     }
 
     override fun stop() {
@@ -52,24 +54,18 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
             val distance = position.dist(pulse.location.value)
             val pulseRadius = pulse.getPulseRadius(currentTime)
 
-            val applyDist = PVector(
-                    pulseRadius.x - distance,
-                    pulseRadius.y - distance,
-                    pulseRadius.z - distance
-            )
+            val applyDist = pulseRadius - distance
 
             val width = pulse.width.value
-            val factors = PVector(
-                    windowedMappedInOut((applyDist.x + (width.x * 0.5f)) / width.x, pulse.attackCurve.value, pulse.releaseCurve.value),
-                    windowedMappedInOut((applyDist.y + (width.y * 0.5f)) / width.y, pulse.attackCurve.value, pulse.releaseCurve.value),
-                    windowedMappedInOut((applyDist.z + (width.z * 0.5f)) / width.z, pulse.attackCurve.value, pulse.releaseCurve.value)
-            )
+            val factor = windowedMappedInOut((applyDist + (width * 0.5f)) / width, pulse.attackCurve.value, pulse.releaseCurve.value)
 
-            brightness += factors.x
-            hue += pulse.hue.value
+            brightness += factor
+
+            if(factor > 0f)
+                hue += pow(pulse.hue.value, 2f)
         }
 
-        led.color.hue = (hue / pulses.size)
+        led.color.hue = sqrt(hue / pulses.size)
         led.color.brightness = brightness.limit(0f, 1f) * 100f
     }
 }
