@@ -304,16 +304,28 @@ class PrimaryView {
 
         // todo: remove this after testing
         project.leda.landmarkColliders.clear()
-        val collider = LandmarkPulseCollider(
+        val leftCollider = LandmarkPulseCollider(
                 location = PVector(0f, 0f),
                 radius = 0.2f,
-                triggeredBy = EnumSet.of(PoseLandmark.LeftWrist, PoseLandmark.RightWrist),
-                pulse = Pulse(speed = DataModel(4.0f))
+                triggeredBy = EnumSet.of(PoseLandmark.LeftWrist),
+                pulse = Pulse(speed = DataModel(4.0f), hue = DataModel(0f)),
         )
-        collider.onCollision += {
-            println("Collision happened!")
+        leftCollider.onCollision += {
+            println("Left wrist collided!")
         }
-        project.leda.landmarkColliders.add(collider)
+
+        val rightCollider = LandmarkPulseCollider(
+                location = PVector(0f, 0f),
+                radius = 0.2f,
+                triggeredBy = EnumSet.of(PoseLandmark.RightWrist),
+                pulse = Pulse(speed = DataModel(4.0f), hue = DataModel(200f)),
+        )
+        rightCollider.onCollision += {
+            println("Right wrist collided!")
+        }
+
+        project.leda.landmarkColliders.add(leftCollider)
+        project.leda.landmarkColliders.add(rightCollider)
     }
 
     fun <T> createBidirectionalMapping(dataModel: DataModel<T>,

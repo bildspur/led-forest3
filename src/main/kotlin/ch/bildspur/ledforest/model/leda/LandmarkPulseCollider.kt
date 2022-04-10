@@ -17,8 +17,10 @@ class LandmarkPulseCollider(@Expose var location: PVector = PVector(),
     override fun checkCollision(location: PVector, landmark: PoseLandmark) : Boolean {
         // very basic sphere collider
         if (PVector.dist(this.location, location) <= radius && triggeredBy.contains(landmark)) {
-            if (oneShot && hasBeenTriggered) return true
+            if (oneShot && hasBeenTriggered) return false
 
+            // todo: fix has been triggered logic
+            // use debounce
             onCollision(Collision(this))
             hasBeenTriggered = true
             return true
