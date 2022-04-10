@@ -64,13 +64,22 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
             brightness += factor
 
             if(factor > 0f) {
-                hue += pow(pulse.hue.value, 2f)
+                // correctly mix hue
+                var hval = pulse.hue.value
+                if (hval >= 180.0)
+                    hval -= 360.0f
+
+                hue += hval
                 saturation += pow(pulse.saturation.value, 2f)
                 applyCount++
             }
         }
 
-        led.color.hue = sqrt(hue / applyCount)
+        var hval = hue / applyCount
+        if (hval < 0)
+            hval += 360f
+
+        led.color.hue = hval
         led.color.saturation = sqrt(saturation / applyCount)
         led.color.brightness = brightness.limit(0f, 1f) * 100f
     }

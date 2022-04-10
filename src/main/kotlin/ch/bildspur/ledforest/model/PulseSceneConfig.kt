@@ -29,7 +29,7 @@ class PulseSceneConfig {
 
     @ActionParameter("Pulse", "Send")
     private var sendPulse = {
-        val pulse = templatePulse.deepCopy() // templatePulse.copy(startTime = DataModel(System.currentTimeMillis()))
+        val pulse = templatePulse.deepCopy()
         pulse.startTime.value = System.currentTimeMillis()
         pulses.add(pulse)
     }
