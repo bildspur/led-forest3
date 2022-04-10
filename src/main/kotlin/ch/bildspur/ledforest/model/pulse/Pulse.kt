@@ -18,7 +18,9 @@ data class Pulse(
 
         @Expose @EnumParameter("Attack Curve") var attackCurve: DataModel<EasingMethod> = DataModel(EasingMethod.Linear),
         @Expose @EnumParameter("Release Curve") var releaseCurve: DataModel<EasingMethod> = DataModel(EasingMethod.Linear),
-        @Expose @SliderParameter("Hue", 0.0, 360.0, 1.0) var hue: DataModel<Float> = DataModel(0.0f)
+
+        @Expose @SliderParameter("Hue", 0.0, 360.0, 1.0) var hue: DataModel<Float> = DataModel(0.0f),
+        @Expose @SliderParameter("Saturation", 0.0, 100.0, 1.0) var saturation: DataModel<Float> = DataModel(100.0f)
 ) {
 
 

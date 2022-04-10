@@ -9,7 +9,6 @@ import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.windowedMappedInOut
 import ch.bildspur.math.pow
-import ch.bildspur.math.sqr
 import kotlin.math.sqrt
 
 class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene", project, tubes) {
@@ -47,8 +46,11 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
     private fun applyToLED(index: Int, led: LED, tube: Tube, currentTime: Long, pulses: List<Pulse>) {
         val position = Sketch.instance.spaceInformation.getLEDPosition(index, tube)
 
-        var brightness = 0f
         var hue = 0f
+        var saturation = 0f
+        var brightness = 0f
+
+        var applyCount = 0
 
         for (pulse in pulses) {
             val distance = position.dist(pulse.location.value)
@@ -61,11 +63,15 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
 
             brightness += factor
 
-            if(factor > 0f)
+            if(factor > 0f) {
                 hue += pow(pulse.hue.value, 2f)
+                saturation += pow(pulse.saturation.value, 2f)
+                applyCount++
+            }
         }
 
-        led.color.hue = sqrt(hue / pulses.size)
+        led.color.hue = sqrt(hue / applyCount)
+        led.color.saturation = sqrt(saturation / applyCount)
         led.color.brightness = brightness.limit(0f, 1f) * 100f
     }
 }
