@@ -2,15 +2,19 @@ package ch.bildspur.ledforest.scene
 
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.model.leda.Collider
+import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
+import processing.core.PVector
 
 class LedaScene(project: Project, tubes: List<Tube>,
                 val pulseScene: PulseScene,
                 val poseProvider: PoseDataProvider)
     : BaseInteractionScene("Leda Scene", project, tubes) {
 
-    private val task = TimerTask(0, { update() })
+    private val task = TimerTask(10, { update() })
 
     override val timerTask: TimerTask
         get() = task
@@ -22,13 +26,17 @@ class LedaScene(project: Project, tubes: List<Tube>,
     override fun update() {
         if (!poseProvider.isRunning.get())
             return
-        val config = project.poseInteraction
+
+        val config = project.leda
 
         // receive poses
         val poses = poseProvider.poses
 
-        // check if triggers have been hit
-
+        for (pose in poses) {
+            for (collider in config.landmarkColliders) {
+                checkCollision(pose, collider)
+            }
+        }
 
         pulseScene.update()
     }
@@ -42,4 +50,16 @@ class LedaScene(project: Project, tubes: List<Tube>,
 
     override val isInteracting: Boolean
         get() = poseProvider.poses.isNotEmpty()
+
+    private fun checkCollision(pose: Pose, collider: LandmarkPulseCollider) {
+        for (landmarkType in collider.triggeredBy) {
+            val relativeLandmarkPosition = PVector.sub(pose.nose, pose[landmarkType])
+
+            // todo: check if landmark is even valid (confidence)
+
+            if (collider.checkCollision(relativeLandmarkPosition, landmarkType)) {
+                project.pulseScene.pulses.add(collider.pulse.spawn())
+            }
+        }
+    }
 }

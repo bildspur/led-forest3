@@ -29,7 +29,7 @@ class PulseSceneConfig {
 
     @ActionParameter("Pulse", "Send")
     private var sendPulse = {
-        pulses.add(templatePulse.spawn(System.currentTimeMillis()))
+        pulses.add(templatePulse.spawn())
     }
 
     @ActionParameter("Pulse", "Example1")

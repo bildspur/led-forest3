@@ -28,7 +28,7 @@ data class Pulse(
         return (speed.value * 0.001f) * (timesStamp - startTime.value).toFloat()
     }
 
-    fun spawn(startTime: Long): Pulse {
+    fun spawn(startTime: Long = System.currentTimeMillis()): Pulse {
         val json = Gson().toJson(this)
         val pulse = Gson().fromJson(json, Pulse::class.java)
         pulse.startTime.value = startTime

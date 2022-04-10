@@ -12,6 +12,10 @@ class Pose {
     var startTimestamp = System.currentTimeMillis()
     val easedPosition = EasingVector()
 
+    operator fun get(landmarkType: PoseLandmark): PVector {
+        return keypoints[PoseLandmark.values().indexOf(landmarkType)]
+    }
+
     val position : PVector
         get() = neck
 

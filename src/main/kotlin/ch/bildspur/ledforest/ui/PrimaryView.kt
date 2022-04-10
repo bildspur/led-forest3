@@ -4,9 +4,12 @@ import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
+import ch.bildspur.ledforest.model.pulse.Pulse
+import ch.bildspur.ledforest.pose.PoseLandmark
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
@@ -42,6 +45,7 @@ import processing.core.PApplet
 import processing.core.PVector
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.*
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
 
@@ -297,6 +301,19 @@ class PrimaryView {
 
         // add hot-reload support
         hotReloadWatcher.reset(Paths.get(appConfig.projectFile))
+
+        // todo: remove this after testing
+        project.leda.landmarkColliders.clear()
+        val collider = LandmarkPulseCollider(
+                location = PVector(0f, 0f),
+                radius = 0.2f,
+                triggeredBy = EnumSet.of(PoseLandmark.LeftWrist, PoseLandmark.RightWrist),
+                pulse = Pulse(speed = DataModel(4.0f))
+        )
+        collider.onCollision += {
+            println("Collision happened!")
+        }
+        project.leda.landmarkColliders.add(collider)
     }
 
     fun <T> createBidirectionalMapping(dataModel: DataModel<T>,

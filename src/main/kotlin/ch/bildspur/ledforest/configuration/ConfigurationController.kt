@@ -3,6 +3,8 @@ package ch.bildspur.ledforest.configuration
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.model.leda.Collider
+import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.model.DataModel
 import com.github.salomonbrys.kotson.fromJson
@@ -38,6 +40,7 @@ class ConfigurationController {
             .registerTypeAdapter(PVector::class.java, PVectorSerializer())
             .registerTypeAdapter(PVector::class.java, PVectorDeserializer())
             .registerTypeAdapter(Tube::class.java, TubeInstanceCreator())
+            .registerTypeAdapter(LandmarkPulseCollider::class.java, LandmarkPulseColliderInstanceCreator())
             .registerTypeAdapterFactory(PostProcessingEnabler())
             .create()
 
@@ -102,6 +105,12 @@ class ConfigurationController {
     private inner class TubeInstanceCreator : InstanceCreator<Tube> {
         override fun createInstance(type: Type): Tube {
             return Tube()
+        }
+    }
+
+    private inner class LandmarkPulseColliderInstanceCreator : InstanceCreator<LandmarkPulseCollider> {
+        override fun createInstance(type: Type): LandmarkPulseCollider {
+            return LandmarkPulseCollider()
         }
     }
 }
