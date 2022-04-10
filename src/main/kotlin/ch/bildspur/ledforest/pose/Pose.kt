@@ -7,7 +7,9 @@ import processing.core.PVector
 class Pose {
     var id = 0
     var score: Float = -1f
+
     var keypoints: Array<PVector> = Array(LightWeightOpenPoseClient.KEY_POINT_COUNT) { PVector() }
+    var keypointScores: Array<Float> = Array(LightWeightOpenPoseClient.KEY_POINT_COUNT) { 1.0f }
 
     var startTimestamp = System.currentTimeMillis()
     val easedPosition = EasingVector()

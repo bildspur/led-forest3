@@ -7,6 +7,7 @@ import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
+import ch.bildspur.ledforest.pose.PoseLandmark
 import processing.core.PVector
 
 class LedaScene(project: Project, tubes: List<Tube>,
@@ -53,10 +54,12 @@ class LedaScene(project: Project, tubes: List<Tube>,
 
     private fun checkCollision(pose: Pose, collider: LandmarkPulseCollider) {
         for (landmarkType in collider.triggeredBy) {
-            val relativeLandmarkPosition = PVector.sub(pose.nose, pose[landmarkType])
+            val landmarkId = PoseLandmark.values().indexOf(landmarkType)
 
-            // todo: check if landmark is even valid (confidence)
+            val score = pose.keypointScores[landmarkId]
+            if (score < project.leda.landmarkMinScore.value) continue
 
+            val relativeLandmarkPosition = PVector.sub(pose.nose, pose.keypoints[landmarkId])
             if (collider.checkCollision(relativeLandmarkPosition, landmarkType)) {
                 project.pulseScene.pulses.add(collider.pulse.spawn())
             }

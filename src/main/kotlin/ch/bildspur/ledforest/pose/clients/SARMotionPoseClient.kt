@@ -55,6 +55,10 @@ class SARMotionPoseClient : OSCPacketListener, PoseClient {
                 keypoints[i].z = message.arguments[index++] as Float
 
                 val kpScore = message.arguments[index++] as Float
+
+                // todo: change keypoint system to float4 to include score
+                // pose.keypointScores[i] = kpScore
+
                 score += kpScore
             }
 
