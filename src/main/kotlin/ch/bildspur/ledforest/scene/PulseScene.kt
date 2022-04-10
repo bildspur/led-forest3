@@ -46,6 +46,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
         val position = Sketch.instance.spaceInformation.getLEDPosition(index, tube)
 
         var brightness = 0f
+        var hue = 0f
 
         for (pulse in pulses) {
             val distance = position.dist(pulse.location.value)
@@ -65,8 +66,10 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
             )
 
             brightness += factors.x
+            hue += pulse.hue.value
         }
 
+        led.color.hue = (hue / pulses.size)
         led.color.brightness = brightness.limit(0f, 1f) * 100f
     }
 }
