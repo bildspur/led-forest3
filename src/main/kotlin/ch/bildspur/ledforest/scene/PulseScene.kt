@@ -8,6 +8,8 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.windowedSine
+import ch.bildspur.ledforest.util.windowedSineIn
+import ch.bildspur.ledforest.util.windowedSineOut
 import processing.core.PVector
 import java.lang.Math.abs
 
@@ -32,7 +34,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
         }
 
         // cleanup
-        pulses.removeIf { it.getPulseRadius(currentTime).magSq() > project.interaction.interactionBox.value.magSq() * 2 }
+        pulses.removeIf { it.getPulseRadius(currentTime).magSq() > project.interaction.interactionBox.value.magSq() * 4 }
     }
 
     override fun stop() {
@@ -50,23 +52,27 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
 
         for(pulse in pulses) {
             val distance = position.dist(pulse.location)
-
             val pulseRadius = pulse.getPulseRadius(currentTime)
-            val applyDist = kotlin.math.abs(distance - pulseRadius.x)
 
-            /*
             val applyDist = PVector(
-                    (kotlin.math.abs(position.x - pulse.location.x)) - pulseRadius.x,
-                    (kotlin.math.abs(position.y - pulse.location.y)) - pulseRadius.y,
-                    (kotlin.math.abs(position.z - pulse.location.z)) - pulseRadius.z
+                    kotlin.math.abs(distance - pulseRadius.x),
+                    kotlin.math.abs(distance - pulseRadius.y),
+                    kotlin.math.abs(distance - pulseRadius.z)
             )
-             */
 
             val factors = PVector(
-                    windowedSine(applyDist / pulse.width.x),
-                    windowedSine(applyDist / pulse.width.y),
-                    windowedSine(applyDist / pulse.width.z)
+                    windowedSineOut(applyDist.x / pulse.width.x),
+                    windowedSineOut(applyDist.y / pulse.width.y),
+                    windowedSineOut(applyDist.z / pulse.width.z)
             )
+
+            // debug info
+            if(index == 10 && tube.universe.value == 4 && tube.addressStart.value == 0) {
+                Sketch.instance.peasy.hud {
+                    Sketch.instance.text("ApplyD: ${applyDist.x}", 20f, 20f)
+                    Sketch.instance.text("Factor: ${factors.x}", 20f, 50f)
+                }
+            }
 
             brightness += factors.x // (factors.x + factors.y + factors.z) / 3f
         }

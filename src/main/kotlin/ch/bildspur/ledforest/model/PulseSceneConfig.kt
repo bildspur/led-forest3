@@ -24,7 +24,7 @@ class PulseSceneConfig {
     var enabled = DataModel(false)
 
     @Expose
-    @BooleanParameter("visualize Pulses")
+    @BooleanParameter("Visualize Pulses")
     var visualize = DataModel(true)
 
     val pulses = CopyOnWriteArrayList<Pulse>()

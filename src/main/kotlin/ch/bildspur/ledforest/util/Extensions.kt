@@ -170,3 +170,19 @@ fun windowedSine(x : Float): Float {
     // calculate sine
     return (0.5 * (1 + kotlin.math.sin(2 * PI * x - (PI / 2)))).toFloat()
 }
+
+fun windowedSineIn(x : Float): Float {
+    if (x < 0.0f || x > 1.0f)
+        return 0.0f
+
+    // calculate sine
+    return (0.5 * (1 + kotlin.math.sin( PI * x - (PI / 2)))).toFloat()
+}
+
+fun windowedSineOut(x : Float): Float {
+    if (x < 0.0f || x > 1.0f)
+        return 0.0f
+
+    // calculate sine
+    return (0.5 * (1 + kotlin.math.sin( PI * x + (PI / 2)))).toFloat()
+}
