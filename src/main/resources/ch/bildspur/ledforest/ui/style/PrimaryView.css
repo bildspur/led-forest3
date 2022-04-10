@@ -38,6 +38,10 @@
     -fx-graphic: url("../images/Pulse16.png");
 }
 
+#ledaMenuItem > .label {
+    -fx-graphic: url("../images/Leda16.png");
+}
+
 #starPatternMenuItem > .label {
     -fx-graphic: url("../images/Star16.png");
 }

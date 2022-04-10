@@ -15,7 +15,9 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
     val poseScene = PoseScene(project, tubes, sketch.pose)
     val blackScene = BlackScene(project, tubes)
     val strobeScene = StrobeScene(project, tubes)
+
     val pulseScene = PulseScene(project, tubes)
+    val ledaScene = LedaScene(project, tubes, pulseScene, sketch.pose)
 
     var activeScene: BaseScene = blackScene
 
@@ -52,6 +54,12 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
                 && project.isSceneManagerEnabled.value
                 && project.interaction.isPoseInteractionEnabled.value)
             initScene(poseScene)
+
+        if (activeScene != ledaScene
+                && ledaScene.isInteracting
+                && project.isSceneManagerEnabled.value
+                && project.leda.enabled.value)
+            initScene(ledaScene)
 
         if (activeScene != starScene
                 && !leapMotionScene.isInteracting

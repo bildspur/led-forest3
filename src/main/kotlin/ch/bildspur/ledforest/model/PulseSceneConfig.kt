@@ -1,14 +1,14 @@
 package ch.bildspur.ledforest.model
 
-import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.ledforest.model.pulse.Pulse
-import ch.bildspur.ledforest.ui.properties.PVectorParameter
 import ch.bildspur.model.DataModel
-import ch.bildspur.ui.properties.*
+import ch.bildspur.ui.properties.ActionParameter
+import ch.bildspur.ui.properties.BooleanParameter
+import ch.bildspur.ui.properties.GroupParameter
+import ch.bildspur.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
 import processing.core.PVector
 import java.util.concurrent.CopyOnWriteArrayList
-import javax.xml.crypto.Data
 
 class PulseSceneConfig {
     @StringParameter("Pulse Count", isEditable = false)
@@ -29,9 +29,7 @@ class PulseSceneConfig {
 
     @ActionParameter("Pulse", "Send")
     private var sendPulse = {
-        val pulse = templatePulse.deepCopy()
-        pulse.startTime.value = System.currentTimeMillis()
-        pulses.add(pulse)
+        pulses.add(templatePulse.spawn(System.currentTimeMillis()))
     }
 
     @ActionParameter("Pulse", "Example1")

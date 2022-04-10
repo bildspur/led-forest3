@@ -6,6 +6,7 @@ import ch.bildspur.ledforest.model.interaction.Interaction
 import ch.bildspur.ledforest.model.interaction.LeapInteraction
 import ch.bildspur.ledforest.model.interaction.PoseInteraction
 import ch.bildspur.ledforest.model.interaction.RealSenseInteraction
+import ch.bildspur.ledforest.model.leda.LedaConfig
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.ui.properties.ArrowControlParameter
@@ -98,6 +99,9 @@ class Project {
 
     @Expose
     var pulseScene = PulseSceneConfig()
+
+    @Expose
+    var leda = LedaConfig()
 
     @Expose
     var visualisation = Visualisation()

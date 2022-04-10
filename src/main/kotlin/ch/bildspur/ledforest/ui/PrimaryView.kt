@@ -507,6 +507,10 @@ class PrimaryView {
         initSettingsView(project.value.pulseScene, "Pulse")
     }
 
+    fun onShowLedaSceneSettings() {
+        initSettingsView(project.value.leda, "Leda")
+    }
+
     fun onShowProjectSettings() {
         initSettingsView(project.value, "Project")
     }

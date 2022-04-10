@@ -28,8 +28,10 @@ data class Pulse(
         return (speed.value * 0.001f) * (timesStamp - startTime.value).toFloat()
     }
 
-    fun deepCopy(): Pulse {
+    fun spawn(startTime: Long): Pulse {
         val json = Gson().toJson(this)
-        return Gson().fromJson(json, Pulse::class.java)
+        val pulse = Gson().fromJson(json, Pulse::class.java)
+        pulse.startTime.value = startTime
+        return pulse
     }
 }

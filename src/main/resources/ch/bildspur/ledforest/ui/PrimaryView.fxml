@@ -66,6 +66,9 @@
                         <MenuItem id="pulseMenuItem" mnemonicParsing="false"
                                   onAction="#onShowPulseSceneSettings"
                                   text="Pulse Scene"/>
+                        <MenuItem id="ledaMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowLedaSceneSettings"
+                                  text="Leda Scene"/>
                     </items>
                 </Menu>
 
