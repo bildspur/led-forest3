@@ -1,8 +1,11 @@
 package ch.bildspur.ledforest.util
 
+import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.easing.EasingMethod
+import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.math.Float2
 import ch.bildspur.model.NumberRange
+import com.google.gson.Gson
 import processing.core.*
 import processing.core.PConstants.QUAD_STRIP
 import java.lang.Math.sin
@@ -27,7 +30,7 @@ fun Boolean.toFloat(): Float {
     return if (this) 1f else 0f
 }
 
-fun PVector.toFloat2() : Float2 {
+fun PVector.toFloat2(): Float2 {
     return Float2(this.x, this.y)
 }
 
@@ -164,7 +167,7 @@ fun NumberRange.modValue(modulator: Float): Float {
     return ((this.high - this.low).toFloat() * modulator) + this.low.toFloat()
 }
 
-fun windowedSine(x : Float): Float {
+fun windowedSine(x: Float): Float {
     if (x < 0.0f || x > 1.0f)
         return 0.0f
 
@@ -172,20 +175,20 @@ fun windowedSine(x : Float): Float {
     return (0.5 * (1 + kotlin.math.sin(2 * PI * x - (PI / 2)))).toFloat()
 }
 
-fun windowedSineIn(x : Float): Float {
+fun windowedSineIn(x: Float): Float {
     if (x < 0.0f || x > 1.0f)
         return 0.0f
 
     // calculate sine
-    return (0.5 * (1 + kotlin.math.sin( PI * x - (PI / 2)))).toFloat()
+    return (0.5 * (1 + kotlin.math.sin(PI * x - (PI / 2)))).toFloat()
 }
 
-fun windowedSineOut(x : Float): Float {
+fun windowedSineOut(x: Float): Float {
     if (x < 0.0f || x > 1.0f)
         return 0.0f
 
     // calculate sine
-    return (0.5 * (1 + kotlin.math.sin( PI * x + (PI / 2)))).toFloat()
+    return (0.5 * (1 + kotlin.math.sin(PI * x + (PI / 2)))).toFloat()
 }
 
 fun windowed(x: Float, lower: Float = 0.0f, upper: Float = 1.0f): Float {
@@ -194,22 +197,27 @@ fun windowed(x: Float, lower: Float = 0.0f, upper: Float = 1.0f): Float {
     return x
 }
 
-fun windowedInOut(x: Float) : Float {
+fun windowedInOut(x: Float): Float {
     if (x < 0.0f || x > 1.0f)
         return 0.0f
 
-    if(x > 0.5f)
+    if (x > 0.5f)
         return (1.0f - x) * 2f
 
     return x * 2f
 }
 
-fun windowedMappedInOut(x: Float, inMapping: EasingMethod, outMapping: EasingMethod) : Float {
+fun windowedMappedInOut(x: Float, inMapping: EasingMethod, outMapping: EasingMethod): Float {
     if (x < 0.0f || x > 1.0f)
         return 0.0f
 
-    if(x > 0.5f)
+    if (x > 0.5f)
         return outMapping.method((1.0f - x) * 2f)
 
     return inMapping.method(x * 2f)
+}
+
+inline fun <reified T : Any> T.deepCopy(obj: T): T {
+    val json = Gson().toJson(obj)
+    return Gson().fromJson(json, T::class.java)
 }
