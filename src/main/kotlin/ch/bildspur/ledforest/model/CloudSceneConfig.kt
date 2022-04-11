@@ -1,13 +1,14 @@
 package ch.bildspur.ledforest.model
 
 import ch.bildspur.ledforest.model.easing.EasingMethod
+import ch.bildspur.ledforest.model.preset.PresetManager
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
 import ch.bildspur.ui.properties.*
 import ch.bildspur.util.Mapping
 import com.google.gson.annotations.Expose
 
-class CloudSceneConfig {
+class CloudSceneConfig : PresetManager() {
 
     @Expose
     @BooleanParameter("Enabled")

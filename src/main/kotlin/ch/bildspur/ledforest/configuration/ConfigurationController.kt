@@ -20,6 +20,7 @@ import java.nio.file.Paths
 
 /**
  * Created by cansik on 11.07.17.
+ * todo: replace this class with the configuration controller directly from bildspur-base
  */
 class ConfigurationController {
     companion object {
@@ -33,7 +34,7 @@ class ConfigurationController {
         val CONFIGURATION_PATH: Path = Paths.get(CONFIGURATION_DIR.toString(), CONFIGURATION_FILE)
     }
 
-    val gson: Gson = GsonBuilder()
+    val gsonBuilder: GsonBuilder = GsonBuilder()
             .setPrettyPrinting()
             .excludeFieldsWithoutExposeAnnotation()
             .registerTypeAdapter(DataModel::class.java, DataModelInstanceCreator())
@@ -42,7 +43,8 @@ class ConfigurationController {
             .registerTypeAdapter(Tube::class.java, TubeInstanceCreator())
             .registerTypeAdapter(LandmarkPulseCollider::class.java, LandmarkPulseColliderInstanceCreator())
             .registerTypeAdapterFactory(PostProcessingEnabler())
-            .create()
+
+    val gson: Gson = gsonBuilder.create()
 
     fun loadAppConfig(): AppConfig {
         if (!Files.exists(CONFIGURATION_DIR)) {
