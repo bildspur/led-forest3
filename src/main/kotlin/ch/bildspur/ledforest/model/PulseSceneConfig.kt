@@ -49,4 +49,19 @@ class PulseSceneConfig {
                 hue = DataModel(200.0f)
         ))
     }
+
+    @ActionParameter("Pulse", "Example2")
+    private var slowPulse = {
+        val start = System.currentTimeMillis()
+
+        pulses.add(Pulse(startTime = DataModel(start),
+                speed = DataModel(2.0f),
+                width = DataModel(5.0f),
+                location = DataModel(PVector(0.0f, 0.0f)),
+                hue = DataModel(16.0f)
+        ))
+      
+    }
+
+   
 }
