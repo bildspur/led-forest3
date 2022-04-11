@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.pose.clients
 
 import ch.bildspur.event.Event
+import ch.bildspur.ledforest.model.math.PVector4
 import ch.bildspur.ledforest.pose.Pose
 import com.illposed.osc.*
 import com.illposed.osc.transport.OSCPortIn
@@ -44,7 +45,7 @@ class SARMotionPoseClient : OSCPacketListener, PoseClient {
 
         val poses = (0 until count).map {
             val pose = Pose()
-            val keypoints = Array(KEY_POINT_COUNT) { PVector() }
+            val keypoints = Array(KEY_POINT_COUNT) { PVector4() }
             var score = 0f
 
             pose.id = message.arguments[index++] as Int
@@ -55,9 +56,7 @@ class SARMotionPoseClient : OSCPacketListener, PoseClient {
                 keypoints[i].z = message.arguments[index++] as Float
 
                 val kpScore = message.arguments[index++] as Float
-
-                // todo: change keypoint system to float4 to include score
-                // pose.keypointScores[i] = kpScore
+                keypoints[i].t = kpScore
 
                 score += kpScore
             }
@@ -68,7 +67,7 @@ class SARMotionPoseClient : OSCPacketListener, PoseClient {
             // ugly mapping to full body pose system
             // sarmotion pose to 15 to 18
             pose.keypoints[0] = keypoints[0]
-            pose.keypoints[1] = PVector.lerp(keypoints[3], keypoints[4], 0.5f)
+            pose.keypoints[1] = PVector4.lerp(keypoints[3], keypoints[4], 0.5f)
 
             pose.keypoints[2] = keypoints[4]
             pose.keypoints[3] = keypoints[6]

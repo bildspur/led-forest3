@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.pose.clients
 
 import ch.bildspur.event.Event
+import ch.bildspur.ledforest.model.math.PVector4
 import ch.bildspur.ledforest.pose.Pose
 import com.illposed.osc.*
 import com.illposed.osc.transport.OSCPortIn
@@ -42,7 +43,7 @@ class MediaPipePoseClient : OSCPacketListener, PoseClient {
         if (count == 0) return
 
         val pose = Pose()
-        val keypoints = Array(KEY_POINT_COUNT) { PVector() }
+        val keypoints = Array(KEY_POINT_COUNT) { PVector4() }
         var score = 0f
 
         for (i in 0 until KEY_POINT_COUNT) {
@@ -53,6 +54,8 @@ class MediaPipePoseClient : OSCPacketListener, PoseClient {
             keypoints[i].z = message.arguments[index++] as Float
 
             val visibility = message.arguments[index] as Float
+            keypoints[i].t = visibility
+
             score += visibility
         }
 
@@ -62,7 +65,7 @@ class MediaPipePoseClient : OSCPacketListener, PoseClient {
         // ugly mapping to full body pose system
         // upper pose 25 to coco 18
         pose.keypoints[0] = keypoints[0]
-        pose.keypoints[1] = PVector.lerp(keypoints[11], keypoints[12], 0.5f)
+        pose.keypoints[1] = PVector4.lerp(keypoints[11], keypoints[12], 0.5f)
 
         pose.keypoints[2] = keypoints[11]
         pose.keypoints[3] = keypoints[13]

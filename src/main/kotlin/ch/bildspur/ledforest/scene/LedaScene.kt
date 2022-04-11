@@ -2,7 +2,6 @@ package ch.bildspur.ledforest.scene
 
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
-import ch.bildspur.ledforest.model.leda.Collider
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.pose.Pose
@@ -55,8 +54,9 @@ class LedaScene(project: Project, tubes: List<Tube>,
     private fun checkCollision(pose: Pose, collider: LandmarkPulseCollider) {
         for (landmarkType in collider.triggeredBy) {
             val landmarkId = PoseLandmark.values().indexOf(landmarkType)
+            val landmark = pose.keypoints[landmarkId]
 
-            val score = pose.keypointScores[landmarkId]
+            val score = landmark.t
             if (score < project.leda.landmarkMinScore.value) continue
 
             val relativeLandmarkPosition = PVector.sub(pose.nose, pose.keypoints[landmarkId])
