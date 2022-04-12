@@ -10,7 +10,9 @@ import ch.bildspur.ui.properties.SelectableListParameter
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import javafx.scene.control.TextInputDialog
+import jfxtras.styles.jmetro.FlatTextInputDialog
+import jfxtras.styles.jmetro.JMetro
+import jfxtras.styles.jmetro.Style
 
 
 abstract class PresetManager() {
@@ -23,9 +25,12 @@ abstract class PresetManager() {
     @SelectableListParameter("Presets")
     var presets = SelectableDataModel(mutableListOf<Preset>())
 
-    @ActionParameter("Preset", "Create", invokesChange = true, uiThread = true)
+    @ActionParameter("Preset", "Create", invokesChange = false, uiThread = true)
     private val addPreset = {
-        val dialog = TextInputDialog("")
+        val jMetro = JMetro(Style.DARK)
+        val dialog = FlatTextInputDialog("")
+        jMetro.scene = dialog.dialogPane.scene
+
         dialog.title = "Create new Preset"
         dialog.headerText = "Create new Preset"
         dialog.contentText = "Please enter the name:"
@@ -33,29 +38,32 @@ abstract class PresetManager() {
         val result = dialog.showAndWait()
 
         result.ifPresent { name: String ->
+            if (name.isBlank()) return@ifPresent
+
             val preset = Preset(name, createPresetJson())
             presets.add(preset)
             presets.selectedItem = preset
         }
     }
 
-    @ActionParameter("Preset", "Load", uiThread = true)
+    @ActionParameter("Preset", "Update", invokesChange = false, uiThread = true)
+    private val updatePreset = {
+        if (presets.selectedIndex < 0) {
+            addPreset()
+        } else {
+            presets.selectedItem.data = createPresetJson()
+            presets.selectedItem = presets.selectedItem
+        }
+    }
+
+    @ActionParameter("Preset", "Load", invokesChange = false, uiThread = true)
     private val loadPreset = {
         if (presets.selectedIndex >= 0) {
             applyPresetJson()
         }
     }
 
-    @ActionParameter("Preset", "Save", invokesChange = true, uiThread = true)
-    private val savePreset = {
-        if (presets.selectedIndex < 0) {
-            addPreset()
-        } else {
-            presets.selectedItem.data = createPresetJson()
-        }
-    }
-
-    @ActionParameter("Preset", "Delete", invokesChange = true, uiThread = true)
+    @ActionParameter("Preset", "Delete", invokesChange = false, uiThread = true)
     private val deletePreset = {
         if (presets.selectedIndex >= 0) {
             presets.remove(presets.selectedItem)
