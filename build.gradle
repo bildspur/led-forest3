@@ -63,9 +63,12 @@ repositories {
 
 dependencies {
     // jmetro
+    /*
     implementation 'org.jfxtras:jmetro:11.6.15', {
         exclude group: 'org.openjfx'
-    }
+    }*/
+
+    implementation files("lib/jmetro/jmetro-11.6.16-SNAPSHOT.jar")
 
     // json
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
