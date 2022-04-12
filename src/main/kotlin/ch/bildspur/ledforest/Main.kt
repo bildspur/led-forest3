@@ -86,8 +86,10 @@ class Main : Application() {
     }
 
     private fun displaySaveDialog(): ButtonData {
-        // todo: change to metro style
+        val jMetro = JMetro(Style.DARK)
         val alert = Alert(AlertType.CONFIRMATION)
+        jMetro.scene = alert.dialogPane.scene
+
         alert.title = "Save Project Settings"
         alert.headerText = "There are unsaved project settings."
         alert.contentText = "Would you like to save them?"
