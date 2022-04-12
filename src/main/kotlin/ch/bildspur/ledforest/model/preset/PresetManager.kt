@@ -1,15 +1,16 @@
 package ch.bildspur.ledforest.model.preset
 
 import ch.bildspur.ledforest.configuration.ConfigurationController
+import ch.bildspur.model.DataModel
 import ch.bildspur.model.SelectableDataModel
+import ch.bildspur.ui.fx.FXPropertyRegistry
 import ch.bildspur.ui.properties.ActionParameter
+import ch.bildspur.ui.properties.PropertyReader
 import ch.bildspur.ui.properties.SelectableListParameter
-import com.google.gson.InstanceCreator
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import javafx.scene.control.TextInputDialog
-import java.lang.reflect.Type
 
 
 abstract class PresetManager() {
@@ -22,7 +23,7 @@ abstract class PresetManager() {
     @SelectableListParameter("Presets")
     var presets = SelectableDataModel(mutableListOf<Preset>())
 
-    @ActionParameter("Preset", "Create", uiThread = true)
+    @ActionParameter("Preset", "Create", invokesChange = true, uiThread = true)
     private val addPreset = {
         val dialog = TextInputDialog("")
         dialog.title = "Create new Preset"
@@ -41,16 +42,11 @@ abstract class PresetManager() {
     @ActionParameter("Preset", "Load", uiThread = true)
     private val loadPreset = {
         if (presets.selectedIndex >= 0) {
-            val jsonString = presets.selectedItem.data
-
-            val gson = ConfigurationController().gsonBuilder
-                    .registerTypeAdapter(this::class.java, InstanceCreator<Any> { type: Type? -> this } as InstanceCreator<*>)
-                    .create()
-            gson.fromJson(jsonString, this.javaClass)
+            applyPresetJson()
         }
     }
 
-    @ActionParameter("Preset", "Save", uiThread = true)
+    @ActionParameter("Preset", "Save", invokesChange = true, uiThread = true)
     private val savePreset = {
         if (presets.selectedIndex < 0) {
             addPreset()
@@ -59,7 +55,7 @@ abstract class PresetManager() {
         }
     }
 
-    @ActionParameter("Preset", "Delete", uiThread = true)
+    @ActionParameter("Preset", "Delete", invokesChange = true, uiThread = true)
     private val deletePreset = {
         if (presets.selectedIndex >= 0) {
             presets.remove(presets.selectedItem)
@@ -73,5 +69,36 @@ abstract class PresetManager() {
         // remove presetManager fields
         json.remove(presetsName)
         return json.toString()
+    }
+
+    private fun applyPresetJson() {
+        val jsonString = presets.selectedItem.data
+
+        val gson = ConfigurationController().gsonBuilder.create()
+        val obj = gson.fromJson(jsonString, this.javaClass)
+        transferDataModelValues(obj, this)
+    }
+
+    private fun <T : Any, K : Any> transferDataModelValues(a: T, b: K) {
+        val propertyReader = PropertyReader(FXPropertyRegistry.properties)
+
+        val aProperties = propertyReader.readPropertyAnnotations(a)
+        val bProperties = propertyReader.readPropertyAnnotations(b)
+
+        val bPropertiesLookupTable = bProperties.associateBy { it.field.name }.toMutableMap()
+        bPropertiesLookupTable.remove(presetsName)
+
+        val dataModelClassName = DataModel::class.qualifiedName
+        for (aProperty in aProperties) {
+            val bProperty = bPropertiesLookupTable[aProperty.field.name] ?: continue
+            if (aProperty.field.type != bProperty.field.type) continue
+
+            if (!(aProperty.field.type.name == dataModelClassName && bProperty.field.type.name == dataModelClassName)) continue
+
+            val aDataModel = aProperty.field.get(a) as DataModel<Any>
+            val bDataModel = bProperty.field.get(b) as DataModel<Any>
+
+            bDataModel.value = aDataModel.value
+        }
     }
 }
