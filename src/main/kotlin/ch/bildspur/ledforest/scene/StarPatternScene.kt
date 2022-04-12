@@ -7,6 +7,7 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
+import ch.bildspur.util.map
 
 
 class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPattern Scene", project, tubes) {
@@ -46,12 +47,12 @@ class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPat
                 it.color.fadeS(hsv.s.toFloat(), 0.05f)
             }
 
-            it.color.fadeB(0f, 0.05f)
+            it.color.fadeB(mapToBrightness(0f), 0.05f)
         }
 
         // turn on cube leds
-        cubeTubes.forEach {
-            it.leds.forEach {
+        cubeTubes.forEach { tube ->
+            tube.leds.forEach {
                 it.color.fadeH(300f, 0.1f)
                 it.color.fadeS(100f, 0.05f)
                 it.color.fadeB(50f, 0.05f)
@@ -61,22 +62,28 @@ class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPat
 
     override fun update() {
         val config = project.starPattern
+        val brightnessSpectrum = config.brightnessSpectrum.value
 
         iaTubes.forEachLED {
             val ledBrightness = ColorMode.brightness(it.color.color)
 
-            if (ledBrightness > 10) {
+            if (ledBrightness > mapToBrightness(10f)) {
                 //led is ON
                 if (Sketch.instance.random(0f, 1f) > config.randomOffFactor.value) {
-                    it.color.fadeB(0f, config.fadeSpeed.value)
+                    it.color.fadeB(mapToBrightness(0f), config.fadeSpeed.value)
                 }
             } else {
                 //led is OFF
                 if (Sketch.instance.random(0f, 1f) > config.randomOnFactor.value) {
-                    it.color.fadeB(Sketch.instance.random(50f, 100f), config.fadeSpeed.value)
+                    it.color.fadeB(Sketch.instance.random(mapToBrightness(50f), mapToBrightness(100f)), config.fadeSpeed.value)
                 }
             }
         }
+    }
+
+    private fun mapToBrightness(value: Float): Float {
+        val brightnessSpectrum = project.starPattern.brightnessSpectrum.value
+        return value.map(0f, 100f, brightnessSpectrum.low.toFloat(), brightnessSpectrum.high.toFloat())
     }
 
     override fun stop() {

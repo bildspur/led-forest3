@@ -23,7 +23,7 @@ abstract class PresetManager() {
     @SelectableListParameter("Presets")
     var presets = SelectableDataModel(mutableListOf<Preset>())
 
-    @ActionParameter("Preset", "Create", uiThread = true)
+    @ActionParameter("Preset", "Create", invokesChange = true, uiThread = true)
     private val addPreset = {
         val dialog = TextInputDialog("")
         dialog.title = "Create new Preset"
@@ -46,7 +46,7 @@ abstract class PresetManager() {
         }
     }
 
-    @ActionParameter("Preset", "Save", uiThread = true)
+    @ActionParameter("Preset", "Save", invokesChange = true, uiThread = true)
     private val savePreset = {
         if (presets.selectedIndex < 0) {
             addPreset()
@@ -55,7 +55,7 @@ abstract class PresetManager() {
         }
     }
 
-    @ActionParameter("Preset", "Delete", uiThread = true)
+    @ActionParameter("Preset", "Delete", invokesChange = true, uiThread = true)
     private val deletePreset = {
         if (presets.selectedIndex >= 0) {
             presets.remove(presets.selectedItem)
