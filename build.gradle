@@ -77,8 +77,8 @@ dependencies {
 
     // bildspur libs
     implementation "com.github.cansik:bildspur-base:0.3.5"
-    implementation 'com.github.cansik:bildspur-ui:0.4.3'
-    //implementation project(":bildspur-ui")
+    implementation 'com.github.cansik:bildspur-ui:0.4.4'
+    // implementation project(":bildspur-ui")
 
     // processing
     implementation files("lib/processing/core.jar")
