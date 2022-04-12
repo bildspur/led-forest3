@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.model.preset
 
 import ch.bildspur.ledforest.configuration.ConfigurationController
+import ch.bildspur.ledforest.ui.properties.SeparatorParameter
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.SelectableDataModel
 import ch.bildspur.ui.fx.FXPropertyRegistry
@@ -69,6 +70,9 @@ abstract class PresetManager() {
             presets.remove(presets.selectedItem)
         }
     }
+
+    @SeparatorParameter()
+    private val separator = Any()
 
     private fun createPresetJson(): String {
         val configController = ConfigurationController()

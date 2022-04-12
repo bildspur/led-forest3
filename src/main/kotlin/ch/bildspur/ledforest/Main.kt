@@ -36,6 +36,7 @@ class Main : Application() {
         FXPropertyRegistry.properties.add(PropertiesRegistryEntry(PVectorParameter::class.java, PVectorParameter::name, ::PVectorProperty))
         FXPropertyRegistry.properties.add(PropertiesRegistryEntry(PVectorAngleParameter::class.java, PVectorAngleParameter::name, ::PVectorAngleProperty))
         FXPropertyRegistry.properties.add(PropertiesRegistryEntry(ArrowControlParameter::class.java, ArrowControlParameter::name, ::ArrowControlAction))
+        FXPropertyRegistry.properties.add(PropertiesRegistryEntry(SeparatorParameter::class.java, SeparatorParameter::name, ::SeparatorProperty))
 
         // start javafx
         val loader = FXMLLoader(javaClass.classLoader.getResource("ch/bildspur/ledforest/ui/PrimaryView.fxml"))
