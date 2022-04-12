@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.model
 
 import ch.bildspur.ledforest.model.pulse.Pulse
+import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.ActionParameter
 import ch.bildspur.ui.properties.BooleanParameter
@@ -32,36 +33,143 @@ class PulseSceneConfig {
         pulses.add(templatePulse.spawn())
     }
 
-    @ActionParameter("Pulse", "Example1")
+  
+
+    @ActionParameter("Pulse", "center")
+    private var center = {
+        val start = System.currentTimeMillis()
+
+        pulses.add(Pulse(startTime = DataModel(start),
+                speed = DataModel(3.0f),
+                width = DataModel(2.0f),
+                location = DataModel(PVector(0.0f, 0.0f)),
+                hue = DataModel(67.0f),
+                attackCurve = DataModel(EasingMethod.EaseInQuad),
+                releaseCurve = DataModel(EasingMethod.Linear)
+        ))
+      
+    }
+
+    @ActionParameter("Pulse", "leftToRight")
+    private var leftToRight = {
+        val start = System.currentTimeMillis()
+
+        pulses.add(Pulse(startTime = DataModel(start),
+                speed = DataModel(3.0f),
+                width = DataModel(2.0f),
+                location = DataModel(PVector(-4.0f, 0.0f)),
+                hue = DataModel(67.0f),
+                attackCurve = DataModel(EasingMethod.Step),
+                releaseCurve = DataModel(EasingMethod.Linear)
+        ))
+      
+    }
+
+    @ActionParameter("Pulse", "rightToLeft")
+    private var rightToLeft = {
+        val start = System.currentTimeMillis()
+
+        pulses.add(Pulse(startTime = DataModel(start),
+                speed = DataModel(3.0f),
+                width = DataModel(2.0f),
+                location = DataModel(PVector(4.0f, 0.0f)),
+                hue = DataModel(67.0f),
+                attackCurve = DataModel(EasingMethod.Step),
+                releaseCurve = DataModel(EasingMethod.Linear)
+        ))
+      
+    }
+
+   
+
+    @ActionParameter("Pulse", "fast")
+    private var fast = {
+        val start = System.currentTimeMillis()
+
+        pulses.add(Pulse(startTime = DataModel(start),
+                speed = DataModel(6.0f),
+                width = DataModel(2.0f),
+                location = DataModel(PVector(0.0f, 0.0f)),
+                hue = DataModel(67.0f),
+                attackCurve = DataModel(EasingMethod.Step),
+                releaseCurve = DataModel(EasingMethod.Linear)
+        ))
+      
+    }
+
+    @ActionParameter("Pulse", "slow")
+    private var slow = {
+        val start = System.currentTimeMillis()
+
+        pulses.add(Pulse(startTime = DataModel(start),
+                speed = DataModel(1.5f),
+                width = DataModel(2.0f),
+                location = DataModel(PVector(0.0f, 0.0f)),
+                hue = DataModel(67.0f),
+                attackCurve = DataModel(EasingMethod.Step),
+                releaseCurve = DataModel(EasingMethod.Linear)
+        ))
+      
+    }
+    @ActionParameter("Pulse", "TwoPulses")
     private var sendTwoPulses = {
         val start = System.currentTimeMillis()
 
         pulses.add(Pulse(startTime = DataModel(start),
-                speed = DataModel(templatePulse.speed.value),
-                width = DataModel(templatePulse.width.value),
+                speed = DataModel(3.0f),
+                width = DataModel(2.0f),
                 location = DataModel(PVector(4.0f, 0.0f)),
-                hue = DataModel(0.0f)
+                hue = DataModel(0.0f),
+                attackCurve = DataModel(EasingMethod.Step),
+                releaseCurve = DataModel(EasingMethod.Linear)
         ))
         pulses.add(Pulse(startTime = DataModel(start),
-                speed = DataModel(templatePulse.speed.value),
-                width = DataModel(templatePulse.width.value),
+                speed = DataModel(3.0f),
+                width = DataModel(2.0f),
                 location = DataModel(PVector(-4.0f, 0.0f)),
-                hue = DataModel(200.0f)
+                hue = DataModel(200.0f),
+                attackCurve = DataModel(EasingMethod.Step),
+                releaseCurve = DataModel(EasingMethod.Linear)
         ))
     }
-
-    @ActionParameter("Pulse", "Example2")
-    private var slowPulse = {
+    @ActionParameter("Pulse", "crazy")
+    private var crazy = {
         val start = System.currentTimeMillis()
 
         pulses.add(Pulse(startTime = DataModel(start),
-                speed = DataModel(2.0f),
-                width = DataModel(5.0f),
-                location = DataModel(PVector(0.0f, 0.0f)),
-                hue = DataModel(16.0f)
+                speed = DataModel(3.0f),
+                width = DataModel(2.0f),
+                location = DataModel(PVector(4.0f, 0.0f)),
+                hue = DataModel(0.0f),
+                attackCurve = DataModel(EasingMethod.Step),
+                releaseCurve = DataModel(EasingMethod.Linear)
         ))
-      
+        pulses.add(Pulse(startTime = DataModel(start),
+                speed = DataModel(3.0f),
+                width = DataModel(2.0f),
+                location = DataModel(PVector(-4.0f, 0.0f)),
+                hue = DataModel(90.0f),
+                attackCurve = DataModel(EasingMethod.Step),
+                releaseCurve = DataModel(EasingMethod.Linear)
+        ))
+        pulses.add(Pulse(startTime = DataModel(start),
+                speed = DataModel(3.0f),
+                width = DataModel(2.0f),
+                location = DataModel(PVector(0.0f, 4.0f)),
+                hue = DataModel(180.0f),
+                attackCurve = DataModel(EasingMethod.Step),
+                releaseCurve = DataModel(EasingMethod.Linear)
+        ))
+        pulses.add(Pulse(startTime = DataModel(start),
+                speed = DataModel(3.0f),
+                width = DataModel(2.0f),
+                location = DataModel(PVector(0.0f, -4.0f)),
+                hue = DataModel(270.0f),
+                attackCurve = DataModel(EasingMethod.Step),
+                releaseCurve = DataModel(EasingMethod.Linear)
+        ))
     }
+
 
    
 }
