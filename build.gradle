@@ -99,6 +99,10 @@ dependencies {
     implementation group: 'org.controlsfx', name: 'controlsfx', version: '11.1.1'
     implementation group: 'com.sun.activation', name: 'javax.activation', version: '1.2.0'
 
+    // icons (ikonli)
+    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
+    implementation 'org.kordamp.ikonli:ikonli-bootstrapicons-pack:12.3.1'
+
     // leap motion java
     implementation files('lib/LeapMotion/library/LeapJava.jar')
     implementation files('lib/LeapMotion/library/LeapMotion.jar')

@@ -32,11 +32,12 @@ class Main : Application() {
         BasicConfigurator.configure()
         Logger.getRootLogger().level = Level.ERROR
 
-        // register properties
+        // register custom properties
         FXPropertyRegistry.properties.add(PropertiesRegistryEntry(PVectorParameter::class.java, PVectorParameter::name, ::PVectorProperty))
         FXPropertyRegistry.properties.add(PropertiesRegistryEntry(PVectorAngleParameter::class.java, PVectorAngleParameter::name, ::PVectorAngleProperty))
         FXPropertyRegistry.properties.add(PropertiesRegistryEntry(ArrowControlParameter::class.java, ArrowControlParameter::name, ::ArrowControlAction))
         FXPropertyRegistry.properties.add(PropertiesRegistryEntry(SeparatorParameter::class.java, SeparatorParameter::name, ::SeparatorProperty))
+        FXPropertyRegistry.properties.add(PropertiesRegistryEntry(CustomUIParameter::class.java, {""}, ::CustomUIElement))
 
         // start javafx
         val loader = FXMLLoader(javaClass.classLoader.getResource("ch/bildspur/ledforest/ui/PrimaryView.fxml"))

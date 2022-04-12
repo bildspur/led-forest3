@@ -57,3 +57,8 @@
 #audioMenuItem > .label {
     -fx-graphic: url("../images/AudioIcon16.png");
 }
+
+.ikonli-font-icon {
+    -fx-icon-color: white;
+    -fx-icon-size: 20px;
+}

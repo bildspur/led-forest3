@@ -15,3 +15,7 @@ annotation class ArrowControlParameter(val name: String, val invokesChange : Boo
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class SeparatorParameter(val name: String = "", val fontSize : Double = 14.0, val topPadding: Double = 10.0,  val bottomPadding: Double = 10.0)
+
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class CustomUIParameter()
