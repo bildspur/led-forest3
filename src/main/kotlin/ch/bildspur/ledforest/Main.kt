@@ -8,6 +8,10 @@ import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.Scene
+import javafx.scene.control.Alert
+import javafx.scene.control.Alert.AlertType
+import javafx.scene.control.ButtonBar.ButtonData
+import javafx.scene.control.ButtonType
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import jfxtras.styles.jmetro.JMetro
@@ -52,11 +56,20 @@ class Main : Application() {
         primaryStage.isResizable = true
 
         // style
-        // PlatformImpl.setDefaultPlatformUserAgentStylesheet()
-        //StyleManager.getInstance().addUserAgentStylesheet(javaClass.classLoader.getResource("ch/bildspur/ledforest/ui/style/ledforest.css").toExternalForm())
         root.stylesheets.add("ch/bildspur/ledforest/ui/style/PrimaryView.css")
 
         primaryStage.setOnCloseRequest {
+            if(controller.hasUnsavedChanges.value) {
+                when(displaySaveDialog()) {
+                    ButtonData.YES -> controller.onSaveProject()
+                    ButtonData.CANCEL_CLOSE -> {
+                        it.consume()
+                        return@setOnCloseRequest
+                    }
+                    else -> {}
+                }
+            }
+
             controller.sketch.stop()
             controller.processingThread.join(5000)
             System.exit(0)
@@ -70,5 +83,24 @@ class Main : Application() {
         fun main(args: Array<String>) {
             launch(Main::class.java)
         }
+    }
+
+    private fun displaySaveDialog(): ButtonData {
+        val jMetro = JMetro(Style.DARK)
+        val alert = Alert(AlertType.CONFIRMATION)
+        jMetro.scene = alert.dialogPane.scene
+
+        alert.title = "Save Project Settings"
+        alert.headerText = "There are unsaved project settings."
+        alert.contentText = "Would you like to save them?"
+
+        val saveButton = ButtonType("Yes", ButtonData.YES)
+        val discardButton = ButtonType("No", ButtonData.NO)
+        val cancelButton = ButtonType("Cancel", ButtonData.CANCEL_CLOSE)
+
+        alert.buttonTypes.setAll(saveButton, discardButton, cancelButton)
+
+        val result = alert.showAndWait()
+        return result.get().buttonData
     }
 }

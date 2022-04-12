@@ -41,6 +41,8 @@ import javafx.stage.FileChooser
 import javafx.stage.Modality
 import javafx.stage.Stage
 import javafx.stage.StageStyle
+import jfxtras.styles.jmetro.JMetro
+import jfxtras.styles.jmetro.Style
 import processing.core.PApplet
 import processing.core.PVector
 import java.nio.file.Files
@@ -103,6 +105,8 @@ class PrimaryView {
 
     private var hotReloadWatcher = FileWatcher()
 
+    var hasUnsavedChanges = DataModel(false)
+
     init {
     }
 
@@ -112,6 +116,15 @@ class PrimaryView {
 
         // setup ui task
         UITask.status.addListener { _ -> statusLabel.text = UITask.status.value }
+
+        // setup unsaved handler
+        hasUnsavedChanges.onChanged += {
+            var changesSign = ""
+            if (it) changesSign = "*"
+
+            primaryStage.title = "${Sketch.NAME}$changesSign"
+        }
+        hasUnsavedChanges.fire()
 
         // setup treeview
         elementTreeView.selectionModel.selectedItemProperty().addListener { _ ->
@@ -170,6 +183,7 @@ class PrimaryView {
             // for updating the property view
             propertiesControl.propertyChanged += {
                 updateUI()
+                hasUnsavedChanges.value = true
             }
 
             // load app config
@@ -350,6 +364,11 @@ class PrimaryView {
         stage.initStyle(StageStyle.DECORATED)
         stage.title = Sketch.NAME
         stage.scene = Scene(root1)
+
+        // todo: fix dark theme here
+        val jMetro = JMetro(Style.LIGHT)
+        jMetro.scene = stage.scene
+
         stage.showAndWait()
 
         if (!controller.initNewProject)
@@ -425,6 +444,7 @@ class PrimaryView {
                 configuration.saveProject(result.path, project.value)
                 appConfig.projectFile = result.path
                 configuration.saveAppConfig(appConfig)
+                hasUnsavedChanges.value = false
                 hotReloadWatcher.reset(Paths.get(result.path))
             }, { updateUI() }, "save project")
         }
@@ -435,6 +455,7 @@ class PrimaryView {
             UITask.run({
                 configuration.saveProject(appConfig.projectFile, project.value)
                 configuration.saveAppConfig(appConfig)
+                hasUnsavedChanges.value = false
                 hotReloadWatcher.reset(Paths.get(appConfig.projectFile))
             }, { updateUI() }, "save project")
         } else {
