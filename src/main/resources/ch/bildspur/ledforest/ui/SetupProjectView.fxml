@@ -8,8 +8,7 @@
             prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.bildspur.ledforest.ui.SetupProjectView">
     <top>
-        <FlowPane alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: #d7d7d7;"
-                  BorderPane.alignment="CENTER">
+        <FlowPane alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <padding>
                 <Insets left="20.0"/>
             </padding>
@@ -117,8 +116,7 @@
     <bottom>
         <SplitPane dividerPositions="0.7" prefHeight="45.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <items>
-                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0"
-                          style="-fx-background-color: #d7d7d7;">
+                <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0">
                     <children>
                         <Label fx:id="statusLabel" prefHeight="17.0" prefWidth="409.0" text="Status">
                             <padding>
@@ -127,8 +125,7 @@
                         </Label>
                     </children>
                 </FlowPane>
-                <FlowPane alignment="CENTER_RIGHT" hgap="15.0" prefHeight="50.0" prefWidth="600.0"
-                          style="-fx-background-color: #d7d7d7;">
+                <FlowPane alignment="CENTER_RIGHT" hgap="15.0" prefHeight="50.0" prefWidth="600.0">
                     <padding>
                         <Insets right="20.0"/>
                     </padding>
