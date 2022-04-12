@@ -1,11 +1,12 @@
 package ch.bildspur.ledforest.model.pulse
 
+import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
 import ch.bildspur.model.DataModel
+import ch.bildspur.ui.properties.ColorParameter
 import ch.bildspur.ui.properties.EnumParameter
 import ch.bildspur.ui.properties.NumberParameter
-import ch.bildspur.ui.properties.SliderParameter
 import com.google.gson.Gson
 import com.google.gson.annotations.Expose
 import processing.core.PVector
@@ -19,8 +20,7 @@ data class Pulse(
         @Expose @EnumParameter("Attack Curve") var attackCurve: DataModel<EasingMethod> = DataModel(EasingMethod.Linear),
         @Expose @EnumParameter("Release Curve") var releaseCurve: DataModel<EasingMethod> = DataModel(EasingMethod.Linear),
 
-        @Expose @SliderParameter("Hue", 0.0, 360.0, 1.0) var hue: DataModel<Float> = DataModel(0.0f),
-        @Expose @SliderParameter("Saturation", 0.0, 100.0, 1.0) var saturation: DataModel<Float> = DataModel(100.0f)
+        @Expose @ColorParameter("Color")  var color: DataModel<RGB> = DataModel(RGB(1.0, 0.0, 0.0, 1.0))
 ) {
 
 

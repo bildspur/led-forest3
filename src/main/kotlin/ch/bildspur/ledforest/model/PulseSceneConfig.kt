@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.model
 
+import ch.bildspur.color.HSV
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.ActionParameter
@@ -40,13 +41,13 @@ class PulseSceneConfig {
                 speed = DataModel(templatePulse.speed.value),
                 width = DataModel(templatePulse.width.value),
                 location = DataModel(PVector(4.0f, 0.0f)),
-                hue = DataModel(0.0f)
+                color = DataModel(HSV(0, 100, 100, 1.0f).toRGB())
         ))
         pulses.add(Pulse(startTime = DataModel(start),
                 speed = DataModel(templatePulse.speed.value),
                 width = DataModel(templatePulse.width.value),
                 location = DataModel(PVector(-4.0f, 0.0f)),
-                hue = DataModel(200.0f)
+                color = DataModel(HSV(200, 100, 100, 1.0f).toRGB())
         ))
     }
 }

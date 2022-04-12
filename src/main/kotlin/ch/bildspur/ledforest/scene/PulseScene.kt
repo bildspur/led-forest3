@@ -10,6 +10,7 @@ import ch.bildspur.ledforest.util.ColorUtil
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.windowedMappedInOut
 import ch.bildspur.math.pow
+import ch.bildspur.util.map
 import kotlin.math.sqrt
 
 class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene", project, tubes) {
@@ -62,11 +63,12 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
             val width = pulse.width.value
             val factor = windowedMappedInOut((applyDist + (width * 0.5f)) / width, pulse.attackCurve.value, pulse.releaseCurve.value)
 
-            brightness += factor
-
             if(factor > 0f) {
-                huesAndWeights.add(ColorUtil.HueAndWeight(pulse.hue.value, factor))
-                saturation += pow(pulse.saturation.value, 2f)
+                val color = pulse.color.value.toHSV()
+
+                brightness += factor.map(0f, 1f, 0f, color.v / 100f)
+                huesAndWeights.add(ColorUtil.HueAndWeight(color.h.toFloat(), factor))
+                saturation += pow(color.s.toFloat(), 2f)
                 applyCount++
             }
         }

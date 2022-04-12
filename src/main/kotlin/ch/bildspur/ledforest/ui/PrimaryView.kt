@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.ui
 
+import ch.bildspur.color.HSV
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.AppConfig
@@ -328,7 +329,7 @@ class PrimaryView {
                 location = PVector(0f, 0f),
                 radius = 0.2f,
                 triggeredBy = EnumSet.of(PoseLandmark.LeftWrist),
-                pulse = Pulse(speed = DataModel(4.0f), hue = DataModel(0f)),
+                pulse = Pulse(speed = DataModel(4.0f), color = DataModel(HSV(0, 100, 100, 1.0f).toRGB())),
         )
         leftCollider.onCollision += {
             println("Left wrist collided!")
@@ -338,7 +339,7 @@ class PrimaryView {
                 location = PVector(0f, 0f),
                 radius = 0.2f,
                 triggeredBy = EnumSet.of(PoseLandmark.RightWrist),
-                pulse = Pulse(speed = DataModel(4.0f), hue = DataModel(200f)),
+                pulse = Pulse(speed = DataModel(4.0f), color = DataModel(HSV(200, 100, 100, 1.0f).toRGB())),
         )
         rightCollider.onCollision += {
             println("Right wrist collided!")
