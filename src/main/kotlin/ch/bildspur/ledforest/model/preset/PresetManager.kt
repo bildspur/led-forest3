@@ -42,9 +42,9 @@ abstract class PresetManager {
         val applyPresetButton = Button("")
 
         createPresetButton.tooltip = Tooltip("Create new Preset")
-        removePresetButton.tooltip= Tooltip( "Remove selected Preset")
-        updatePresetButton.tooltip= Tooltip("Update select Preset")
-        applyPresetButton.tooltip= Tooltip("Apply selected Preset")
+        removePresetButton.tooltip = Tooltip("Remove selected Preset")
+        updatePresetButton.tooltip = Tooltip("Update select Preset")
+        applyPresetButton.tooltip = Tooltip("Apply selected Preset")
 
         createPresetButton.setOnAction { createPreset() }
         updatePresetButton.setOnAction { updatePreset() }
