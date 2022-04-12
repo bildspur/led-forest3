@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.view
 
+import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.leap.InteractionHand
 import ch.bildspur.ledforest.leap.LeapDataProvider
@@ -85,11 +86,12 @@ class SceneRenderer(val g: PGraphics,
 
         // visualize pulses
         if(project.pulseScene.enabled.value && project.pulseScene.visualize.value) {
+            val maxRadius = project.interaction.interactionBox.value.mag()
             project.pulseScene.pulses.forEach {
                 g.push()
 
                 g.translate(it.location.value)
-                val radius = it.getPulseRadius(System.currentTimeMillis())
+                val radius = it.getExpansionRadius(System.currentTimeMillis(), maxRadius)
 
                 g.noFill()
                 g.stroke(0f, 255f, 100f)

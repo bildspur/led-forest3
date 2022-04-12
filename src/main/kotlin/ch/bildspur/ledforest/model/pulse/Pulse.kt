@@ -18,6 +18,8 @@ data class Pulse(
         @Expose @NumberParameter("Delay (ms)") var delay: DataModel<Int> = DataModel(0),
 
         @Expose @NumberParameter("Speed") var speed: DataModel<Float> = DataModel(1f),
+        @Expose @EnumParameter("Expansion Curve") var expansionCurve: DataModel<EasingMethod> = DataModel(EasingMethod.Linear),
+
         @Expose @NumberParameter("Width") var width: DataModel<Float> = DataModel(1f),
         @Expose @PVectorParameter("Location") var location: DataModel<PVector> = DataModel(PVector()),
 
@@ -28,10 +30,20 @@ data class Pulse(
 ) {
 
 
+    /**
+     * Returns the radius of the actual pulse.
+     */
     fun getPulseRadius(timesStamp: Long): Float {
         val delta = max(0, timesStamp - (startTime.value + delay.value))
-
         return (speed.value * 0.001f) * delta.toFloat()
+    }
+
+    /**
+     * Returns the radius with expansion curve applied.
+     */
+    fun getExpansionRadius(timesStamp: Long, maxRadius: Float): Float {
+        val value = kotlin.math.max(0f, expansionCurve.value.method((getPulseRadius(timesStamp) / maxRadius)))
+        return value * maxRadius
     }
 
     fun spawn(startTime: Long = System.currentTimeMillis()): Pulse {

@@ -9,6 +9,7 @@ import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.util.ColorUtil
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.windowedMappedInOut
+import ch.bildspur.math.max
 import ch.bildspur.math.pow
 import ch.bildspur.util.map
 import kotlin.math.sqrt
@@ -20,8 +21,16 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
     override val timerTask: TimerTask
         get() = task
 
-    override fun setup() {
+    var maxRadius = project.interaction.interactionBox.value.mag()
 
+    init {
+        project.interaction.interactionBox.onChanged += {
+            maxRadius = project.interaction.interactionBox.value.mag() * 1.5f
+        }
+    }
+
+    override fun setup() {
+        project.interaction.interactionBox.fire()
     }
 
     override fun update() {
@@ -34,7 +43,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
         }
 
         // cleanup
-        pulses.removeIf { it.getPulseRadius(currentTime) > project.interaction.interactionBox.value.mag() }
+        pulses.removeIf { it.getPulseRadius(currentTime) > maxRadius }
     }
 
     override fun stop() {
@@ -56,14 +65,14 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
 
         for (pulse in pulses) {
             val distance = position.dist(pulse.location.value)
-            val pulseRadius = pulse.getPulseRadius(currentTime)
+            val pulseRadius = pulse.getExpansionRadius(currentTime, maxRadius)
 
             val applyDist = pulseRadius - distance
 
             val width = pulse.width.value
             val factor = windowedMappedInOut((applyDist + (width * 0.5f)) / width, pulse.attackCurve.value, pulse.releaseCurve.value)
 
-            if(factor > 0f) {
+            if (factor > 0f) {
                 val color = pulse.color.value.toHSV()
 
                 brightness += factor.map(0f, 1f, 0f, color.v / 100f)
