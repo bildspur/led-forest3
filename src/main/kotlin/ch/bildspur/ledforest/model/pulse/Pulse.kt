@@ -10,9 +10,13 @@ import ch.bildspur.ui.properties.NumberParameter
 import com.google.gson.Gson
 import com.google.gson.annotations.Expose
 import processing.core.PVector
+import java.lang.Long.max
 
 data class Pulse(
         val startTime: DataModel<Long> = DataModel(0L),
+
+        @Expose @NumberParameter("Delay (ms)") var delay: DataModel<Int> = DataModel(0),
+
         @Expose @NumberParameter("Speed") var speed: DataModel<Float> = DataModel(1f),
         @Expose @NumberParameter("Width") var width: DataModel<Float> = DataModel(1f),
         @Expose @PVectorParameter("Location") var location: DataModel<PVector> = DataModel(PVector()),
@@ -25,7 +29,9 @@ data class Pulse(
 
 
     fun getPulseRadius(timesStamp: Long): Float {
-        return (speed.value * 0.001f) * (timesStamp - startTime.value).toFloat()
+        val delta = max(0, timesStamp - (startTime.value + delay.value))
+
+        return (speed.value * 0.001f) * delta.toFloat()
     }
 
     fun spawn(startTime: Long = System.currentTimeMillis()): Pulse {
