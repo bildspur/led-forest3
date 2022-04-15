@@ -210,8 +210,8 @@ class PrimaryView {
 
             // change disable preview based on architecture
             if (OSValidator.isMac && OSValidator.isRosetta2) {
-                println("Disabling view rendering on MacOS Silicon (AMD64) in Rosetta2 Mode")
-                project.value.visualisation.disableViewRendering.value = true
+                println("LED Forest running in MacOS Silicon (AMD64) in Rosetta2 Mode")
+                println("If you experience bugs and crashes please use Eclipse Temurin (AdoptOpenJDK) 17.0.2")
             }
 
             // add accelerators
