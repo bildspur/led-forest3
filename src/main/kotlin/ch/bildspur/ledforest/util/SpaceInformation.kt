@@ -14,18 +14,18 @@ object SpaceInformation {
     data class RangeVector(val x: NumberRange, val y: NumberRange, val z: NumberRange)
 
     fun calculateTubeDimensions(tubes: List<Tube>): RangeVector {
-        val ledPositions = tubes.map { Pair(it, it.leds) }
-            .map { p ->
-                p.second.mapIndexed { i, _ -> getLEDPosition(i, p.first) }
+        val ledPositions = tubes.map { it.leds }
+            .map { led ->
+                led.map { it.position }
             }.flatten()
 
         // calculate min & max
-        val maxX = ledPositions.map { it.x }.maxOrNull() ?: 0f
-        val minX = ledPositions.map { it.x }.minOrNull() ?: 0f
-        val maxY = ledPositions.map { it.y }.maxOrNull() ?: 0f
-        val minY = ledPositions.map { it.y }.minOrNull() ?: 0f
-        val maxZ = ledPositions.map { it.z }.maxOrNull() ?: 0f
-        val minZ = ledPositions.map { it.z }.minOrNull() ?: 0f
+        val maxX = ledPositions.maxOfOrNull { it.x } ?: 0f
+        val minX = ledPositions.minOfOrNull { it.x } ?: 0f
+        val maxY = ledPositions.maxOfOrNull { it.y } ?: 0f
+        val minY = ledPositions.minOfOrNull { it.y } ?: 0f
+        val maxZ = ledPositions.maxOfOrNull { it.z } ?: 0f
+        val minZ = ledPositions.minOfOrNull { it.z } ?: 0f
 
         return RangeVector(
             NumberRange(minX.toDouble(), maxX.toDouble()),
@@ -34,9 +34,9 @@ object SpaceInformation {
         )
     }
 
-    fun getLEDPosition(index: Int, tube: Tube): PVector {
+    fun calculateLEDPosition(index: Int, tube: Tube): PVector {
         // led size
-        val ledHeight = Sketch.instance.project.value.visualisation.ledHeight.value
+        val ledHeight = tube.length.value / tube.ledCount.value
         val tubeLength = tube.ledCount.value * ledHeight
 
         // delta

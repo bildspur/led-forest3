@@ -16,38 +16,37 @@ import processing.core.PApplet
 import processing.core.PGraphics
 import processing.core.PShape
 
-class SceneRenderer(val g: PGraphics,
-                    val tubes: List<Tube>,
-                    val leap: LeapDataProvider,
-                    val realSense: RealSenseDataProvider,
-                    val poseProvider: PoseDataProvider,
-                    val project: Project) : IRenderer {
+class SceneRenderer(
+    val g: PGraphics,
+    val tubes: List<Tube>,
+    val leap: LeapDataProvider,
+    val realSense: RealSenseDataProvider,
+    val poseProvider: PoseDataProvider,
+    val project: Project
+) : IRenderer {
     private val task = TimerTask(0, { render() }, "SceneRenderer")
     override val timerTask: TimerTask
         get() = task
 
-    lateinit var rodShape: PShape
+    val rodShapes = mutableMapOf<Tube, PShape>()
 
     override fun setup() {
         project.visualisation.ledWidth.onChanged += {
-            setupRod()
-        }
-
-        project.visualisation.ledHeight.onChanged += {
-            setupRod()
+            rodShapes.clear()
         }
 
         project.visualisation.ledDetail.onChanged += {
-            setupRod()
+            rodShapes.clear()
         }
 
-        project.visualisation.ledDetail.fireLatest()
-        project.visualisation.ledWidth.fireLatest()
-        project.visualisation.ledHeight.fireLatest()
+        // initially create rods
+        project.tubes.forEach {
+            getOrCreateRod(it)
+        }
     }
 
     override fun render() {
-        if(project.visualisation.disableViewRendering.value) {
+        if (project.visualisation.disableViewRendering.value) {
             return
         }
 
@@ -84,7 +83,7 @@ class SceneRenderer(val g: PGraphics,
         }
 
         // visualize pulses
-        if(project.pulseScene.enabled.value && project.pulseScene.visualize.value) {
+        if (project.pulseScene.enabled.value && project.pulseScene.visualize.value) {
             val maxRadius = project.interaction.interactionBox.value.mag()
             project.pulseScene.pulses.forEach {
                 g.push()
@@ -114,15 +113,17 @@ class SceneRenderer(val g: PGraphics,
         g.fill(28f)
         g.noStroke()
         g.translate(0f, 0f, project.visualisation.floorZHeight.value / -2f)
-        g.box(project.interaction.interactionBox.value.x,
-                project.interaction.interactionBox.value.y,
-                project.visualisation.floorZHeight.value)
+        g.box(
+            project.interaction.interactionBox.value.x,
+            project.interaction.interactionBox.value.y,
+            project.visualisation.floorZHeight.value
+        )
         g.popMatrix()
     }
 
     private fun renderTube(tube: Tube) {
         // led size
-        val ledHeight = project.visualisation.ledHeight.value
+        val ledHeight = tube.ledLength
         val tubeLength = tube.ledCount.value * ledHeight
 
         // delta
@@ -155,17 +156,19 @@ class SceneRenderer(val g: PGraphics,
             g.fill(tube.leds[i].color.color)
 
             if (project.visualisation.highDetail.value)
-                g.shape(rodShape)
+                g.shape(getOrCreateRod(tube))
             else
-                g.box(project.visualisation.ledWidth.value,
-                        project.visualisation.ledWidth.value,
-                        project.visualisation.ledHeight.value)
+                g.box(
+                    project.visualisation.ledWidth.value,
+                    project.visualisation.ledWidth.value,
+                    tube.ledLength
+                )
 
             g.popMatrix()
         }
 
         // render rect around selected tube
-        if(!project.visualisation.displayDebugInformation.value) return
+        if (!project.visualisation.displayDebugInformation.value) return
 
         g.pushMatrix()
 
@@ -189,12 +192,12 @@ class SceneRenderer(val g: PGraphics,
         // render rect around selected tube
         if (project.visualisation.displayCubeCage.value || tube.isSelected.value) {
             g.noFill()
-            val hue = if(tube.isSelected.value) 160f else 30f
-            val brightness = if(tube.isSelected.value) 100f else 60f
+            val hue = if (tube.isSelected.value) 160f else 30f
+            val brightness = if (tube.isSelected.value) 100f else 60f
             g.stroke(ColorMode.color(hue, 80f, brightness))
 
             val cageWidth = project.visualisation.ledWidth.value * 2f
-            val cageHeight = (project.visualisation.ledHeight.value * tube.ledCount.value) + cageWidth
+            val cageHeight = tube.length.value + cageWidth
 
             g.translate(0f, 0f, cageHeight * 0.5f + delta)
             g.box(cageWidth, cageWidth, cageHeight)
@@ -203,11 +206,23 @@ class SceneRenderer(val g: PGraphics,
         g.popMatrix()
     }
 
-    private fun setupRod() {
-        rodShape = g.createRod(project.visualisation.ledWidth.value,
-                project.visualisation.ledHeight.value,
-                project.visualisation.ledDetail.value)
+    private fun getOrCreateRod(tube: Tube): PShape {
+        if (rodShapes.containsKey(tube)) return rodShapes[tube]!!
+
+        val rodShape = g.createRod(
+            project.visualisation.ledWidth.value,
+            tube.ledLength,
+            project.visualisation.ledDetail.value
+        )
         rodShape.disableStyle()
+
+        rodShapes[tube] = rodShape
+
+        tube.length.onChanged += {
+            rodShapes.remove(tube)
+        }
+
+        return rodShape
     }
 
     private fun renderActiveRegion(region: ActiveRegion) {
@@ -248,9 +263,11 @@ class SceneRenderer(val g: PGraphics,
         g.strokeWeight(0.05f)
         g.noFill()
         g.stroke(255)
-        g.box(project.interaction.interactionBox.value.x,
-                project.interaction.interactionBox.value.y,
-                project.interaction.interactionBox.value.z)
+        g.box(
+            project.interaction.interactionBox.value.x,
+            project.interaction.interactionBox.value.y,
+            project.interaction.interactionBox.value.z
+        )
         g.popMatrix()
     }
 

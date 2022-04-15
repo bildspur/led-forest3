@@ -24,7 +24,7 @@ class LeapMotionScene(project: Project, tubes: List<Tube>, val leap: LeapDataPro
     override fun update() {
         if (leap.isRunning)
             iaTubes.forEach {
-                it.leds.forEachIndexed { i, led -> interactWithLED(i, led, it) }
+                it.leds.forEach { led -> interactWithLED(led) }
             }
     }
 
@@ -39,8 +39,8 @@ class LeapMotionScene(project: Project, tubes: List<Tube>, val leap: LeapDataPro
     override val isInteracting: Boolean
         get() = leap.isRunning && leap.hands.isNotEmpty()
 
-    private fun interactWithLED(index: Int, led: LED, tube: Tube) {
-        val ledPosition = getLEDPosition(index, tube)
+    private fun interactWithLED(led: LED) {
+        val ledPosition = led.position
         val hands = leap.hands
 
         if (hands.isEmpty())

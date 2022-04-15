@@ -53,8 +53,8 @@ class CloudScene(project: Project, tubes: List<Tube>, override val isInteracting
         Sketch.instance.noiseDetail(config.lod.value, config.fallOff.value)
 
         iaTubes.forEach {
-            it.leds.forEachIndexed { index, led ->
-                val ledPosition = getLEDPosition(index, it)
+            it.leds.forEachIndexed { _, led ->
+                val ledPosition = led.position
                 ledPosition.mult(config.scale.value)
 
                 var modulator = (shiftedNoise(ledPosition.x, ledPosition.y, time) * config.contrast.value).limit(0.0f, 1.0f)

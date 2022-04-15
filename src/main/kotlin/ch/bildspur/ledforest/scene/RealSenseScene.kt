@@ -41,7 +41,7 @@ class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSen
 
         // interaction tubes
         iaTubes.forEach {
-            it.leds.forEachIndexed { i, led -> interactWithLED(i, led, it) }
+            it.leds.forEachIndexed { i, led -> interactWithLED(led) }
         }
 
         // cube tubes (pulsing)
@@ -68,9 +68,9 @@ class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSen
     override val isInteracting: Boolean
         get() = realSense.activeRegions.isNotEmpty()
 
-    private fun interactWithLED(index: Int, led: LED, tube: Tube) {
+    private fun interactWithLED(led: LED) {
         val rsi = project.realSenseInteraction
-        val ledPosition = getLEDPosition(index, tube)
+        val ledPosition = led.position
 
         val nearestRegion = realSense.activeRegions.sortedBy { it.interactionPosition.dist(ledPosition) }.firstOrNull()
                 ?: return

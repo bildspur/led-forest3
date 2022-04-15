@@ -1,16 +1,13 @@
 package ch.bildspur.ledforest.scene
 
-import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.util.ColorUtil
-import ch.bildspur.ledforest.util.SpaceInformation
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.windowedMappedInOut
-import ch.bildspur.math.max
 import ch.bildspur.math.pow
 import ch.bildspur.util.map
 import kotlin.math.sqrt
@@ -40,7 +37,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
 
         val currentTime = System.currentTimeMillis()
         tubes.forEach {
-            it.leds.forEachIndexed { i, led -> applyToLED(i, led, it, currentTime, pulses) }
+            it.leds.forEach { led -> applyToLED(led, currentTime, pulses) }
         }
 
         // cleanup
@@ -55,8 +52,8 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
 
     }
 
-    private fun applyToLED(index: Int, led: LED, tube: Tube, currentTime: Long, pulses: List<Pulse>) {
-        val position = SpaceInformation.getLEDPosition(index, tube)
+    private fun applyToLED(led: LED, currentTime: Long, pulses: List<Pulse>) {
+        val position = led.position
 
         val huesAndWeights = mutableListOf<ColorUtil.HueAndWeight>()
         var saturation = 0f
@@ -71,7 +68,11 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
             val applyDist = pulseRadius - distance
 
             val width = pulse.width.value
-            val factor = windowedMappedInOut((applyDist + (width * 0.5f)) / width, pulse.attackCurve.value, pulse.releaseCurve.value)
+            val factor = windowedMappedInOut(
+                (applyDist + (width * 0.5f)) / width,
+                pulse.attackCurve.value,
+                pulse.releaseCurve.value
+            )
 
             if (factor > 0f) {
                 val color = pulse.color.value.toHSV()
