@@ -10,13 +10,8 @@ import processing.core.PGraphics
 import processing.core.PVector
 
 object SpaceInformation {
-    // private lateinit var space: PGraphics
 
     data class RangeVector(val x: NumberRange, val y: NumberRange, val z: NumberRange)
-
-    fun setup() {
-        // space = sketch.createGraphics(10, 10, PApplet.P3D)
-    }
 
     fun calculateTubeDimensions(tubes: List<Tube>): RangeVector {
         val ledPositions = tubes.map { Pair(it, it.leds) }
