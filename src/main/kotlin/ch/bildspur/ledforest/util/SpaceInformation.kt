@@ -35,15 +35,6 @@ object SpaceInformation {
     }
 
     fun getLEDPosition(index: Int, tube: Tube): PVector {
-        val position = PVector()
-
-        val transform = TransformMatrix(
-            translation = tube.position.value,
-            rotation = tube.rotation.value
-        )
-
-        transform.applyTranslationAndRotation(position)
-
         // led size
         val ledHeight = Sketch.instance.project.value.visualisation.ledHeight.value
         val tubeLength = tube.ledCount.value * ledHeight
@@ -55,13 +46,14 @@ object SpaceInformation {
             TubeOrigin.Top -> -(tubeLength - ledHeight)
         }
 
-        // translate height
-        position.add(PVector(0f, 0f, (index * ledHeight) + delta))
+        val position = PVector(0f, 0f, (index * ledHeight) + delta)
 
-        // rotate shape
-        // position.rotationInX()
-        // position.rotateX(PApplet.radians(90f))
+        val transform = TransformMatrix(
+            translation = tube.position.value,
+            rotation = tube.rotation.value
+        )
 
+        transform.applyRotationAndTranslation(position)
         return position
     }
 }

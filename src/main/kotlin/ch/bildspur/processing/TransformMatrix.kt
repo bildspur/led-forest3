@@ -50,7 +50,7 @@ class TransformMatrix(translation : PVector,
         )
     }
 
-    fun apply(vector : PVector) {
+    fun applyRotationAndTranslation(vector : PVector) {
         rotationMatrix.mult(vector, vector)
         translationMatrix.mult(vector, vector)
 
@@ -61,6 +61,18 @@ class TransformMatrix(translation : PVector,
         translationMatrix.mult(vector, vector)
         rotationMatrix.mult(vector, vector)
 
+        vector.flip(flipX, flipY, flipZ)
+    }
+
+    fun applyTranslation(vector: PVector) {
+        translationMatrix.mult(vector, vector)
+    }
+
+    fun applyRotation(vector: PVector) {
+        rotationMatrix.mult(vector, vector)
+    }
+
+    fun applyFlip(vector: PVector) {
         vector.flip(flipX, flipY, flipZ)
     }
 }
