@@ -97,6 +97,8 @@ class Sketch : PApplet() {
     @Volatile
     var running = true
 
+    private var is3D = true
+
     var isRendering = DataModel(true)
 
     var isInteractionOn = DataModel(true)
@@ -139,7 +141,8 @@ class Sketch : PApplet() {
             fullScreen(PConstants.P3D, project.value.visualisation.fullScreenDisplay.value)
         } else {
             if (project.value.visualisation.disablePreview.value) {
-                size(100, 100, PConstants.P3D)
+                size(100, 100, PConstants.JAVA2D)
+                is3D = false
             } else {
                 size(WINDOW_WIDTH, WINDOW_HEIGHT, PConstants.P3D)
             }
@@ -157,10 +160,10 @@ class Sketch : PApplet() {
         Sketch.instance = this
         surface.setResizable(true)
 
-        if (project.value.visualisation.disablePreview.value) {
-            frameRate(40f)
-        } else {
+        if (is3D) {
             frameRate(if (project.value.visualisation.highFPSMode.value) HIGH_RES_FRAME_RATE else LOW_RES_FRAME_RATE)
+        } else {
+            frameRate(40f)
         }
 
         colorMode(HSB, 360f, 100f, 100f)
@@ -170,7 +173,7 @@ class Sketch : PApplet() {
         }
         project.fire()
 
-        if (!project.value.visualisation.disablePreview.value) {
+        if (is3D) {
             fx = PostFX(this)
             peasy.setup()
         }
@@ -237,6 +240,15 @@ class Sketch : PApplet() {
         // update tubes
         updateLEDColors()
 
+        // first frame is draw
+        if (!is3D) {
+            println("starting renderer...")
+            surface.setVisible(false)
+            kotlin.concurrent.thread(isDaemon = true, block = { this.backgroundRenderer() })
+            noLoop()
+            return
+        }
+
         canvas.draw {
             it.background(project.value.visualisation.clearColorBrightness.value.toInt())
 
@@ -259,14 +271,6 @@ class Sketch : PApplet() {
 
             showDebugInformation()
             drawSketchInformation(g)
-        }
-
-        // first frame is draw
-        if (project.value.visualisation.disablePreview.value) {
-            println("starting renderer...")
-            surface.setVisible(false)
-            kotlin.concurrent.thread(isDaemon = true, block = { this.backgroundRenderer() })
-            noLoop()
         }
     }
 
@@ -342,7 +346,7 @@ class Sketch : PApplet() {
         renderer.clear()
 
         // add renderer
-        if (!project.value.visualisation.disablePreview.value) {
+        if (is3D) {
             renderer.add(SceneRenderer(canvas, project.value.tubes, leapMotion, realSense, pose, project.value))
         }
         renderer.add(ArtNetRenderer(project.value, artnet, project.value.nodes, project.value.tubes))
@@ -376,11 +380,13 @@ class Sketch : PApplet() {
     fun skipFirstFrames(): Boolean {
         // skip first two frames
         if (frameCount < 2) {
-            peasy.hud {
-                textAlign(CENTER, CENTER)
-                fill(255)
-                textSize(20f)
-                text("${Sketch.NAME} is loading...", width / 2f, height / 2f)
+            if (is3D) {
+                peasy.hud {
+                    textAlign(CENTER, CENTER)
+                    fill(255)
+                    textSize(20f)
+                    text("${Sketch.NAME} is loading...", width / 2f, height / 2f)
+                }
             }
             return true
         }
@@ -391,7 +397,10 @@ class Sketch : PApplet() {
     fun initControllers(): Boolean {
         if (!osc.isSetup) {
             osc.setup()
-            resetCanvas()
+
+            if (is3D) {
+                resetCanvas()
+            }
 
             timer.setup()
 
