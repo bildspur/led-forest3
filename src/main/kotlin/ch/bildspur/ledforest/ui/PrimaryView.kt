@@ -17,6 +17,7 @@ import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
 import ch.bildspur.ledforest.ui.util.TagItem
 import ch.bildspur.ledforest.ui.util.UITask
 import ch.bildspur.ledforest.util.FileWatcher
+import ch.bildspur.ledforest.util.OSValidator
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.fx.PropertiesControl
 import ch.fhnw.afpars.ui.control.editor.shapes.RectangleShape
@@ -206,6 +207,12 @@ class PrimaryView {
                 }
             else
                 project.value = Project()
+
+            // change disable preview based on architecture
+            if (OSValidator.isMac && OSValidator.isRosetta2) {
+                println("Disabling view rendering on MacOS Silicon (AMD64) in Rosetta2 Mode")
+                project.value.visualisation.disableViewRendering.value = true
+            }
 
             // add accelerators
             primaryStage.scene.accelerators.put(KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN)) { onSaveProject() }
