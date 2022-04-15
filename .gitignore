@@ -4,3 +4,4 @@ out
 .gradle
 logbook.txt
 *.log
+.DS_Store

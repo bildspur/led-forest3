@@ -170,8 +170,10 @@ class Sketch : PApplet() {
         }
         project.fire()
 
-        fx = PostFX(this)
-        peasy.setup()
+        if (!project.value.visualisation.disablePreview.value) {
+            fx = PostFX(this)
+            peasy.setup()
+        }
         artnet.open()
 
         project.value.interaction.isLeapInteractionEnabled.onChanged += {
