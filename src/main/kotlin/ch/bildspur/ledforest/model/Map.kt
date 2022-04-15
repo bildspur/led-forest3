@@ -2,6 +2,7 @@ package ch.bildspur.ledforest.model
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
+import ch.bildspur.ledforest.util.SpaceInformation
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.ActionParameter
 import ch.bildspur.ui.properties.BooleanParameter
@@ -24,7 +25,7 @@ class Map {
     val autoScaleMap = {
         val scaleFactor = 0.8
 
-        val ranges = Sketch.instance.spaceInformation.calculateTubeDimensions(Sketch.instance.project.value.tubes)
+        val ranges = SpaceInformation.calculateTubeDimensions(Sketch.instance.project.value.tubes)
         val maxX = abs(ranges.x.low).coerceAtLeast(ranges.x.high)
         val maxY = abs(ranges.y.low).coerceAtLeast(ranges.y.high)
 

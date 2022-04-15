@@ -7,6 +7,7 @@ import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.util.ColorUtil
+import ch.bildspur.ledforest.util.SpaceInformation
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.windowedMappedInOut
 import ch.bildspur.math.max
@@ -55,7 +56,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
     }
 
     private fun applyToLED(index: Int, led: LED, tube: Tube, currentTime: Long, pulses: List<Pulse>) {
-        val position = Sketch.instance.spaceInformation.getLEDPosition(index, tube)
+        val position = SpaceInformation.getLEDPosition(index, tube)
 
         val huesAndWeights = mutableListOf<ColorUtil.HueAndWeight>()
         var saturation = 0f

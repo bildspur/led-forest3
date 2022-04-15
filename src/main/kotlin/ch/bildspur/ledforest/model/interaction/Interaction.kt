@@ -2,6 +2,7 @@ package ch.bildspur.ledforest.model.interaction
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
+import ch.bildspur.ledforest.util.SpaceInformation
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.ActionParameter
 import ch.bildspur.ui.properties.BooleanParameter
@@ -34,7 +35,7 @@ class Interaction {
         // factor two because interaction box is only half sized
         val scaleFactor = 2.02f
 
-        val ranges = Sketch.instance.spaceInformation.calculateTubeDimensions(Sketch.instance.project.value.tubes)
+        val ranges = SpaceInformation.calculateTubeDimensions(Sketch.instance.project.value.tubes)
 
         interactionBox.value = PVector(
                 Math.ceil(Math.max(Math.abs(ranges.x.low), ranges.x.high) * scaleFactor).toFloat(),

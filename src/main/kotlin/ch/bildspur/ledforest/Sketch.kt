@@ -129,8 +129,6 @@ class Sketch : PApplet() {
 
     val minim = Minim(this)
 
-    val spaceInformation = SpaceInformation(this)
-
     lateinit var fx: PostFX
 
     init {
@@ -202,8 +200,6 @@ class Sketch : PApplet() {
                 pose.stop()
         }
         project.value.interaction.isPoseInteractionEnabled.fireLatest()
-
-        spaceInformation.setup()
 
         // timer for cursor hiding
         timer.addTask(TimerTask(CURSOR_HIDING_TIME, {
