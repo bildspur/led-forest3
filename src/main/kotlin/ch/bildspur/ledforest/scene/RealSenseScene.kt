@@ -41,7 +41,7 @@ class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSen
 
         // interaction tubes
         iaTubes.forEach {
-            it.leds.forEachIndexed { i, led -> interactWithLED(led) }
+            it.leds.forEach { led -> interactWithLED(led) }
         }
 
         // cube tubes (pulsing)

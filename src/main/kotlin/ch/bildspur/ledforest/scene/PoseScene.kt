@@ -56,7 +56,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 
         // interaction tubes
         iaTubes.forEach {
-            it.leds.forEachIndexed { i, led -> interactWithLED(led, interactors) }
+            it.leds.forEach { led -> interactWithLED(led, interactors) }
         }
     }
 
