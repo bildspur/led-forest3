@@ -41,6 +41,7 @@ import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
+import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.stage.FileChooser
@@ -120,7 +121,13 @@ class PrimaryView {
 
     fun setupView() {
         tubeScene = TubeScene()
-        root.center = tubeScene.scene
+
+        val stackPane = StackPane()
+        stackPane.children.add(tubeScene.subScene)
+        tubeScene.subScene.heightProperty().bind(stackPane.heightProperty())
+        tubeScene.subScene.widthProperty().bind(stackPane.widthProperty())
+        root.center = stackPane
+
         propertiesPane.content = propertiesControl
 
         // setup ui task
