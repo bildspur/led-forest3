@@ -11,6 +11,7 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.pose.PoseLandmark
+import ch.bildspur.ledforest.ui.control.scene.TubeScene
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
@@ -65,6 +66,8 @@ class PrimaryView {
 
     var tubeMap = TubeMap()
 
+    lateinit var tubeScene : TubeScene
+
     val moveTool = MoveTool()
 
     val configuration = ConfigurationController()
@@ -116,7 +119,8 @@ class PrimaryView {
     }
 
     fun setupView() {
-        root.center = tubeMap
+        tubeScene = TubeScene()
+        root.center = tubeScene.scene
         propertiesPane.content = propertiesControl
 
         // setup ui task
