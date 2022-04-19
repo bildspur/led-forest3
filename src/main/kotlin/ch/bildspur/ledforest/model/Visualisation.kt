@@ -8,8 +8,8 @@ import com.google.gson.annotations.Expose
 
 class Visualisation {
     @Expose
-    @BooleanParameter("Disable Preview*")
-    var disablePreview = DataModel(false)
+    @BooleanParameter("Disable Processing Preview*")
+    var disablePreview = DataModel(true)
 
     @Expose
     @BooleanParameter("High Res Mode*")

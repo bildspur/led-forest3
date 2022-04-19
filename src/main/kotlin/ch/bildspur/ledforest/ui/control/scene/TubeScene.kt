@@ -6,6 +6,7 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.ui.control.scene.control.OrbitControls
 import ch.bildspur.model.DataModel
 import javafx.application.Platform
+import javafx.geometry.Rectangle2D
 import javafx.scene.Group
 import javafx.scene.PerspectiveCamera
 import javafx.scene.SceneAntialiasing
@@ -14,9 +15,11 @@ import javafx.scene.effect.Bloom
 import javafx.scene.paint.Color
 import javafx.scene.paint.PhongMaterial
 import javafx.scene.shape.Box
+import javafx.scene.shape.Rectangle
 import javafx.scene.shape.Shape3D
 import javafx.scene.transform.Rotate
 import javafx.scene.transform.Scale
+import tornadofx.add
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
 
@@ -30,7 +33,7 @@ class TubeScene(val project: DataModel<Project>) : Group() {
     val camera = PerspectiveCamera()
     lateinit var control: OrbitControls
 
-    private val ledGroup = Group()
+    private val sceneGroup = Group()
     private val ledShapes = ConcurrentHashMap<LED, Shape3D>()
 
     private var running = true
@@ -38,7 +41,7 @@ class TubeScene(val project: DataModel<Project>) : Group() {
     init {
         project.onChanged += {
             Platform.runLater {
-                recreateTubes()
+                recreateScene()
             }
             hookEvents()
         }
@@ -54,13 +57,13 @@ class TubeScene(val project: DataModel<Project>) : Group() {
         subScene.camera = camera
 
         // add render element
-        ledGroup.transforms.addAll(
+        sceneGroup.transforms.addAll(
             Rotate(-90.0, Rotate.Y_AXIS),
             Rotate(90.0, Rotate.X_AXIS),
             Rotate(-90.0, Rotate.Z_AXIS),
             Scale(globalScale, globalScale, globalScale)
         )
-        children.add(ledGroup)
+        children.add(sceneGroup)
 
         // render thread
         thread(isDaemon = true, start = true) {
@@ -107,8 +110,13 @@ class TubeScene(val project: DataModel<Project>) : Group() {
         }
     }
 
-    fun recreateTubes() {
-        ledGroup.children.clear()
+    fun recreateScene() {
+        sceneGroup.children.clear()
+
+        val box = project.value.interaction.interactionBox.value
+        val cage = Rectangle(box.x / -2.0, box.y / -2.0, box.x.toDouble(), box.y.toDouble())
+        cage.style = "-fx-fill: transparent; -fx-stroke: white; -fx-stroke-width: 0.05;"
+        sceneGroup.add(cage)
 
         project.value.tubes.forEach { tube ->
             tube.leds.forEach { led ->
@@ -126,7 +134,7 @@ class TubeScene(val project: DataModel<Project>) : Group() {
                 mat.specularPower = 0.0
                 ledShape.material = mat
 
-                ledGroup.children.add(ledShape)
+                sceneGroup.children.add(ledShape)
                 ledShapes[led] = ledShape
             }
         }
