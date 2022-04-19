@@ -89,7 +89,7 @@ class SceneRenderer(
                 g.push()
 
                 g.translate(it.location.value)
-                val radius = it.getExpansionRadius(System.currentTimeMillis(), maxRadius)
+                val radius = it.getPulseRadius(System.currentTimeMillis())
 
                 g.noFill()
                 g.stroke(0f, 255f, 100f)

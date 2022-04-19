@@ -19,14 +19,6 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
     override val timerTask: TimerTask
         get() = task
 
-    var maxRadius = project.interaction.interactionBox.value.mag()
-
-    init {
-        project.interaction.interactionBox.onChanged += {
-            maxRadius = project.interaction.interactionBox.value.mag() * 1.5f
-        }
-    }
-
     override fun setup() {
         project.interaction.interactionBox.fire()
     }
@@ -41,7 +33,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
         }
 
         // cleanup
-        pulses.removeIf { it.getPulseRadius(currentTime) > maxRadius }
+        pulses.removeIf { !it.isAlive(currentTime) }
     }
 
     override fun stop() {
@@ -63,7 +55,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
 
         for (pulse in pulses) {
             val distance = position.dist(pulse.location.value)
-            val pulseRadius = pulse.getExpansionRadius(currentTime, maxRadius)
+            val pulseRadius = pulse.getPulseRadius(currentTime)
 
             val applyDist = pulseRadius - distance
 

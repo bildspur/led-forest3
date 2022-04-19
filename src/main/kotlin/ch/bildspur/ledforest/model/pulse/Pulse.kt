@@ -11,39 +11,44 @@ import com.google.gson.Gson
 import com.google.gson.annotations.Expose
 import processing.core.PVector
 import java.lang.Long.max
+import kotlin.math.min
 
 data class Pulse(
-        val startTime: DataModel<Long> = DataModel(0L),
+    // start parameter
+    val startTime: DataModel<Long> = DataModel(0L),
+    @Expose @NumberParameter("Delay (ms)") var delay: DataModel<Int> = DataModel(0),
+    @Expose @PVectorParameter("Location (m)") var location: DataModel<PVector> = DataModel(PVector()),
 
-        @Expose @NumberParameter("Delay (ms)") var delay: DataModel<Int> = DataModel(0),
+    // expansion parameter
+    @Expose @NumberParameter("Duration (ms)") var duration: DataModel<Float> = DataModel(2000f),
+    @Expose @NumberParameter("Distance (m)") var distance: DataModel<Float> = DataModel(10f),
+    @Expose @EnumParameter("Expansion Curve") var expansionCurve: DataModel<EasingMethod> = DataModel(EasingMethod.Linear),
 
-        @Expose @NumberParameter("Speed") var speed: DataModel<Float> = DataModel(1f),
-        @Expose @EnumParameter("Expansion Curve") var expansionCurve: DataModel<EasingMethod> = DataModel(EasingMethod.Linear),
+    // ring parameter
+    @Expose @NumberParameter("Width") var width: DataModel<Float> = DataModel(1f),
+    @Expose @EnumParameter("Attack Curve") var attackCurve: DataModel<EasingMethod> = DataModel(EasingMethod.Linear),
+    @Expose @EnumParameter("Release Curve") var releaseCurve: DataModel<EasingMethod> = DataModel(EasingMethod.Linear),
 
-        @Expose @NumberParameter("Width") var width: DataModel<Float> = DataModel(1f),
-        @Expose @PVectorParameter("Location") var location: DataModel<PVector> = DataModel(PVector()),
-
-        @Expose @EnumParameter("Attack Curve") var attackCurve: DataModel<EasingMethod> = DataModel(EasingMethod.Linear),
-        @Expose @EnumParameter("Release Curve") var releaseCurve: DataModel<EasingMethod> = DataModel(EasingMethod.Linear),
-
-        @Expose @ColorParameter("Color")  var color: DataModel<RGB> = DataModel(RGB(1.0, 0.0, 0.0, 1.0))
+    @Expose @ColorParameter("Color") var color: DataModel<RGB> = DataModel(RGB(1.0, 0.0, 0.0, 1.0))
 ) {
 
+    fun isAlive(timesStamp: Long): Boolean {
+        return getProgress(timesStamp) < 1.0f
+    }
+
+    /**
+     * Returns progression
+     */
+    fun getProgress(timesStamp: Long): Float {
+        return max(0, timesStamp - (startTime.value + delay.value)) / duration.value
+    }
 
     /**
      * Returns the radius of the actual pulse.
      */
     fun getPulseRadius(timesStamp: Long): Float {
-        val delta = max(0, timesStamp - (startTime.value + delay.value))
-        return (speed.value * 0.001f) * delta.toFloat()
-    }
-
-    /**
-     * Returns the radius with expansion curve applied.
-     */
-    fun getExpansionRadius(timesStamp: Long, maxRadius: Float): Float {
-        val value = kotlin.math.max(0f, expansionCurve.value.method((getPulseRadius(timesStamp) / maxRadius)))
-        return value * maxRadius
+        val expansionProgress = expansionCurve.value.method(getProgress(timesStamp))
+        return expansionProgress * distance.value
     }
 
     fun spawn(startTime: Long = System.currentTimeMillis()): Pulse {

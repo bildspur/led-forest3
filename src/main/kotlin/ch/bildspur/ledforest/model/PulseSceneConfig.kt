@@ -38,13 +38,15 @@ class PulseSceneConfig {
         val start = System.currentTimeMillis()
 
         pulses.add(Pulse(startTime = DataModel(start),
-                speed = DataModel(templatePulse.speed.value),
+                duration = DataModel(templatePulse.duration.value),
+                distance = DataModel(templatePulse.distance.value),
                 width = DataModel(templatePulse.width.value),
                 location = DataModel(PVector(4.0f, 0.0f)),
                 color = DataModel(HSV(0, 100, 100, 1.0f).toRGB())
         ))
         pulses.add(Pulse(startTime = DataModel(start),
-                speed = DataModel(templatePulse.speed.value),
+                duration = DataModel(templatePulse.duration.value),
+                distance = DataModel(templatePulse.distance.value),
                 width = DataModel(templatePulse.width.value),
                 location = DataModel(PVector(-4.0f, 0.0f)),
                 color = DataModel(HSV(200, 100, 100, 1.0f).toRGB())
