@@ -56,6 +56,7 @@ import processing.core.PVector
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
+import kotlin.collections.HashSet
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
 
@@ -355,7 +356,7 @@ class PrimaryView {
         val leftCollider = LandmarkPulseCollider(
                 location = DataModel(PVector(0f, 0f)),
                 radius = DataModel(0.2f),
-                triggeredBy = EnumSet.of(PoseLandmark.LeftWrist),
+                triggeredBy = DataModel(mutableSetOf(PoseLandmark.LeftWrist)),
                 pulses = listOf(Pulse(color = DataModel(HSV(0, 100, 100, 1.0f).toRGB()))),
         )
         leftCollider.onCollision += {
@@ -365,7 +366,7 @@ class PrimaryView {
         val rightCollider = LandmarkPulseCollider(
                 location = DataModel(PVector(0f, 0f)),
                 radius = DataModel(0.2f),
-                triggeredBy = EnumSet.of(PoseLandmark.RightWrist),
+                triggeredBy = DataModel(mutableSetOf(PoseLandmark.RightWrist)),
                 pulses = listOf(Pulse(color = DataModel(HSV(200, 100, 100, 1.0f).toRGB()))),
         )
         rightCollider.onCollision += {

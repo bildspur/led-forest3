@@ -10,12 +10,13 @@ import ch.bildspur.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
 import processing.core.PVector
 import java.util.*
+import kotlin.collections.HashSet
 
 class LandmarkPulseCollider(
     @Expose @StringParameter("Name") var name: DataModel<String> = DataModel("Collider"),
     @Expose @PVectorParameter("Location") var location: DataModel<PVector> = DataModel(PVector()),
     @Expose @NumberParameter("Radius (m)") var radius: DataModel<Float> = DataModel(1.0f),
-    @Expose var triggeredBy: EnumSet<PoseLandmark> = EnumSet.noneOf(PoseLandmark.Nose.javaClass),
+    @Expose var triggeredBy: DataModel<MutableSet<PoseLandmark>> = DataModel(mutableSetOf()),
     @Expose var pulses: List<Pulse> = mutableListOf(),
     @Expose @BooleanParameter("One Shot") var oneShot: DataModel<Boolean> = DataModel(true)
 ) : Collider() {
@@ -24,7 +25,7 @@ class LandmarkPulseCollider(
 
     override fun checkCollision(location: PVector, landmark: PoseLandmark): Boolean {
         // very basic sphere collider
-        if (PVector.dist(this.location.value, location) <= radius.value && triggeredBy.contains(landmark)) {
+        if (PVector.dist(this.location.value, location) <= radius.value && triggeredBy.value.contains(landmark)) {
             if (oneShot.value && hasBeenTriggered) return false
 
             // todo: fix has been triggered logic

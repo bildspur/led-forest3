@@ -53,7 +53,7 @@ class LedaScene(
         get() = poseProvider.poses.isNotEmpty()
 
     private fun checkCollision(pose: Pose, collider: LandmarkPulseCollider) {
-        for (landmarkType in collider.triggeredBy) {
+        for (landmarkType in collider.triggeredBy.value) {
             val landmarkId = PoseLandmark.values().indexOf(landmarkType)
             val landmark = pose.keypoints[landmarkId]
 

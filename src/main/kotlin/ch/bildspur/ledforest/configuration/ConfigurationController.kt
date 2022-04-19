@@ -105,14 +105,12 @@ class ConfigurationController {
             val typeParameters = (type as ParameterizedType).actualTypeArguments
             val defaultValue = typeParameters[0]
 
-            // todo: fix enumset creator
-            /*
-            if (defaultValue is ParameterizedType && defaultValue.rawType == EnumSet::class.java) {
+            // todo: fix instance creator of parameterized class
+            if (defaultValue is ParameterizedType && defaultValue.rawType == MutableSet::class.java) {
                 val subTypeParameters = defaultValue.actualTypeArguments
-                val subDefaultValue = (subTypeParameters[0] as Class<*>).enumConstants[0]
-                return DataModel(EnumSet.noneOf(PoseLandmark.Nose.javaClass))
+                val subDefaultValue = subTypeParameters[0] as Class<*>
+                return DataModel(mutableSetOf(subDefaultValue))
             }
-            */
 
             return DataModel(defaultValue as Class<*>)
         }
