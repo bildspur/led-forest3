@@ -594,6 +594,11 @@ class PrimaryView {
         initSettingsView(project.value.leda, "Leda")
     }
 
+    fun onShowLedaColliderEditor() {
+        val editor = LedaColliderEditor(project.value.leda)
+        editor.show()
+    }
+
     fun onShowProjectSettings() {
         initSettingsView(project.value, "Project")
     }

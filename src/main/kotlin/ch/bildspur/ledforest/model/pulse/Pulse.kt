@@ -7,6 +7,7 @@ import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.ColorParameter
 import ch.bildspur.ui.properties.EnumParameter
 import ch.bildspur.ui.properties.NumberParameter
+import ch.bildspur.ui.properties.StringParameter
 import com.google.gson.Gson
 import com.google.gson.annotations.Expose
 import processing.core.PVector
@@ -16,6 +17,7 @@ import kotlin.math.min
 data class Pulse(
     // start parameter
     val startTime: DataModel<Long> = DataModel(0L),
+    @Expose @StringParameter("Name") var name: DataModel<String> = DataModel("Pulse"),
     @Expose @NumberParameter("Delay (ms)") var delay: DataModel<Int> = DataModel(0),
     @Expose @PVectorParameter("Location (m)") var location: DataModel<PVector> = DataModel(PVector()),
 
@@ -56,5 +58,9 @@ data class Pulse(
         val pulse = Gson().fromJson(json, Pulse::class.java)
         pulse.startTime.value = startTime
         return pulse
+    }
+
+    override fun toString(): String {
+        return "${name.value}"
     }
 }

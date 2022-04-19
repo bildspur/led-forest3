@@ -38,4 +38,8 @@ class LandmarkPulseCollider(
         hasBeenTriggered = false
         return false
     }
+
+    override fun toString(): String {
+        return "${name.value}"
+    }
 }
