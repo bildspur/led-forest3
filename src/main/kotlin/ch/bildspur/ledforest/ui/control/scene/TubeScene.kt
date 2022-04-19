@@ -17,7 +17,6 @@ import javafx.scene.shape.Box
 import javafx.scene.shape.Shape3D
 import javafx.scene.transform.Rotate
 import javafx.scene.transform.Scale
-import javafx.scene.transform.Translate
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
 
@@ -38,7 +37,9 @@ class TubeScene(val project: DataModel<Project>) : Group() {
 
     init {
         project.onChanged += {
-            recreateTubes()
+            Platform.runLater {
+                recreateTubes()
+            }
             hookEvents()
         }
         project.fireLatest()
@@ -70,7 +71,7 @@ class TubeScene(val project: DataModel<Project>) : Group() {
 
         // setup controls later to be sure node exists
         Platform.runLater {
-            Thread.sleep(1000 * 2)
+            // Thread.sleep(1000 * 2)
             control = OrbitControls(camera, subScene)
             // children.add(control.centerMarker)
         }
@@ -91,11 +92,9 @@ class TubeScene(val project: DataModel<Project>) : Group() {
                 updateLEDs(tube)
             }
 
-            /*
             tube.rotation.onChanged += {
                 updateLEDs(tube)
             }
-            */
         }
     }
 
@@ -113,7 +112,7 @@ class TubeScene(val project: DataModel<Project>) : Group() {
         project.value.tubes.forEach { tube ->
             tube.leds.forEach { led ->
                 val width = project.value.visualisation.ledWidth.value.toDouble()
-                val ledShape = Box(width  * 2, width * 2, tube.ledLength.toDouble())
+                val ledShape = Box(width * 2, width * 2, tube.ledLength.toDouble())
 
                 ledShape.transforms.add(led.position.toTranslate())
                 /*
