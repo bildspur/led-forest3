@@ -85,8 +85,8 @@ class TubeScene(val project: DataModel<Project>) : Group() {
                 val width = project.value.visualisation.ledWidth.value.toDouble()
                 val ledShape = Box(width, tube.ledLength.toDouble(), width)
 
-                // ledShape.transforms.addAll(tube.rotation.value.toRotation())
                 ledShape.transforms.add(led.position.toTranslate())
+                // ledShape.transforms.addAll(tube.rotation.value.toRotation())
 
                 ledShape.material = PhongMaterial(Color.WHITE)
 
