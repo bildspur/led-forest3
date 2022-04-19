@@ -23,7 +23,7 @@ class Map {
 
     @ActionParameter("Map", "Auto Scale")
     val autoScaleMap = {
-        val scaleFactor = 0.8
+        val scaleFactor = 0.70f
 
         val ranges = SpaceInformation.calculateTubeDimensions(Sketch.instance.project.value.tubes)
         val maxX = abs(ranges.x.low).coerceAtLeast(ranges.x.high)
