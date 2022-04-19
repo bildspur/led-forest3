@@ -31,6 +31,7 @@ import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.geometry.Dimension2D
 import javafx.geometry.Point2D
+import javafx.geometry.Side
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.*
@@ -120,13 +121,21 @@ class PrimaryView {
     }
 
     fun setupView() {
+        // setup center maps and scenes
         tubeScene = TubeScene(project)
 
-        val stackPane = StackPane()
-        stackPane.children.add(tubeScene.subScene)
-        tubeScene.subScene.heightProperty().bind(stackPane.heightProperty())
-        tubeScene.subScene.widthProperty().bind(stackPane.widthProperty())
-        root.center = stackPane
+        val stackPaneScene = StackPane()
+        stackPaneScene.children.add(tubeScene.subScene)
+        tubeScene.subScene.heightProperty().bind(stackPaneScene.heightProperty())
+        tubeScene.subScene.widthProperty().bind(stackPaneScene.widthProperty())
+
+        val tabPane = TabPane()
+        tabPane.side = Side.BOTTOM
+        tabPane.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
+        tabPane.tabs.addAll(Tab("2D", tubeMap), Tab("3D", stackPaneScene))
+        tabPane.selectionModel.select(1)
+
+        root.center = tabPane
 
         propertiesPane.content = propertiesControl
 
