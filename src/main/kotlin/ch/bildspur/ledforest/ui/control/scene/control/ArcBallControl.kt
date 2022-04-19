@@ -10,13 +10,13 @@ import kotlin.math.min
 
 class ArcBallControl(
     val camera: Camera, val node: Node,
-    var zoomSpeed: Double = 5.0, var minZoom: Double = -50.0, var maxZoom: Double = -500.0
+    var zoomSpeed: Double = 1.0, var minZoom: Double = -5.0, var maxZoom: Double = -50.0
 ) {
     val rotateX = Rotate(0.0, Rotate.X_AXIS)
     val rotateY = Rotate(0.0, Rotate.Y_AXIS)
     val rotateZ = Rotate(0.0, Rotate.Z_AXIS)
 
-    val translate = Translate(0.0, 0.0, -100.0)
+    val translate = Translate(0.0, 0.0, -10.0)
 
 
     private var lastPosition = Float2()

@@ -3,20 +3,21 @@ package ch.bildspur.ledforest.model
 import ch.bildspur.ledforest.util.ColorMode
 import processing.core.PVector
 import java.awt.Color
+import kotlin.math.abs
 
 
 class FadeColor() {
     /* Importent: This is for HSB only! */
 
-    internal val minimumDistance = 0.001f
+    private val minimumDistance = 0.001f
 
-    internal val hmax = 360f
-    internal val smax = 100f
-    internal val bmax = 100f
+    private val hmax = 360f
+    private val smax = 100f
+    private val bmax = 100f
 
     internal var current = PVector()
     internal var target = PVector()
-    internal var easingVector = PVector()
+    private var easingVector = PVector()
 
     constructor(c: Int) : this() {
         current = colorToVector(c)
@@ -27,9 +28,9 @@ class FadeColor() {
         val delta = target.copy().sub(current)
 
         // Hue => 360° (can ease to both sides)
-        val otherDelta = hmax - Math.abs(delta.x)
+        val otherDelta = hmax - abs(delta.x)
 
-        if (Math.abs(otherDelta) < Math.abs(delta.x)) {
+        if (abs(otherDelta) < abs(delta.x)) {
             delta.x = otherDelta * if (delta.x < 0) 1 else -1
         }
 
@@ -101,5 +102,13 @@ class FadeColor() {
 
     private fun vectorToColor(v: PVector): Int {
         return ColorMode.color(Math.round(v.x), Math.round(v.y), Math.round(v.z))
+    }
+
+    fun toJavaFXColor(): javafx.scene.paint.Color {
+        return javafx.scene.paint.Color.hsb(
+            (hue / hmax).toDouble(),
+            (saturation / smax).toDouble(),
+            (brightness / bmax).toDouble()
+        )
     }
 }

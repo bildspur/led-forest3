@@ -120,7 +120,7 @@ class PrimaryView {
     }
 
     fun setupView() {
-        tubeScene = TubeScene()
+        tubeScene = TubeScene(project)
 
         val stackPane = StackPane()
         stackPane.children.add(tubeScene.subScene)
