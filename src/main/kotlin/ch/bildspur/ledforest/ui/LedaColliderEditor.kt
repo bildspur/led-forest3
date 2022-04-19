@@ -16,6 +16,7 @@ import javafx.scene.shape.Rectangle
 import javafx.stage.Stage
 import jfxtras.styles.jmetro.JMetro
 import jfxtras.styles.jmetro.Style
+import tornadofx.selectFirst
 
 
 class LedaColliderEditor(val config: LedaConfig) : Stage() {
@@ -29,13 +30,18 @@ class LedaColliderEditor(val config: LedaConfig) : Stage() {
     init {
         title = "Leda Colliders"
 
-        scene = Scene(root, 700.0, 400.0)
+        scene = Scene(root, 600.0, 600.0)
         this.scene = scene
 
         treeView.isShowRoot = false
         treeView.isEditable = true
 
-        root.center = ScrollPane(treeView)
+        val scrollPane = ScrollPane()
+        scrollPane.isFitToHeight = true
+        scrollPane.isFitToWidth = true
+        scrollPane.content = treeView
+
+        root.center = scrollPane
         root.right = ScrollPane(propertiesControl)
 
         updateTreeView()
@@ -52,6 +58,8 @@ class LedaColliderEditor(val config: LedaConfig) : Stage() {
                 }
             }
         }
+
+        treeView.selectFirst()
     }
 
     fun updateTreeView() {
