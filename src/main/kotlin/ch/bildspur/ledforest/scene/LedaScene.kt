@@ -9,10 +9,11 @@ import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.pose.PoseLandmark
 import processing.core.PVector
 
-class LedaScene(project: Project, tubes: List<Tube>,
-                val pulseScene: PulseScene,
-                val poseProvider: PoseDataProvider)
-    : BaseInteractionScene("Leda Scene", project, tubes) {
+class LedaScene(
+    project: Project, tubes: List<Tube>,
+    val pulseScene: PulseScene,
+    val poseProvider: PoseDataProvider
+) : BaseInteractionScene("Leda Scene", project, tubes) {
 
     private val task = TimerTask(10, { update() })
 
@@ -61,7 +62,9 @@ class LedaScene(project: Project, tubes: List<Tube>,
 
             val relativeLandmarkPosition = PVector.sub(pose.nose, pose.keypoints[landmarkId])
             if (collider.checkCollision(relativeLandmarkPosition, landmarkType)) {
-                project.pulseScene.pulses.add(collider.pulse.spawn())
+                collider.pulses.forEach {
+                    project.pulseScene.pulses.add(it.spawn())
+                }
             }
         }
     }

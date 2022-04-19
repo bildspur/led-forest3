@@ -356,7 +356,7 @@ class PrimaryView {
                 location = PVector(0f, 0f),
                 radius = 0.2f,
                 triggeredBy = EnumSet.of(PoseLandmark.LeftWrist),
-                pulse = Pulse(color = DataModel(HSV(0, 100, 100, 1.0f).toRGB())),
+                pulses = listOf(Pulse(color = DataModel(HSV(0, 100, 100, 1.0f).toRGB()))),
         )
         leftCollider.onCollision += {
             println("Left wrist collided!")
@@ -366,7 +366,7 @@ class PrimaryView {
                 location = PVector(0f, 0f),
                 radius = 0.2f,
                 triggeredBy = EnumSet.of(PoseLandmark.RightWrist),
-                pulse = Pulse(color = DataModel(HSV(200, 100, 100, 1.0f).toRGB())),
+                pulses = listOf(Pulse(color = DataModel(HSV(200, 100, 100, 1.0f).toRGB()))),
         )
         rightCollider.onCollision += {
             println("Right wrist collided!")

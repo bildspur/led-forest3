@@ -9,7 +9,7 @@ import java.util.*
 class LandmarkPulseCollider(@Expose var location: PVector = PVector(),
                             @Expose var radius: Float = 1.0f,
                             @Expose var triggeredBy: EnumSet<PoseLandmark> = EnumSet.noneOf(PoseLandmark.Nose.javaClass),
-                            @Expose var pulse: Pulse = Pulse(),
+                            @Expose var pulses: List<Pulse> = mutableListOf(),
                             @Expose var oneShot: Boolean = true) : Collider() {
 
     var hasBeenTriggered = false
