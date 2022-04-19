@@ -106,7 +106,7 @@ class FadeColor() {
 
     fun toJavaFXColor(): javafx.scene.paint.Color {
         return javafx.scene.paint.Color.hsb(
-            (hue / hmax).toDouble(),
+            hue.toDouble(),
             (saturation / smax).toDouble(),
             (brightness / bmax).toDouble()
         )

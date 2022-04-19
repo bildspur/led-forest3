@@ -2,6 +2,7 @@ package ch.bildspur.ledforest.ui.control.scene
 
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
+import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.ui.control.scene.control.OrbitControls
 import ch.bildspur.model.DataModel
 import javafx.application.Platform
@@ -9,12 +10,14 @@ import javafx.scene.Group
 import javafx.scene.PerspectiveCamera
 import javafx.scene.SceneAntialiasing
 import javafx.scene.SubScene
+import javafx.scene.effect.Bloom
 import javafx.scene.paint.Color
 import javafx.scene.paint.PhongMaterial
 import javafx.scene.shape.Box
 import javafx.scene.shape.Shape3D
 import javafx.scene.transform.Rotate
 import javafx.scene.transform.Scale
+import javafx.scene.transform.Translate
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
 
@@ -36,11 +39,15 @@ class TubeScene(val project: DataModel<Project>) : Group() {
     init {
         project.onChanged += {
             recreateTubes()
+            hookEvents()
         }
         project.fireLatest()
 
         // setup global scene
-        subScene.fill = Color.DARKGRAY
+        subScene.fill = Color.rgb(15, 15, 15)
+        subScene.effect = Bloom(0.1)
+
+        // setup camera
         camera.nearClip = 0.1
         camera.farClip = 10000.0
         subScene.camera = camera
@@ -72,8 +79,31 @@ class TubeScene(val project: DataModel<Project>) : Group() {
     fun render() {
         ledShapes.forEach { (led, shape) ->
             if (shape.material is PhongMaterial) {
-                (shape.material as PhongMaterial).diffuseColor = led.color.toJavaFXColor()
+                val mat = (shape.material as PhongMaterial)
+                mat.diffuseColor = led.color.toJavaFXColor()
             }
+        }
+    }
+
+    private fun hookEvents() {
+        project.value.tubes.forEach { tube ->
+            tube.position.onChanged += {
+                updateLEDs(tube)
+            }
+
+            /*
+            tube.rotation.onChanged += {
+                updateLEDs(tube)
+            }
+            */
+        }
+    }
+
+    fun updateLEDs(tube: Tube) {
+        tube.leds.forEach {
+            val shape = ledShapes[it]!!
+            shape.transforms.clear()
+            shape.transforms.add(it.position.toTranslate())
         }
     }
 
@@ -83,12 +113,18 @@ class TubeScene(val project: DataModel<Project>) : Group() {
         project.value.tubes.forEach { tube ->
             tube.leds.forEach { led ->
                 val width = project.value.visualisation.ledWidth.value.toDouble()
-                val ledShape = Box(width, tube.ledLength.toDouble(), width)
+                val ledShape = Box(width  * 2, width * 2, tube.ledLength.toDouble())
 
                 ledShape.transforms.add(led.position.toTranslate())
-                // ledShape.transforms.addAll(tube.rotation.value.toRotation())
+                /*
+                ledShape.transforms.add(Rotate(90.0 + Math.toDegrees(tube.rotation.value.x.toDouble()), Rotate.X_AXIS))
+                ledShape.transforms.add(Rotate(Math.toDegrees(tube.rotation.value.y.toDouble()), Rotate.Y_AXIS))
+                ledShape.transforms.add(Rotate(Math.toDegrees(tube.rotation.value.z.toDouble()), Rotate.Z_AXIS))
+                 */
 
-                ledShape.material = PhongMaterial(Color.WHITE)
+                val mat = PhongMaterial(Color.WHITE)
+                mat.specularPower = 0.0
+                ledShape.material = mat
 
                 ledGroup.children.add(ledShape)
                 ledShapes[led] = ledShape

@@ -161,6 +161,7 @@ class Sketch : PApplet() {
         if (is3D) {
             frameRate(if (project.value.visualisation.highFPSMode.value) HIGH_RES_FRAME_RATE else LOW_RES_FRAME_RATE)
         } else {
+            surface.setVisible(false)
             frameRate(40f)
         }
 
