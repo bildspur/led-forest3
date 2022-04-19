@@ -55,8 +55,6 @@ import processing.core.PApplet
 import processing.core.PVector
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.util.*
-import kotlin.collections.HashSet
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
 
