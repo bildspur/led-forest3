@@ -353,8 +353,8 @@ class PrimaryView {
         // todo: remove this after testing
         project.leda.landmarkColliders.clear()
         val leftCollider = LandmarkPulseCollider(
-                location = PVector(0f, 0f),
-                radius = 0.2f,
+                location = DataModel(PVector(0f, 0f)),
+                radius = DataModel(0.2f),
                 triggeredBy = EnumSet.of(PoseLandmark.LeftWrist),
                 pulses = listOf(Pulse(color = DataModel(HSV(0, 100, 100, 1.0f).toRGB()))),
         )
@@ -363,8 +363,8 @@ class PrimaryView {
         }
 
         val rightCollider = LandmarkPulseCollider(
-                location = PVector(0f, 0f),
-                radius = 0.2f,
+                location = DataModel(PVector(0f, 0f)),
+                radius = DataModel(0.2f),
                 triggeredBy = EnumSet.of(PoseLandmark.RightWrist),
                 pulses = listOf(Pulse(color = DataModel(HSV(200, 100, 100, 1.0f).toRGB()))),
         )
