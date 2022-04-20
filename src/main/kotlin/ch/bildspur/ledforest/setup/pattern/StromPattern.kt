@@ -1,12 +1,9 @@
 package ch.bildspur.ledforest.setup.pattern
 
-import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.setup.SetupInformation
 import ch.bildspur.ledforest.util.ExtendedRandom
 import ch.bildspur.math.radians
-import ch.bildspur.processing.TransformMatrix
-import processing.core.PApplet
 import processing.core.PVector
 import kotlin.math.floor
 import kotlin.math.sqrt
@@ -22,8 +19,8 @@ class StromPattern : SquarePattern("Strøm") {
 
         // find the x position of the first and last led
         // start - center(start, end)
-        var startPos = Sketch.instance.spaceInformation.getLEDPosition(0, tube)
-        var endPos = Sketch.instance.spaceInformation.getLEDPosition(tube.ledCount.value - 1, tube)
+        val startPos = tube.leds[0].position
+        val endPos = tube.leds[tube.ledCount.value - 1].position
         tube.position.value = PVector.lerp(startPos, endPos, -0.5f)
 
         // create basic cascade (front to back)

@@ -8,8 +8,8 @@ import com.google.gson.annotations.Expose
 
 class Visualisation {
     @Expose
-    @BooleanParameter("Disable Preview*")
-    var disablePreview = DataModel(false)
+    @BooleanParameter("Disable Processing Preview*")
+    var disablePreview = DataModel(true)
 
     @Expose
     @BooleanParameter("High Res Mode*")
@@ -58,10 +58,6 @@ class Visualisation {
     @Expose
     @SliderParameter("LED Width", 0.01, 0.1, 0.01)
     var ledWidth = DataModel(0.03f)
-
-    @Expose
-    @SliderParameter("LED Height", 0.01, 0.1, 0.01)
-    var ledHeight = DataModel(0.0625f)
 
     @Expose
     @SliderParameter("LED Detail", 2.0, 10.0)

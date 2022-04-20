@@ -6,9 +6,11 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.leda.Collider
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.pose.PoseLandmark
 import ch.bildspur.model.DataModel
 import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.get
+import com.github.salomonbrys.kotson.registerTypeAdapter
 import com.google.gson.*
 import processing.core.PVector
 import java.lang.reflect.ParameterizedType
@@ -16,6 +18,8 @@ import java.lang.reflect.Type
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.*
+import kotlin.reflect.typeOf
 
 
 /**
@@ -100,6 +104,14 @@ class ConfigurationController {
         override fun createInstance(type: Type): DataModel<*> {
             val typeParameters = (type as ParameterizedType).actualTypeArguments
             val defaultValue = typeParameters[0]
+
+            // todo: fix instance creator of parameterized class
+            if (defaultValue is ParameterizedType && defaultValue.rawType == MutableSet::class.java) {
+                val subTypeParameters = defaultValue.actualTypeArguments
+                val subDefaultValue = subTypeParameters[0] as Class<*>
+                return DataModel(mutableSetOf(subDefaultValue))
+            }
+
             return DataModel(defaultValue as Class<*>)
         }
     }

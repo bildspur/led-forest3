@@ -57,3 +57,19 @@
 #audioMenuItem > .label {
     -fx-graphic: url("../images/AudioIcon16.png");
 }
+
+.ikonli-font-icon {
+    -fx-icon-color: white;
+    -fx-icon-size: 20px;
+}
+
+.slider .track {
+    -fx-border-color: transparent;
+    -fx-border-width: 0.2em;
+
+}
+
+.slider .fill {
+    -fx-border-color: transparent;
+    -fx-border-width: 0.2em;
+}

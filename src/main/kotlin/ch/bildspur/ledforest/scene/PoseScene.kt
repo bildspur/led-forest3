@@ -56,7 +56,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 
         // interaction tubes
         iaTubes.forEach {
-            it.leds.forEachIndexed { i, led -> interactWithLED(i, led, it, interactors) }
+            it.leds.forEach { led -> interactWithLED(led, interactors) }
         }
     }
 
@@ -91,9 +91,9 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
     override val isInteracting: Boolean
         get() = poseProvider.poses.isNotEmpty()
 
-    private fun interactWithLED(index: Int, led: LED, tube: Tube, interactors: List<Interactor>) {
+    private fun interactWithLED(led: LED, interactors: List<Interactor>) {
         val config = project.poseInteraction
-        val ledPosition = getLEDPosition(index, tube)
+        val ledPosition = led.position
 
         // sum light by poses
         var hue = 0f

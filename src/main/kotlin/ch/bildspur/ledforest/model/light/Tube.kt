@@ -3,6 +3,7 @@ package ch.bildspur.ledforest.model.light
 import ch.bildspur.ledforest.configuration.PostProcessable
 import ch.bildspur.ledforest.ui.properties.*
 import ch.bildspur.ledforest.util.ColorMode
+import ch.bildspur.ledforest.util.SpaceInformation
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
@@ -24,6 +25,10 @@ class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = D
     @EnumParameter("Origin")
     @Expose
     var origin = DataModel(TubeOrigin.Bottom)
+
+    @Expose
+    @NumberParameter("Length")
+    val length = DataModel(1.5f)
 
     @Expose
     @NumberParameter("LED Count")
@@ -59,21 +64,39 @@ class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = D
         hookListener()
     }
 
-    fun hookListener() {
+    private fun hookListener() {
         ledCount.onChanged += {
             initLEDs()
         }
         addressStart.onChanged += {
             initLEDs()
         }
+        position.onChanged += {
+            recalculateLEDPosition()
+        }
+        rotation.onChanged += {
+            recalculateLEDPosition()
+        }
         ledCount.fire()
     }
 
     fun initLEDs() {
         leds = (0 until ledCount.value).map {
-            LED(addressStart.value + it * LED.LED_ADDRESS_SIZE, ColorMode.color(0, 100, 100))
+            LED(addressStart.value + it * LED.LED_ADDRESS_SIZE,
+                ColorMode.color(0, 100, 100),
+                SpaceInformation.calculateLEDPosition(it, this)
+            )
         }
     }
+
+    fun recalculateLEDPosition() {
+        leds.forEachIndexed { index, led ->
+            led.position = SpaceInformation.calculateLEDPosition(index, this)
+        }
+    }
+
+    val ledLength: Float
+        get() = length.value / ledCount.value
 
     override fun toString(): String {
         return "${name.value} ${universe.value}.$startAddress-$endAddress (${ledCount.value})"

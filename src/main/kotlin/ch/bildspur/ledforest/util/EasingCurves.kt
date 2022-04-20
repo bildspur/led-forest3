@@ -30,6 +30,10 @@ object EasingCurves {
         return 0.0f
     }
 
+    fun sinePulse(t: Float): Float {
+        return 0.5f * (1 + sin(2 * PI * t - (PI / 2))) * sin(t * 19)
+    }
+
     // accelerating from zero velocity
     fun easeInQuad(t: Float): Float {
         return t * t

@@ -52,7 +52,7 @@ compileJava {
 }
 
 javafx {
-    version = "11"
+    version = "17"
     modules = ['javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.graphics']
 }
 
@@ -63,9 +63,11 @@ repositories {
 
 dependencies {
     // jmetro
+    /*
     implementation 'org.jfxtras:jmetro:11.6.15', {
         exclude group: 'org.openjfx'
-    }
+    }*/
+    implementation files("lib/jmetro/jmetro-11.6.16-SNAPSHOT.jar")
 
     // json
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
@@ -98,6 +100,13 @@ dependencies {
     // javafx
     implementation group: 'org.controlsfx', name: 'controlsfx', version: '11.1.1'
     implementation group: 'com.sun.activation', name: 'javax.activation', version: '1.2.0'
+
+    // tornadofx
+    implementation 'no.tornado:tornadofx:1.7.20'
+
+    // icons (ikonli)
+    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
+    implementation 'org.kordamp.ikonli:ikonli-bootstrapicons-pack:12.3.1'
 
     // leap motion java
     implementation files('lib/LeapMotion/library/LeapJava.jar')

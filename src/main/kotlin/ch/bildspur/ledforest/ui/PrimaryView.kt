@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.ui
 
+import ch.bildspur.color.HSV
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.AppConfig
@@ -10,12 +11,14 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.pose.PoseLandmark
+import ch.bildspur.ledforest.ui.control.scene.TubeScene
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
 import ch.bildspur.ledforest.ui.util.TagItem
 import ch.bildspur.ledforest.ui.util.UITask
 import ch.bildspur.ledforest.util.FileWatcher
+import ch.bildspur.ledforest.util.OSValidator
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.fx.PropertiesControl
 import ch.fhnw.afpars.ui.control.editor.shapes.RectangleShape
@@ -28,13 +31,18 @@ import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.geometry.Dimension2D
 import javafx.geometry.Point2D
+import javafx.geometry.Side
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyCodeCombination
+import javafx.scene.input.KeyCombination
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
+import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.stage.FileChooser
@@ -47,7 +55,6 @@ import processing.core.PApplet
 import processing.core.PVector
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.util.*
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
 
@@ -59,6 +66,8 @@ class PrimaryView {
     lateinit var root: BorderPane
 
     var tubeMap = TubeMap()
+
+    lateinit var tubeScene : TubeScene
 
     val moveTool = MoveTool()
 
@@ -111,7 +120,22 @@ class PrimaryView {
     }
 
     fun setupView() {
-        root.center = tubeMap
+        // setup center maps and scenes
+        tubeScene = TubeScene(project)
+
+        val stackPaneScene = StackPane()
+        stackPaneScene.children.add(tubeScene.subScene)
+        tubeScene.subScene.heightProperty().bind(stackPaneScene.heightProperty())
+        tubeScene.subScene.widthProperty().bind(stackPaneScene.widthProperty())
+
+        val tabPane = TabPane()
+        tabPane.side = Side.BOTTOM
+        tabPane.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
+        tabPane.tabs.addAll(Tab("2D", tubeMap), Tab("3D", stackPaneScene))
+        tabPane.selectionModel.select(1)
+
+        root.center = tabPane
+
         propertiesPane.content = propertiesControl
 
         // setup ui task
@@ -202,6 +226,15 @@ class PrimaryView {
                 }
             else
                 project.value = Project()
+
+            // change disable preview based on architecture
+            if (OSValidator.isMac && OSValidator.isRosetta2) {
+                println("LED Forest running in MacOS Silicon (AMD64) in Rosetta2 Mode")
+                println("If you experience bugs and crashes please use Eclipse Temurin (AdoptOpenJDK) 17.0.2")
+            }
+
+            // add accelerators
+            primaryStage.scene.accelerators.put(KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN)) { onSaveProject() }
 
             // start processing
             startProcessing()
@@ -319,20 +352,20 @@ class PrimaryView {
         // todo: remove this after testing
         project.leda.landmarkColliders.clear()
         val leftCollider = LandmarkPulseCollider(
-                location = PVector(0f, 0f),
-                radius = 0.2f,
-                triggeredBy = EnumSet.of(PoseLandmark.LeftWrist),
-                pulse = Pulse(speed = DataModel(4.0f), hue = DataModel(0f)),
+                location = DataModel(PVector(0f, 0f)),
+                radius = DataModel(0.2f),
+                triggeredBy = DataModel(mutableSetOf(PoseLandmark.LeftWrist)),
+                pulses = listOf(Pulse(color = DataModel(HSV(0, 100, 100, 1.0f).toRGB()))),
         )
         leftCollider.onCollision += {
             println("Left wrist collided!")
         }
 
         val rightCollider = LandmarkPulseCollider(
-                location = PVector(0f, 0f),
-                radius = 0.2f,
-                triggeredBy = EnumSet.of(PoseLandmark.RightWrist),
-                pulse = Pulse(speed = DataModel(4.0f), hue = DataModel(200f)),
+                location = DataModel(PVector(0f, 0f)),
+                radius = DataModel(0.2f),
+                triggeredBy = DataModel(mutableSetOf(PoseLandmark.RightWrist)),
+                pulses = listOf(Pulse(color = DataModel(HSV(200, 100, 100, 1.0f).toRGB()))),
         )
         rightCollider.onCollision += {
             println("Right wrist collided!")
@@ -559,6 +592,11 @@ class PrimaryView {
 
     fun onShowLedaSceneSettings() {
         initSettingsView(project.value.leda, "Leda")
+    }
+
+    fun onShowLedaColliderEditor() {
+        val editor = LedaColliderEditor(project.value.leda)
+        editor.show()
     }
 
     fun onShowProjectSettings() {

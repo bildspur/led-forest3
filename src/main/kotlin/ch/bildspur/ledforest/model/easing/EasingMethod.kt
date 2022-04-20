@@ -5,6 +5,7 @@ import ch.bildspur.ledforest.util.EasingCurves
 enum class EasingMethod(val method : (Float) -> Float) {
     Linear({EasingCurves.linear(it)}),
     Step({EasingCurves.step(it)}),
+    SinePulse({EasingCurves.sinePulse(it)}),
     EaseInSine({EasingCurves.easeInSine(it)}),
     EaseOutSine({EasingCurves.easeOutSine(it)}),
     EaseInOutSine({EasingCurves.easeInOutSine(it)}),

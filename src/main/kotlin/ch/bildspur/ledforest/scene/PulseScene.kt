@@ -1,6 +1,5 @@
 package ch.bildspur.ledforest.scene
 
-import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
@@ -10,6 +9,7 @@ import ch.bildspur.ledforest.util.ColorUtil
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.windowedMappedInOut
 import ch.bildspur.math.pow
+import ch.bildspur.util.map
 import kotlin.math.sqrt
 
 class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene", project, tubes) {
@@ -20,7 +20,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
         get() = task
 
     override fun setup() {
-
+        project.interaction.interactionBox.fire()
     }
 
     override fun update() {
@@ -29,11 +29,11 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
 
         val currentTime = System.currentTimeMillis()
         tubes.forEach {
-            it.leds.forEachIndexed { i, led -> applyToLED(i, led, it, currentTime, pulses) }
+            it.leds.forEach { led -> applyToLED(led, currentTime, pulses) }
         }
 
         // cleanup
-        pulses.removeIf { it.getPulseRadius(currentTime) > project.interaction.interactionBox.value.mag() }
+        pulses.removeIf { !it.isAlive(currentTime) }
     }
 
     override fun stop() {
@@ -44,8 +44,8 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
 
     }
 
-    private fun applyToLED(index: Int, led: LED, tube: Tube, currentTime: Long, pulses: List<Pulse>) {
-        val position = Sketch.instance.spaceInformation.getLEDPosition(index, tube)
+    private fun applyToLED(led: LED, currentTime: Long, pulses: List<Pulse>) {
+        val position = led.position
 
         val huesAndWeights = mutableListOf<ColorUtil.HueAndWeight>()
         var saturation = 0f
@@ -60,13 +60,18 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene",
             val applyDist = pulseRadius - distance
 
             val width = pulse.width.value
-            val factor = windowedMappedInOut((applyDist + (width * 0.5f)) / width, pulse.attackCurve.value, pulse.releaseCurve.value)
+            val factor = windowedMappedInOut(
+                (applyDist + (width * 0.5f)) / width,
+                pulse.attackCurve.value,
+                pulse.releaseCurve.value
+            )
 
-            brightness += factor
+            if (factor > 0f) {
+                val color = pulse.color.value.toHSV()
 
-            if(factor > 0f) {
-                huesAndWeights.add(ColorUtil.HueAndWeight(pulse.hue.value, factor))
-                saturation += pow(pulse.saturation.value, 2f)
+                brightness += factor.map(0f, 1f, 0f, color.v / 100f)
+                huesAndWeights.add(ColorUtil.HueAndWeight(color.h.toFloat(), factor))
+                saturation += pow(color.s.toFloat(), 2f)
                 applyCount++
             }
         }
