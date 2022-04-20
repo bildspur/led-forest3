@@ -82,10 +82,12 @@ class TubeScene(val project: DataModel<Project>) : Group() {
     }
 
     fun render() {
-        ledShapes.forEach { (led, shape) ->
-            if (shape.material is PhongMaterial) {
-                val mat = (shape.material as PhongMaterial)
-                mat.diffuseColor = led.color.toJavaFXColor()
+        Platform.runLater {
+            ledShapes.forEach { (led, shape) ->
+                if (shape.material is PhongMaterial) {
+                    val mat = (shape.material as PhongMaterial)
+                    mat.diffuseColor = led.color.toJavaFXColor()
+                }
             }
         }
     }
