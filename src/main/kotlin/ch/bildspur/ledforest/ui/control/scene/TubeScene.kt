@@ -61,7 +61,7 @@ class TubeScene(val project: DataModel<Project>) : Group() {
             Rotate(-90.0, Rotate.Y_AXIS),
             Rotate(90.0, Rotate.X_AXIS),
             Rotate(-90.0, Rotate.Z_AXIS),
-            Scale(globalScale, globalScale, globalScale)
+            Scale(globalScale, globalScale, -globalScale)
         )
         children.add(sceneGroup)
 
