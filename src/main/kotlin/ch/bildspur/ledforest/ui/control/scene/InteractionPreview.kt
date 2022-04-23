@@ -69,7 +69,7 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
         PoseLandmark.values().forEach {
             val shape = Box(0.1, 0.1, 0.1)
             shape.isVisible = false
-            shape.material = PhongMaterial(Color.GREEN)
+            shape.material = PhongMaterial(Color.LIGHTGREEN)
             landmarkShapes[it] = shape
             sceneGroup.children.add(shape)
         }
@@ -94,7 +94,8 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
     fun render() {
         Platform.runLater {
             val pose = Sketch.instance.pose.poses.firstOrNull()
-            landmarkShapes.values.forEach { it.isVisible = false }
+
+            // landmarkShapes.values.forEach { it.isVisible = false }
             val cameraOrigin = project.value.leda.triggerOrigin.value
 
             if (pose != null) {
@@ -102,10 +103,10 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
                     val lm = pose[it]
                     val shape = landmarkShapes[it]!!
 
-                    if (lm.t < project.value.leda.landmarkMinScore.value) return@forEach
-
-                    shape.transforms.add(PVector.sub(pose.rightWrist, cameraOrigin).toTranslate())
-                    shape.isVisible = true
+                    if (lm.t >= project.value.leda.landmarkMinScore.value) {
+                        shape.transforms.add(PVector.sub(pose.rightWrist, cameraOrigin).toTranslate())
+                        shape.isVisible = true
+                    }
                 }
             }
         }
