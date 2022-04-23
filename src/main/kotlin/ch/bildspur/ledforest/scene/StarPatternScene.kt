@@ -23,10 +23,11 @@ class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPat
         // allow on the fly change!
         project.starPattern.color.onChanged += {
             if(project.starPattern.overwriteColor.value) {
+                println("overwriting color")
                 tubes.forEachLED {
                     val hsv = project.starPattern.color.value.toHSV()
-                    it.color.fadeH(hsv.h.toFloat(), 0.05f)
-                    it.color.fadeS(hsv.s.toFloat(), 0.05f)
+                    it.color.fadeH(hsv.h.toFloat(), 0.1f)
+                    it.color.fadeS(hsv.s.toFloat(), 0.1f)
                 }
             }
         }

@@ -19,6 +19,7 @@ import jfxtras.styles.jmetro.Style
 import org.apache.log4j.BasicConfigurator
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
+import kotlin.system.exitProcess
 
 
 /**
@@ -74,7 +75,7 @@ class Main : Application() {
 
             controller.sketch.stop()
             controller.processingThread.join(5000)
-            System.exit(0)
+            exitProcess(0)
         }
 
         primaryStage.show()

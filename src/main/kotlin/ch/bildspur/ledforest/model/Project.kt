@@ -81,17 +81,30 @@ class Project {
         }
 
         val universes = Sketch.instance.project.value.tubes.groupBy { it.universe.value }
-        universes.forEach { u, ts ->
+        universes.forEach { (u, ts) ->
             val color = TubeShape.UNIVERSE_COLORS[u % TubeShape.UNIVERSE_COLORS.size]
             val minAddress = ts.minOf { it.startAddress }
             val maxAddress = ts.maxOf { it.endAddress }
 
-            ts.forEachLED {
-                val hue = round(color.hue * 360.0).toFloat()
-                val saturation = Sketch.map(it.address, minAddress, maxAddress, 0, 100).toFloat()
-                it.color.fadeH(hue, 0.1f)
-                it.color.fadeS(saturation, 0.1f)
-                it.color.fadeB(100f, 0.1f)
+            ts.forEach { tube ->
+                tube.leds.forEachIndexed { index, led ->
+                    var hue = color.hue.toFloat()
+                    var saturation = Sketch.map(led.address, minAddress, maxAddress, 0, 200).toFloat()
+
+                    if(saturation >= 100) {
+                        saturation = 200 - saturation;
+                    }
+
+                    // set first and last color
+                    if (index == 0 || index == tube.leds.count() - 1) {
+                        hue = color.invert().hue.toFloat()
+                        saturation = 100f
+                    }
+
+                    led.color.fadeH(hue, 0.2f)
+                    led.color.fadeS(saturation, 0.2f)
+                    led.color.fadeB(100f, 0.2f)
+                }
             }
         }
 
@@ -99,10 +112,10 @@ class Project {
     }
 
     @ArrowControlParameter("Translate All")
-    var translateAll : (KeyCode) -> Unit = {code ->
+    var translateAll: (KeyCode) -> Unit = { code ->
         val adjustAmount = 0.1f
         Sketch.instance.project.value.tubes.forEach {
-            when(code) {
+            when (code) {
                 KeyCode.UP -> it.position.value.y -= adjustAmount
                 KeyCode.DOWN -> it.position.value.y += adjustAmount
                 KeyCode.LEFT -> it.position.value.x -= adjustAmount

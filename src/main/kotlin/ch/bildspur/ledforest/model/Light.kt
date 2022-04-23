@@ -1,7 +1,10 @@
 package ch.bildspur.ledforest.model
 
+import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.BooleanParameter
+import ch.bildspur.ui.properties.EnumParameter
+import ch.bildspur.ui.properties.RangeSliderParameter
 import ch.bildspur.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose
 
@@ -21,4 +24,12 @@ class Light {
     @Expose
     @SliderParameter("Trace", 0.0, 1.0, 0.01)
     var trace = DataModel(0f)
+
+    @Expose
+    @SliderParameter("Brightness Cutoff", 0.0, 1.0, 0.01)
+    var brightnessCutoff = DataModel(0.0f)
+
+    @Expose
+    @EnumParameter("Brightness Curve")
+    var brightnessCurve = DataModel(EasingMethod.Linear)
 }

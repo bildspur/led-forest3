@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.model
 
+import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.ledforest.util.ColorMode
 import processing.core.PVector
 import java.awt.Color
@@ -95,6 +96,19 @@ class FadeColor() {
 
     val rgbColor: Int
         get() = Color.HSBtoRGB(current.x / hmax, current.y / smax, current.z / bmax)
+
+    fun rgbColorWithMapping(brightnessCutoff: Float, brightnessCurve: EasingMethod): Int {
+        var valb = current.z / bmax
+        if (valb < brightnessCutoff) {
+            valb = 0f
+        }
+
+        return Color.HSBtoRGB(
+            current.x / hmax,
+            current.y / smax,
+            brightnessCurve.method(valb)
+        )
+    }
 
     private fun colorToVector(c: Int): PVector {
         return PVector(ColorMode.hue(c), ColorMode.saturation(c), ColorMode.brightness(c))

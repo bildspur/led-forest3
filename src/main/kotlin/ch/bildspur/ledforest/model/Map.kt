@@ -38,5 +38,9 @@ class Map {
 
         if (ratio > 0)
             mapScaleFactor.value = floor(ratio * scaleFactor).toFloat()
+
+        if (!mapScaleFactor.value.isFinite()) {
+            mapScaleFactor.value = 15.0f
+        }
     }
 }
