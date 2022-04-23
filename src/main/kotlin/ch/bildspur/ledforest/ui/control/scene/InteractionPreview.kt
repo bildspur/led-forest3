@@ -3,12 +3,10 @@ package ch.bildspur.ledforest.ui.control.scene
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
-import ch.bildspur.ledforest.model.light.LED
-import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.pose.PoseLandmark
 import ch.bildspur.ledforest.ui.control.scene.control.OrbitControls
 import ch.bildspur.model.DataModel
 import javafx.application.Platform
-import javafx.geometry.Rectangle2D
 import javafx.scene.Group
 import javafx.scene.PerspectiveCamera
 import javafx.scene.SceneAntialiasing
@@ -20,7 +18,6 @@ import javafx.scene.shape.*
 import javafx.scene.transform.Rotate
 import javafx.scene.transform.Scale
 import processing.core.PVector
-import tornadofx.add
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
 
@@ -36,7 +33,8 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
     private val sceneGroup = Group()
     private val colliderShapes = ConcurrentHashMap<LandmarkPulseCollider, Shape3D>()
     private lateinit var cameraShape: Shape3D
-    private lateinit var rightWristShape: Shape3D
+
+    private val landmarkShapes = mutableMapOf<PoseLandmark, Shape3D>()
 
     private var running = true
 
@@ -67,6 +65,15 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
         )
         children.add(sceneGroup)
 
+        // add pose shapes
+        PoseLandmark.values().forEach {
+            val shape = Box(0.1, 0.1, 0.1)
+            shape.isVisible = false
+            shape.material = PhongMaterial(Color.GREEN)
+            landmarkShapes[it] = shape
+            sceneGroup.children.add(shape)
+        }
+
         // render thread
         thread(isDaemon = true, start = true) {
             Thread.sleep(5000)
@@ -87,19 +94,19 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
     fun render() {
         Platform.runLater {
             val pose = Sketch.instance.pose.poses.firstOrNull()
-            if (pose != null) {
-                val score = pose.rightWrist.t
-                if (score < project.value.leda.landmarkMinScore.value) {
-                    rightWristShape.isVisible = false
-                    return@runLater
-                }
+            landmarkShapes.values.forEach { it.isVisible = false }
+            val cameraOrigin = project.value.leda.triggerOrigin.value
 
-                rightWristShape.transforms.clear()
-                val cameraOrigin = project.value.leda.triggerOrigin.value
-                rightWristShape.transforms.add(PVector.sub(pose.rightWrist, cameraOrigin).toTranslate())
-                rightWristShape.isVisible = true
-            } else {
-                rightWristShape.isVisible = false
+            if (pose != null) {
+                landmarkShapes.keys.forEach {
+                    val lm = pose[it]
+                    val shape = landmarkShapes[it]!!
+
+                    if (lm.t < project.value.leda.landmarkMinScore.value) return@forEach
+
+                    shape.transforms.add(PVector.sub(pose.rightWrist, cameraOrigin).toTranslate())
+                    shape.isVisible = true
+                }
             }
         }
     }
@@ -145,10 +152,5 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
         cameraShape = Box(0.124, 0.026, 0.029)
         cameraShape.material = PhongMaterial(Color.WHITE)
         sceneGroup.children.add(cameraShape)
-
-        rightWristShape = Box(0.1, 0.1, 0.1)
-        rightWristShape.isVisible = false
-        rightWristShape.material = PhongMaterial(Color.GREEN)
-        sceneGroup.children.add(rightWristShape)
     }
 }
