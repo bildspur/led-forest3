@@ -3,6 +3,7 @@ package ch.bildspur.ledforest.model.leda
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.pose.PoseLandmark
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
+import ch.bildspur.ledforest.util.DeBouncer
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.BooleanParameter
 import ch.bildspur.ui.properties.NumberParameter
@@ -21,22 +22,18 @@ class LandmarkPulseCollider(
     @Expose @BooleanParameter("One Shot") var oneShot: DataModel<Boolean> = DataModel(true)
 ) : Collider() {
 
-    var hasBeenTriggered = false
+    private val deBouncer = DeBouncer(100L, false)
 
     override fun checkCollision(location: PVector, landmark: PoseLandmark): Boolean {
         // very basic sphere collider
         if (PVector.dist(this.location.value, location) <= radius.value && triggeredBy.value.contains(landmark)) {
-            if (oneShot.value && hasBeenTriggered) return false
-
-            // todo: fix has been triggered logic
-            // use debounce
+            if (deBouncer.update(true)) return false
             onCollision(Collision(this))
-            hasBeenTriggered = true
-            return true
+        } else {
+            deBouncer.update(false)
         }
 
-        hasBeenTriggered = false
-        return false
+        return deBouncer.currentValue
     }
 
     override fun toString(): String {
