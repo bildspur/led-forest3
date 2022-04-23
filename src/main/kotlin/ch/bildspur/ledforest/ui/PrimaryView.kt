@@ -348,31 +348,6 @@ class PrimaryView {
 
         // add hot-reload support
         hotReloadWatcher.reset(Paths.get(appConfig.projectFile))
-
-        // todo: remove this after testing
-        project.leda.landmarkColliders.clear()
-        val leftCollider = LandmarkPulseCollider(
-                location = DataModel(PVector(0f, 0f)),
-                radius = DataModel(0.2f),
-                triggeredBy = DataModel(mutableSetOf(PoseLandmark.LeftWrist)),
-                pulses = listOf(Pulse(color = DataModel(HSV(0, 100, 100, 1.0f).toRGB()))),
-        )
-        leftCollider.onCollision += {
-            println("Left wrist collided!")
-        }
-
-        val rightCollider = LandmarkPulseCollider(
-                location = DataModel(PVector(0f, 0f)),
-                radius = DataModel(0.2f),
-                triggeredBy = DataModel(mutableSetOf(PoseLandmark.RightWrist)),
-                pulses = listOf(Pulse(color = DataModel(HSV(200, 100, 100, 1.0f).toRGB()))),
-        )
-        rightCollider.onCollision += {
-            println("Right wrist collided!")
-        }
-
-        project.leda.landmarkColliders.add(leftCollider)
-        project.leda.landmarkColliders.add(rightCollider)
     }
 
     fun <T> createBidirectionalMapping(dataModel: DataModel<T>,
