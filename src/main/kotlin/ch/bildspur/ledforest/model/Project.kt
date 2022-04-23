@@ -9,13 +9,17 @@ import ch.bildspur.ledforest.model.interaction.RealSenseInteraction
 import ch.bildspur.ledforest.model.leda.LedaConfig
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.properties.ArrowControlParameter
 import ch.bildspur.ledforest.util.forEachLED
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 import javafx.scene.input.KeyCode
+import processing.core.PApplet
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.math.max
+import kotlin.math.round
 
 /**
  * Created by cansik on 11.07.17.
@@ -47,6 +51,11 @@ class Project {
 
     @ActionParameter("LEDs", "On")
     var turnOnLEDs = {
+        if (isSceneManagerEnabled.value) {
+            isSceneManagerEnabled.value = false
+            Thread.sleep(50)
+        }
+
         Sketch.instance.project.value.tubes.forEachLED {
             it.color.fadeB(100.0f, 0.1f)
         }
@@ -54,9 +63,39 @@ class Project {
 
     @ActionParameter("LEDs", "Off")
     var turnOffLEDs = {
+        if (isSceneManagerEnabled.value) {
+            isSceneManagerEnabled.value = false
+            Thread.sleep(50)
+        }
+
         Sketch.instance.project.value.tubes.forEachLED {
             it.color.fadeB(0.0f, 0.1f)
         }
+    }
+
+    @ActionParameter("Mapping", "Test Color")
+    var mappingTestColor = {
+        if (isSceneManagerEnabled.value) {
+            isSceneManagerEnabled.value = false
+            Thread.sleep(50)
+        }
+
+        val universes = Sketch.instance.project.value.tubes.groupBy { it.universe.value }
+        universes.forEach { u, ts ->
+            val color = TubeShape.UNIVERSE_COLORS[u % TubeShape.UNIVERSE_COLORS.size]
+            val minAddress = ts.minOf { it.startAddress }
+            val maxAddress = ts.maxOf { it.endAddress }
+
+            ts.forEachLED {
+                val hue = round(color.hue * 360.0).toFloat()
+                val saturation = Sketch.map(it.address, minAddress, maxAddress, 0, 100).toFloat()
+                it.color.fadeH(hue, 0.1f)
+                it.color.fadeS(saturation, 0.1f)
+                it.color.fadeB(100f, 0.1f)
+            }
+        }
+
+        println("mapping color activted")
     }
 
     @ArrowControlParameter("Translate All")
@@ -114,4 +153,10 @@ class Project {
 
     @Expose
     var audio = Audio()
+
+    init {
+        solidLEDColor.onChanged += {
+            isSceneManagerEnabled.value = false
+        }
+    }
 }

@@ -56,7 +56,7 @@ class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = D
         get() = if (leds.isNotEmpty()) leds[0].address else 0
 
     val endAddress: Int
-        get() = if (leds.isNotEmpty()) leds[leds.size - 1].address + 3 else 0
+        get() = if (leds.isNotEmpty()) leds[leds.size - 1].address else 0
 
     var leds: List<LED> = emptyList()
 
@@ -99,7 +99,7 @@ class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = D
         get() = length.value / ledCount.value
 
     override fun toString(): String {
-        return "${name.value} ${universe.value}.$startAddress-$endAddress (${ledCount.value})"
+        return "${name.value} ${universe.value + 1}.${startAddress + 1}-${endAddress + 1} (${ledCount.value})"
     }
 
     override fun gsonPostProcess() {

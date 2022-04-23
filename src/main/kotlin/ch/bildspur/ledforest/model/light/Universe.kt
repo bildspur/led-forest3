@@ -8,6 +8,7 @@ import ch.bildspur.ui.properties.ActionParameter
 import ch.bildspur.ui.properties.NumberParameter
 import com.google.gson.annotations.Expose
 import java.awt.Color
+import kotlin.math.abs
 
 class Universe(id: Int = 0) {
     companion object {
@@ -100,10 +101,10 @@ class Universe(id: Int = 0) {
      * @return Normalised sigmoid result.
      */
     private fun normalisedTunableSigmoid(x: Float, k: Float): Float {
-        return (x - x * k) / (k - Math.abs(x) * 2f * k + 1)
+        return (x - x * k) / (k - abs(x) * 2f * k + 1)
     }
 
     override fun toString(): String {
-        return "Universe (${id.value})"
+        return "Universe (${id.value + 1})"
     }
 }
