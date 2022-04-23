@@ -104,7 +104,7 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
 
                     if (lm.t >= project.value.leda.landmarkMinScore.value) {
                         shape.transforms.clear()
-                        shape.transforms.add(PVector.sub(pose.rightWrist, cameraOrigin).toTranslate())
+                        shape.transforms.add(PVector.sub(lm, cameraOrigin).toTranslate())
                         shape.isVisible = true
                     }
                 }
