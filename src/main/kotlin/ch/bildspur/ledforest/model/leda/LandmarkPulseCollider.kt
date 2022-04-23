@@ -25,6 +25,7 @@ class LandmarkPulseCollider(
     private val deBouncer = DeBouncer(100L, false)
 
     override fun checkCollision(location: PVector, landmark: PoseLandmark): Boolean {
+        // todo: fix debouncer
         // very basic sphere collider
         if (PVector.dist(this.location.value, location) <= radius.value && triggeredBy.value.contains(landmark)) {
             // if (deBouncer.update(true)) return false
