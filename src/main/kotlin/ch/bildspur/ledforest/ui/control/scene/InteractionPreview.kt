@@ -126,7 +126,7 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
                 val shape = Sphere(collider.radius.value.toDouble())
                 shape.material = PhongMaterial(Color.LIGHTBLUE)
                 colliderShapes[collider] = shape
-                shape.transforms.add(collider.location.value.toTranslate())
+                shape.transforms.add(PVector.sub(PVector(), collider.location.value).toTranslate())
                 sceneGroup.children.add(shape)
             }
         }
