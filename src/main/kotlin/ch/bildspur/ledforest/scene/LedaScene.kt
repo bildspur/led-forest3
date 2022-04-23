@@ -31,7 +31,7 @@ class LedaScene(
         val config = project.leda
 
         // receive poses
-        val poses = poseProvider.poses
+        val poses = poseProvider.poses.take(config.interactorLimit.value)
 
         for (pose in poses) {
             for (collider in config.landmarkColliders) {
@@ -53,6 +53,8 @@ class LedaScene(
         get() = poseProvider.poses.isNotEmpty()
 
     private fun checkCollision(pose: Pose, collider: LandmarkPulseCollider) {
+        val origin = project.leda.triggerOrigin.value
+
         for (landmarkType in collider.triggeredBy.value) {
             val landmarkId = PoseLandmark.values().indexOf(landmarkType)
             val landmark = pose.keypoints[landmarkId]
@@ -60,7 +62,7 @@ class LedaScene(
             val score = landmark.t
             if (score < project.leda.landmarkMinScore.value) continue
 
-            val relativeLandmarkPosition = PVector.sub(pose.nose, pose.keypoints[landmarkId])
+            val relativeLandmarkPosition = PVector.sub(origin, pose.keypoints[landmarkId])
             if (collider.checkCollision(relativeLandmarkPosition, landmarkType)) {
                 collider.pulses.forEach {
                     project.pulseScene.pulses.add(it.spawn())
