@@ -1,8 +1,8 @@
 package ch.bildspur.ledforest.pose
 
+import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.pose.clients.PoseClient
-import ch.bildspur.ledforest.pose.clients.LightWeightOpenPoseClient
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.util.toFloat2
@@ -28,19 +28,21 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
 
     val totalPoseCount = AtomicInteger(0)
 
-    private val simpleTracker = SimpleTracker<Pose>({ it.neck.toFloat2() },
-            onUpdate = { e, i ->
-                // just update the keypoints but keep the object
-                e.item.keypoints = i.keypoints
-                e.item.score = i.score
-            },
-            onAdd = {
-                // set initial easing position
-                it.item.easedPosition.init(it.item.position, project.value.poseInteraction.positionEasing.value)
-                totalPoseCount.incrementAndGet()
-            },
-            maxDelta = project.value.poseInteraction.maxDelta.value,
-            maxUntrackedTime = project.value.poseInteraction.maxDeadTime.value)
+    private val simpleTracker = SimpleTracker<Pose>(
+        { it.neck.toFloat2() },
+        onUpdate = { e, i ->
+            // just update the keypoints but keep the object
+            e.item.keypoints = i.keypoints
+            e.item.score = i.score
+        },
+        onAdd = {
+            // set initial easing position
+            it.item.easedPosition.init(it.item.position, project.value.poseInteraction.positionEasing.value)
+            totalPoseCount.incrementAndGet()
+        },
+        maxDelta = project.value.poseInteraction.maxDelta.value,
+        maxUntrackedTime = project.value.poseInteraction.maxDeadTime.value
+    )
 
     private val relevantPoses = AtomicReference<List<Pose>>(listOf())
 
@@ -92,12 +94,23 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
 
                     // update poses (make this once in the loop)
                     relevantPoses.set(simpleTracker.entities.map { it.item }
-                            .filter { System.currentTimeMillis() - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
-                            .toList())
+                        .filter { System.currentTimeMillis() - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
+                        .toList())
 
                     // update ui
                     project.value.poseInteraction.poseCount.value = "${simpleTracker.entities.size}"
                 } else {
+                    // prepare poses
+                    val config = Sketch.instance.project.value.poseInteraction
+                    validPoses.forEach { pose ->
+                        pose.keypoints.forEach {
+                            it.x = if (config.flipX.value) 1f - it.x else it.x
+                            it.y = if (config.flipY.value) 1f - it.y else it.y
+                            it.z = if (config.flipZ.value) 1f - it.z else it.z
+                        }
+                    }
+
+                    // add poses
                     relevantPoses.set(validPoses)
                     project.value.poseInteraction.poseCount.value = "${validPoses.size}"
                 }
@@ -162,7 +175,12 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 g.stroke(ColorMode.color(255))
                 g.strokeWeight(2f)
                 val maxDelta = project.value.poseInteraction.maxDelta.value
-                g.ellipse(pose.position.x * g.width, pose.position.y * g.height, g.width * maxDelta, g.height * maxDelta)
+                g.ellipse(
+                    pose.position.x * g.width,
+                    pose.position.y * g.height,
+                    g.width * maxDelta,
+                    g.height * maxDelta
+                )
             }
         }
     }
