@@ -39,6 +39,14 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
     private var running = true
 
     init {
+        // add pose shapes
+        PoseLandmark.values().forEach {
+            val shape = Box(0.1, 0.1, 0.1)
+            shape.isVisible = false
+            shape.material = PhongMaterial(Color.GREEN)
+            landmarkShapes[it] = shape
+        }
+
         project.onChanged += {
             Platform.runLater {
                 recreateScene()
@@ -65,15 +73,6 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
         )
         children.add(sceneGroup)
 
-        // add pose shapes
-        PoseLandmark.values().forEach {
-            val shape = Box(0.1, 0.1, 0.1)
-            shape.isVisible = false
-            shape.material = PhongMaterial(Color.LIGHTGREEN)
-            landmarkShapes[it] = shape
-            sceneGroup.children.add(shape)
-        }
-
         // render thread
         thread(isDaemon = true, start = true) {
             Thread.sleep(5000)
@@ -95,7 +94,7 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
         Platform.runLater {
             val pose = Sketch.instance.pose.poses.firstOrNull()
 
-            // landmarkShapes.values.forEach { it.isVisible = false }
+            landmarkShapes.values.forEach { it.isVisible = false }
             val cameraOrigin = project.value.leda.triggerOrigin.value
 
             if (pose != null) {
@@ -153,5 +152,9 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
         cameraShape = Box(0.124, 0.026, 0.029)
         cameraShape.material = PhongMaterial(Color.WHITE)
         sceneGroup.children.add(cameraShape)
+
+        landmarkShapes.values.forEach {
+            sceneGroup.children.add(it)
+        }
     }
 }
