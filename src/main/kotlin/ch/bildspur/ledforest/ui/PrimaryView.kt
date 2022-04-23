@@ -45,10 +45,7 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
-import javafx.stage.FileChooser
-import javafx.stage.Modality
-import javafx.stage.Stage
-import javafx.stage.StageStyle
+import javafx.stage.*
 import jfxtras.styles.jmetro.JMetro
 import jfxtras.styles.jmetro.Style
 import processing.core.PApplet
@@ -56,6 +53,7 @@ import processing.core.PVector
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.concurrent.thread
+import kotlin.math.min
 import kotlin.system.exitProcess
 
 
@@ -235,6 +233,11 @@ class PrimaryView {
 
             // add accelerators
             primaryStage.scene.accelerators.put(KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN)) { onSaveProject() }
+
+            // resize primary stage if necessary
+            val primaryScreen = Screen.getPrimary()
+            primaryStage.width = min(primaryStage.width, primaryScreen.bounds.width * 0.9f)
+            primaryStage.height = min(primaryStage.height, primaryScreen.bounds.height * 0.9f)
 
             // start processing
             startProcessing()
