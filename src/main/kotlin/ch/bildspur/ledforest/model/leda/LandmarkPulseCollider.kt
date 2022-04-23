@@ -27,13 +27,15 @@ class LandmarkPulseCollider(
     override fun checkCollision(location: PVector, landmark: PoseLandmark): Boolean {
         // very basic sphere collider
         if (PVector.dist(this.location.value, location) <= radius.value && triggeredBy.value.contains(landmark)) {
-            if (deBouncer.update(true)) return false
+            // if (deBouncer.update(true)) return false
             onCollision(Collision(this))
+            return true
         } else {
-            deBouncer.update(false)
+            //deBouncer.update(false)
+            return false
         }
 
-        return deBouncer.currentValue
+        //return deBouncer.currentValue
     }
 
     override fun toString(): String {
