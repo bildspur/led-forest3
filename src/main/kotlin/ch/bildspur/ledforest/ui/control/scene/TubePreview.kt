@@ -6,7 +6,6 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.ui.control.scene.control.OrbitControls
 import ch.bildspur.model.DataModel
 import javafx.application.Platform
-import javafx.geometry.Rectangle2D
 import javafx.scene.Group
 import javafx.scene.PerspectiveCamera
 import javafx.scene.SceneAntialiasing
@@ -24,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
 
 
-class TubeScene(val project: DataModel<Project>) : Group() {
+class TubePreview(val project: DataModel<Project>) : Group() {
     private val refreshRate = 30.0
     private val globalScale = 100.0
 

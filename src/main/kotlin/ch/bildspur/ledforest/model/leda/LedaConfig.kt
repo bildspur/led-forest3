@@ -25,7 +25,7 @@ class LedaConfig {
 
     @Expose
     @PVectorParameter("Trigger Origin")
-    var triggerOrigin = DataModel(PVector(0f, 0f, 2.8f))
+    var triggerOrigin = DataModel(PVector(0f, 2.8f, 0f))
 
     @GroupParameter("Collider")
     private var templateCollider = LandmarkPulseCollider()

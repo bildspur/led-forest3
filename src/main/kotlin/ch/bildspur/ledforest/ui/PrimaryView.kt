@@ -1,17 +1,15 @@
 package ch.bildspur.ledforest.ui
 
-import ch.bildspur.color.HSV
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
-import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
+import ch.bildspur.ledforest.model.interaction.Interaction
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
-import ch.bildspur.ledforest.model.pulse.Pulse
-import ch.bildspur.ledforest.pose.PoseLandmark
-import ch.bildspur.ledforest.ui.control.scene.TubeScene
+import ch.bildspur.ledforest.ui.control.scene.InteractionPreview
+import ch.bildspur.ledforest.ui.control.scene.TubePreview
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
 import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.control.tubemap.tool.MoveTool
@@ -66,7 +64,9 @@ class PrimaryView {
 
     var tubeMap = TubeMap()
 
-    lateinit var tubeScene : TubeScene
+    lateinit var tubePreview: TubePreview
+
+    lateinit var interactionPreview: InteractionPreview
 
     val moveTool = MoveTool()
 
@@ -120,18 +120,28 @@ class PrimaryView {
 
     fun setupView() {
         // setup center maps and scenes
-        tubeScene = TubeScene(project)
+        interactionPreview = InteractionPreview(project)
+        tubePreview = TubePreview(project)
 
         val stackPaneScene = StackPane()
-        stackPaneScene.children.add(tubeScene.subScene)
-        tubeScene.subScene.heightProperty().bind(stackPaneScene.heightProperty())
-        tubeScene.subScene.widthProperty().bind(stackPaneScene.widthProperty())
+        stackPaneScene.children.add(tubePreview.subScene)
+        tubePreview.subScene.heightProperty().bind(stackPaneScene.heightProperty())
+        tubePreview.subScene.widthProperty().bind(stackPaneScene.widthProperty())
+
+        val stackPaneInteraction = StackPane()
+        stackPaneInteraction.children.add(interactionPreview.subScene)
+        interactionPreview.subScene.heightProperty().bind(stackPaneInteraction.heightProperty())
+        interactionPreview.subScene.widthProperty().bind(stackPaneInteraction.widthProperty())
 
         val tabPane = TabPane()
         tabPane.side = Side.BOTTOM
         tabPane.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
-        tabPane.tabs.addAll(Tab("2D", tubeMap), Tab("3D", stackPaneScene))
-        tabPane.selectionModel.select(1)
+        tabPane.tabs.addAll(
+            Tab("2D", tubeMap),
+            Tab("3D", stackPaneScene),
+            Tab("Interaction", stackPaneInteraction)
+        )
+        tabPane.selectionModel.select(2)
 
         root.center = tabPane
 
@@ -233,7 +243,12 @@ class PrimaryView {
             }
 
             // add accelerators
-            primaryStage.scene.accelerators.put(KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN)) { onSaveProject() }
+            primaryStage.scene.accelerators.put(
+                KeyCodeCombination(
+                    KeyCode.S,
+                    KeyCombination.CONTROL_DOWN
+                )
+            ) { onSaveProject() }
 
             // resize primary stage if necessary
             val primaryScreen = Screen.getPrimary()
@@ -287,7 +302,8 @@ class PrimaryView {
             rootItem.children.add(nodeItem)
 
             n.universes.forEach { u ->
-                val colorRect = Rectangle(4.0, 16.0, TubeShape.UNIVERSE_COLORS[u.id.value % TubeShape.UNIVERSE_COLORS.size])
+                val colorRect =
+                    Rectangle(4.0, 16.0, TubeShape.UNIVERSE_COLORS[u.id.value % TubeShape.UNIVERSE_COLORS.size])
                 val graphic = HBox(ImageView(dmxIcon), colorRect)
                 graphic.spacing = 4.0
                 val universeItem = TreeItem(TagItem(u), graphic)
@@ -310,17 +326,23 @@ class PrimaryView {
         // setup specific handlers for project
 
         // quick settings
-        createBidirectionalMapping(project.isSceneManagerEnabled,
-                sceneManagerMenuItem.onActionProperty(),
-                sceneManagerMenuItem.selectedProperty())
+        createBidirectionalMapping(
+            project.isSceneManagerEnabled,
+            sceneManagerMenuItem.onActionProperty(),
+            sceneManagerMenuItem.selectedProperty()
+        )
 
-        createBidirectionalMapping(project.interaction.isInteractionDataEnabled,
-                interactionSceneManager.onActionProperty(),
-                interactionSceneManager.selectedProperty())
+        createBidirectionalMapping(
+            project.interaction.isInteractionDataEnabled,
+            interactionSceneManager.onActionProperty(),
+            interactionSceneManager.selectedProperty()
+        )
 
-        createBidirectionalMapping(project.visualisation.disableViewRendering,
-                disableRenderingMenuItem.onActionProperty(),
-                disableRenderingMenuItem.selectedProperty())
+        createBidirectionalMapping(
+            project.visualisation.disableViewRendering,
+            disableRenderingMenuItem.onActionProperty(),
+            disableRenderingMenuItem.selectedProperty()
+        )
 
         display2DMapMenuItem.setOnAction {
             if (tubeMap.isVisible) {
@@ -357,9 +379,11 @@ class PrimaryView {
         hotReloadWatcher.reset(Paths.get(appConfig.projectFile))
     }
 
-    fun <T> createBidirectionalMapping(dataModel: DataModel<T>,
-                                       onActionProperty: ObjectProperty<EventHandler<ActionEvent>>,
-                                       value: WritableValue<T>) {
+    fun <T> createBidirectionalMapping(
+        dataModel: DataModel<T>,
+        onActionProperty: ObjectProperty<EventHandler<ActionEvent>>,
+        value: WritableValue<T>
+    ) {
         dataModel.onChanged += { value.value = it }
         onActionProperty.set(EventHandler { dataModel.setSilent(value.value) })
         dataModel.fireLatest()
@@ -412,7 +436,7 @@ class PrimaryView {
         fileChooser.title = "Select project to load"
         fileChooser.initialFileName = ""
         fileChooser.extensionFilters.addAll(
-                FileChooser.ExtensionFilter("JSON", "*.json")
+            FileChooser.ExtensionFilter("JSON", "*.json")
         )
 
         val result = fileChooser.showOpenDialog(primaryStage)
@@ -525,7 +549,8 @@ class PrimaryView {
 
         // add boundary
         val box = project.value.interaction.interactionBox.value
-        val position = Point2D(box.x.toDouble() * -0.5, box.y.toDouble() * -0.5).multiply(scale.toDouble()).add(transform.x.toDouble(), transform.y.toDouble())
+        val position = Point2D(box.x.toDouble() * -0.5, box.y.toDouble() * -0.5).multiply(scale.toDouble())
+            .add(transform.x.toDouble(), transform.y.toDouble())
         val dimension = Dimension2D(box.x.toDouble() * scale, box.y.toDouble() * scale)
         val bounds = RectangleShape(position, dimension)
         bounds.selectable = false
@@ -606,7 +631,8 @@ class PrimaryView {
         val alert = Alert(Alert.AlertType.INFORMATION)
         alert.title = "About"
         alert.headerText = "${Sketch.NAME} - ${Sketch.VERSION}"
-        alert.contentText = "Developed by Florian Bruggisser 2018.\nUpdated in 2020 & 2022\nwww.bildspur.ch\n\nURI: ${Sketch.URI_NAME}"
+        alert.contentText =
+            "Developed by Florian Bruggisser 2018.\nUpdated in 2020 & 2022\nwww.bildspur.ch\n\nURI: ${Sketch.URI_NAME}"
         alert.showAndWait()
     }
 
