@@ -66,6 +66,16 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
 
         client = project.value.poseInteraction.poseClient.value.client
         client.onPosesReceived += { rawPoses ->
+            // fix raw poses
+            val config = Sketch.instance.project.value.poseInteraction
+            rawPoses.forEach { pose ->
+                pose.keypoints.forEach {
+                    it.x = if (config.flipX.value) 1f - it.x else it.x
+                    it.y = if (config.flipY.value) 1f - it.y else it.y
+                    it.z = if (config.flipZ.value) 1f - it.z else it.z
+                }
+            }
+
             poseBuffer = rawPoses
             lastReceiveTimeStamp = System.currentTimeMillis()
         }
@@ -100,17 +110,7 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                     // update ui
                     project.value.poseInteraction.poseCount.value = "${simpleTracker.entities.size}"
                 } else {
-                    // prepare poses
-                    val config = Sketch.instance.project.value.poseInteraction
-                    validPoses.forEach { pose ->
-                        pose.keypoints.forEach {
-                            it.x = if (config.flipX.value) 1f - it.x else it.x
-                            it.y = if (config.flipY.value) 1f - it.y else it.y
-                            it.z = if (config.flipZ.value) 1f - it.z else it.z
-                        }
-                    }
-
-                    // add poses
+                    // update poses
                     relevantPoses.set(validPoses)
                     project.value.poseInteraction.poseCount.value = "${validPoses.size}"
                 }
