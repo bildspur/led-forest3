@@ -117,7 +117,7 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
             collider.location.onChanged += {
                 val shape = colliderShapes[collider]!!
                 shape.transforms.clear()
-                shape.transforms.add(it.toTranslate())
+                shape.transforms.add(PVector.sub(PVector(), collider.location.value).toTranslate())
             }
             collider.location.fireLatest()
 
