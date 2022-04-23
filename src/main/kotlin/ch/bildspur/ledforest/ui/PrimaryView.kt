@@ -570,7 +570,7 @@ class PrimaryView {
     }
 
     fun onShowLedaColliderEditor() {
-        val editor = LedaColliderEditor(project.value.leda)
+        val editor = LedaColliderEditor(project.value)
         editor.show()
     }
 

@@ -1,17 +1,21 @@
 package ch.bildspur.ledforest.ui
 
-import ch.bildspur.ledforest.model.leda.LedaConfig
+import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
+import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.ui.util.TagItem
 import ch.bildspur.ui.fx.PropertiesControl
 import ch.bildspur.ui.fx.utils.toFXColor
 import javafx.application.Platform
 import javafx.scene.Scene
+import javafx.scene.control.Button
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
+import javafx.scene.layout.HBox
 import javafx.scene.shape.Rectangle
 import javafx.stage.Stage
 import jfxtras.styles.jmetro.JMetro
@@ -19,7 +23,9 @@ import jfxtras.styles.jmetro.Style
 import tornadofx.selectFirst
 
 
-class LedaColliderEditor(val config: LedaConfig) : Stage() {
+class LedaColliderEditor(val project: Project) : Stage() {
+    private val config = project.leda
+
     private val root = BorderPane()
     private val treeView = TreeView<TagItem>()
     private val propertiesControl = PropertiesControl()
@@ -41,6 +47,18 @@ class LedaColliderEditor(val config: LedaConfig) : Stage() {
         scrollPane.isFitToWidth = true
         scrollPane.content = treeView
 
+        val testButton = Button("Test Deploy")
+        testButton.setOnAction {
+            val item = treeView.selectionModel.selectedItem
+            if (item != null) {
+                deployTest(item.value!!.item!!)
+            }
+        }
+
+        val topBox = HBox(testButton)
+        topBox.spacing = 10.0
+
+        root.top = topBox
         root.center = scrollPane
         root.right = ScrollPane(propertiesControl)
 
@@ -79,5 +97,17 @@ class LedaColliderEditor(val config: LedaConfig) : Stage() {
         }
 
         treeView.root = rootItem
+    }
+
+    private fun deployTest(obj: Any) {
+        if (obj is LandmarkPulseCollider) {
+            obj.pulses.forEach { deployPulse(it) }
+        } else if (obj is Pulse) {
+            deployPulse(obj)
+        }
+    }
+
+    private fun deployPulse(pulse: Pulse) {
+        project.pulseScene.pulses.add(pulse.spawn())
     }
 }
