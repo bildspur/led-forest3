@@ -94,12 +94,13 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                     relevantPoses.set(simpleTracker.entities.map { it.item }
                             .filter { System.currentTimeMillis() - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
                             .toList())
+
+                    // update ui
+                    project.value.poseInteraction.poseCount.value = "${simpleTracker.entities.size}"
                 } else {
                     relevantPoses.set(validPoses)
+                    project.value.poseInteraction.poseCount.value = "${validPoses.size}"
                 }
-
-                // update ui
-                project.value.poseInteraction.poseCount.value = "${simpleTracker.entities.size}"
 
                 // reset buffer if nothing received
                 if (System.currentTimeMillis() - lastReceiveTimeStamp >= project.value.poseInteraction.maxReceiveTimeout.value) {
