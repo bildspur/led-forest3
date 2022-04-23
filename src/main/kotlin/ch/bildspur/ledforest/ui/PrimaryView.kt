@@ -53,6 +53,7 @@ import processing.core.PVector
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.concurrent.thread
+import kotlin.math.max
 import kotlin.math.min
 import kotlin.system.exitProcess
 
@@ -238,6 +239,9 @@ class PrimaryView {
             val primaryScreen = Screen.getPrimary()
             primaryStage.width = min(primaryStage.width, primaryScreen.bounds.width * 0.9f)
             primaryStage.height = min(primaryStage.height, primaryScreen.bounds.height * 0.9f)
+
+            primaryStage.x = max(primaryStage.x, 0.0)
+            primaryStage.y = max(primaryStage.y, 0.0)
 
             // start processing
             startProcessing()
