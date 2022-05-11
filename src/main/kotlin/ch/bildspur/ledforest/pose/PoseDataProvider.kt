@@ -2,10 +2,13 @@ package ch.bildspur.ledforest.pose
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.model.image.ImageFlip
+import ch.bildspur.ledforest.model.image.ImageRotation
 import ch.bildspur.ledforest.pose.clients.PoseClient
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.util.toFloat2
+import ch.bildspur.math.Float2
 import ch.bildspur.model.DataModel
 import ch.bildspur.tracking.simple.SimpleTracker
 import processing.core.PApplet
@@ -29,19 +32,19 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
     val totalPoseCount = AtomicInteger(0)
 
     private val simpleTracker = SimpleTracker<Pose>(
-        { it.neck.toFloat2() },
-        onUpdate = { e, i ->
-            // just update the keypoints but keep the object
-            e.item.keypoints = i.keypoints
-            e.item.score = i.score
-        },
-        onAdd = {
-            // set initial easing position
-            it.item.easedPosition.init(it.item.position, project.value.poseInteraction.positionEasing.value)
-            totalPoseCount.incrementAndGet()
-        },
-        maxDelta = project.value.poseInteraction.maxDelta.value,
-        maxUntrackedTime = project.value.poseInteraction.maxDeadTime.value
+            { it.neck.toFloat2() },
+            onUpdate = { e, i ->
+                // just update the keypoints but keep the object
+                e.item.keypoints = i.keypoints
+                e.item.score = i.score
+            },
+            onAdd = {
+                // set initial easing position
+                it.item.easedPosition.init(it.item.position, project.value.poseInteraction.positionEasing.value)
+                totalPoseCount.incrementAndGet()
+            },
+            maxDelta = project.value.poseInteraction.maxDelta.value,
+            maxUntrackedTime = project.value.poseInteraction.maxDeadTime.value
     )
 
     private val relevantPoses = AtomicReference<List<Pose>>(listOf())
@@ -70,6 +73,13 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
             val config = Sketch.instance.project.value.poseInteraction
             rawPoses.forEach { pose ->
                 pose.keypoints.forEach {
+                    val t = transform2DPoint(Float2(it.x, it.y),
+                            project.value.poseInteraction.imageRotation.value,
+                            project.value.poseInteraction.imageFlip.value)
+
+                    it.x = t.x
+                    it.y = t.y
+
                     it.x = if (config.flipX.value) 1f - it.x else it.x
                     it.y = if (config.flipY.value) 1f - it.y else it.y
                     it.z = if (config.flipZ.value) 1f - it.z else it.z
@@ -104,8 +114,8 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
 
                     // update poses (make this once in the loop)
                     relevantPoses.set(simpleTracker.entities.map { it.item }
-                        .filter { System.currentTimeMillis() - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
-                        .toList())
+                            .filter { System.currentTimeMillis() - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
+                            .toList())
 
                     // update ui
                     project.value.poseInteraction.poseCount.value = "${simpleTracker.entities.size}"
@@ -134,6 +144,34 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
 
         isRunning.set(false)
         trackerThread.join(5000)
+    }
+
+    private fun transform2DPoint(pos: Float2, rotation: ImageRotation, flip: ImageFlip): Float2 {
+        var nx = pos.x
+        var ny = pos.y
+
+        when (rotation) {
+            ImageRotation.Clockwise90 -> {
+                nx = pos.y
+                ny = 1.0f - pos.x
+            }
+            ImageRotation.CounterClockwise90 -> {
+                nx = 1.0f - pos.y
+                ny = pos.x
+            }
+            ImageRotation.Full180 -> {
+                nx = 1.0f - pos.x
+                ny = 1.0f - pos.y
+            }
+        }
+
+        if (flip == ImageFlip.Horizontal) {
+            nx = 1.0f - nx
+        } else if (flip == ImageFlip.Vertical) {
+            ny = 1.0f - ny
+        }
+
+        return Float2(nx, ny)
     }
 
     fun renderDebug(g: PGraphics) {
@@ -176,10 +214,10 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 g.strokeWeight(2f)
                 val maxDelta = project.value.poseInteraction.maxDelta.value
                 g.ellipse(
-                    pose.position.x * g.width,
-                    pose.position.y * g.height,
-                    g.width * maxDelta,
-                    g.height * maxDelta
+                        pose.position.x * g.width,
+                        pose.position.y * g.height,
+                        g.width * maxDelta,
+                        g.height * maxDelta
                 )
             }
         }

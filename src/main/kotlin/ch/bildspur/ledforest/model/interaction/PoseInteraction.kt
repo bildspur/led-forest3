@@ -1,6 +1,8 @@
 package ch.bildspur.ledforest.model.interaction
 
 import ch.bildspur.ledforest.Sketch
+import ch.bildspur.ledforest.model.image.ImageFlip
+import ch.bildspur.ledforest.model.image.ImageRotation
 import ch.bildspur.ledforest.pose.clients.PoseClientTypes
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
@@ -35,10 +37,21 @@ class PoseInteraction {
     var poseClient = DataModel(PoseClientTypes.LightWeightOpenPose)
 
     @ActionParameter("Pose Client", "Reset")
-   private val resetPoseClient = {
+    private val resetPoseClient = {
         Sketch.instance.pose.stop()
         Sketch.instance.pose.start()
     }
+
+    @LabelParameter("Data")
+    private var dataTile = ""
+
+    @Expose
+    @EnumParameter("Image Rotation")
+    var imageRotation = DataModel(ImageRotation.None)
+
+    @Expose
+    @EnumParameter("Image Flip")
+    var imageFlip = DataModel(ImageFlip.None)
 
     @LabelParameter("Tracking")
     private var trackingTitle = ""
