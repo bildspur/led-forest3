@@ -10,11 +10,11 @@ import com.google.gson.annotations.Expose
 import processing.core.PVector
 
 
-class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = DataModel(0),
+class Tube(universe: DataModel<Int> = DataModel(0),
            @NumberParameter("Start") @Expose val addressStart: DataModel<Int> = DataModel(0),
            @PVectorParameter("Position") @Expose val position: DataModel<PVector> = DataModel(PVector()),
            @PVectorAngleParameter("Rotation") @Expose val rotation: DataModel<PVector> = DataModel(PVector()))
-    : PostProcessable {
+    : LightElement(universe), PostProcessable {
 
     var isSelected = DataModel(false)
 
@@ -52,14 +52,6 @@ class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = D
         }
     }
 
-    val startAddress: Int
-        get() = if (leds.isNotEmpty()) leds[0].address else 0
-
-    val endAddress: Int
-        get() = if (leds.isNotEmpty()) leds[leds.size - 1].address else 0
-
-    var leds: List<LED> = emptyList()
-
     init {
         hookListener()
     }
@@ -83,8 +75,8 @@ class Tube(@NumberParameter("Universe") @Expose val universe: DataModel<Int> = D
     fun initLEDs() {
         leds = (0 until ledCount.value).map {
             LED(addressStart.value + it * LED.LED_ADDRESS_SIZE,
-                ColorMode.color(0, 100, 100),
-                SpaceInformation.calculateLEDPosition(it, this)
+                    ColorMode.color(0, 100, 100),
+                    SpaceInformation.calculateLEDPosition(it, this)
             )
         }
     }
