@@ -32,7 +32,9 @@ abstract class BaseClonePattern(val name: String) : ClonePattern {
                 universeCount++
             }
 
-            val tube = Tube(addressStart = DataModel(addressCount), universe = DataModel(universeCount))
+            val tube = Tube()
+            tube.addressStart.value = addressCount
+            tube.universe.value = universeCount
             tube.ledCount.value = info.ledsPerTubeCount
             setupPosition(i, tube, info)
             project.tubes.add(tube)

@@ -9,7 +9,6 @@ import processing.core.PVector
 
 
 class Tube() : SpatialLightElement(initialLEDCount = 24) {
-
     var isSelected = DataModel(false)
 
     @EnumParameter("Origin")
@@ -26,6 +25,7 @@ class Tube() : SpatialLightElement(initialLEDCount = 24) {
 
     override fun ledPositionByIndex(index: Int): PVector {
         // this can happen because light element is initialized first
+        @Suppress("SENSELESS_COMPARISON")
         if (length == null) {
             return PVector()
         }
