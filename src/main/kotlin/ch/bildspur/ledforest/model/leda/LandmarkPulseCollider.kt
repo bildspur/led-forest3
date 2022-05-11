@@ -12,29 +12,36 @@ import com.google.gson.annotations.Expose
 import processing.core.PVector
 
 class LandmarkPulseCollider(
-    @Expose @StringParameter("Name") var name: DataModel<String> = DataModel("Collider"),
-    @Expose @PVectorParameter("Location") var location: DataModel<PVector> = DataModel(PVector()),
-    @Expose @NumberParameter("Radius (m)") var radius: DataModel<Float> = DataModel(1.0f),
-    @Expose var triggeredBy: DataModel<MutableSet<PoseLandmark>> = DataModel(mutableSetOf()),
-    @Expose var pulses: List<Pulse> = mutableListOf(),
-    @Expose @BooleanParameter("One Shot") var oneShot: DataModel<Boolean> = DataModel(true)
+        @Expose @StringParameter("Name") var name: DataModel<String> = DataModel("Collider"),
+        @Expose @PVectorParameter("Location") var location: DataModel<PVector> = DataModel(PVector()),
+        @Expose @NumberParameter("Radius (m)") var radius: DataModel<Float> = DataModel(1.0f),
+        @Expose var triggeredBy: DataModel<MutableSet<PoseLandmark>> = DataModel(mutableSetOf()),
+        @Expose var pulses: List<Pulse> = mutableListOf(),
+        @Expose @BooleanParameter("One Shot") var oneShot: DataModel<Boolean> = DataModel(true)
 ) : Collider() {
 
-    private val deBouncer = Debouncer(100L, false)
+    private val debouncer = Debouncer(100L, false)
+    private var currentState = ColliderState.Inactive
 
     override fun checkCollision(location: PVector, landmark: PoseLandmark): Boolean {
-        // todo: fix debouncer
         // very basic sphere collider
         if (PVector.dist(this.location.value, location) <= radius.value && triggeredBy.value.contains(landmark)) {
-            // if (deBouncer.update(true)) return false
-            onCollision(Collision(this))
-            return true
+            if (debouncer.update(true)) {
+                if (currentState == ColliderState.Inactive || !oneShot.value) {
+                    currentState = ColliderState.Active
+                    onCollision(Collision(this))
+                }
+            }
+            currentState
         } else {
-            //deBouncer.update(false)
-            return false
+            if (!debouncer.update(false)) {
+                if (currentState == ColliderState.Active || !oneShot.value) {
+                    currentState = ColliderState.Inactive
+                }
+            }
         }
 
-        //return deBouncer.currentValue
+        return currentState == ColliderState.Active
     }
 
     override fun toString(): String {
