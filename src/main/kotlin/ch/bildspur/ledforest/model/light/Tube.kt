@@ -11,16 +11,12 @@ import processing.core.PVector
 
 
 class Tube(universe: DataModel<Int> = DataModel(0),
-           @NumberParameter("Start") @Expose val addressStart: DataModel<Int> = DataModel(0),
+           addressStart: DataModel<Int> = DataModel(0),
            @PVectorParameter("Position") @Expose val position: DataModel<PVector> = DataModel(PVector()),
            @PVectorAngleParameter("Rotation") @Expose val rotation: DataModel<PVector> = DataModel(PVector()))
-    : LightElement(universe), PostProcessable {
+    : LightElement(universe, addressStart, initialLEDCount = 24), PostProcessable {
 
     var isSelected = DataModel(false)
-
-    @Expose
-    @StringParameter("Name")
-    var name = DataModel("")
 
     @EnumParameter("Origin")
     @Expose
@@ -31,54 +27,29 @@ class Tube(universe: DataModel<Int> = DataModel(0),
     val length = DataModel(1.5f)
 
     @Expose
-    @NumberParameter("LED Count")
-    val ledCount = DataModel(24)
-
-    @Expose
     @EnumParameter("Tag")
     var tag = DataModel(TubeTag.Interaction)
 
-    @ActionParameter("LEDs", "Select")
-    val markLEDs = {
-        leds.forEach {
-            it.color.fade(ColorMode.color(250, 100, 100), 0.1f)
-        }
-    }
-
-    @ActionParameter("LEDs", "Deselect")
-    val deselectLEDs = {
-        leds.forEach {
-            it.color.fadeB(0f, 0.1f)
-        }
-    }
-
     init {
-        hookListener()
+        hookPositionListener()
     }
 
-    private fun hookListener() {
-        ledCount.onChanged += {
-            initLEDs()
-        }
-        addressStart.onChanged += {
-            initLEDs()
-        }
+    private fun hookPositionListener() {
         position.onChanged += {
             recalculateLEDPosition()
         }
         rotation.onChanged += {
             recalculateLEDPosition()
         }
-        ledCount.fire()
     }
 
-    fun initLEDs() {
-        leds = (0 until ledCount.value).map {
-            LED(addressStart.value + it * LED.LED_ADDRESS_SIZE,
-                    ColorMode.color(0, 100, 100),
-                    SpaceInformation.calculateLEDPosition(it, this)
-            )
+    override fun ledPositionByIndex(index: Int): PVector {
+        // this can happen because light element is initialized first
+        if (length == null) {
+            return PVector()
         }
+
+        return SpaceInformation.calculateLEDPosition(index, this)
     }
 
     fun recalculateLEDPosition() {
@@ -95,6 +66,8 @@ class Tube(universe: DataModel<Int> = DataModel(0),
     }
 
     override fun gsonPostProcess() {
-        hookListener()
+        super.gsonPostProcess()
+        hookPositionListener()
+        recalculateLEDPosition()
     }
 }

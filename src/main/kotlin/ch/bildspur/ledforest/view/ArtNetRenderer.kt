@@ -26,7 +26,7 @@ class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: 
         if (!project.light.isArtNetRendering.value)
             return
 
-        val elements = project.lights + project.tubes
+        val elements = project.lightElements
 
         elements.groupBy { it.universe.value }.forEach {
             val universe = indexToUniverses[it.key]!!

@@ -4,6 +4,7 @@ import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
+import ch.bildspur.ledforest.model.light.GenericLightElement
 import ch.bildspur.ledforest.model.light.LightElement
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.util.RuntimeTypeAdapterFactory
@@ -131,5 +132,6 @@ class ConfigurationController {
         return RuntimeTypeAdapterFactory
                 .of(LightElement::class.java, "type")
                 .registerSubtype(Tube::class.java, "tube")
+                // .registerSubtype(GenericLightElement::class.java, "generic")
     }
 }

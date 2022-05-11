@@ -4,8 +4,8 @@ import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
-import ch.bildspur.ledforest.model.interaction.Interaction
 import ch.bildspur.ledforest.model.light.DmxNode
+import ch.bildspur.ledforest.model.light.GenericLightElement
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
 import ch.bildspur.ledforest.ui.control.scene.InteractionPreview
@@ -227,10 +227,11 @@ class PrimaryView {
                 try {
                     project.value = configuration.loadProject(appConfig.projectFile)
                 } catch (ex: Exception) {
+                    ex.printStackTrace()
                     val alert = Alert(Alert.AlertType.ERROR)
                     alert.title = "Error"
                     alert.headerText = "Could not load configuration file!"
-                    alert.contentText = "File: ${appConfig.projectFile}\nMessage: ${ex.message}"
+                    alert.contentText = "File:\n${appConfig.projectFile}\nMessage: ${ex.message}"
                     alert.showAndWait()
                 }
             else
@@ -295,7 +296,7 @@ class PrimaryView {
         elementTreeView.isEditable = true
 
         // add nodes
-        val tubes = project.value.tubes.groupBy { it.universe.value }
+        val lightElements = project.value.lightElements.groupBy { it.universe.value }
         project.value.nodes.forEach { n ->
             val nodeItem = TreeItem(TagItem(n), ImageView(nodeIcon))
             nodeItem.isExpanded = true
@@ -310,10 +311,10 @@ class PrimaryView {
                 universeItem.isExpanded = true
                 nodeItem.children.add(universeItem)
 
-                tubes.getOrElse(u.id.value) { emptyList<Tube>() }.forEach { t ->
-                    val tubeItem = TreeItem(TagItem(t), ImageView(tubeIcon))
-                    tubeItem.isExpanded = true
-                    universeItem.children.add(tubeItem)
+                lightElements.getOrElse(u.id.value) { emptyList<Tube>() }.forEach { t ->
+                    val lightItem = TreeItem(TagItem(t), ImageView(tubeIcon))
+                    lightItem.isExpanded = true
+                    universeItem.children.add(lightItem)
                 }
             }
         }
@@ -455,7 +456,7 @@ class PrimaryView {
                 configuration.saveAppConfig(appConfig)
                 resetRenderer()
             } catch (ex: Exception) {
-                System.err.println("An error happened on loading the project file ${file}: ${ex.message}")
+                System.err.println("An error happened on loading the project file \n${file}:\n${ex.message}")
                 ex.printStackTrace()
                 appConfig.projectFile = currentProjectFile
             }
@@ -464,10 +465,14 @@ class PrimaryView {
 
     fun resetRenderer() {
         sketch.proposeResetRenderer()
+        tubePreview.reset()
+        interactionPreview.recreateScene()
     }
 
     fun rebuildRenderer() {
         sketch.renderer.forEach { it.setup() }
+        tubePreview.reset()
+        interactionPreview.recreateScene()
     }
 
     fun onSaveProjectAs() {
@@ -504,7 +509,7 @@ class PrimaryView {
 
     fun addElement() {
         // show selection dialog
-        val dialog = ChoiceDialog("Tube", listOf("Tube", "Universe", "Node"))
+        val dialog = ChoiceDialog("Tube", listOf("Tube", "Generic", "Universe", "Node"))
         dialog.title = "Add Element"
         dialog.headerText = "Add a new element to the scene."
         dialog.contentText = "Choose an element to add:"
@@ -514,6 +519,7 @@ class PrimaryView {
         result.ifPresent { elementName ->
             when (elementName) {
                 "Tube" -> project.value.tubes.add(Tube())
+                "Generic" -> project.value.lights.add(GenericLightElement())
                 "Universe" -> project.value.nodes.first().universes.add(Universe())
                 "Node" -> project.value.nodes.add(DmxNode())
             }

@@ -92,7 +92,7 @@ class Project {
                     var hue = color.hue.toFloat()
                     var saturation = Sketch.map(led.address, minAddress, maxAddress, 0, 200).toFloat()
 
-                    if(saturation >= 100) {
+                    if (saturation >= 100) {
                         saturation = 200 - saturation;
                     }
 
@@ -134,6 +134,9 @@ class Project {
 
     @Expose
     var lights = CopyOnWriteArrayList<LightElement>()
+
+    val lightElements: List<LightElement>
+        get() = tubes + lights
 
     @Expose
     var interaction = Interaction()

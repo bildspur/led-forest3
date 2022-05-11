@@ -39,10 +39,7 @@ class TubePreview(val project: DataModel<Project>) : Group() {
 
     init {
         project.onChanged += {
-            Platform.runLater {
-                recreateScene()
-            }
-            hookEvents()
+            reset()
         }
         project.fireLatest()
 
@@ -57,10 +54,10 @@ class TubePreview(val project: DataModel<Project>) : Group() {
 
         // add render element
         sceneGroup.transforms.addAll(
-            Rotate(-90.0, Rotate.Y_AXIS),
-            Rotate(90.0, Rotate.X_AXIS),
-            Rotate(-90.0, Rotate.Z_AXIS),
-            Scale(globalScale, globalScale, -globalScale)
+                Rotate(-90.0, Rotate.Y_AXIS),
+                Rotate(90.0, Rotate.X_AXIS),
+                Rotate(-90.0, Rotate.Z_AXIS),
+                Scale(globalScale, globalScale, -globalScale)
         )
         children.add(sceneGroup)
 
@@ -91,6 +88,19 @@ class TubePreview(val project: DataModel<Project>) : Group() {
         }
     }
 
+    fun reset(hook: Boolean = true) {
+        Platform.runLater {
+            recreateScene()
+
+            project.value.tubes.forEach { t ->
+                updateLEDs(t)
+            }
+        }
+
+        if (hook)
+            hookEvents()
+    }
+
     private fun hookEvents() {
         project.value.tubes.forEach { tube ->
             tube.position.onChanged += {
@@ -100,12 +110,18 @@ class TubePreview(val project: DataModel<Project>) : Group() {
             tube.rotation.onChanged += {
                 updateLEDs(tube)
             }
+
+            tube.ledCount.onChanged += {
+                // todo: fix reset of renderer
+                reset(hook = false)
+            }
         }
     }
 
     fun updateLEDs(tube: Tube) {
         tube.leds.forEach {
-            val shape = ledShapes[it]!!
+            val shape = ledShapes[it] ?: return@forEach
+
             shape.transforms.clear()
             shape.transforms.add(it.position.toTranslate())
         }
@@ -113,6 +129,7 @@ class TubePreview(val project: DataModel<Project>) : Group() {
 
     fun recreateScene() {
         sceneGroup.children.clear()
+        ledShapes.clear()
 
         val box = project.value.interaction.interactionBox.value
         val cage = Rectangle(box.x / -2.0, box.y / -2.0, box.x.toDouble(), box.y.toDouble())
@@ -135,7 +152,7 @@ class TubePreview(val project: DataModel<Project>) : Group() {
                 mat.specularPower = 0.0
                 ledShape.material = mat
 
-                sceneGroup.children.add(ledShape)
+                sceneGroup.add(ledShape)
                 ledShapes[led] = ledShape
             }
         }
