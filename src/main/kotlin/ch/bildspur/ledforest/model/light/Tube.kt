@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose
 import processing.core.PVector
 
 
-class Tube() : SpatialLightElement(initialLEDCount = 24) {
+class Tube : SpatialLightElement(initialLEDCount = 24) {
     var isSelected = DataModel(false)
 
     @EnumParameter("Origin")

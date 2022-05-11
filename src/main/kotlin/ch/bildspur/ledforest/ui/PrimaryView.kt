@@ -4,10 +4,7 @@ import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
-import ch.bildspur.ledforest.model.light.DmxNode
-import ch.bildspur.ledforest.model.light.GenericLightElement
-import ch.bildspur.ledforest.model.light.Tube
-import ch.bildspur.ledforest.model.light.Universe
+import ch.bildspur.ledforest.model.light.*
 import ch.bildspur.ledforest.ui.control.scene.InteractionPreview
 import ch.bildspur.ledforest.ui.control.scene.TubePreview
 import ch.bildspur.ledforest.ui.control.tubemap.TubeMap
@@ -509,7 +506,8 @@ class PrimaryView {
 
     fun addElement() {
         // show selection dialog
-        val dialog = ChoiceDialog("Tube", listOf("Tube", "Generic", "Universe", "Node"))
+        val dialog = ChoiceDialog("Tube",
+                listOf("Tube", "Generic", "Ring", "Universe", "Node"))
         dialog.title = "Add Element"
         dialog.headerText = "Add a new element to the scene."
         dialog.contentText = "Choose an element to add:"
@@ -520,6 +518,7 @@ class PrimaryView {
             when (elementName) {
                 "Tube" -> project.value.tubes.add(Tube())
                 "Generic" -> project.value.lights.add(GenericLightElement())
+                "Ring" -> project.value.lights.add(LEDRing())
                 "Universe" -> project.value.nodes.first().universes.add(Universe())
                 "Node" -> project.value.nodes.add(DmxNode())
             }
