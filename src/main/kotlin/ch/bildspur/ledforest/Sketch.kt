@@ -349,7 +349,7 @@ class Sketch : PApplet() {
         if (is3D) {
             renderer.add(SceneRenderer(canvas, project.value.tubes, leapMotion, realSense, pose, project.value))
         }
-        renderer.add(ArtNetRenderer(project.value, artnet, project.value.nodes, project.value.tubes))
+        renderer.add(ArtNetRenderer(project.value, artnet, project.value.nodes))
         renderer.add(SceneManager(this, project.value, project.value.tubes))
 
         // make audio optional

@@ -24,19 +24,19 @@ class Universe(id: Int = 0) {
     @ActionParameter("LEDs", "Select")
     val markLEDs = {
         Sketch.instance.project.value.tubes
-            .filter { it.universe.value == this.id.value }
-            .forEachLED {
-                it.color.fade(ColorMode.color(250, 0, 100), 0.1f)
-            }
+                .filter { it.universe.value == this.id.value }
+                .forEachLED {
+                    it.color.fade(ColorMode.color(250, 0, 100), 0.1f)
+                }
     }
 
     @ActionParameter("LEDs", "Deselect")
     val deselectLEDs = {
         Sketch.instance.project.value.tubes
-            .filter { it.universe.value == this.id.value }
-            .forEachLED {
-                it.color.fadeB(0f, 0.1f)
-            }
+                .filter { it.universe.value == this.id.value }
+                .forEachLED {
+                    it.color.fadeB(0f, 0.1f)
+                }
     }
 
     var dmxData: ByteArray
@@ -47,39 +47,39 @@ class Universe(id: Int = 0) {
     }
 
     fun stageDmx(
-        tubes: List<Tube>,
-        luminosity: Float,
-        response: Float,
-        trace: Float,
-        brightnessCutoff: Float,
-        brightnessCurve: EasingMethod
+            elements: List<LightElement>,
+            luminosity: Float,
+            response: Float,
+            trace: Float,
+            brightnessCutoff: Float,
+            brightnessCurve: EasingMethod
     ): ByteArray {
         val data = ByteArray(dmxData.size)
 
-        for (tube in tubes) {
-            for (led in tube.leds) {
+        for (element in elements) {
+            for (led in element.leds) {
 
                 val c = Color(led.color.rgbColorWithMapping(brightnessCutoff, brightnessCurve))
 
                 // red
                 data[led.address] = calculateValue(
-                    c.red.toFloat(),
-                    dmxData[led.address].toInt() and 0xFF,
-                    luminosity, response, trace
+                        c.red.toFloat(),
+                        dmxData[led.address].toInt() and 0xFF,
+                        luminosity, response, trace
                 )
 
                 // green
                 data[led.address + 1] = calculateValue(
-                    c.green.toFloat(),
-                    dmxData[led.address + 1].toInt() and 0xFF,
-                    luminosity, response, trace
+                        c.green.toFloat(),
+                        dmxData[led.address + 1].toInt() and 0xFF,
+                        luminosity, response, trace
                 )
 
                 // blue
                 data[led.address + 2] = calculateValue(
-                    c.blue.toFloat(),
-                    dmxData[led.address + 2].toInt() and 0xFF,
-                    luminosity, response, trace
+                        c.blue.toFloat(),
+                        dmxData[led.address + 2].toInt() and 0xFF,
+                        luminosity, response, trace
                 )
             }
         }

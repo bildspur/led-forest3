@@ -8,6 +8,7 @@ import ch.bildspur.ledforest.model.interaction.PoseInteraction
 import ch.bildspur.ledforest.model.interaction.RealSenseInteraction
 import ch.bildspur.ledforest.model.leda.LedaConfig
 import ch.bildspur.ledforest.model.light.DmxNode
+import ch.bildspur.ledforest.model.light.LightElement
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.properties.ArrowControlParameter
@@ -130,6 +131,9 @@ class Project {
 
     @Expose
     var tubes = CopyOnWriteArrayList<Tube>()
+
+    @Expose
+    var lights = CopyOnWriteArrayList<LightElement>()
 
     @Expose
     var interaction = Interaction()

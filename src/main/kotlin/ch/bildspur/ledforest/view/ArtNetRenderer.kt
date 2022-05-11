@@ -8,8 +8,8 @@ import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.Universe
 
-class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: List<DmxNode>, val tubes: List<Tube>) :
-    IRenderer {
+class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: List<DmxNode>) :
+        IRenderer {
     lateinit var universesToNodes: Map<Universe, ArtNetNode>
     lateinit var indexToUniverses: Map<Int, Universe>
 
@@ -26,18 +26,20 @@ class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: 
         if (!project.light.isArtNetRendering.value)
             return
 
-        tubes.groupBy { it.universe.value }.forEach {
+        val elements = project.lights + project.tubes
+
+        elements.groupBy { it.universe.value }.forEach {
             val universe = indexToUniverses[it.key]!!
             val node = universesToNodes[universe]!!
 
             val light = project.light
             universe.stageDmx(
-                it.value,
-                light.luminosity.value,
-                light.response.value,
-                light.trace.value,
-                light.brightnessCutoff.value,
-                light.brightnessCurve.value
+                    it.value,
+                    light.luminosity.value,
+                    light.response.value,
+                    light.trace.value,
+                    light.brightnessCutoff.value,
+                    light.brightnessCurve.value
             )
             artnet.send(node, universe.id.value, universe.dmxData)
         }
@@ -45,8 +47,8 @@ class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: 
 
     fun buildUniverseIndex() {
         universesToNodes = nodes
-            .flatMap { n -> n.universes.map { u -> Pair(u, n) } }
-            .associate { it.first to artnet.createNode(it.second.address.value)!! }
+                .flatMap { n -> n.universes.map { u -> Pair(u, n) } }
+                .associate { it.first to artnet.createNode(it.second.address.value)!! }
 
         indexToUniverses = universesToNodes.keys.associate { it.id.value to it }
     }

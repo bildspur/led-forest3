@@ -3,14 +3,13 @@ package ch.bildspur.ledforest.configuration
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
-import ch.bildspur.ledforest.model.leda.Collider
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
+import ch.bildspur.ledforest.model.light.LightElement
 import ch.bildspur.ledforest.model.light.Tube
-import ch.bildspur.ledforest.pose.PoseLandmark
+import ch.bildspur.ledforest.util.RuntimeTypeAdapterFactory
 import ch.bildspur.model.DataModel
 import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.get
-import com.github.salomonbrys.kotson.registerTypeAdapter
 import com.google.gson.*
 import processing.core.PVector
 import java.lang.reflect.ParameterizedType
@@ -19,7 +18,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
-import kotlin.reflect.typeOf
 
 
 /**
@@ -47,6 +45,7 @@ class ConfigurationController {
             .registerTypeAdapter(Tube::class.java, TubeInstanceCreator())
             .registerTypeAdapter(LandmarkPulseCollider::class.java, LandmarkPulseColliderInstanceCreator())
             .registerTypeAdapterFactory(PostProcessingEnabler())
+            .registerTypeAdapterFactory(createLightElementRuntimeFactory())
 
     val gson: Gson = gsonBuilder.create()
 
@@ -126,5 +125,11 @@ class ConfigurationController {
         override fun createInstance(type: Type): LandmarkPulseCollider {
             return LandmarkPulseCollider()
         }
+    }
+
+    private fun createLightElementRuntimeFactory(): RuntimeTypeAdapterFactory<LightElement> {
+        return RuntimeTypeAdapterFactory
+                .of(LightElement::class.java, "type")
+                .registerSubtype(Tube::class.java, "tube")
     }
 }
