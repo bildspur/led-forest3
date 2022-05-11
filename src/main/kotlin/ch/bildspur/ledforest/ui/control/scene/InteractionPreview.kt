@@ -5,6 +5,7 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.pose.PoseLandmark
 import ch.bildspur.ledforest.ui.control.scene.control.OrbitControls
+import ch.bildspur.ledforest.ui.control.scene.shapes.Grid
 import ch.bildspur.model.DataModel
 import javafx.application.Platform
 import javafx.scene.Group
@@ -14,12 +15,15 @@ import javafx.scene.SubScene
 import javafx.scene.effect.Bloom
 import javafx.scene.paint.Color
 import javafx.scene.paint.PhongMaterial
-import javafx.scene.shape.*
+import javafx.scene.shape.Box
+import javafx.scene.shape.Shape3D
+import javafx.scene.shape.Sphere
 import javafx.scene.transform.Rotate
 import javafx.scene.transform.Scale
 import processing.core.PVector
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
+
 
 class InteractionPreview(val project: DataModel<Project>) : Group() {
     private val refreshRate = 30.0
@@ -141,6 +145,9 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
 
     fun recreateScene() {
         sceneGroup.children.clear()
+
+        // add floor
+        sceneGroup.children.add(Grid(8.0, 8))
 
         // add colliders
         project.value.leda.landmarkColliders.forEach {
