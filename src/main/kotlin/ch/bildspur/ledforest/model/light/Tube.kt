@@ -8,11 +8,7 @@ import com.google.gson.annotations.Expose
 import processing.core.PVector
 
 
-class Tube(universe: DataModel<Int> = DataModel(0),
-           addressStart: DataModel<Int> = DataModel(0),
-           position: DataModel<PVector> = DataModel(PVector()),
-           rotation: DataModel<PVector> = DataModel(PVector()))
-    : SpatialLightElement(universe, addressStart, position, rotation, initialLEDCount = 24) {
+class Tube() : SpatialLightElement(initialLEDCount = 24) {
 
     var isSelected = DataModel(false)
 
