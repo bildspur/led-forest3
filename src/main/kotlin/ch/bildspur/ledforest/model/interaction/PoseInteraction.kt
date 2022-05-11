@@ -4,6 +4,7 @@ import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.image.ImageFlip
 import ch.bildspur.ledforest.model.image.ImageRotation
 import ch.bildspur.ledforest.pose.clients.PoseClientTypes
+import ch.bildspur.ledforest.ui.properties.SeparatorParameter
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
 import ch.bildspur.ui.properties.*
@@ -42,8 +43,8 @@ class PoseInteraction {
         Sketch.instance.pose.start()
     }
 
-    @LabelParameter("Data")
-    private var dataTile = ""
+    @SeparatorParameter("Input Data")
+    private val dataSep = Any()
 
     @Expose
     @EnumParameter("Image Rotation")
@@ -53,8 +54,8 @@ class PoseInteraction {
     @EnumParameter("Image Flip")
     var imageFlip = DataModel(ImageFlip.None)
 
-    @LabelParameter("Tracking")
-    private var trackingTitle = ""
+    @SeparatorParameter("Tracking")
+    private val trackingSep = Any()
 
     @Expose
     @ParameterInformation("Minimal score a pose needs to be valid.")
@@ -93,8 +94,8 @@ class PoseInteraction {
     @SliderParameter("Position Easing", 0.01, 1.0, mapping = Mapping.Quad)
     var positionEasing = DataModel(0.2f)
 
-    @LabelParameter("Interaction")
-    private var interactionTitle = ""
+    @SeparatorParameter("Interaction")
+    private val interactionSep = Any()
 
     // orientation
     @Expose
@@ -109,8 +110,8 @@ class PoseInteraction {
     @BooleanParameter("Flip Z", useToggleSwitch = true)
     var flipZ = DataModel(false)
 
-    @LabelParameter("Scene")
-    private var sceneTitle = ""
+    @SeparatorParameter("Scene")
+    private val sceneSep = Any()
 
     @Expose
     @RangeSliderParameter("Interaction Distance", 0.01, 5.0, 0.01, snap = true)

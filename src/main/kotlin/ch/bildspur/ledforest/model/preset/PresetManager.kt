@@ -64,7 +64,7 @@ abstract class PresetManager {
         )
     }
 
-    @SeparatorParameter()
+    @SeparatorParameter
     private val separator = Any()
 
     private fun createPreset() {
