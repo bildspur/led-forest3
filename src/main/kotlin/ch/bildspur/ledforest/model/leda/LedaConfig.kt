@@ -27,6 +27,8 @@ class LedaConfig {
     @PVectorParameter("Trigger Origin")
     var triggerOrigin = DataModel(PVector(0f, 2.8f, 0f))
 
+    // todo: maybe add camera position relative to floor
+
     @GroupParameter("Collider")
     private var templateCollider = LandmarkPulseCollider()
 }
