@@ -2,7 +2,7 @@ package ch.bildspur.ledforest.util
 
 import ch.bildspur.event.Event
 
-class DeBouncer<T : Any>(var delay: Long, defaultValue: T) {
+class Debouncer<T : Any>(var delay: Long, defaultValue: T) {
     private var lastTimeStamp = 0L
     private var lastValue: T = defaultValue
     var currentValue: T = defaultValue

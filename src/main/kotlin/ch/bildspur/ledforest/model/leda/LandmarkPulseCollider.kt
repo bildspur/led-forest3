@@ -3,15 +3,13 @@ package ch.bildspur.ledforest.model.leda
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.pose.PoseLandmark
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
-import ch.bildspur.ledforest.util.DeBouncer
+import ch.bildspur.ledforest.util.Debouncer
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.BooleanParameter
 import ch.bildspur.ui.properties.NumberParameter
 import ch.bildspur.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
 import processing.core.PVector
-import java.util.*
-import kotlin.collections.HashSet
 
 class LandmarkPulseCollider(
     @Expose @StringParameter("Name") var name: DataModel<String> = DataModel("Collider"),
@@ -22,7 +20,7 @@ class LandmarkPulseCollider(
     @Expose @BooleanParameter("One Shot") var oneShot: DataModel<Boolean> = DataModel(true)
 ) : Collider() {
 
-    private val deBouncer = DeBouncer(100L, false)
+    private val deBouncer = Debouncer(100L, false)
 
     override fun checkCollision(location: PVector, landmark: PoseLandmark): Boolean {
         // todo: fix debouncer
