@@ -9,6 +9,7 @@ import ch.bildspur.ledforest.model.interaction.RealSenseInteraction
 import ch.bildspur.ledforest.model.leda.LedaConfig
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.LightElement
+import ch.bildspur.ledforest.model.light.SpatialLightElement
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.properties.ArrowControlParameter
@@ -135,9 +136,6 @@ class Project {
     @Expose
     var lights = CopyOnWriteArrayList<LightElement>()
 
-    val lightElements: List<LightElement>
-        get() = tubes + lights
-
     @Expose
     var interaction = Interaction()
 
@@ -179,4 +177,10 @@ class Project {
             isSceneManagerEnabled.value = false
         }
     }
+
+    val lightElements: List<LightElement>
+        get() = tubes + lights
+
+    val spatialLightElements: List<SpatialLightElement>
+        get() = lightElements.filterIsInstance(SpatialLightElement::class.java)
 }

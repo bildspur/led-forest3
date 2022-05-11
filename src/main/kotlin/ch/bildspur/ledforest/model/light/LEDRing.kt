@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.model.light
 
+import ch.bildspur.ledforest.configuration.PostProcessable
 import ch.bildspur.model.DataModel
 import ch.bildspur.processing.TransformMatrix
 import ch.bildspur.ui.properties.NumberParameter
@@ -8,14 +9,27 @@ import processing.core.PVector
 import kotlin.math.cos
 import kotlin.math.sin
 
-class LEDRing : SpatialLightElement(initialLEDCount = 10) {
+class LEDRing : SpatialLightElement(initialLEDCount = 10), PostProcessable {
     init {
         name.value = "LED Ring"
     }
 
     @Expose
     @NumberParameter("Diameter")
-    val diameter = DataModel(1.5f)
+    val diameter = DataModel(1.20f)
+
+    private fun hookDiameterListener() {
+        diameter.onChanged += {
+            recalculateLEDPosition()
+        }
+    }
+
+    init {
+        hookDiameterListener()
+    }
+
+    override val ledLength: Float
+        get() = 0.03f
 
     override fun ledPositionByIndex(index: Int): PVector {
         // this can happen because light element is initialized first
@@ -38,5 +52,10 @@ class LEDRing : SpatialLightElement(initialLEDCount = 10) {
         transform.applyRotationAndTranslation(ledPos)
 
         return ledPos
+    }
+
+    override fun gsonPostProcess() {
+        super.gsonPostProcess()
+        hookDiameterListener()
     }
 }

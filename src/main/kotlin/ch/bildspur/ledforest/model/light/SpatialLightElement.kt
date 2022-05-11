@@ -3,7 +3,6 @@ package ch.bildspur.ledforest.model.light
 import ch.bildspur.ledforest.configuration.PostProcessable
 import ch.bildspur.ledforest.ui.properties.PVectorAngleParameter
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
-import ch.bildspur.ledforest.util.SpaceInformation
 import ch.bildspur.model.DataModel
 import com.google.gson.annotations.Expose
 import processing.core.PVector
@@ -15,7 +14,6 @@ abstract class SpatialLightElement(
         @PVectorAngleParameter("Rotation") @Expose val rotation: DataModel<PVector> = DataModel(PVector()),
         initialLEDCount: Int = 1
 ) : LightElement(universe, addressStart, initialLEDCount), PostProcessable {
-
 
     init {
         hookPositionListener()
@@ -40,4 +38,6 @@ abstract class SpatialLightElement(
         super.gsonPostProcess()
         hookPositionListener()
     }
+
+    abstract val ledLength: Float
 }

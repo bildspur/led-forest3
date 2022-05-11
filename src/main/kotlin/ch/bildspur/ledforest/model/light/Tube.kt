@@ -33,6 +33,6 @@ class Tube : SpatialLightElement(initialLEDCount = 24) {
         return SpaceInformation.calculateLEDPosition(index, this)
     }
 
-    val ledLength: Float
+    override val ledLength: Float
         get() = length.value / ledCount.value
 }

@@ -71,11 +71,11 @@ class Sketch : PApplet() {
         @JvmStatic
         fun map(value: Int, start1: Int, stop1: Int, start2: Int, stop2: Int): Int {
             return map(
-                value.toDouble(),
-                start1.toDouble(),
-                stop1.toDouble(),
-                start2.toDouble(),
-                stop2.toDouble()
+                    value.toDouble(),
+                    start1.toDouble(),
+                    stop1.toDouble(),
+                    start2.toDouble(),
+                    stop2.toDouble()
             ).roundToInt()
         }
     }
@@ -264,8 +264,8 @@ class Sketch : PApplet() {
             // output image
             if (project.value.visualisation.highResMode.value)
                 fx.render(canvas)
-                    .bloom(project.value.visualisation.bloomBrightPassThreshold.value.toFloat(), 20, 40f)
-                    .compose()
+                        .bloom(project.value.visualisation.bloomBrightPassThreshold.value.toFloat(), 20, 40f)
+                        .compose()
             else
                 image(canvas, 0f, 0f)
 
@@ -314,7 +314,7 @@ class Sketch : PApplet() {
 
         project.value.solidLEDColor.onChanged += {
             project.value.isSceneManagerEnabled.value = false
-            project.value.tubes.forEachLED {
+            project.value.lightElements.forEachLED {
                 val hsv = project.value.solidLEDColor.value.toHSV()
                 it.color.fade(ColorMode.color(hsv.h, hsv.s, hsv.v), 0.1f)
             }
@@ -322,7 +322,7 @@ class Sketch : PApplet() {
     }
 
     fun updateLEDColors() {
-        project.value.tubes.forEach { t ->
+        project.value.lightElements.forEach { t ->
             t.leds.forEach { l ->
                 l.color.update()
             }
@@ -426,10 +426,10 @@ class Sketch : PApplet() {
         pg.fill(255)
         pg.textSize(12f)
         pg.text(
-            (if (project.value.visualisation.disableViewRendering.value) "View Disabled\n" else "") +
-                    (if (project.value.poseInteraction.isDebug.value) "Pose Debug\n" else "") +
-                    "FPS: ${frameRate.format(2)}\n" +
-                    "FOT: ${averageFPS.format(2)}", 10f, height - 5f
+                (if (project.value.visualisation.disableViewRendering.value) "View Disabled\n" else "") +
+                        (if (project.value.poseInteraction.isDebug.value) "Pose Debug\n" else "") +
+                        "FPS: ${frameRate.format(2)}\n" +
+                        "FOT: ${averageFPS.format(2)}", 10f, height - 5f
         )
     }
 

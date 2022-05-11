@@ -2,7 +2,7 @@ package ch.bildspur.ledforest.ui.control.scene
 
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
-import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.model.light.SpatialLightElement
 import ch.bildspur.ledforest.ui.control.scene.control.OrbitControls
 import ch.bildspur.model.DataModel
 import javafx.application.Platform
@@ -92,7 +92,7 @@ class TubePreview(val project: DataModel<Project>) : Group() {
         Platform.runLater {
             recreateScene()
 
-            project.value.tubes.forEach { t ->
+            project.value.spatialLightElements.forEach { t ->
                 updateLEDs(t)
             }
         }
@@ -102,7 +102,7 @@ class TubePreview(val project: DataModel<Project>) : Group() {
     }
 
     private fun hookEvents() {
-        project.value.tubes.forEach { tube ->
+        project.value.spatialLightElements.forEach { tube ->
             tube.position.onChanged += {
                 updateLEDs(tube)
             }
@@ -118,8 +118,8 @@ class TubePreview(val project: DataModel<Project>) : Group() {
         }
     }
 
-    fun updateLEDs(tube: Tube) {
-        tube.leds.forEach {
+    fun updateLEDs(element: SpatialLightElement) {
+        element.leds.forEach {
             val shape = ledShapes[it] ?: return@forEach
 
             shape.transforms.clear()
@@ -136,16 +136,16 @@ class TubePreview(val project: DataModel<Project>) : Group() {
         cage.style = "-fx-fill: transparent; -fx-stroke: white; -fx-stroke-width: 0.05;"
         sceneGroup.add(cage)
 
-        project.value.tubes.forEach { tube ->
-            tube.leds.forEach { led ->
+        project.value.spatialLightElements.forEach { element ->
+            element.leds.forEach { led ->
                 val width = project.value.visualisation.ledWidth.value.toDouble()
-                val ledShape = Box(width * 2, width * 2, tube.ledLength.toDouble())
+                val ledShape = Box(width * 2, width * 2, element.ledLength.toDouble())
 
                 ledShape.transforms.add(led.position.toTranslate())
                 /*
-                ledShape.transforms.add(Rotate(90.0 + Math.toDegrees(tube.rotation.value.x.toDouble()), Rotate.X_AXIS))
-                ledShape.transforms.add(Rotate(Math.toDegrees(tube.rotation.value.y.toDouble()), Rotate.Y_AXIS))
-                ledShape.transforms.add(Rotate(Math.toDegrees(tube.rotation.value.z.toDouble()), Rotate.Z_AXIS))
+                ledShape.transforms.add(Rotate(90.0 + Math.toDegrees(element.rotation.value.x.toDouble()), Rotate.X_AXIS))
+                ledShape.transforms.add(Rotate(Math.toDegrees(element.rotation.value.y.toDouble()), Rotate.Y_AXIS))
+                ledShape.transforms.add(Rotate(Math.toDegrees(element.rotation.value.z.toDouble()), Rotate.Z_AXIS))
                  */
 
                 val mat = PhongMaterial(Color.WHITE)
