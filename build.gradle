@@ -102,6 +102,14 @@ dependencies {
     // illposed osc
     implementation group: 'com.illposed.osc', name: 'javaosc-core', version: '0.8'
 
+    // ktmidi
+    implementation 'dev.atsushieno:ktmidi:0.3.16'
+    implementation 'dev.atsushieno:ktmidi-jvm:0.3.16'
+    implementation 'dev.atsushieno:ktmidi-jvm-desktop:0.3.16'
+
+    // coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
+
     // javafx
     implementation group: 'org.controlsfx', name: 'controlsfx', version: '11.1.1'
     implementation group: 'com.sun.activation', name: 'javax.activation', version: '1.2.0'
