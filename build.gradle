@@ -12,7 +12,7 @@ version '3.1'
 
 import org.gradle.internal.os.OperatingSystem
 
-def applicationMainClass = "ch.bildspur.ledforest.DebouncerTest"
+def applicationMainClass = "ch.bildspur.ledforest.Main"
 
 // find jvm args
 def defaultJvmArgs = ''
