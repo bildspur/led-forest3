@@ -27,21 +27,23 @@ class LandmarkPulseCollider(
         // very basic sphere collider
         if (PVector.dist(this.location.value, location) <= radius.value && triggeredBy.value.contains(landmark)) {
             if (debouncer.update(true)) {
-                if (currentState == ColliderState.Inactive || !oneShot.value) {
-                    currentState = ColliderState.Active
-                    onCollision(Collision(this))
+                if (oneShot.value && currentState == ColliderState.Active) {
+                    return false
                 }
+
+                currentState = ColliderState.Active
+                onCollision(Collision(this))
+
+                return true
             }
             currentState
         } else {
             if (!debouncer.update(false)) {
-                if (currentState == ColliderState.Active || !oneShot.value) {
-                    currentState = ColliderState.Inactive
-                }
+                currentState = ColliderState.Inactive
             }
         }
 
-        return currentState == ColliderState.Active
+        return false
     }
 
     override fun toString(): String {
