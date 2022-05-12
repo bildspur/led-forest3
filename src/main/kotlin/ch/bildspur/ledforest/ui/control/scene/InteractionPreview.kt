@@ -95,6 +95,10 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
     }
 
     fun render() {
+        if (!Sketch.isInstanceInitialized) {
+            return
+        }
+
         Platform.runLater {
             val pose = Sketch.instance.pose.poses.firstOrNull()
 

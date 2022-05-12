@@ -103,9 +103,14 @@ dependencies {
     implementation group: 'com.illposed.osc', name: 'javaosc-core', version: '0.8'
 
     // ktmidi
+    /*
     implementation 'dev.atsushieno:ktmidi:0.3.16'
     implementation 'dev.atsushieno:ktmidi-jvm:0.3.16'
     implementation 'dev.atsushieno:ktmidi-jvm-desktop:0.3.16'
+    */
+
+    // the midi bus
+    implementation files('lib/midi/themidibus.jar')
 
     // coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'

@@ -64,6 +64,10 @@ class Sketch : PApplet() {
         lateinit var instance: Sketch
 
         @JvmStatic
+        val isInstanceInitialized: Boolean
+            get() = ::instance.isInitialized
+
+        @JvmStatic
         fun map(value: Double, start1: Double, stop1: Double, start2: Double, stop2: Double): Double {
             return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1))
         }
@@ -71,11 +75,11 @@ class Sketch : PApplet() {
         @JvmStatic
         fun map(value: Int, start1: Int, stop1: Int, start2: Int, stop2: Int): Int {
             return map(
-                    value.toDouble(),
-                    start1.toDouble(),
-                    stop1.toDouble(),
-                    start2.toDouble(),
-                    stop2.toDouble()
+                value.toDouble(),
+                start1.toDouble(),
+                stop1.toDouble(),
+                start2.toDouble(),
+                stop2.toDouble()
             ).roundToInt()
         }
     }
@@ -264,8 +268,8 @@ class Sketch : PApplet() {
             // output image
             if (project.value.visualisation.highResMode.value)
                 fx.render(canvas)
-                        .bloom(project.value.visualisation.bloomBrightPassThreshold.value.toFloat(), 20, 40f)
-                        .compose()
+                    .bloom(project.value.visualisation.bloomBrightPassThreshold.value.toFloat(), 20, 40f)
+                    .compose()
             else
                 image(canvas, 0f, 0f)
 
@@ -426,10 +430,10 @@ class Sketch : PApplet() {
         pg.fill(255)
         pg.textSize(12f)
         pg.text(
-                (if (project.value.visualisation.disableViewRendering.value) "View Disabled\n" else "") +
-                        (if (project.value.poseInteraction.isDebug.value) "Pose Debug\n" else "") +
-                        "FPS: ${frameRate.format(2)}\n" +
-                        "FOT: ${averageFPS.format(2)}", 10f, height - 5f
+            (if (project.value.visualisation.disableViewRendering.value) "View Disabled\n" else "") +
+                    (if (project.value.poseInteraction.isDebug.value) "Pose Debug\n" else "") +
+                    "FPS: ${frameRate.format(2)}\n" +
+                    "FOT: ${averageFPS.format(2)}", 10f, height - 5f
         )
     }
 
