@@ -28,10 +28,13 @@ class MidiController(
     fun setupInput(deviceName: String) {
         midi = MidiBus(this, deviceName, deviceName)
         print("MIDI device ${deviceName} has been setup.")
+
+        midi.sendControllerChange(10, 8, 127)
+        midi.sendNoteOn(10, 23, 127)
     }
 
     fun noteOn(channel: Int, pitch: Int, velocity: Int) {
-        println("note on: ${channel}")
+        println("note on: ${channel}: $pitch")
     }
 
     fun noteOff(channel: Int, pitch: Int, velocity: Int) {
