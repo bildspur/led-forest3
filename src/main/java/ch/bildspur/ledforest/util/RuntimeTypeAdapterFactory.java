@@ -229,6 +229,9 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
                 }
 
                 if (labelJsonElement == null) {
+                    System.err.println("Json Element: ");
+                    System.err.println(jsonElement);
+
                     throw new JsonParseException("cannot deserialize " + baseType
                             + " because it does not define a field named " + typeFieldName);
                 }

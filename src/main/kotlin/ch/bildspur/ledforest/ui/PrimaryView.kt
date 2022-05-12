@@ -463,13 +463,19 @@ class PrimaryView {
     fun resetRenderer() {
         sketch.proposeResetRenderer()
         tubePreview.reset()
-        interactionPreview.recreateScene()
+
+        Platform.runLater {
+            interactionPreview.recreateScene()
+        }
     }
 
     fun rebuildRenderer() {
         sketch.renderer.forEach { it.setup() }
         tubePreview.reset()
-        interactionPreview.recreateScene()
+
+        Platform.runLater {
+            interactionPreview.recreateScene()
+        }
     }
 
     fun onSaveProjectAs() {
