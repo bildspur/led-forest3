@@ -1,76 +1,75 @@
 package ch.bildspur.ledforest.pose
 
 import ch.bildspur.ledforest.model.easing.EasingVector
-import ch.bildspur.ledforest.model.math.PVector4
 import ch.bildspur.ledforest.pose.clients.LightWeightOpenPoseClient
 
 class Pose {
     var id = 0
     var score: Float = -1f
 
-    var keypoints: Array<PVector4> = Array(LightWeightOpenPoseClient.KEY_POINT_COUNT) { PVector4() }
+    var keypoints: Array<KeyPoint> = Array(LightWeightOpenPoseClient.KEY_POINT_COUNT) { KeyPoint() }
 
     var startTimestamp = System.currentTimeMillis()
     val easedPosition = EasingVector()
 
-    operator fun get(landmarkType: PoseLandmark): PVector4 {
+    operator fun get(landmarkType: PoseLandmark): KeyPoint {
         return keypoints[PoseLandmark.values().indexOf(landmarkType)]
     }
 
-    val position : PVector4
+    val position: KeyPoint
         get() = neck
 
-    val nose : PVector4
+    val nose: KeyPoint
         get() = keypoints[0]
 
-    val neck : PVector4
+    val neck: KeyPoint
         get() = keypoints[1]
 
-    val rightShoulder : PVector4
+    val rightShoulder: KeyPoint
         get() = keypoints[2]
 
-    val rightElbow : PVector4
+    val rightElbow: KeyPoint
         get() = keypoints[3]
 
-    val rightWrist : PVector4
+    val rightWrist: KeyPoint
         get() = keypoints[4]
 
-    val leftShoulder : PVector4
+    val leftShoulder: KeyPoint
         get() = keypoints[5]
 
-    val  leftElbow : PVector4
+    val leftElbow: KeyPoint
         get() = keypoints[6]
 
-    val leftWrist : PVector4
+    val leftWrist: KeyPoint
         get() = keypoints[7]
 
-    val rightHip : PVector4
+    val rightHip: KeyPoint
         get() = keypoints[8]
 
-    val rightKnee : PVector4
+    val rightKnee: KeyPoint
         get() = keypoints[9]
 
-    val rightAnkle : PVector4
+    val rightAnkle: KeyPoint
         get() = keypoints[10]
 
-    val leftHip : PVector4
+    val leftHip: KeyPoint
         get() = keypoints[11]
 
-    val leftKnee : PVector4
+    val leftKnee: KeyPoint
         get() = keypoints[12]
 
-    val leftAnkle : PVector4
+    val leftAnkle: KeyPoint
         get() = keypoints[13]
 
-    val rightEye : PVector4
+    val rightEye: KeyPoint
         get() = keypoints[14]
 
-    val leftEye : PVector4
+    val leftEye: KeyPoint
         get() = keypoints[15]
 
-    val rightEar : PVector4
+    val rightEar: KeyPoint
         get() = keypoints[16]
 
-    val leftEar : PVector4
+    val leftEar: KeyPoint
         get() = keypoints[17]
 }

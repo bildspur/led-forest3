@@ -2,7 +2,7 @@ package ch.bildspur.ledforest.model.math
 
 import processing.core.PVector
 
-class PVector4 : PVector {
+open class PVector4 : PVector {
     var t: Float = 0f
 
     constructor() : super()

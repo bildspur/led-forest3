@@ -63,6 +63,10 @@ class PoseInteraction {
     var minScore = DataModel(2.0f)
 
     @Expose
+    @BooleanParameter("Track Velocity")
+    var trackVelocity = DataModel(false)
+
+    @Expose
     @BooleanParameter("Use Tracking")
     var useTracking = DataModel(true)
 

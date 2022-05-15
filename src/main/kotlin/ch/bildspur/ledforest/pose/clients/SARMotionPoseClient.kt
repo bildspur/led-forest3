@@ -1,12 +1,14 @@
 package ch.bildspur.ledforest.pose.clients
 
 import ch.bildspur.event.Event
-import ch.bildspur.ledforest.model.math.PVector4
+import ch.bildspur.ledforest.pose.KeyPoint
 import ch.bildspur.ledforest.pose.Pose
-import com.illposed.osc.*
+import com.illposed.osc.OSCBadDataEvent
+import com.illposed.osc.OSCMessage
+import com.illposed.osc.OSCPacketEvent
+import com.illposed.osc.OSCPacketListener
 import com.illposed.osc.transport.OSCPortIn
 import com.illposed.osc.transport.OSCPortInBuilder
-import processing.core.PVector
 import java.net.InetSocketAddress
 
 class SARMotionPoseClient : OSCPacketListener, PoseClient {
@@ -45,7 +47,7 @@ class SARMotionPoseClient : OSCPacketListener, PoseClient {
 
         val poses = (0 until count).map {
             val pose = Pose()
-            val keypoints = Array(KEY_POINT_COUNT) { PVector4() }
+            val keypoints = Array(KEY_POINT_COUNT) { KeyPoint() }
             var score = 0f
 
             pose.id = message.arguments[index++] as Int
@@ -56,7 +58,7 @@ class SARMotionPoseClient : OSCPacketListener, PoseClient {
                 keypoints[i].y = message.arguments[index++] as Float
 
                 val kpScore = message.arguments[index++] as Float
-                keypoints[i].t = kpScore
+                keypoints[i].score = kpScore
 
                 score += kpScore
             }
@@ -67,7 +69,7 @@ class SARMotionPoseClient : OSCPacketListener, PoseClient {
             // ugly mapping to full body pose system
             // sarmotion pose to 15 to 18
             pose.keypoints[0] = keypoints[0]
-            pose.keypoints[1] = PVector4.lerp(keypoints[3], keypoints[4], 0.5f)
+            pose.keypoints[1] = KeyPoint.lerp(keypoints[3], keypoints[4], 0.5f)
 
             pose.keypoints[2] = keypoints[4]
             pose.keypoints[3] = keypoints[6]

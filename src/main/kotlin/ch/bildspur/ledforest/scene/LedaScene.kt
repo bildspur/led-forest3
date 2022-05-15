@@ -59,7 +59,7 @@ class LedaScene(
             val landmarkId = PoseLandmark.values().indexOf(landmarkType)
             val landmark = pose.keypoints[landmarkId]
 
-            val score = landmark.t
+            val score = landmark.score
             if (score < project.leda.landmarkMinScore.value) continue
 
             val relativeLandmarkPosition = PVector.sub(origin, pose.keypoints[landmarkId])
