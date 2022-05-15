@@ -29,8 +29,8 @@ class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: 
         val elements = project.lightElements
 
         elements.groupBy { it.universe.value }.forEach {
-            val universe = indexToUniverses[it.key]!!
-            val node = universesToNodes[universe]!!
+            val universe = indexToUniverses[it.key] ?: return@forEach
+            val node = universesToNodes[universe] ?: return@forEach
 
             val light = project.light
             universe.stageDmx(
