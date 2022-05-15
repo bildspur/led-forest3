@@ -58,7 +58,7 @@ class Project {
             Thread.sleep(50)
         }
 
-        Sketch.instance.project.value.tubes.forEachLED {
+        Sketch.instance.project.value.lights.forEachLED {
             it.color.fadeB(100.0f, 0.1f)
         }
     }
@@ -70,7 +70,7 @@ class Project {
             Thread.sleep(50)
         }
 
-        Sketch.instance.project.value.tubes.forEachLED {
+        Sketch.instance.project.value.lights.forEachLED {
             it.color.fadeB(0.0f, 0.1f)
         }
     }
@@ -82,7 +82,7 @@ class Project {
             Thread.sleep(50)
         }
 
-        val universes = Sketch.instance.project.value.tubes.groupBy { it.universe.value }
+        val universes = Sketch.instance.project.value.lights.groupBy { it.universe.value }
         universes.forEach { (u, ts) ->
             val color = TubeShape.UNIVERSE_COLORS[u % TubeShape.UNIVERSE_COLORS.size]
             val minAddress = ts.minOf { it.startAddress }
@@ -116,7 +116,7 @@ class Project {
     @ArrowControlParameter("Translate All")
     var translateAll: (KeyCode) -> Unit = { code ->
         val adjustAmount = 0.1f
-        Sketch.instance.project.value.tubes.forEach {
+        Sketch.instance.project.value.spatialLightElements.forEach {
             when (code) {
                 KeyCode.UP -> it.position.value.y -= adjustAmount
                 KeyCode.DOWN -> it.position.value.y += adjustAmount
