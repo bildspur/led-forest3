@@ -121,7 +121,7 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
             }
 
             // update colliders
-            colliderShapes.forEach { c, s ->
+            colliderShapes.forEach { (c, s) ->
                 val mat = (s.material as PhongMaterial)
 
                 if (c.state == ColliderState.Active) {
