@@ -14,6 +14,7 @@ import ch.bildspur.tracking.simple.SimpleTracker
 import processing.core.PApplet
 import processing.core.PConstants.CENTER
 import processing.core.PGraphics
+import processing.core.PVector
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
@@ -32,19 +33,19 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
     val totalPoseCount = AtomicInteger(0)
 
     private val simpleTracker = SimpleTracker<Pose>(
-            { it.neck.toFloat2() },
-            onUpdate = { e, i ->
-                // just update the keypoints but keep the object
-                e.item.keypoints = i.keypoints
-                e.item.score = i.score
-            },
-            onAdd = {
-                // set initial easing position
-                it.item.easedPosition.init(it.item.position, project.value.poseInteraction.positionEasing.value)
-                totalPoseCount.incrementAndGet()
-            },
-            maxDelta = project.value.poseInteraction.maxDelta.value,
-            maxUntrackedTime = project.value.poseInteraction.maxDeadTime.value
+        { it.neck.toFloat2() },
+        onUpdate = { e, i ->
+            // just update the keypoints but keep the object
+            e.item.keypoints = i.keypoints
+            e.item.score = i.score
+        },
+        onAdd = {
+            // set initial easing position
+            it.item.easedPosition.init(it.item.position, project.value.poseInteraction.positionEasing.value)
+            totalPoseCount.incrementAndGet()
+        },
+        maxDelta = project.value.poseInteraction.maxDelta.value,
+        maxUntrackedTime = project.value.poseInteraction.maxDeadTime.value
     )
 
     private val relevantPoses = AtomicReference<List<Pose>>(listOf())
@@ -73,9 +74,11 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
             val config = Sketch.instance.project.value.poseInteraction
             rawPoses.forEach { pose ->
                 pose.keypoints.forEach {
-                    val t = transform2DPoint(Float2(it.x, it.y),
-                            project.value.poseInteraction.imageRotation.value,
-                            project.value.poseInteraction.imageFlip.value)
+                    val t = transform2DPoint(
+                        Float2(it.x, it.y),
+                        project.value.poseInteraction.imageRotation.value,
+                        project.value.poseInteraction.imageFlip.value
+                    )
 
                     it.x = t.x
                     it.y = t.y
@@ -95,12 +98,15 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
             isRunning.set(true)
 
             while (isRunning.get()) {
-                val validPoses = poseBuffer.filter { it.score >= project.value.poseInteraction.minScore.value }
+                val ts = System.currentTimeMillis();
+                val lastPoses = relevantPoses.get()
+                val detectedPoses = poseBuffer.filter { it.score >= project.value.poseInteraction.minScore.value }
+                var actualPoses = detectedPoses
 
                 if (project.value.poseInteraction.useTracking.value) {
                     // run tracking
                     simpleTracker.maxDelta = project.value.poseInteraction.maxDelta.value
-                    simpleTracker.track(validPoses)
+                    simpleTracker.track(detectedPoses)
 
                     // update id's and easing
                     simpleTracker.entities.forEach {
@@ -113,22 +119,36 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                     }
 
                     // update poses (make this once in the loop)
-                    relevantPoses.set(simpleTracker.entities.map { it.item }
-                            .filter { System.currentTimeMillis() - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
-                            .toList())
+                    actualPoses = simpleTracker.entities.map { it.item }
+                        .filter { ts - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
+                        .toList()
 
                     // update ui
                     project.value.poseInteraction.poseCount.value = "${simpleTracker.entities.size}"
                 } else {
-                    // update poses
-                    relevantPoses.set(validPoses)
-                    project.value.poseInteraction.poseCount.value = "${validPoses.size}"
+                    project.value.poseInteraction.poseCount.value = "${detectedPoses.size}"
                 }
 
+                // detect velocity in m/s
+                if (project.value.poseInteraction.trackVelocity.value) {
+                    val lastPoseTable = lastPoses.associateBy { it.id }
+                    for (pose in actualPoses) {
+                        val lastPose = lastPoseTable[pose.id] ?: continue
+                        for (i in 0 until pose.keypoints.size) {
+                            val delta = PVector.dist(pose.keypoints[i], lastPose.keypoints[i])
+                            val velocity = delta / (ts / 1000f)
+                            pose.keypoints[i].velocity = velocity
+                        }
+                    }
+                }
+
+                // update poses
+                relevantPoses.set(actualPoses)
+
                 // reset buffer if nothing received
-                if (System.currentTimeMillis() - lastReceiveTimeStamp >= project.value.poseInteraction.maxReceiveTimeout.value) {
+                if (ts - lastReceiveTimeStamp >= project.value.poseInteraction.maxReceiveTimeout.value) {
                     poseBuffer = emptyList()
-                    lastReceiveTimeStamp = System.currentTimeMillis()
+                    lastReceiveTimeStamp = ts
                 }
 
                 Thread.sleep(1000 / project.value.poseInteraction.trackingFPS.value)
@@ -214,10 +234,10 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 g.strokeWeight(2f)
                 val maxDelta = project.value.poseInteraction.maxDelta.value
                 g.ellipse(
-                        pose.position.x * g.width,
-                        pose.position.y * g.height,
-                        g.width * maxDelta,
-                        g.height * maxDelta
+                    pose.position.x * g.width,
+                    pose.position.y * g.height,
+                    g.width * maxDelta,
+                    g.height * maxDelta
                 )
             }
         }
