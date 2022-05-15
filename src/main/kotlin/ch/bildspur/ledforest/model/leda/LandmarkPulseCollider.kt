@@ -12,16 +12,19 @@ import com.google.gson.annotations.Expose
 import processing.core.PVector
 
 class LandmarkPulseCollider(
-        @Expose @StringParameter("Name") var name: DataModel<String> = DataModel("Collider"),
-        @Expose @PVectorParameter("Location") var location: DataModel<PVector> = DataModel(PVector()),
-        @Expose @NumberParameter("Radius (m)") var radius: DataModel<Float> = DataModel(1.0f),
-        @Expose var triggeredBy: DataModel<MutableSet<PoseLandmark>> = DataModel(mutableSetOf()),
-        @Expose var pulses: List<Pulse> = mutableListOf(),
-        @Expose @BooleanParameter("One Shot") var oneShot: DataModel<Boolean> = DataModel(true)
+    @Expose @StringParameter("Name") var name: DataModel<String> = DataModel("Collider"),
+    @Expose @PVectorParameter("Location") var location: DataModel<PVector> = DataModel(PVector()),
+    @Expose @NumberParameter("Radius (m)") var radius: DataModel<Float> = DataModel(1.0f),
+    @Expose var triggeredBy: DataModel<MutableSet<PoseLandmark>> = DataModel(mutableSetOf()),
+    @Expose var pulses: List<Pulse> = mutableListOf(),
+    @Expose @BooleanParameter("One Shot") var oneShot: DataModel<Boolean> = DataModel(true)
 ) : Collider() {
 
     private val debouncer = Debouncer(100L, false)
     private var currentState = ColliderState.Inactive
+
+    val state: ColliderState
+        get() = currentState
 
     override fun checkCollision(location: PVector, landmark: PoseLandmark): Boolean {
         // very basic sphere collider
@@ -47,6 +50,6 @@ class LandmarkPulseCollider(
     }
 
     override fun toString(): String {
-        return "${name.value}"
+        return name.value
     }
 }
