@@ -2,6 +2,7 @@ package ch.bildspur.ledforest.ui.control.scene
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.model.leda.ColliderState
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.pose.PoseLandmark
 import ch.bildspur.ledforest.ui.control.scene.control.OrbitControls
@@ -100,6 +101,7 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
         }
 
         Platform.runLater {
+            // update poses
             val pose = Sketch.instance.pose.poses.firstOrNull()
 
             landmarkShapes.values.forEach { it.isVisible = false }
@@ -115,6 +117,17 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
                         shape.transforms.add(PVector.sub(lm, cameraOrigin).toTranslate())
                         shape.isVisible = true
                     }
+                }
+            }
+
+            // update colliders
+            colliderShapes.forEach { c, s ->
+                val mat = (s.material as PhongMaterial)
+
+                if (c.state == ColliderState.Active) {
+                    mat.diffuseColor = Color.CRIMSON
+                } else {
+                    mat.diffuseColor = Color.LIGHTBLUE
                 }
             }
         }
