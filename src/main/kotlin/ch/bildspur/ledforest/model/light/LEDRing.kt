@@ -22,6 +22,7 @@ class LEDRing : SpatialLightElement(initialLEDCount = 10), PostProcessable {
         diameter.onChanged += {
             recalculateLEDPosition()
         }
+        diameter.fireLatest()
     }
 
     init {

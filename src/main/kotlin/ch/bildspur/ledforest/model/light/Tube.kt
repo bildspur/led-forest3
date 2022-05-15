@@ -35,4 +35,20 @@ class Tube : SpatialLightElement(initialLEDCount = 24) {
 
     override val ledLength: Float
         get() = length.value / ledCount.value
+
+    private fun hookTubeEvents() {
+        length.onChanged += {
+            recalculateLEDPosition()
+        }
+        length.fireLatest()
+    }
+
+    init {
+        hookTubeEvents()
+    }
+
+    override fun gsonPostProcess() {
+        super.gsonPostProcess()
+        hookTubeEvents()
+    }
 }

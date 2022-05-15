@@ -20,11 +20,15 @@ class TubePreview(project: DataModel<Project>) : Base3DScene<LED>(project) {
         root.children.add(cage)
 
         project.value.spatialLightElements.forEach { element ->
+            element.recalculateLEDPosition()
+
             element.leds.forEach { led ->
                 val width = project.value.visualisation.ledWidth.value.toDouble()
                 val ledShape = Box(width * 2, width * 2, element.ledLength.toDouble())
 
-                ledShape.transforms.add(led.position.toTranslate())
+                val pos = led.position.toTranslate()
+                ledShape.transforms.add(pos)
+                // println(pos)
                 /*
                 ledShape.transforms.add(Rotate(90.0 + Math.toDegrees(element.rotation.value.x.toDouble()), Rotate.X_AXIS))
                 ledShape.transforms.add(Rotate(Math.toDegrees(element.rotation.value.y.toDouble()), Rotate.Y_AXIS))

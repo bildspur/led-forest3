@@ -44,10 +44,6 @@ abstract class LightElement(
         }
     }
 
-    init {
-        hookListener()
-    }
-
     fun initLEDs() {
         leds = (0 until ledCount.value).map {
             LED(addressStart.value + it * LED.LED_ADDRESS_SIZE,
@@ -76,6 +72,10 @@ abstract class LightElement(
     }
 
     override fun gsonPostProcess() {
+        hookListener()
+    }
+
+    init {
         hookListener()
     }
 }
