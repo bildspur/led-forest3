@@ -472,7 +472,7 @@ class PrimaryView {
 
     fun resetRenderer() {
         sketch.proposeResetRenderer()
-        tubePreview.reset()
+        tubePreview.resetScene()
 
         Platform.runLater {
             interactionPreview.recreateScene()
@@ -481,7 +481,7 @@ class PrimaryView {
 
     fun rebuildRenderer() {
         sketch.renderer.forEach { it.setup() }
-        tubePreview.reset()
+        tubePreview.resetScene()
 
         Platform.runLater {
             interactionPreview.recreateScene()
