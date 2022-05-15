@@ -71,9 +71,7 @@ class TubePreview(val project: DataModel<Project>) : Group() {
 
         // setup controls later to be sure node exists
         Platform.runLater {
-            // Thread.sleep(1000 * 2)
             control = OrbitControls(camera, subScene)
-            // children.add(control.centerMarker)
         }
     }
 

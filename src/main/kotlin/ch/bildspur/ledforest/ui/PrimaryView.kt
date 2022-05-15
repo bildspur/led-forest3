@@ -45,6 +45,7 @@ import jfxtras.styles.jmetro.JMetro
 import jfxtras.styles.jmetro.Style
 import processing.core.PApplet
 import processing.core.PVector
+import tornadofx.tab
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.concurrent.thread
@@ -103,6 +104,8 @@ class PrimaryView {
     @FXML
     lateinit var display2DMapMenuItem: CheckMenuItem
 
+    private val tabPane = TabPane()
+
     private val appIcon = Image(javaClass.getResourceAsStream("images/LEDForestIcon.png"))
     private val nodeIcon = Image(javaClass.getResourceAsStream("images/ArtnetIcon32.png"))
     private val dmxIcon = Image(javaClass.getResourceAsStream("images/DmxFront16.png"))
@@ -130,7 +133,6 @@ class PrimaryView {
         interactionPreview.subScene.heightProperty().bind(stackPaneInteraction.heightProperty())
         interactionPreview.subScene.widthProperty().bind(stackPaneInteraction.widthProperty())
 
-        val tabPane = TabPane()
         tabPane.side = Side.BOTTOM
         tabPane.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
         tabPane.tabs.addAll(
@@ -138,7 +140,10 @@ class PrimaryView {
             Tab("3D", stackPaneScene),
             Tab("Interaction", stackPaneInteraction)
         )
-        tabPane.selectionModel.select(2)
+        tabPane.selectionModel.select(1)
+        tabPane.selectionModel.selectedIndexProperty().addListener { _ ->
+            project.value.ui.selectedPreviewTab.value = tabPane.selectionModel.selectedIndex
+        }
 
         root.center = tabPane
 
@@ -375,6 +380,11 @@ class PrimaryView {
 
         // add hot-reload support
         hotReloadWatcher.reset(Paths.get(appConfig.projectFile))
+
+        // update ui tab selection
+        val index = project.ui.selectedPreviewTab.value
+        if (index < tabPane.tabs.size)
+            tabPane.selectionModel.select(index)
     }
 
     fun <T> createBidirectionalMapping(
@@ -512,8 +522,10 @@ class PrimaryView {
 
     fun addElement() {
         // show selection dialog
-        val dialog = ChoiceDialog("Tube",
-                listOf("Tube", "Generic", "Ring", "Universe", "Node"))
+        val dialog = ChoiceDialog(
+            "Tube",
+            listOf("Tube", "Generic", "Ring", "Universe", "Node")
+        )
         dialog.title = "Add Element"
         dialog.headerText = "Add a new element to the scene."
         dialog.contentText = "Choose an element to add:"

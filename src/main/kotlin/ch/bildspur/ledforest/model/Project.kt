@@ -172,6 +172,9 @@ class Project {
     @Expose
     var audio = Audio()
 
+    @Expose
+    var ui = UserInterfaceConfig()
+
     init {
         solidLEDColor.onChanged += {
             isSceneManagerEnabled.value = false
