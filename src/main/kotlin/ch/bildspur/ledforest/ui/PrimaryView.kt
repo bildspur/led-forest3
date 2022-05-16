@@ -143,6 +143,8 @@ class PrimaryView {
         tabPane.selectionModel.select(1)
         tabPane.selectionModel.selectedIndexProperty().addListener { _ ->
             project.value.ui.selectedPreviewTab.value = tabPane.selectionModel.selectedIndex
+
+            tubePreview.rendering = tabPane.selectionModel.selectedIndex == 1
         }
 
         root.center = tabPane

@@ -43,6 +43,11 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
 
     private var running = true
 
+    private val colliderActiveColor = Color(0.98, 0.4, 0.0, 0.75)
+    private val colliderInactiveColor = Color(0.0, 0.31, 0.93, 0.5)
+
+    private val poseColor = Color(0.37, 0.66, 0.09, 0.80)
+
     init {
         // add pose shapes
         PoseLandmark.values().forEach {
@@ -125,9 +130,9 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
                 val mat = (s.material as PhongMaterial)
 
                 if (c.state == ColliderState.Active) {
-                    mat.diffuseColor = Color.CRIMSON
+                    mat.diffuseColor = colliderActiveColor
                 } else {
-                    mat.diffuseColor = Color.LIGHTBLUE
+                    mat.diffuseColor = colliderInactiveColor
                 }
             }
         }
@@ -145,7 +150,7 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
             collider.radius.onChanged += {
                 sceneGroup.children.remove(colliderShapes[collider])
                 val shape = Sphere(collider.radius.value.toDouble())
-                shape.material = PhongMaterial(Color.LIGHTBLUE)
+                shape.material = PhongMaterial(colliderInactiveColor)
                 colliderShapes[collider] = shape
                 shape.transforms.add(PVector.sub(PVector(), collider.location.value).toTranslate())
                 sceneGroup.children.add(shape)
@@ -169,7 +174,7 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
         // add colliders
         project.value.leda.landmarkColliders.forEach {
             val shape = Sphere(it.radius.value.toDouble())
-            shape.material = PhongMaterial(Color.LIGHTBLUE)
+            shape.material = PhongMaterial(colliderInactiveColor)
             colliderShapes[it] = shape
             sceneGroup.children.add(shape)
         }
