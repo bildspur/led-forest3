@@ -25,7 +25,7 @@ class TestScene(project: Project, tubes: List<Tube>) : BaseScene("Test Scene", p
         ledsByUniverse = elements.sortedBy { it.startAddress }.groupBy { it.universe.value }
             .mapValues { it.value.flatMap { it.leds } }
 
-        maxLeds = ledsByUniverse.maxOf { it.value.size }
+        maxLeds = ledsByUniverse.maxOf { it.value.size } + project.test.size.value
 
         // set all led's one black
         elements.forEachLED {
@@ -35,14 +35,16 @@ class TestScene(project: Project, tubes: List<Tube>) : BaseScene("Test Scene", p
 
     override fun update() {
         timerTask.interval = project.test.interval.value
-        index = (index + 1) % maxLeds
+        index = (index + 1)
+        if (index >= maxLeds)
+            index = -project.test.size.value
 
         ledsByUniverse.map { it.value }.forEach { leds ->
             leds.forEachIndexed { i, led ->
                 if (index <= i && i < index + project.test.size.value) {
-                    led.color.fade(ColorMode.color(150), 0.25f)
+                    led.color.fade(ColorMode.color(150, 80, 100), project.test.fade.value)
                 } else {
-                    led.color.fade(ColorMode.color(60), 0.25f)
+                    led.color.fade(ColorMode.color(60, 80, 100), project.test.fade.value)
                 }
             }
         }

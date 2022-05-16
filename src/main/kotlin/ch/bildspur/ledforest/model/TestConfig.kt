@@ -17,4 +17,8 @@ class TestConfig {
     @Expose
     @SliderParameter("Size", 1.0, 100.0, 1.0, true)
     var size = DataModel(1)
+
+    @Expose
+    @SliderParameter("Fade", 0.01, 1.0, 0.01)
+    var fade = DataModel(0.5f)
 }
