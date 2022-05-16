@@ -477,7 +477,7 @@ class PrimaryView {
         tubePreview.resetScene()
 
         Platform.runLater {
-            interactionPreview.recreateScene()
+            interactionPreview.reset()
         }
     }
 
@@ -486,7 +486,7 @@ class PrimaryView {
         tubePreview.resetScene()
 
         Platform.runLater {
-            interactionPreview.recreateScene()
+            interactionPreview.reset()
         }
     }
 

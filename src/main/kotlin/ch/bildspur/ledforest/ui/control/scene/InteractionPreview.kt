@@ -188,4 +188,9 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
             sceneGroup.children.add(it)
         }
     }
+
+    fun reset() {
+        recreateScene()
+        hookEvents()
+    }
 }
