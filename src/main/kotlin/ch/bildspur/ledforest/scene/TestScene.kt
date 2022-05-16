@@ -9,7 +9,7 @@ import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
 
 class TestScene(project: Project, tubes: List<Tube>) : BaseScene("Test Scene", project, tubes) {
-    private val task = TimerTask(project.test.interval.value, { update() })
+    private val task = TimerTask(0, { update() })
 
     override val timerTask: TimerTask
         get() = task
@@ -17,7 +17,7 @@ class TestScene(project: Project, tubes: List<Tube>) : BaseScene("Test Scene", p
     private var elements = project.lightElements
     private var ledsByUniverse = emptyMap<Int, List<LED>>()
 
-    private var index = 0
+    private var index = 0.0
     private var maxLeds = 0
 
     override fun setup() {
@@ -49,10 +49,9 @@ class TestScene(project: Project, tubes: List<Tube>) : BaseScene("Test Scene", p
             return
         }
 
-        timerTask.interval = project.test.interval.value
-        index = (index + 1)
+        index = (index + project.test.speed.value)
         if (index >= maxLeds)
-            index = -project.test.size.value
+            index = -project.test.size.value.toDouble()
 
         val color = project.test.color.value.toHSV()
 

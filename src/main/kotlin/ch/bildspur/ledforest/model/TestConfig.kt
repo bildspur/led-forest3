@@ -13,8 +13,8 @@ class TestConfig {
     var enabled = DataModel(false)
 
     @Expose
-    @SliderParameter("Interval", 1.0, 1000.0, 1.0, true)
-    var interval = DataModel(100L)
+    @SliderParameter("Speed", 0.0, 20.0, 0.05, false)
+    var speed = DataModel(1.0)
 
     @Expose
     @SliderParameter("Size", 1.0, 100.0, 1.0, true)
