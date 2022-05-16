@@ -34,6 +34,21 @@ class TestScene(project: Project, tubes: List<Tube>) : BaseScene("Test Scene", p
     }
 
     override fun update() {
+        if (project.test.soloMode.value) {
+            val color = project.test.color.value.toHSV()
+
+            project.tubes.forEach { t ->
+                t.leds.forEach {
+                    if (t.isSelected.value) {
+                        it.color.fade(ColorMode.color(color.h, color.s, 100), project.test.fade.value)
+                    } else {
+                        it.color.fade(ColorMode.color(color.h, color.s, 0), project.test.fade.value)
+                    }
+                }
+            }
+            return
+        }
+
         timerTask.interval = project.test.interval.value
         index = (index + 1)
         if (index >= maxLeds)

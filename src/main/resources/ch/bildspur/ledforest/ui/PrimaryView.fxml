@@ -57,9 +57,6 @@
 
                 <Menu mnemonicParsing="false" text="Scenes">
                     <items>
-                        <MenuItem id="testMenuItem" mnemonicParsing="false"
-                                  onAction="#onShowTestScene"
-                                  text="Test"/>
                         <MenuItem id="starPatternMenuItem" mnemonicParsing="false"
                                   onAction="#onShowstarPatternSettings"
                                   text="Star Pattern"/>
@@ -75,6 +72,9 @@
                         <MenuItem id="ledaMenuItem" mnemonicParsing="false"
                                   onAction="#onShowLedaColliderEditor"
                                   text="Leda Colliders"/>
+                        <MenuItem id="testMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowTestScene"
+                                  text="Test"/>
                     </items>
                 </Menu>
 

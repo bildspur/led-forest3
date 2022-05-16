@@ -58,6 +58,10 @@
     -fx-graphic: url("../images/AudioIcon16.png");
 }
 
+#testMenuItem > .label {
+    -fx-graphic: url("../images/Lab16.png");
+}
+
 .ikonli-font-icon {
     -fx-icon-color: white;
     -fx-icon-size: 20px;

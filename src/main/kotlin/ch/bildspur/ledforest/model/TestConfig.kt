@@ -27,4 +27,8 @@ class TestConfig {
     @Expose
     @ColorParameter("Color")
     var color = DataModel(RGB(1.0, 0.0, 0.0, 1.0))
+
+    @Expose
+    @BooleanParameter("Solo Mode")
+    var soloMode = DataModel(false)
 }
