@@ -68,7 +68,7 @@ abstract class LightElement(
     }
 
     override fun toString(): String {
-        return "${name.value} ${universe.value + 1}.${startAddress + 1}-${endAddress + 1} (${ledCount.value})"
+        return "${name.value} (${universe.value + 1}.${startAddress + 1}-${endAddress + 1} / ${ledCount.value})"
     }
 
     override fun gsonPostProcess() {
