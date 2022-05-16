@@ -39,12 +39,14 @@ class TestScene(project: Project, tubes: List<Tube>) : BaseScene("Test Scene", p
         if (index >= maxLeds)
             index = -project.test.size.value
 
+        val color = project.test.color.value.toHSV()
+
         ledsByUniverse.map { it.value }.forEach { leds ->
             leds.forEachIndexed { i, led ->
                 if (index <= i && i < index + project.test.size.value) {
-                    led.color.fade(ColorMode.color(150, 80, 100), project.test.fade.value)
+                    led.color.fade(ColorMode.color(color.h, color.s, 100), project.test.fade.value)
                 } else {
-                    led.color.fade(ColorMode.color(60, 80, 100), project.test.fade.value)
+                    led.color.fade(ColorMode.color(color.h, color.s, 0), project.test.fade.value)
                 }
             }
         }

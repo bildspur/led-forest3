@@ -58,7 +58,7 @@ class Project {
             Thread.sleep(50)
         }
 
-        Sketch.instance.project.value.lights.forEachLED {
+        Sketch.instance.project.value.lightElements.forEachLED {
             it.color.fadeB(100.0f, 0.1f)
         }
     }
@@ -70,7 +70,7 @@ class Project {
             Thread.sleep(50)
         }
 
-        Sketch.instance.project.value.lights.forEachLED {
+        Sketch.instance.project.value.lightElements.forEachLED {
             it.color.fadeB(0.0f, 0.1f)
         }
     }
@@ -82,7 +82,7 @@ class Project {
             Thread.sleep(50)
         }
 
-        val universes = Sketch.instance.project.value.lights.groupBy { it.universe.value }
+        val universes = Sketch.instance.project.value.lightElements.groupBy { it.universe.value }
         universes.forEach { (u, ts) ->
             val color = TubeShape.UNIVERSE_COLORS[u % TubeShape.UNIVERSE_COLORS.size]
             val minAddress = ts.minOf { it.startAddress }
