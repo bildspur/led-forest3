@@ -643,6 +643,10 @@ class PrimaryView {
         initSettingsView(project.value.starPattern, "Star Pattern")
     }
 
+    fun onShowTestScene() {
+        initSettingsView(project.value.test, "Test")
+    }
+
     fun onClose() {
         sketch.exit()
         exitProcess(0)

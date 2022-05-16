@@ -19,6 +19,8 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
     val pulseScene = PulseScene(project, tubes)
     val ledaScene = LedaScene(project, tubes, pulseScene, sketch.pose)
 
+    val testScene = TestScene(project, tubes)
+
     var activeScene: BaseScene = blackScene
 
     private val task = TimerTask(0, { render() }, "SceneManager")
@@ -87,6 +89,10 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
 
         if (activeScene != blackScene && !project.isSceneManagerEnabled.value)
             initScene(blackScene)
+
+        if (activeScene != testScene && project.test.enabled.value) {
+            initScene(testScene)
+        }
 
         try {
             if (activeScene != strobeScene

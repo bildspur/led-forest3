@@ -57,6 +57,9 @@
 
                 <Menu mnemonicParsing="false" text="Scenes">
                     <items>
+                        <MenuItem id="testMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowTestScene"
+                                  text="Test"/>
                         <MenuItem id="starPatternMenuItem" mnemonicParsing="false"
                                   onAction="#onShowstarPatternSettings"
                                   text="Star Pattern"/>

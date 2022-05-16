@@ -175,6 +175,9 @@ class Project {
     @Expose
     var ui = UserInterfaceConfig()
 
+    @Expose
+    var test = TestConfig()
+
     init {
         solidLEDColor.onChanged += {
             isSceneManagerEnabled.value = false
