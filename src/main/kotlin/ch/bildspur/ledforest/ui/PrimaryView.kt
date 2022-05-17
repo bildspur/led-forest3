@@ -558,6 +558,7 @@ class PrimaryView {
                         it.universes.remove(selectedItem as Universe)
                 }
                 is Tube -> project.value.tubes.remove(selectedItem as Tube)
+                is LightElement -> project.value.lights.remove(selectedItem)
             }
 
             rebuildRenderer()
