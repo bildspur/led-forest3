@@ -14,7 +14,7 @@ class BlackScene(project: Project, tubes: List<Tube>) : BaseScene("Black Scene",
 
     override fun setup() {
         // set all led's one black
-        tubes.forEachLED {
+        project.lightElements.forEachLED {
             it.color.fade(ColorMode.color(0), 0.05f)
         }
     }

@@ -32,7 +32,7 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
 
     override fun setup() {
         timer.setup()
-        initScene(starScene)
+        initScene(blackScene)
     }
 
     override fun render() {

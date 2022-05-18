@@ -67,6 +67,10 @@ class LedaScene(
 
     override fun stop() {
         pulseScene.stop()
+
+        ledRing?.leds?.forEach {
+            it.color.fade(ColorMode.color(0),0.2f)
+        }
     }
 
     override fun dispose() {
