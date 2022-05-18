@@ -3,9 +3,7 @@ package ch.bildspur.ledforest.model.light
 import ch.bildspur.ledforest.configuration.PostProcessable
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.model.DataModel
-import ch.bildspur.ui.properties.ActionParameter
-import ch.bildspur.ui.properties.NumberParameter
-import ch.bildspur.ui.properties.StringParameter
+import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 import processing.core.PVector
 
