@@ -3,10 +3,14 @@ package ch.bildspur.ledforest.scene
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
+import ch.bildspur.ledforest.model.light.LED
+import ch.bildspur.ledforest.model.light.LEDRing
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.pose.PoseLandmark
+import ch.bildspur.ledforest.util.ColorMode
+import ch.bildspur.ledforest.util.Debouncer
 import processing.core.PVector
 
 class LedaScene(
@@ -20,8 +24,14 @@ class LedaScene(
     override val timerTask: TimerTask
         get() = task
 
+    private var ledRing: LEDRing? = null
+    private var poseDetected = Debouncer(500, false)
+
     override fun setup() {
         pulseScene.setup()
+
+        // try to find led ring
+        ledRing = project.spatialLightElements.first { it is LEDRing } as LEDRing
     }
 
     override fun update() {
@@ -36,6 +46,19 @@ class LedaScene(
         for (pose in poses) {
             for (collider in config.landmarkColliders) {
                 checkCollision(pose, collider)
+            }
+        }
+
+        poseDetected.update(poses.isNotEmpty())
+
+        // check if led should be turned on
+        if(poseDetected.currentValue) {
+            ledRing?.leds?.forEach {
+                it.color.fade(ColorMode.color(255),0.2f)
+            }
+        } else {
+            ledRing?.leds?.forEach {
+                it.color.fade(ColorMode.color(0),0.2f)
             }
         }
 
