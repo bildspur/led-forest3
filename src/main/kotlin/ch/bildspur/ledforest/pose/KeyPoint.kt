@@ -23,4 +23,8 @@ class KeyPoint : PVector {
             return KeyPoint(PVector.lerp(v1, v2, amt), (v1.score * (1.0f - amt)) + (v2.score * amt))
         }
     }
+
+    public fun clone() : KeyPoint {
+        return KeyPoint(x, y, z, score)
+    }
 }

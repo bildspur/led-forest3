@@ -47,6 +47,9 @@ class LedaScene(
             for (collider in config.landmarkColliders) {
                 checkCollision(pose, collider)
             }
+
+            // todo: implement realtime pose interaction
+            // todo: implement pose-classification
         }
 
         poseDetected.update(poses.isNotEmpty())

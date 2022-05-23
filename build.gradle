@@ -140,6 +140,9 @@ dependencies {
     // peasy cam
     implementation files('lib/plugins/peasycam/peasycam.jar')
 
+    // smile
+    implementation("com.github.haifengl:smile-kotlin:2.6.0")
+
     // minim for audio
     implementation files('lib/plugins/minim/library/minim.jar')
     implementation files('lib/plugins/minim/library/jsminim.jar')

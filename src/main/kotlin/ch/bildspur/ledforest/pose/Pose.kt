@@ -3,13 +3,13 @@ package ch.bildspur.ledforest.pose
 import ch.bildspur.ledforest.model.easing.EasingVector
 import ch.bildspur.ledforest.pose.clients.LightWeightOpenPoseClient
 
-class Pose {
-    var id = 0
-    var score: Float = -1f
+class Pose(
+    var id: Int = 0,
+    var keypoints: Array<KeyPoint> = Array(LightWeightOpenPoseClient.KEY_POINT_COUNT) { KeyPoint() },
+    var score: Float = -1f,
+    var startTimestamp: Long = System.currentTimeMillis()
+) {
 
-    var keypoints: Array<KeyPoint> = Array(LightWeightOpenPoseClient.KEY_POINT_COUNT) { KeyPoint() }
-
-    var startTimestamp = System.currentTimeMillis()
     val easedPosition = EasingVector()
 
     operator fun get(landmarkType: PoseLandmark): KeyPoint {
@@ -72,4 +72,13 @@ class Pose {
 
     val leftEar: KeyPoint
         get() = keypoints[17]
+
+    fun clone(): Pose {
+        return Pose(
+            id,
+            keypoints.map { it.clone() }.toTypedArray(),
+            score,
+            startTimestamp
+        )
+    }
 }
