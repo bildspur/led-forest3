@@ -8,25 +8,12 @@ class PoseClassifier() : BaseClassifier() {
     private var model: KNN<DoubleArray>? = null
     private val embedder = PoseEmbedder()
 
-    private val samples = mutableMapOf<Int, MutableList<DoubleArray>>()
-
-    val sampleCount: Int
-        get() = samples.map { it.value.size }.sum()
-
     override fun setup() {
         // todo: load saved embeddings
     }
 
-    fun sample(pose: Pose, label: Int) {
-        val embedding = embedder.create(pose)
-        if (label !in samples) {
-            samples[label] = mutableListOf()
-        }
-        samples[label]?.add(embedding)
-    }
-
-    fun fit() {
-        val data = samples.flatMap { s -> s.value.map { s.key to it } }
+    fun fit(samples: Map<Int, MutableList<Pose>>) {
+        val data = samples.flatMap { s -> s.value.map { s.key to embedder.create(it) } }
 
         if (data.isEmpty()) {
             println("Could not fit knn because there are 0 samples.")

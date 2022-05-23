@@ -8,6 +8,7 @@ import ch.bildspur.ledforest.model.light.GenericLightElement
 import ch.bildspur.ledforest.model.light.LEDRing
 import ch.bildspur.ledforest.model.light.LightElement
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.pose.KeyPoint
 import ch.bildspur.ledforest.util.RuntimeTypeAdapterFactory
 import ch.bildspur.model.DataModel
 import com.github.salomonbrys.kotson.fromJson
@@ -39,15 +40,17 @@ class ConfigurationController {
     }
 
     val gsonBuilder: GsonBuilder = GsonBuilder()
-            .setPrettyPrinting()
-            .excludeFieldsWithoutExposeAnnotation()
-            .registerTypeAdapter(DataModel::class.java, DataModelInstanceCreator())
-            .registerTypeAdapter(PVector::class.java, PVectorSerializer())
-            .registerTypeAdapter(PVector::class.java, PVectorDeserializer())
-            .registerTypeAdapter(Tube::class.java, TubeInstanceCreator())
-            .registerTypeAdapter(LandmarkPulseCollider::class.java, LandmarkPulseColliderInstanceCreator())
-            .registerTypeAdapterFactory(PostProcessingEnabler())
-            .registerTypeAdapterFactory(createLightElementRuntimeFactory())
+        .setPrettyPrinting()
+        .excludeFieldsWithoutExposeAnnotation()
+        .registerTypeAdapter(DataModel::class.java, DataModelInstanceCreator())
+        .registerTypeAdapter(PVector::class.java, PVectorSerializer())
+        .registerTypeAdapter(PVector::class.java, PVectorDeserializer())
+        .registerTypeAdapter(KeyPoint::class.java, KeyPointSerializer())
+        .registerTypeAdapter(KeyPoint::class.java, KeyPointDeserializer())
+        .registerTypeAdapter(Tube::class.java, TubeInstanceCreator())
+        .registerTypeAdapter(LandmarkPulseCollider::class.java, LandmarkPulseColliderInstanceCreator())
+        .registerTypeAdapterFactory(PostProcessingEnabler())
+        .registerTypeAdapterFactory(createLightElementRuntimeFactory())
 
     val gson: Gson = gsonBuilder.create()
 
@@ -101,6 +104,31 @@ class ConfigurationController {
         }
     }
 
+    private inner class KeyPointDeserializer : JsonDeserializer<KeyPoint> {
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): KeyPoint {
+            val x = json["x"].asFloat
+            val y = json["y"].asFloat
+            val z = json["z"].asFloat
+            val score = json["score"].asFloat
+            val velocity = json["velocity"].asFloat
+            val kp = KeyPoint(x, y, z, score)
+            kp.velocity = velocity
+            return kp
+        }
+    }
+
+    private inner class KeyPointSerializer : JsonSerializer<KeyPoint> {
+        override fun serialize(src: KeyPoint, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            val obj = JsonObject()
+            obj.addProperty("x", src.x)
+            obj.addProperty("y", src.y)
+            obj.addProperty("z", src.z)
+            obj.addProperty("score", src.score)
+            obj.addProperty("velocity", src.velocity)
+            return obj
+        }
+    }
+
     private inner class DataModelInstanceCreator : InstanceCreator<DataModel<*>> {
         override fun createInstance(type: Type): DataModel<*> {
             val typeParameters = (type as ParameterizedType).actualTypeArguments
@@ -131,9 +159,9 @@ class ConfigurationController {
 
     private fun createLightElementRuntimeFactory(): RuntimeTypeAdapterFactory<LightElement> {
         return RuntimeTypeAdapterFactory
-                .of(LightElement::class.java, "type")
-                .registerSubtype(Tube::class.java, "tube")
-                .registerSubtype(GenericLightElement::class.java, "generic")
-                .registerSubtype(LEDRing::class.java, "ring")
+            .of(LightElement::class.java, "type")
+            .registerSubtype(Tube::class.java, "tube")
+            .registerSubtype(GenericLightElement::class.java, "generic")
+            .registerSubtype(LEDRing::class.java, "ring")
     }
 }

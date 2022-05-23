@@ -2,13 +2,14 @@ package ch.bildspur.ledforest.pose
 
 import ch.bildspur.ledforest.model.easing.EasingVector
 import ch.bildspur.ledforest.pose.clients.LightWeightOpenPoseClient
+import com.google.gson.annotations.Expose
 
 class Pose(
-    var id: Int = 0,
-    var keypoints: Array<KeyPoint> = Array(LightWeightOpenPoseClient.KEY_POINT_COUNT) { KeyPoint() },
-    var score: Float = -1f,
-    var startTimestamp: Long = System.currentTimeMillis(),
-    var classification: Int = -1
+    @Expose var id: Int = 0,
+    @Expose var keypoints: Array<KeyPoint> = Array(LightWeightOpenPoseClient.KEY_POINT_COUNT) { KeyPoint() },
+    @Expose var score: Float = -1f,
+    @Expose var startTimestamp: Long = System.currentTimeMillis(),
+    @Expose var classification: Int = -1
 ) {
 
     val easedPosition = EasingVector()

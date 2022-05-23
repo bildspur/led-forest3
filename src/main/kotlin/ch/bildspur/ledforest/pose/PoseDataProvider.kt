@@ -150,13 +150,12 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 if (classificationConfig.enabled.value) {
                     actualPoses.forEach {
                         if (classificationConfig.sample.value) {
-                            poseClassifier.sample(it, classificationConfig.label.value)
-                            classificationConfig.sampleCount.value = "${poseClassifier.sampleCount}"
+                            classificationConfig.sample(it, classificationConfig.label.value)
+                            classificationConfig.sampleCountText.value = "${classificationConfig.sampleCount}"
                         } else {
                             val result = poseClassifier.predict(it)
                             it.classification = result.label
-
-                            println("Pose is: ${it.classification}")
+                            // println("${System.currentTimeMillis()} Class: ${it.classification}")
                         }
                     }
                 }
