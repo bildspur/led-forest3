@@ -7,7 +7,8 @@ class Pose(
     var id: Int = 0,
     var keypoints: Array<KeyPoint> = Array(LightWeightOpenPoseClient.KEY_POINT_COUNT) { KeyPoint() },
     var score: Float = -1f,
-    var startTimestamp: Long = System.currentTimeMillis()
+    var startTimestamp: Long = System.currentTimeMillis(),
+    var classification: Int = -1
 ) {
 
     val easedPosition = EasingVector()
@@ -78,7 +79,8 @@ class Pose(
             id,
             keypoints.map { it.clone() }.toTypedArray(),
             score,
-            startTimestamp
+            startTimestamp,
+            classification
         )
     }
 }

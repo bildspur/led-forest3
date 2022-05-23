@@ -54,6 +54,13 @@ class PoseInteraction {
     @EnumParameter("Image Flip")
     var imageFlip = DataModel(ImageFlip.None)
 
+    @SeparatorParameter("Classification")
+    private val classSep = Any()
+
+    @Expose
+    @GroupParameter("Classification")
+    val classification = PoseClassificationConfig()
+
     @SeparatorParameter("Tracking")
     private val trackingSep = Any()
 

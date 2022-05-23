@@ -1,12 +1,17 @@
 package ch.bildspur.ledforest.ml
 
 import ch.bildspur.ledforest.pose.Pose
+import smile.classification.KNN
 import smile.classification.knn
 
 class PoseClassifier() : BaseClassifier() {
-    private var model = knn(arrayOf(DoubleArray(0)), IntArray(0), 0)
-    private val samples = mutableMapOf<Int, MutableList<DoubleArray>>()
+    private var model: KNN<DoubleArray>? = null
     private val embedder = PoseEmbedder()
+
+    private val samples = mutableMapOf<Int, MutableList<DoubleArray>>()
+
+    val sampleCount: Int
+        get() = samples.map { it.value.size }.sum()
 
     override fun setup() {
         // todo: load saved embeddings
@@ -23,6 +28,11 @@ class PoseClassifier() : BaseClassifier() {
     fun fit() {
         val data = samples.flatMap { s -> s.value.map { s.key to it } }
 
+        if (data.isEmpty()) {
+            println("Could not fit knn because there are 0 samples.")
+            return
+        }
+
         model = knn(
             data.map { it.second }.toTypedArray(),
             data.map { it.first }.toIntArray(),
@@ -36,7 +46,11 @@ class PoseClassifier() : BaseClassifier() {
     }
 
     override fun predict(embedding: DoubleArray): ClassificationResult {
-        return ClassificationResult(model.predict(embedding), 0.0f)
+        if (model == null)
+            return ClassificationResult(-1, 0.0f)
+
+        val result = model!!.predict(embedding)
+        return ClassificationResult(result, 0.0f)
     }
 
 }

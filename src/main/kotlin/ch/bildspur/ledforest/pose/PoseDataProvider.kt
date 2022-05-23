@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.pose
 
 import ch.bildspur.ledforest.Sketch
+import ch.bildspur.ledforest.ml.PoseClassifier
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.image.ImageFlip
 import ch.bildspur.ledforest.model.image.ImageRotation
@@ -27,6 +28,8 @@ import kotlin.concurrent.thread
 class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
     lateinit var client: PoseClient
     lateinit var trackerThread: Thread
+
+    val poseClassifier = PoseClassifier()
 
     val isRunning = AtomicBoolean()
 
@@ -142,6 +145,22 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                     }
                 }
 
+                // classify
+                val classificationConfig = project.value.poseInteraction.classification
+                if (classificationConfig.enabled.value) {
+                    actualPoses.forEach {
+                        if (classificationConfig.sample.value) {
+                            poseClassifier.sample(it, classificationConfig.label.value)
+                            classificationConfig.sampleCount.value = "${poseClassifier.sampleCount}"
+                        } else {
+                            val result = poseClassifier.predict(it)
+                            it.classification = result.label
+
+                            println("Pose is: ${it.classification}")
+                        }
+                    }
+                }
+
                 // update poses
                 relevantPoses.set(actualPoses)
 
@@ -183,6 +202,7 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 nx = 1.0f - pos.x
                 ny = 1.0f - pos.y
             }
+            else -> {}
         }
 
         if (flip == ImageFlip.Horizontal) {

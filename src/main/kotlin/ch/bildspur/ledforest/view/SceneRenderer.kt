@@ -84,7 +84,6 @@ class SceneRenderer(
 
         // visualize pulses
         if (project.pulseScene.enabled.value && project.pulseScene.visualize.value) {
-            val maxRadius = project.interaction.interactionBox.value.mag()
             project.pulseScene.pulses.forEach {
                 g.push()
 
