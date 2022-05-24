@@ -14,6 +14,10 @@ class Light {
     var isArtNetRendering = DataModel(true)
 
     @Expose
+    @SliderParameter("Global Brightness", 0.0, 1.0, 0.01)
+    var globalBrightness = DataModel(1f)
+
+    @Expose
     @SliderParameter("Luminosity", 0.0, 1.0, 0.01)
     var luminosity = DataModel(1f)
 

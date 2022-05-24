@@ -2,7 +2,7 @@ package ch.bildspur.ledforest
 
 import ch.bildspur.event.Event
 import ch.bildspur.ledforest.artnet.ArtNetClient
-import ch.bildspur.ledforest.controller.MidiController
+import ch.bildspur.ledforest.controller.midi.MidiController
 import ch.bildspur.ledforest.controller.OscController
 import ch.bildspur.ledforest.controller.PeasyController
 import ch.bildspur.ledforest.controller.RemoteController
