@@ -72,7 +72,6 @@ class MidiController(val project: DataModel<Project>) {
     }
 
     fun controllerChange(channel: Int, number: Int, value: Int) {
-        println("controller changed")
         mapping.controllerChange(project.value, midi, channel, number, value)
 
     }

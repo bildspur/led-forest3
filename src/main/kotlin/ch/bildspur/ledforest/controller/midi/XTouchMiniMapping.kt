@@ -6,7 +6,14 @@ import themidibus.MidiBus
 
 class XTouchMiniMapping : MidiMapping("X-TOUCH MINI") {
     override fun attach(project: Project, midi: MidiBus) {
+        midi.sendNoteOn(10, 22, 0)
+        midi.sendNoteOn(10, 21, 0)
 
+        if (project.leda.enabled.value) {
+            midi.sendNoteOn(10, 22, 127)
+        } else {
+            midi.sendNoteOn(10, 21, 127)
+        }
     }
 
     override fun detach(project: Project) {
@@ -37,7 +44,14 @@ class XTouchMiniMapping : MidiMapping("X-TOUCH MINI") {
     }
 
     override fun noteOff(project: Project, midi: MidiBus, channel: Int, pitch: Int, velocity: Int) {
+        midi.sendNoteOn(10, 22, 0)
+        midi.sendNoteOn(10, 21, 0)
 
+        if (project.leda.enabled.value) {
+            midi.sendNoteOn(10, 22, 127)
+        } else {
+            midi.sendNoteOn(10, 21, 127)
+        }
     }
 
     override fun controllerChange(project: Project, midi: MidiBus, channel: Int, number: Int, value: Int) {
