@@ -49,7 +49,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         poses.forEach {
             // add hand reactors
             // createHandInteractor(reactors, it.leftShoulder, it.leftElbow, it.leftWrist)
-            createHandInteractor(reactors, it.rightShoulder, it.rightElbow, it.rightWrist)
+            createHandReactor(reactors, it.rightShoulder, it.rightElbow, it.rightWrist)
         }
 
         // interaction tubes
@@ -58,7 +58,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         }
     }
 
-    private fun createHandInteractor(
+    private fun createHandReactor(
         reactors: MutableList<Reactor>,
         shoulder: PVector,
         elbow: PVector,

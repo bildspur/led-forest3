@@ -32,6 +32,10 @@ class PoseInteraction {
     var showTrackedPoses = DataModel(false)
 
     @Expose
+    @BooleanParameter("Show Reactors")
+    var showReactors = DataModel(true)
+
+    @Expose
     @NumberParameter("Port")
     var port = DataModel(7400)
 

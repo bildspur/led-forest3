@@ -76,6 +76,8 @@ class TubePreview(project: DataModel<Project>) : Base3DScene<Any>(project) {
 
         // check for poses
         reactorShapes.forEach { it.isVisible = false }
+
+        if (!project.value.poseInteraction.showReactors.value) return
         val reactors = project.value.poseInteraction.activeReactors
         reactors.forEachIndexed { index, reactor ->
             val shape = reactorShapes[index]
