@@ -37,8 +37,8 @@ class LedaScene(
     val poseState = SceneState(poseScene)
     val pulseState = SceneState(pulseScene)
 
-    val offState = TimedState("Off", 3000L, idleState)
-    val welcomeState = TimedState("Welcome", 3000L, poseState)
+    val offState = TimedState("Off", 1000L, idleState)
+    val welcomeState = TimedState("Welcome", 1000L, poseState)
 
     val stateMachine = StateMachine(offState)
 
@@ -58,10 +58,12 @@ class LedaScene(
         poseState.onUpdate = {
             // check for collisions
             var hasCollision = false
-            for (pose in poses) {
-                for (collider in project.leda.landmarkColliders) {
-                    if (checkCollision(pose, collider)) {
-                        hasCollision = true
+            if (project.leda.enabledCollider.value) {
+                for (pose in poses) {
+                    for (collider in project.leda.landmarkColliders) {
+                        if (checkCollision(pose, collider)) {
+                            hasCollision = true
+                        }
                     }
                 }
             }

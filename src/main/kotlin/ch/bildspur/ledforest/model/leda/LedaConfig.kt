@@ -11,6 +11,10 @@ class LedaConfig {
     @BooleanParameter("Enabled")
     var enabled = DataModel(false)
 
+    @Expose
+    @BooleanParameter("Enabled Collider")
+    var enabledCollider = DataModel(true)
+
     @StringParameter("State", isEditable = false)
     var currentState = DataModel("-")
 

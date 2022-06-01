@@ -3,7 +3,6 @@ package ch.bildspur.ledforest.ui.control.scene
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.ui.control.scene.control.OrbitControls
 import ch.bildspur.model.DataModel
-import javafx.animation.AnimationTimer
 import javafx.application.Platform
 import javafx.scene.Group
 import javafx.scene.PerspectiveCamera
@@ -84,6 +83,7 @@ abstract class Base3DScene<E>(
             shapes.forEach { (element, shape) ->
                 updateShape(element, shape)
             }
+            postRender()
         }
     }
 
@@ -95,6 +95,8 @@ abstract class Base3DScene<E>(
             recreateScene(sceneGroup)
         }
     }
+
+    open fun postRender() {}
 
     internal abstract fun recreateScene(root: Group)
     internal abstract fun updateShape(element: E, shape: Shape3D)

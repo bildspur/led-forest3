@@ -4,14 +4,17 @@ import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.image.ImageFlip
 import ch.bildspur.ledforest.model.image.ImageRotation
 import ch.bildspur.ledforest.pose.clients.PoseClientTypes
+import ch.bildspur.ledforest.scene.PoseScene
 import ch.bildspur.ledforest.ui.properties.SeparatorParameter
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
 import ch.bildspur.ui.properties.*
 import ch.bildspur.util.Mapping
 import com.google.gson.annotations.Expose
+import java.util.concurrent.CopyOnWriteArrayList
 
 class PoseInteraction {
+    val activeReactors = CopyOnWriteArrayList<PoseScene.Reactor>()
 
     @StringParameter("Pose Count", isEditable = false)
     var poseCount = DataModel("-")

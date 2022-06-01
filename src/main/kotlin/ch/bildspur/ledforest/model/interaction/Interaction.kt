@@ -7,6 +7,7 @@ import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.ActionParameter
 import ch.bildspur.ui.properties.BooleanParameter
 import com.google.gson.annotations.Expose
+import processing.core.PApplet
 import processing.core.PVector
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -44,9 +45,23 @@ class Interaction {
         val ranges = SpaceInformation.calculateTubeDimensions(Sketch.instance.project.value.tubes)
 
         mappingSpace.value = PVector(
-                ceil(abs(ranges.x.low).coerceAtLeast(ranges.x.high) * scaleFactor).toFloat(),
-                ceil(abs(ranges.y.low).coerceAtLeast(ranges.y.high) * scaleFactor).toFloat(),
-                ceil(abs(ranges.z.low).coerceAtLeast(ranges.z.high) * scaleFactor).toFloat()
+            ceil(abs(ranges.x.low).coerceAtLeast(ranges.x.high) * scaleFactor).toFloat(),
+            ceil(abs(ranges.y.low).coerceAtLeast(ranges.y.high) * scaleFactor).toFloat(),
+            ceil(abs(ranges.z.low).coerceAtLeast(ranges.z.high) * scaleFactor).toFloat()
+        )
+    }
+
+    fun fromInteractionToMappingSpace(v: PVector): PVector {
+        val ias = interactionSpace.value
+        val mps = mappingSpace.value
+
+        val hias = PVector.div(ias, 2f)
+        val hmps = PVector.div(mps, 2f)
+
+        return PVector(
+            PApplet.map(v.x, -hias.x, hias.x, -hmps.x, hmps.x),
+            PApplet.map(v.y, -hias.y, hias.y, -hmps.y, hmps.y),
+            PApplet.map(v.z, 0f, ias.z, -hmps.z, hmps.z)
         )
     }
 }

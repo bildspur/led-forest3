@@ -10,7 +10,6 @@ import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.realsense.RealSenseDataProvider
 import ch.bildspur.ledforest.realsense.tracking.ActiveRegion
-import ch.bildspur.ledforest.scene.mapPose
 import ch.bildspur.ledforest.util.*
 import processing.core.PApplet
 import processing.core.PGraphics
@@ -247,7 +246,7 @@ class SceneRenderer(
     }
 
     private fun renderPose(pose: Pose) {
-        val position = pose.easedPosition.mapPose()
+        val position = project.interaction.fromInteractionToMappingSpace(pose.easedPosition)
         g.pushMatrix()
         g.translate(position.x, position.y, position.z)
         g.noFill()

@@ -6,7 +6,6 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.image.ImageFlip
 import ch.bildspur.ledforest.model.image.ImageRotation
 import ch.bildspur.ledforest.pose.clients.PoseClient
-import ch.bildspur.ledforest.scene.mapPose
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.util.toFloat2

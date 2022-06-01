@@ -15,8 +15,8 @@ import processing.core.PApplet.map
 import processing.core.PVector
 import java.lang.Integer.max
 
-class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataProvider)
-    : BaseInteractionScene("Pose", project, tubes) {
+class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataProvider) :
+    BaseInteractionScene("Pose", project, tubes) {
 
     private val task = TimerTask(0, { update() })
 
@@ -25,11 +25,13 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 
     var iaTubes = emptyList<Tube>()
 
-    data class Interactor(val position: PVector,
-                          val hue: Float,
-                          val saturation: Float,
-                          val brightness: Float,
-                          val impactRadius: Float)
+    data class Reactor(
+        val position: PVector,
+        val hue: Float,
+        val saturation: Float,
+        val brightness: Float,
+        val impactRadius: Float
+    )
 
     override fun setup() {
         iaTubes = tubes.filter { it.tag.value == TubeTag.Interaction }.toList()
@@ -43,25 +45,27 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         // receive poses
         val poses = poseProvider.poses
 
-        // create interactors
-        val interactors = mutableListOf<Interactor>()
+        // create reactors
+        val reactors = config.activeReactors
+        reactors.clear()
         poses.forEach {
-            interactors.add(Interactor(it.easedPosition,
-                    config.hueSpectrum.value.modValue(0.5f), config.saturation.value, config.brightness.value,
-                    config.interactionDistanceRange.value.low.toFloat()))
-
-            // add hand interactors
-            createHandInteractor(interactors, it.leftShoulder, it.leftElbow, it.leftWrist)
-            createHandInteractor(interactors, it.rightShoulder, it.rightElbow, it.rightWrist)
+            // add hand reactors
+            // createHandInteractor(reactors, it.leftShoulder, it.leftElbow, it.leftWrist)
+            createHandInteractor(reactors, it.rightShoulder, it.rightElbow, it.rightWrist)
         }
 
         // interaction tubes
         iaTubes.forEach {
-            it.leds.forEach { led -> interactWithLED(led, interactors) }
+            it.leds.forEach { led -> interactWithLED(led, reactors) }
         }
     }
 
-    private fun createHandInteractor(interactors: MutableList<Interactor>, shoulder: PVector, elbow: PVector, wrist: PVector) {
+    private fun createHandInteractor(
+        reactors: MutableList<Reactor>,
+        shoulder: PVector,
+        elbow: PVector,
+        wrist: PVector
+    ) {
         // only do it if points are valid
         if (shoulder.isInvalid() || elbow.isInvalid() || wrist.isInvalid()) return
         val config = project.poseInteraction
@@ -76,9 +80,17 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         val angleDegree = PApplet.degrees(angle)
         val angleRatio = angleDegree / 180f
 
-        interactors.add(Interactor(wrist,
+        val mappedPosition = project.interaction.fromInteractionToMappingSpace(
+            PVector.sub(wrist, project.leda.triggerOrigin.value)
+        )
+
+        reactors.add(
+            Reactor(
+                mappedPosition,
                 config.hueSpectrum.value.modValue(angleRatio), config.saturation.value, config.brightness.value,
-                config.interactionDistanceRange.value.modValue(ratio)))
+                config.interactionDistanceRange.value.modValue(ratio)
+            )
+        )
     }
 
     override fun stop() {
@@ -92,7 +104,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
     override val isInteracting: Boolean
         get() = poseProvider.poses.isNotEmpty()
 
-    private fun interactWithLED(led: LED, interactors: List<Interactor>) {
+    private fun interactWithLED(led: LED, reactors: List<Reactor>) {
         val config = project.poseInteraction
         val ledPosition = led.position
 
@@ -103,19 +115,19 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 
         var relevantPoseCount = 0
 
-        for (interactor in interactors) {
+        for (reactor in reactors) {
             // get distance to led
-            val posePosition = interactor.position.mapPose()
+            val posePosition = reactor.position
             val distance = posePosition.dist(ledPosition)
 
             // check if is relevant for interaction
-            if (distance > interactor.impactRadius) continue
+            if (distance > reactor.impactRadius) continue
 
             // inversed norm delta 1.0 => very close
-            val normDelta = 1f - distance / interactor.impactRadius
-            hue += interactor.hue
-            saturation += interactor.saturation
-            brightness += interactor.brightness * EasingCurves.easeOutSine(normDelta)
+            val normDelta = 1f - distance / reactor.impactRadius
+            hue += reactor.hue
+            saturation += reactor.saturation
+            brightness += reactor.brightness * EasingCurves.easeOutSine(normDelta)
 
             relevantPoseCount++
         }
@@ -134,15 +146,4 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
     private fun PVector.isInvalid(): Boolean {
         return this.x == 0f && this.y == 0f
     }
-}
-
-fun PVector.mapPose(): PVector {
-    val ias = Sketch.instance.project.value.interaction.interactionSpace.value
-    val mps = Sketch.instance.project.value.interaction.mappingSpace.value
-
-    return PVector(
-        map(this.x, 0f, ias.x, -mps.x, mps.x),
-        map(this.y, 0f, ias.y, -mps.y, mps.y),
-        map(this.z, 0f, ias.z, -mps.z, mps.z)
-    )
 }
