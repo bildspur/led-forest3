@@ -128,6 +128,10 @@ class PoseInteraction {
     private val sceneSep = Any()
 
     @Expose
+    @BooleanParameter("Map z to 0", useToggleSwitch = true)
+    var zeroZ = DataModel(false)
+
+    @Expose
     @RangeSliderParameter("Interaction Distance", 0.01, 5.0, 0.01, snap = true)
     var interactionDistanceRange = DataModel(NumberRange(1.0, 2.0))
 

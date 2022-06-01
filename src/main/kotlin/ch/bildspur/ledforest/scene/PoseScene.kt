@@ -78,9 +78,14 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         val angleDegree = PApplet.degrees(angle)
         val angleRatio = angleDegree / 180f
 
+        // todo: move mapping into data-provider
         val mappedPosition = project.interaction.fromInteractionToMappingSpace(
             PVector.sub(wrist, project.leda.triggerOrigin.value)
         )
+
+        if (project.poseInteraction.zeroZ.value) {
+            mappedPosition.z = 0f
+        }
 
         reactors.add(
             Reactor(
