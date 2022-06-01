@@ -55,6 +55,7 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
 
         if (activeScene != poseScene
             && poseScene.isInteracting
+            && !project.leda.enabled.value
             && project.isSceneManagerEnabled.value
             && project.interaction.isPoseInteractionEnabled.value
         )

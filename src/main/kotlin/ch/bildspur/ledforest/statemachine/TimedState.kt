@@ -14,8 +14,8 @@ class TimedState(
 
 
     override fun activate() {
-        timer.reset()
         super.activate()
+        timer.reset()
     }
 
     override fun update(): StateResult {
