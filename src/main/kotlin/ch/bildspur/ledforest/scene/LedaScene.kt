@@ -3,7 +3,6 @@ package ch.bildspur.ledforest.scene
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
-import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.LEDRing
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.pose.Pose
