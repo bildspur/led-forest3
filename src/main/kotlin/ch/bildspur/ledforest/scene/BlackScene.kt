@@ -6,7 +6,7 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
 
-class BlackScene(project: Project, tubes: List<Tube>) : BaseScene("Black Scene", project, tubes) {
+class BlackScene(project: Project, tubes: List<Tube>) : BaseScene("Black", project, tubes) {
     private val task = TimerTask(1000, { update() })
 
     override val timerTask: TimerTask

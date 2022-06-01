@@ -11,7 +11,7 @@ import ch.bildspur.ledforest.util.limit
 import processing.core.PApplet
 
 class RealSenseScene(project: Project, tubes: List<Tube>, val realSense: RealSenseDataProvider)
-    : BaseInteractionScene("RealSense Scene", project, tubes) {
+    : BaseInteractionScene("RealSense", project, tubes) {
 
     private val task = TimerTask(0, { update() })
 

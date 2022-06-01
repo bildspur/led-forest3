@@ -10,7 +10,7 @@ import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.modValue
 
 
-class CloudScene(project: Project, tubes: List<Tube>, override val isInteracting: Boolean = true) : BaseInteractionScene("Cloud Scene", project, tubes) {
+class CloudScene(project: Project, tubes: List<Tube>, override val isInteracting: Boolean = true) : BaseInteractionScene("Cloud", project, tubes) {
     private val task = TimerTask(project.cloudScene.timerInterval.value, { update() })
 
     override val timerTask: TimerTask

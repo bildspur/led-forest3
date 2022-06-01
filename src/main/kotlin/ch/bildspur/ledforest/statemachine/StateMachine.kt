@@ -21,4 +21,7 @@ class StateMachine(initialState: State) {
     fun release() {
         activeState.deactivate()
     }
+
+    val activeStateName: String
+        get() = activeState.name
 }

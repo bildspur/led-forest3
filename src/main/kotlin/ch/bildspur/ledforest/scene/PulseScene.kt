@@ -12,7 +12,7 @@ import ch.bildspur.math.pow
 import ch.bildspur.util.map
 import kotlin.math.sqrt
 
-class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse Scene", project, tubes) {
+class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", project, tubes) {
 
     private val task = TimerTask(10, { update() })
 

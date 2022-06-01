@@ -10,7 +10,7 @@ import ch.bildspur.ledforest.util.forEachLED
 import ch.bildspur.util.map
 
 
-class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPattern Scene", project, tubes) {
+class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPattern", project, tubes) {
     private val task = TimerTask(project.starPattern.timerInterval.value, { update() })
 
     override val timerTask: TimerTask

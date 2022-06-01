@@ -15,7 +15,7 @@ import processing.core.PVector
 import java.lang.Integer.max
 
 class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataProvider)
-    : BaseInteractionScene("Pose Scene", project, tubes) {
+    : BaseInteractionScene("Pose", project, tubes) {
 
     private val task = TimerTask(0, { update() })
 

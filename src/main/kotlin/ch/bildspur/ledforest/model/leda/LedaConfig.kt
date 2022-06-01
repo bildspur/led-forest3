@@ -11,6 +11,9 @@ class LedaConfig {
     @BooleanParameter("Enabled")
     var enabled = DataModel(false)
 
+    @StringParameter("State", isEditable = false)
+    var currentState = DataModel("-")
+
     @Expose
     var landmarkColliders = mutableListOf<LandmarkPulseCollider>()
 

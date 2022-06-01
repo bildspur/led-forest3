@@ -9,7 +9,7 @@ import ch.bildspur.ledforest.model.light.TubeTag
 import processing.core.PApplet
 
 class LeapMotionScene(project: Project, tubes: List<Tube>, val leap: LeapDataProvider)
-    : BaseInteractionScene("LeapMotion Scene", project, tubes) {
+    : BaseInteractionScene("LeapMotion", project, tubes) {
     private val task = TimerTask(0, { update() })
 
     override val timerTask: TimerTask

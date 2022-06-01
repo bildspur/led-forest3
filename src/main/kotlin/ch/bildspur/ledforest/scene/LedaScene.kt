@@ -20,7 +20,7 @@ class LedaScene(
     val pulseScene: PulseScene,
     val poseScene: PoseScene,
     val poseProvider: PoseDataProvider
-) : BaseInteractionScene("Leda Scene", project, tubes) {
+) : BaseInteractionScene("Leda", project, tubes) {
 
     private val task = TimerTask(10, { update() })
 
@@ -85,6 +85,8 @@ class LedaScene(
     }
 
     override fun update() {
+        project.leda.currentState.value = stateMachine.activeStateName
+
         if (!poseProvider.isRunning.get())
             return
 

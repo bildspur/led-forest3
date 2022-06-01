@@ -7,7 +7,7 @@ import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.ExtendedRandom
 import ch.bildspur.ledforest.util.forEachLED
 
-class StrobeScene(project: Project, tubes: List<Tube>) : BaseScene("Strobe Scene", project, tubes) {
+class StrobeScene(project: Project, tubes: List<Tube>) : BaseScene("Strobe", project, tubes) {
 
     private val task = TimerTask(10, { update() })
 
