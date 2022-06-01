@@ -11,6 +11,7 @@ import ch.bildspur.ledforest.util.EasingCurves
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.modValue
 import processing.core.PApplet
+import processing.core.PApplet.map
 import processing.core.PVector
 import java.lang.Integer.max
 
@@ -136,16 +137,12 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 }
 
 fun PVector.mapPose(): PVector {
-    val box = Sketch.instance.project.value.interaction.mappingSpace.value
-    val config = Sketch.instance.project.value.poseInteraction
+    val ias = Sketch.instance.project.value.interaction.interactionSpace.value
+    val mps = Sketch.instance.project.value.interaction.mappingSpace.value
 
-    val v = PVector(if (config.flipX.value) 1f - this.x else this.x,
-            if (config.flipY.value) 1f - this.y else this.y,
-            if (config.flipZ.value) 1f - this.z else this.z)
-
-    // todo: think about how to set y (2d height)
-    return PVector((v.x * 2.0f - 1.0f) * box.x / 2f,
-            0.5f, //(v.z * 2.0f - 1.0f) * box.y / 2f,
-            // height: maybe not use -1 scaling cause of bounding box
-            (1.0f - v.y) * box.z / 2f)
+    return PVector(
+        map(this.x, 0f, ias.x, -mps.x, mps.x),
+        map(this.y, 0f, ias.y, -mps.y, mps.y),
+        map(this.z, 0f, ias.z, -mps.z, mps.z)
+    )
 }

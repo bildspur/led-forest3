@@ -6,6 +6,7 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.image.ImageFlip
 import ch.bildspur.ledforest.model.image.ImageRotation
 import ch.bildspur.ledforest.pose.clients.PoseClient
+import ch.bildspur.ledforest.scene.mapPose
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.util.toFloat2
@@ -222,11 +223,18 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
         // render tracked poses
         if (project.value.poseInteraction.showTrackedPoses.value) {
             val psTracked = poses
+            val ias = Sketch.instance.project.value.interaction.interactionSpace.value
             for (pose in psTracked) {
                 g.noStroke()
                 g.fill(360.0f * (pose.id % 10) / 10.0f, 80f, 100f)
                 pose.keypoints.forEach {
-                    g.circle(it.x * g.width, it.y * g.height, 20f)
+                    val v = PVector(
+                        PApplet.map(it.x, 0f, ias.x, 0f, 1f),
+                        PApplet.map(it.y, 0f, ias.y, 0f, 1f),
+                        PApplet.map(it.z, 0f, ias.z, 0f, 1f)
+                    )
+
+                    g.circle(v.x * g.width, v.y * g.height, 20f)
                 }
 
                 g.stroke(255)

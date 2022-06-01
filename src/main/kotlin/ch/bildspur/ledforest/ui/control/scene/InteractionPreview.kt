@@ -7,6 +7,7 @@ import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.pose.PoseLandmark
 import ch.bildspur.ledforest.ui.control.scene.control.OrbitControls
 import ch.bildspur.ledforest.ui.control.scene.shapes.Grid
+import ch.bildspur.ledforest.ui.control.scene.shapes.WireBox
 import ch.bildspur.model.DataModel
 import javafx.application.Platform
 import javafx.scene.Group
@@ -170,6 +171,12 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
 
         // add floor
         sceneGroup.children.add(Grid(8.0, 8))
+
+        // add interaction box
+        val box = project.value.interaction.interactionSpace.value
+        val iaBox = WireBox(box.x.toDouble(), box.y.toDouble(), box.z.toDouble())
+        iaBox.translateZ = box.z / 2.0
+        sceneGroup.children.add(iaBox)
 
         // add colliders
         project.value.leda.landmarkColliders.forEach {

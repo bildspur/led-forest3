@@ -2,6 +2,7 @@ package ch.bildspur.ledforest.ui.control.scene
 
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
+import ch.bildspur.ledforest.ui.control.scene.shapes.WireBox
 import ch.bildspur.model.DataModel
 import javafx.scene.Group
 import javafx.scene.paint.Color
@@ -15,9 +16,7 @@ import javafx.scene.transform.Translate
 class TubePreview(project: DataModel<Project>) : Base3DScene<LED>(project) {
     override fun recreateScene(root: Group) {
         val box = project.value.interaction.mappingSpace.value
-        val cage = Rectangle(box.x / -2.0, box.y / -2.0, box.x.toDouble(), box.y.toDouble())
-        cage.style = "-fx-fill: transparent; -fx-stroke: white; -fx-stroke-width: 0.05;"
-        root.children.add(cage)
+        root.children.add(WireBox(box.x.toDouble(), box.y.toDouble(), box.z.toDouble()))
 
         project.value.spatialLightElements.forEach { element ->
             element.recalculateLEDPosition()

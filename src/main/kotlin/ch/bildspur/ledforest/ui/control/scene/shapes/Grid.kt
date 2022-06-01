@@ -3,8 +3,9 @@ package ch.bildspur.ledforest.ui.control.scene.shapes
 import javafx.scene.Group
 import javafx.scene.shape.Line
 import javafx.scene.shape.Rectangle
+import javafx.scene.shape.Sphere
 
-class Grid(size: Double, fields: Int, strokeWidth: Double = 0.02) : Group() {
+class Grid(size: Double, fields: Int, strokeWidth: Double = 0.02, showCenter: Boolean = false) : Group() {
     init {
         val hsize = size * 0.5
         val mainLineStyle = "-fx-fill: transparent; -fx-stroke: white; -fx-stroke-width: ${strokeWidth};"
@@ -25,5 +26,9 @@ class Grid(size: Double, fields: Int, strokeWidth: Double = 0.02) : Group() {
         val cage = Rectangle(-hsize, -hsize, size, size)
         cage.style = mainLineStyle
         children.add(cage)
+
+        if(showCenter) {
+            children.add(Sphere(strokeWidth * 2))
+        }
     }
 }
