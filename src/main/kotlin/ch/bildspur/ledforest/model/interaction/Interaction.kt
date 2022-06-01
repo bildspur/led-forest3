@@ -8,6 +8,8 @@ import ch.bildspur.ui.properties.ActionParameter
 import ch.bildspur.ui.properties.BooleanParameter
 import com.google.gson.annotations.Expose
 import processing.core.PVector
+import kotlin.math.abs
+import kotlin.math.ceil
 
 class Interaction {
     @Expose
@@ -27,20 +29,24 @@ class Interaction {
     var isPoseInteractionEnabled = DataModel(false)
 
     @Expose
-    @PVectorParameter("Interaction Box")
-    var interactionBox = DataModel(PVector(15f, 15f, 10f))
+    @PVectorParameter("Interaction Space")
+    var interactionSpace = DataModel(PVector(1f, 1f, 1f))
 
-    @ActionParameter("Interaction Box", "Auto Scale")
+    @Expose
+    @PVectorParameter("Mapping Space")
+    var mappingSpace = DataModel(PVector(15f, 15f, 10f))
+
+    @ActionParameter("Mapping Space", "Auto Scale")
     val autoScaleInteractionBox = {
         // factor two because interaction box is only half sized
         val scaleFactor = 2.02f
 
         val ranges = SpaceInformation.calculateTubeDimensions(Sketch.instance.project.value.tubes)
 
-        interactionBox.value = PVector(
-                Math.ceil(Math.max(Math.abs(ranges.x.low), ranges.x.high) * scaleFactor).toFloat(),
-                Math.ceil(Math.max(Math.abs(ranges.y.low), ranges.y.high) * scaleFactor).toFloat(),
-                Math.ceil(Math.max(Math.abs(ranges.z.low), ranges.z.high) * scaleFactor).toFloat()
+        mappingSpace.value = PVector(
+                ceil(abs(ranges.x.low).coerceAtLeast(ranges.x.high) * scaleFactor).toFloat(),
+                ceil(abs(ranges.y.low).coerceAtLeast(ranges.y.high) * scaleFactor).toFloat(),
+                ceil(abs(ranges.z.low).coerceAtLeast(ranges.z.high) * scaleFactor).toFloat()
         )
     }
 }

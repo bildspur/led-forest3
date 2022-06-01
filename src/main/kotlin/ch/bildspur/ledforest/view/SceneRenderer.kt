@@ -113,8 +113,8 @@ class SceneRenderer(
         g.noStroke()
         g.translate(0f, 0f, project.visualisation.floorZHeight.value / -2f)
         g.box(
-            project.interaction.interactionBox.value.x,
-            project.interaction.interactionBox.value.y,
+            project.interaction.mappingSpace.value.x,
+            project.interaction.mappingSpace.value.y,
             project.visualisation.floorZHeight.value
         )
         g.popMatrix()
@@ -263,9 +263,9 @@ class SceneRenderer(
         g.noFill()
         g.stroke(255)
         g.box(
-            project.interaction.interactionBox.value.x,
-            project.interaction.interactionBox.value.y,
-            project.interaction.interactionBox.value.z
+            project.interaction.mappingSpace.value.x,
+            project.interaction.mappingSpace.value.y,
+            project.interaction.mappingSpace.value.z
         )
         g.popMatrix()
     }

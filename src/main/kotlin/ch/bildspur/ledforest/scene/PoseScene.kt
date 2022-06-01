@@ -136,7 +136,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 }
 
 fun PVector.mapPose(): PVector {
-    val box = Sketch.instance.project.value.interaction.interactionBox.value
+    val box = Sketch.instance.project.value.interaction.mappingSpace.value
     val config = Sketch.instance.project.value.poseInteraction
 
     val v = PVector(if (config.flipX.value) 1f - this.x else this.x,

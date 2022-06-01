@@ -45,7 +45,6 @@ import jfxtras.styles.jmetro.JMetro
 import jfxtras.styles.jmetro.Style
 import processing.core.PApplet
 import processing.core.PVector
-import tornadofx.tab
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.concurrent.thread
@@ -574,7 +573,7 @@ class PrimaryView {
         val scale = project.value.map.mapScaleFactor.value
 
         // add boundary
-        val box = project.value.interaction.interactionBox.value
+        val box = project.value.interaction.mappingSpace.value
         val position = Point2D(box.x.toDouble() * -0.5, box.y.toDouble() * -0.5).multiply(scale.toDouble())
             .add(transform.x.toDouble(), transform.y.toDouble())
         val dimension = Dimension2D(box.x.toDouble() * scale, box.y.toDouble() * scale)

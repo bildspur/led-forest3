@@ -20,7 +20,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", proje
         get() = task
 
     override fun setup() {
-        project.interaction.interactionBox.fire()
+        project.interaction.mappingSpace.fire()
     }
 
     override fun update() {

@@ -43,4 +43,9 @@ class PoseClassificationConfig {
         sample.value = false
         Sketch.instance.pose.poseClassifier.fit(samples)
     }
+
+    @ActionParameter("Samples", "Clear")
+    private val clear = {
+        samples.clear()
+    }
 }

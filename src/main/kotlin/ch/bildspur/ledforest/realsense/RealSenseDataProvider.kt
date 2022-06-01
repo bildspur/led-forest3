@@ -178,7 +178,7 @@ class RealSenseDataProvider(val sketch: PApplet, val project: DataModel<Project>
             it.update()
 
             // map to interaction box todo: should not be here but is convenient
-            it.mapToInteractionBox(project.value.interaction.interactionBox.value,
+            it.mapToInteractionBox(project.value.interaction.mappingSpace.value,
                     rsi.flipX.value,
                     rsi.flipY.value,
                     rsi.flipZ.value)

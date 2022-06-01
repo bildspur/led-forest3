@@ -57,14 +57,14 @@ class SoundRenderer(val project: Project, val minim: Minim, val leap: LeapDataPr
         if (!hands.isEmpty()) {
             handPlayer.volume.target = project.audio.rattleGain.value.toFloat()
             val average = (hands.sumOf { it.position.x.toDouble() } / hands.size.toDouble()).toFloat()
-            handPlayer.player.pan = PApplet.map(average, 0f, project.interaction.interactionBox.value.x, 0f, 1f).limit(-1f, 1f)
+            handPlayer.player.pan = PApplet.map(average, 0f, project.interaction.mappingSpace.value.x, 0f, 1f).limit(-1f, 1f)
         }
 
         // enable if realsense is there
         if (!rs.activeRegions.isEmpty()) {
             handPlayer.volume.target = project.audio.rattleGain.value.toFloat()
             val average = rs.activeRegions.map { it.normalizedPosition.x }.average().toFloat()
-            handPlayer.player.pan = PApplet.map(average, 0f, project.interaction.interactionBox.value.x, 0f, 1f).limit(-1f, 1f)
+            handPlayer.player.pan = PApplet.map(average, 0f, project.interaction.mappingSpace.value.x, 0f, 1f).limit(-1f, 1f)
         }
     }
 

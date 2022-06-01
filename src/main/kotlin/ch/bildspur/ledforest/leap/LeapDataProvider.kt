@@ -77,7 +77,7 @@ class LeapDataProvider(val project: DataModel<Project>) {
             // add if not already in cache
             if (!handCache.containsKey(it.id())) {
                 handCache[it.id()] = InteractionHand(it,
-                        project.value.interaction.interactionBox.value,
+                        project.value.interaction.mappingSpace.value,
                         project.value.leapInteraction.handTranslationSpeed.value,
                         project.value.leapInteraction.handRotationSpeed.value)
                 handCount++

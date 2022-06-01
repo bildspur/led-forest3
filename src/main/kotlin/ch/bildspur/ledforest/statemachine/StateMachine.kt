@@ -1,9 +1,10 @@
 package ch.bildspur.ledforest.statemachine
 
-class StateMachine(initialState: State) {
+class StateMachine(private val initialState: State) {
     private var activeState = initialState
 
     fun setup() {
+        activeState = initialState
         activeState.activate()
     }
 
