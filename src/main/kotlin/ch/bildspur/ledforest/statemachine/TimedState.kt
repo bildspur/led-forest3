@@ -12,6 +12,12 @@ class TimedState(
 ) : CustomState(name, onActivate, onUpdate, onDeactivate) {
     val timer = ElapsedTimer(duration)
 
+
+    override fun activate() {
+        timer.reset()
+        super.activate()
+    }
+
     override fun update(): StateResult {
         val result = onUpdate()
 

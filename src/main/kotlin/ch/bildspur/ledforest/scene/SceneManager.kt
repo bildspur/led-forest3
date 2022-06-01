@@ -70,6 +70,7 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
             && !leapMotionScene.isInteracting
             && !realSenseScene.isInteracting
             && !poseScene.isInteracting
+            && !project.leda.enabled.value
             && project.isSceneManagerEnabled.value
             && !project.cloudScene.enabled.value
         )
@@ -79,6 +80,7 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
             && !leapMotionScene.isInteracting
             && !realSenseScene.isInteracting
             && !poseScene.isInteracting
+            && !project.leda.enabled.value
             && project.isSceneManagerEnabled.value
             && project.cloudScene.enabled.value
         )
@@ -88,6 +90,7 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
             && !leapMotionScene.isInteracting
             && !realSenseScene.isInteracting
             && !poseScene.isInteracting
+            && !project.leda.enabled.value
             && project.isSceneManagerEnabled.value
             && project.pulseScene.enabled.value
         )

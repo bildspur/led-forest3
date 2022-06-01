@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.statemachine
 
+import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.scene.BaseScene
 
 class SceneState(
@@ -8,6 +9,11 @@ class SceneState(
     onUpdate: () -> StateResult = { StateResult() },
     onDeactivate: () -> Unit = {}
 ) : CustomState(scene.name, onActivate, onUpdate, onDeactivate) {
+    val timer = Timer()
+
+    init {
+        timer.addTask(scene.timerTask)
+    }
 
     override fun activate() {
         scene.setup()
@@ -15,7 +21,7 @@ class SceneState(
     }
 
     override fun update(): StateResult {
-        scene.update()
+        timer.update()
         return super.update()
     }
 
