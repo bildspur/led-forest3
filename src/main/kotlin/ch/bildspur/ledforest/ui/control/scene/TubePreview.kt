@@ -12,7 +12,7 @@ import javafx.scene.transform.Translate
 
 
 class TubePreview(project: DataModel<Project>) : Base3DScene<Any>(project) {
-    val reactorShapes = mutableListOf<Shape3D>()
+    private val reactorShapes = mutableListOf<Shape3D>()
 
     override fun recreateScene(root: Group) {
         val box = project.value.interaction.mappingSpace.value
@@ -44,7 +44,8 @@ class TubePreview(project: DataModel<Project>) : Base3DScene<Any>(project) {
         }
 
         // add reactor shapes
-        for (i in 0 until 5) {
+        reactorShapes.clear()
+        for (i in 0 until 4) {
             val sphere = Sphere(0.3)
             sphere.drawMode = DrawMode.LINE
             sphere.transforms.add(Translate())

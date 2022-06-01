@@ -1,6 +1,5 @@
 package ch.bildspur.ledforest.scene
 
-import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
@@ -11,7 +10,6 @@ import ch.bildspur.ledforest.util.EasingCurves
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.modValue
 import processing.core.PApplet
-import processing.core.PApplet.map
 import processing.core.PVector
 import java.lang.Integer.max
 
