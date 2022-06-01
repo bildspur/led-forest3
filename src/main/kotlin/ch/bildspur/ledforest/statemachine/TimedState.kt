@@ -3,12 +3,13 @@ package ch.bildspur.ledforest.statemachine
 import ch.bildspur.timer.ElapsedTimer
 
 class TimedState(
+    name: String,
     duration: Long,
-    private val nextState: State,
+    var nextState: State? = null,
     onActivate: () -> Unit = {},
     onUpdate: () -> StateResult = { StateResult() },
     onDeactivate: () -> Unit = {}
-) : CustomState(onActivate, onUpdate, onDeactivate) {
+) : CustomState(name, onActivate, onUpdate, onDeactivate) {
     val timer = ElapsedTimer(duration)
 
     override fun update(): StateResult {

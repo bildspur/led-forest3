@@ -17,7 +17,7 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
     val strobeScene = StrobeScene(project, tubes)
 
     val pulseScene = PulseScene(project, tubes)
-    val ledaScene = LedaScene(project, tubes, pulseScene, sketch.pose)
+    val ledaScene = LedaScene(project, tubes, starScene, pulseScene, poseScene, sketch.pose)
 
     val testScene = TestScene(project, tubes)
 
@@ -40,51 +40,58 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
 
         // check if hand is detected
         if (activeScene != leapMotionScene
-                && leapMotionScene.isInteracting
-                && project.isSceneManagerEnabled.value
-                && project.interaction.isLeapInteractionEnabled.value)
+            && leapMotionScene.isInteracting
+            && project.isSceneManagerEnabled.value
+            && project.interaction.isLeapInteractionEnabled.value
+        )
             initScene(leapMotionScene)
 
         if (activeScene != realSenseScene
-                && realSenseScene.isInteracting
-                && project.isSceneManagerEnabled.value
-                && project.interaction.isRealSenseInteractionEnabled.value)
+            && realSenseScene.isInteracting
+            && project.isSceneManagerEnabled.value
+            && project.interaction.isRealSenseInteractionEnabled.value
+        )
             initScene(realSenseScene)
 
         if (activeScene != poseScene
-                && poseScene.isInteracting
-                && project.isSceneManagerEnabled.value
-                && project.interaction.isPoseInteractionEnabled.value)
+            && poseScene.isInteracting
+            && project.isSceneManagerEnabled.value
+            && project.interaction.isPoseInteractionEnabled.value
+        )
             initScene(poseScene)
 
         if (activeScene != ledaScene
-                && ledaScene.isInteracting
-                && project.isSceneManagerEnabled.value
-                && project.leda.enabled.value)
+            && ledaScene.isInteracting
+            && project.isSceneManagerEnabled.value
+            && project.leda.enabled.value
+        )
             initScene(ledaScene)
 
         if (activeScene != starScene
-                && !leapMotionScene.isInteracting
-                && !realSenseScene.isInteracting
-                && !poseScene.isInteracting
-                && project.isSceneManagerEnabled.value
-                && !project.cloudScene.enabled.value)
+            && !leapMotionScene.isInteracting
+            && !realSenseScene.isInteracting
+            && !poseScene.isInteracting
+            && project.isSceneManagerEnabled.value
+            && !project.cloudScene.enabled.value
+        )
             initScene(starScene)
 
         if (activeScene != cloudScene
-                && !leapMotionScene.isInteracting
-                && !realSenseScene.isInteracting
-                && !poseScene.isInteracting
-                && project.isSceneManagerEnabled.value
-                && project.cloudScene.enabled.value)
+            && !leapMotionScene.isInteracting
+            && !realSenseScene.isInteracting
+            && !poseScene.isInteracting
+            && project.isSceneManagerEnabled.value
+            && project.cloudScene.enabled.value
+        )
             initScene(cloudScene)
 
         if (activeScene != pulseScene
-                && !leapMotionScene.isInteracting
-                && !realSenseScene.isInteracting
-                && !poseScene.isInteracting
-                && project.isSceneManagerEnabled.value
-                && project.pulseScene.enabled.value)
+            && !leapMotionScene.isInteracting
+            && !realSenseScene.isInteracting
+            && !poseScene.isInteracting
+            && project.isSceneManagerEnabled.value
+            && project.pulseScene.enabled.value
+        )
             initScene(pulseScene)
 
         if (activeScene != blackScene && !project.isSceneManagerEnabled.value)
@@ -96,9 +103,11 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
 
         try {
             if (activeScene != strobeScene
-                    && project.leapInteraction.isStrobeEnabled.value
-                    && leapMotionScene.isInteracting
-                    && leapMotionScene.leap.hands.map { it.grabStrength.value >= project.leapInteraction.strobeThreshold.value }.contains(true))
+                && project.leapInteraction.isStrobeEnabled.value
+                && leapMotionScene.isInteracting
+                && leapMotionScene.leap.hands.map { it.grabStrength.value >= project.leapInteraction.strobeThreshold.value }
+                    .contains(true)
+            )
                 initScene(strobeScene)
         } catch (ex: Exception) {
             println("NPE: 05")
