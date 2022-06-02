@@ -22,14 +22,12 @@ object FireLog {
 
     val dateFormat = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS")
 
-    val enabled: Boolean
+    val hasDatabase: Boolean
         get() = databaseUrl.isNotBlank()
 
-    fun init(databaseUrl: String, secret: String) {
-        if (databaseUrl.isBlank()) {
-            return
-        }
+    var enabled = false
 
+    fun init(databaseUrl: String, secret: String) {
         this.databaseUrl = databaseUrl
         this.secret = secret
     }
@@ -42,6 +40,7 @@ object FireLog {
 
     fun logEvent(event: FireLogEvent) {
         if (!enabled) return
+        if (!hasDatabase) return
 
         val guid = UUID.randomUUID().toString().take(5)
 

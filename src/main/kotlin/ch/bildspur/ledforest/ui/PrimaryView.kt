@@ -329,6 +329,7 @@ class PrimaryView {
 
     fun onProjectChanged(project: Project) {
         // setup specific handlers for project
+        project.fireLog.updateFireLogInformation()
 
         // quick settings
         createBidirectionalMapping(

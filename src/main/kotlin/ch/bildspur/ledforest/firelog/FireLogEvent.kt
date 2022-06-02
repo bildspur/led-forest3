@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 data class FireLogEvent(
     @Expose
