@@ -128,6 +128,10 @@ class Project {
     }
 
     @Expose
+    @GroupParameter("FireLog")
+    var fireLog = FireLogConfig()
+
+    @Expose
     var nodes = CopyOnWriteArrayList<DmxNode>()
 
     @Expose

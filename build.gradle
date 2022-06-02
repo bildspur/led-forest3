@@ -109,6 +109,9 @@ dependencies {
     implementation 'dev.atsushieno:ktmidi-jvm-desktop:0.3.16'
     */
 
+    // fuel
+    implementation "com.github.kittinunf.fuel:fuel:2.3.1"
+
     // the midi bus
     implementation files('lib/midi/themidibus.jar')
 

@@ -2,6 +2,7 @@ package ch.bildspur.ledforest.ui
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.ConfigurationController
+import ch.bildspur.ledforest.firelog.FireLog
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.*
