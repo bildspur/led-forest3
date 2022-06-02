@@ -11,21 +11,24 @@ object FireLog {
     private const val EVENTS_COLLECTION = "events"
     private const val PINGS_COLLECTION = "pings"
 
+    var enabled = false
+
+    var enablePings = false
+    var pingInterval = 60 * 1000L
+
     private var databaseUrl = ""
     private var secret = ""
 
     private var defaultApp = ""
     private var defaultView = ""
     private var defaultEventType = ""
-
+    
     private val gson = Gson()
 
     val dateFormat = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS")
 
     val hasDatabase: Boolean
         get() = databaseUrl.isNotBlank()
-
-    var enabled = false
 
     fun init(databaseUrl: String, secret: String) {
         this.databaseUrl = databaseUrl

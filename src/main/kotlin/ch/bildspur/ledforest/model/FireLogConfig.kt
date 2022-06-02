@@ -46,7 +46,7 @@ class FireLogConfig {
 
     @Expose
     @NumberParameter("Ping Interval (ms)")
-    var pingInterval = DataModel(1000 * 60)
+    var pingInterval = DataModel(1000 * 60L)
 
     @ActionParameter("FireLog", "Test Event", invokesChange = false)
     private val sendTestEvent = {
@@ -58,5 +58,9 @@ class FireLogConfig {
         FireLog.init(databaseUrl.value, secret.value)
         FireLog.enabled = enabled.value
         FireLog.setDefaults(app.value, view.value, eventType.value)
+
+        // pings
+        FireLog.enablePings = enablePing.value
+        FireLog.pingInterval = pingInterval.value
     }
 }
