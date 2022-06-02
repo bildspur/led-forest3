@@ -6,6 +6,7 @@ import com.github.kittinunf.fuel.httpPut
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.thread
 
 object FireLog {
     private const val EVENTS_COLLECTION = "events"
@@ -22,13 +23,24 @@ object FireLog {
     private var defaultApp = ""
     private var defaultView = ""
     private var defaultEventType = ""
-    
+
     private val gson = Gson()
 
     val dateFormat = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS")
 
     val hasDatabase: Boolean
         get() = databaseUrl.isNotBlank()
+
+    private var running = true
+
+    init {
+        thread(start = true, isDaemon = true) {
+            while (running) {
+                sendPing(FireLogPing(defaultApp, defaultView))
+                Thread.sleep(pingInterval)
+            }
+        }
+    }
 
     fun init(databaseUrl: String, secret: String) {
         this.databaseUrl = databaseUrl
@@ -74,6 +86,28 @@ object FireLog {
         params: Map<String, Any> = emptyMap()
     ) {
         logEvent(FireLogEvent(app, view, eventType, timestamp, params))
+    }
+
+    fun sendPing(ping: FireLogPing) {
+        if (!enabled) return
+        if (!hasDatabase) return
+
+        val dateTime = Date(ping.timestamp)
+        val tsText = dateFormat.format(dateTime)
+
+        val content = ping.toJson()
+        val json = gson.toJson(content)
+
+        "$databaseUrl/$PINGS_COLLECTION/${ping.app}/${ping.view}.json?$authParameter"
+            .httpPut()
+            .jsonBody(json)
+            .responseString { request, response, result ->
+                if (response.isSuccessful)
+                    return@responseString
+
+                val errorMessage = result.get()
+                System.err.println("Could not send ping $errorMessage")
+            }
     }
 
     private val authParameter: String
