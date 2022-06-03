@@ -22,6 +22,7 @@ import javafx.scene.shape.Shape3D
 import javafx.scene.shape.Sphere
 import javafx.scene.transform.Rotate
 import javafx.scene.transform.Scale
+import javafx.scene.transform.Translate
 import processing.core.PVector
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
@@ -48,6 +49,8 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
     private val colliderInactiveColor = Color(0.0, 0.31, 0.93, 0.5)
 
     private val poseColor = Color(0.37, 0.66, 0.09, 0.80)
+
+    private lateinit var iaBox: WireBox
 
     init {
         // add pose shapes
@@ -136,6 +139,10 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
                     mat.diffuseColor = colliderInactiveColor
                 }
             }
+
+            // update iabox
+            iaBox.transforms.clear()
+            iaBox.transforms.add(getInteractionSpaceTranslate())
         }
     }
 
@@ -174,8 +181,8 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
 
         // add interaction box
         val box = project.value.interaction.interactionSpace.value
-        val iaBox = WireBox(box.x.toDouble(), box.y.toDouble(), box.z.toDouble())
-        iaBox.translateZ = box.z / 2.0
+        iaBox = WireBox(box.x.toDouble(), box.y.toDouble(), box.z.toDouble())
+        iaBox.transforms.add(getInteractionSpaceTranslate())
         sceneGroup.children.add(iaBox)
 
         // add colliders
@@ -199,5 +206,16 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
     fun reset() {
         recreateScene()
         hookEvents()
+    }
+
+    private fun getInteractionSpaceTranslate(): Translate {
+        val box = project.value.interaction.interactionSpace.value
+        val iat = project.value.interaction.interactionSpaceTranslation.value
+
+        return Translate(
+            iat.x.toDouble(),
+            iat.y.toDouble(),
+            iat.z.toDouble() + (box.z / 2.0)
+        )
     }
 }
