@@ -92,9 +92,6 @@ object FireLog {
         if (!enabled) return
         if (!hasDatabase) return
 
-        val dateTime = Date(ping.timestamp)
-        val tsText = dateFormat.format(dateTime)
-
         val content = ping.toJson()
         val json = gson.toJson(content)
 

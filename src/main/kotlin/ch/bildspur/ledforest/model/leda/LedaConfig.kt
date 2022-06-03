@@ -1,10 +1,14 @@
 package ch.bildspur.ledforest.model.leda
 
+import ch.bildspur.ledforest.Sketch
+import ch.bildspur.ledforest.model.math.PVector4
+import ch.bildspur.ledforest.pose.KeyPoint
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 import processing.core.PVector
+import kotlin.math.max
 
 class LedaConfig {
     @Expose
@@ -33,6 +37,31 @@ class LedaConfig {
     @Expose
     @PVectorParameter("Trigger Origin")
     var triggerOrigin = DataModel(PVector(0f, 2.8f, 0f))
+
+    @ActionParameter("Trigger Origin", "Calibrate", invokesChange = false)
+    private val calibrateTriggerOriginFromPose = {
+        val maxTrys = 5
+
+        val dataProvider = Sketch.instance.pose
+        for (i in 0 until maxTrys) {
+            if (dataProvider.poses.isNotEmpty()) {
+                val pose = dataProvider.poses[0]
+
+                // find ankle position
+                val centerAnkle = KeyPoint.lerp(pose.leftAnkle, pose.rightAnkle, 0.5f)
+
+                // add ground to feet height
+                centerAnkle.z -= 0.08f
+
+                triggerOrigin.value = centerAnkle
+                break
+            }
+
+            Thread.sleep(200)
+        }
+
+        println("Could not find a valid pose for calibration.")
+    }
 
     // todo: maybe add camera position relative to floor
 
