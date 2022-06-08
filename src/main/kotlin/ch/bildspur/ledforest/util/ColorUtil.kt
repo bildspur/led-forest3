@@ -6,12 +6,15 @@ object ColorUtil {
         val totalWeight = values.map { it.weight }.sum()
         var hueSum = 0f
 
+        if (totalWeight < 0.0001)
+            return hueSum
+
         for (value in values) {
             var hval = value.hue
             if (hval >= 180.0)
                 hval -= 360.0f
 
-            hueSum += (hval * (value.weight / totalWeight))
+            hueSum += hval * (value.weight / totalWeight)
         }
 
         if (hueSum < 0)

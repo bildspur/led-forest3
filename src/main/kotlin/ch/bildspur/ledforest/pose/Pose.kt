@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.pose
 
 import ch.bildspur.ledforest.model.easing.EasingVector
+import ch.bildspur.ledforest.model.math.OneEuroFilter3
 import ch.bildspur.ledforest.pose.clients.LightWeightOpenPoseClient
 import com.google.gson.annotations.Expose
 
@@ -13,6 +14,8 @@ class Pose(
 ) {
 
     val easedPosition = EasingVector()
+    val smoothRightWrist = EasingVector()
+    val smoothLeftWrist = EasingVector()
 
     operator fun get(landmarkType: PoseLandmark): KeyPoint {
         return keypoints[PoseLandmark.values().indexOf(landmarkType)]

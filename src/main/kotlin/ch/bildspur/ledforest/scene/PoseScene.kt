@@ -50,8 +50,8 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         reactors.clear()
         poses.forEach {
             // add hand reactors
-            createHandReactor(reactors, it.leftShoulder, it.leftElbow, it.leftWrist,  config.hueSpectrum.value.high.toFloat())
-            createHandReactor(reactors, it.rightShoulder, it.rightElbow, it.rightWrist,  config.hueSpectrum.value.low.toFloat())
+            createHandReactor(reactors, it.leftShoulder, it.leftElbow, it.smoothLeftWrist,  config.hueSpectrum.value.high.toFloat())
+            createHandReactor(reactors, it.rightShoulder, it.rightElbow, it.smoothRightWrist,  config.hueSpectrum.value.low.toFloat())
         }
 
         // interaction tubes

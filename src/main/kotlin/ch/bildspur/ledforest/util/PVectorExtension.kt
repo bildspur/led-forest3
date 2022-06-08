@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.util
 
+import ch.bildspur.math.Float3
 import processing.core.PApplet
 import processing.core.PVector
 
@@ -46,4 +47,12 @@ fun PVector.toPolar(): PolarCoordinates {
         theta += 360f
 
     return PolarCoordinates(r, theta)
+}
+
+fun PVector.toFloat3(): Float3 {
+    return Float3(this.x, this.y, this.z)
+}
+
+fun Float3.toPVector(): PVector {
+    return PVector(this.x, this.y, this.z)
 }

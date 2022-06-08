@@ -3,12 +3,12 @@ package ch.bildspur.ledforest.model.math
 import kotlin.math.abs
 
 class OneEuroFilter(
-    var tPrev: Float = 0.0f,
-    var xPrev: Float = 0.0f,
-    var dxPrev: Float = 0.0f,
-    var minCutoff: Float = 2.0f,
-    var beta: Float = 0.0f,
-    var dCutoff: Float = 1.0f
+        var tPrev: Float = 0.0f,
+        var xPrev: Float = 0.0f,
+        var dxPrev: Float = 0.0f,
+        var minCutoff: Float = 2.0f,
+        var beta: Float = 0.0f,
+        var dCutoff: Float = 1.0f
 ) {
 
     private fun smoothingFactor(te: Float, cutoff: Float): Float {
@@ -39,4 +39,7 @@ class OneEuroFilter(
         tPrev = t
         return xHat
     }
+
+    val value: Float
+        get() = xPrev
 }

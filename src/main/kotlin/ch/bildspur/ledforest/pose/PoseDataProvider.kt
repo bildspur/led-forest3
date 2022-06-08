@@ -10,6 +10,7 @@ import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.format
 import ch.bildspur.ledforest.util.toFloat2
 import ch.bildspur.math.Float2
+import ch.bildspur.math.Float3
 import ch.bildspur.model.DataModel
 import ch.bildspur.tracking.simple.SimpleTracker
 import processing.core.PApplet
@@ -36,19 +37,19 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
     val totalPoseCount = AtomicInteger(0)
 
     private val simpleTracker = SimpleTracker<Pose>(
-        { it.neck.toFloat2() },
-        onUpdate = { e, i ->
-            // just update the keypoints but keep the object
-            e.item.keypoints = i.keypoints
-            e.item.score = i.score
-        },
-        onAdd = {
-            // set initial easing position
-            it.item.easedPosition.init(it.item.position, project.value.poseInteraction.positionEasing.value)
-            totalPoseCount.incrementAndGet()
-        },
-        maxDelta = project.value.poseInteraction.maxDelta.value,
-        maxUntrackedTime = project.value.poseInteraction.maxDeadTime.value
+            { it.neck.toFloat2() },
+            onUpdate = { e, i ->
+                // just update the keypoints but keep the object
+                e.item.keypoints = i.keypoints
+                e.item.score = i.score
+            },
+            onAdd = {
+                // set initial easing position
+                it.item.easedPosition.init(it.item.position, project.value.poseInteraction.positionEasing.value)
+                totalPoseCount.incrementAndGet()
+            },
+            maxDelta = project.value.poseInteraction.maxDelta.value,
+            maxUntrackedTime = project.value.poseInteraction.maxDeadTime.value
     )
 
     private val relevantPoses = AtomicReference<List<Pose>>(listOf())
@@ -78,9 +79,9 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
             rawPoses.forEach { pose ->
                 pose.keypoints.forEach {
                     val t = transform2DPoint(
-                        Float2(it.x, it.y),
-                        project.value.poseInteraction.imageRotation.value,
-                        project.value.poseInteraction.imageFlip.value
+                            Float2(it.x, it.y),
+                            project.value.poseInteraction.imageRotation.value,
+                            project.value.poseInteraction.imageFlip.value
                     )
 
                     it.x = t.x
@@ -119,12 +120,20 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                         it.item.easedPosition.target.set(it.item.position)
                         it.item.easedPosition.easing = project.value.poseInteraction.positionEasing.value
                         it.item.easedPosition.update()
+
+                        it.item.smoothRightWrist.target.set(it.item.rightWrist)
+                        it.item.smoothRightWrist.easing = project.value.poseInteraction.positionEasing.value
+                        it.item.smoothRightWrist.update()
+
+                        it.item.smoothLeftWrist.target.set(it.item.leftWrist)
+                        it.item.smoothLeftWrist.easing = project.value.poseInteraction.positionEasing.value
+                        it.item.smoothLeftWrist.update()
                     }
 
                     // update poses (make this once in the loop)
                     actualPoses = simpleTracker.entities.map { it.item }
-                        .filter { ts - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
-                        .toList()
+                            .filter { ts - it.startTimestamp > project.value.poseInteraction.minAliveTime.value }
+                            .toList()
 
                     // update ui
                     project.value.poseInteraction.poseCount.value = "${simpleTracker.entities.size}"
@@ -228,9 +237,9 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 g.fill(360.0f * (pose.id % 10) / 10.0f, 80f, 100f)
                 pose.keypoints.forEach {
                     val v = PVector(
-                        PApplet.map(it.x, 0f, ias.x, 0f, 1f),
-                        PApplet.map(it.y, 0f, ias.y, 0f, 1f),
-                        PApplet.map(it.z, 0f, ias.z, 0f, 1f)
+                            PApplet.map(it.x, 0f, ias.x, 0f, 1f),
+                            PApplet.map(it.y, 0f, ias.y, 0f, 1f),
+                            PApplet.map(it.z, 0f, ias.z, 0f, 1f)
                     )
 
                     g.circle(v.x * g.width, v.y * g.height, 20f)
@@ -260,10 +269,10 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 g.strokeWeight(2f)
                 val maxDelta = project.value.poseInteraction.maxDelta.value
                 g.ellipse(
-                    pose.position.x * g.width,
-                    pose.position.y * g.height,
-                    g.width * maxDelta,
-                    g.height * maxDelta
+                        pose.position.x * g.width,
+                        pose.position.y * g.height,
+                        g.width * maxDelta,
+                        g.height * maxDelta
                 )
             }
         }
