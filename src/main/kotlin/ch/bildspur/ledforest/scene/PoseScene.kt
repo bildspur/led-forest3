@@ -117,7 +117,12 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 
             // inversed norm delta 1.0 => very close
             val normDelta = 1f - distance / reactor.impactRadius
-            val factor = EasingCurves.easeOutSine(normDelta)
+            var factor = EasingCurves.easeOutSine(normDelta)
+
+            if(config.invertDistanceRange.value) {
+                factor = 1.0f - factor
+            }
+
             colorMixer.addColor(reactor.hue, reactor.saturation, reactor.brightness * factor, factor)
         }
 
@@ -125,12 +130,6 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         led.color.hue = mixedColor.h.toFloat()
         led.color.saturation = mixedColor.s.toFloat()
         led.color.brightness = mixedColor.v.toFloat()
-
-        /*
-        led.color.fadeH(finalHue, config.fadingSpeed.value)
-        led.color.fadeS(saturation / divider, config.fadingSpeed.value)
-        led.color.fadeB(brightness / divider, config.fadingSpeed.value)
-         */
     }
 
     private fun PVector.isInvalid(): Boolean {

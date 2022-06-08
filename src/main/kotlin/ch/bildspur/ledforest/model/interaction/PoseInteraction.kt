@@ -136,6 +136,10 @@ class PoseInteraction {
     var zeroZ = DataModel(false)
 
     @Expose
+    @BooleanParameter("Invert Distance Range", useToggleSwitch = true)
+    var invertDistanceRange = DataModel(false)
+
+    @Expose
     @RangeSliderParameter("Interaction Distance", 0.01, 5.0, 0.01, snap = true)
     var interactionDistanceRange = DataModel(NumberRange(1.0, 2.0))
 
