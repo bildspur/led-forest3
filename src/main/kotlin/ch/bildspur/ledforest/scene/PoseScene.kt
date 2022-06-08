@@ -6,15 +6,15 @@ import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.pose.PoseDataProvider
-import ch.bildspur.ledforest.util.EasingCurves
-import ch.bildspur.ledforest.util.limit
-import ch.bildspur.ledforest.util.modValue
+import ch.bildspur.ledforest.util.*
+import ch.bildspur.math.mix
 import processing.core.PApplet
 import processing.core.PVector
 import java.lang.Integer.max
+import kotlin.math.sqrt
 
 class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataProvider) :
-    BaseInteractionScene("Pose", project, tubes) {
+        BaseInteractionScene("Pose", project, tubes) {
 
     private val task = TimerTask(0, { update() })
 
@@ -23,12 +23,14 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 
     var iaTubes = emptyList<Tube>()
 
+    private val colorMixer = ColorMixer()
+
     data class Reactor(
-        val position: PVector,
-        val hue: Float,
-        val saturation: Float,
-        val brightness: Float,
-        val impactRadius: Float
+            val position: PVector,
+            val hue: Float,
+            val saturation: Float,
+            val brightness: Float,
+            val impactRadius: Float
     )
 
     override fun setup() {
@@ -48,8 +50,8 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         reactors.clear()
         poses.forEach {
             // add hand reactors
-            // createHandInteractor(reactors, it.leftShoulder, it.leftElbow, it.leftWrist)
-            createHandReactor(reactors, it.rightShoulder, it.rightElbow, it.rightWrist)
+            createHandReactor(reactors, it.leftShoulder, it.leftElbow, it.leftWrist,  config.hueSpectrum.value.high.toFloat())
+            createHandReactor(reactors, it.rightShoulder, it.rightElbow, it.rightWrist,  config.hueSpectrum.value.low.toFloat())
         }
 
         // interaction tubes
@@ -59,28 +61,19 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
     }
 
     private fun createHandReactor(
-        reactors: MutableList<Reactor>,
-        shoulder: PVector,
-        elbow: PVector,
-        wrist: PVector
+            reactors: MutableList<Reactor>,
+            shoulder: PVector,
+            elbow: PVector,
+            wrist: PVector,
+            reactorHue: Float
     ) {
         // only do it if points are valid
-        if (shoulder.isInvalid() || elbow.isInvalid() || wrist.isInvalid()) return
+        if (wrist.isInvalid()) return
         val config = project.poseInteraction
-
-        // calculate ratio
-        val maxDistance = PVector.dist(shoulder, elbow) + PVector.dist(elbow, wrist)
-        val currentDistance = PVector.dist(shoulder, wrist)
-        val ratio = currentDistance / maxDistance
-
-        // todo: calculate angles for hue range modulation
-        val angle = PVector.angleBetween(PVector.sub(shoulder, elbow), PVector.sub(wrist, elbow))
-        val angleDegree = PApplet.degrees(angle)
-        val angleRatio = angleDegree / 180f
 
         // todo: move mapping into data-provider
         val mappedPosition = project.interaction.fromInteractionToMappingSpace(
-            PVector.sub(wrist, project.leda.triggerOrigin.value)
+                PVector.sub(wrist, project.leda.triggerOrigin.value)
         )
 
         if (project.poseInteraction.zeroZ.value) {
@@ -88,11 +81,11 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         }
 
         reactors.add(
-            Reactor(
-                mappedPosition,
-                config.hueSpectrum.value.modValue(angleRatio), config.saturation.value, config.brightness.value,
-                config.interactionDistanceRange.value.modValue(ratio)
-            )
+                Reactor(
+                        mappedPosition,
+                        reactorHue, config.saturation.value, config.brightness.value,
+                        config.interactionDistanceRange.value.low.toFloat()
+                )
         )
     }
 
@@ -112,11 +105,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         val ledPosition = led.position
 
         // sum light by poses
-        var hue = 0f
-        var saturation = 0f
-        var brightness = 0f
-
-        var relevantPoseCount = 0
+        colorMixer.init()
 
         for (reactor in reactors) {
             // get distance to led
@@ -128,22 +117,20 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 
             // inversed norm delta 1.0 => very close
             val normDelta = 1f - distance / reactor.impactRadius
-            hue += reactor.hue
-            saturation += reactor.saturation
-            brightness += reactor.brightness * EasingCurves.easeOutSine(normDelta)
-
-            relevantPoseCount++
+            val factor = EasingCurves.easeOutSine(normDelta)
+            colorMixer.addColor(reactor.hue, reactor.saturation, reactor.brightness * factor, factor)
         }
 
-        // prevent zero bug
-        val divider = max(relevantPoseCount, 1)
+        val mixedColor = colorMixer.mixedColor
+        led.color.hue = mixedColor.h.toFloat()
+        led.color.saturation = mixedColor.s.toFloat()
+        led.color.brightness = mixedColor.v.toFloat()
 
-        // limit hue
-        val finalHue = hue.limit(config.hueSpectrum.value.low.toFloat(), config.hueSpectrum.value.high.toFloat())
-
+        /*
         led.color.fadeH(finalHue, config.fadingSpeed.value)
         led.color.fadeS(saturation / divider, config.fadingSpeed.value)
         led.color.fadeB(brightness / divider, config.fadingSpeed.value)
+         */
     }
 
     private fun PVector.isInvalid(): Boolean {
