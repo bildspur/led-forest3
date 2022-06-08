@@ -26,7 +26,7 @@ class FadeColor() {
     }
 
     fun update() {
-        val delta = target.copy().sub(current)
+        val delta = PVector.sub(target, current)
 
         // Hue => 360° (can ease to both sides)
         val otherDelta = hmax - abs(delta.x)

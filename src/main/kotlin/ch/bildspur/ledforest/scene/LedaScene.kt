@@ -1,10 +1,13 @@
 package ch.bildspur.ledforest.scene
 
+import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.model.light.LEDRing
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.pose.PoseLandmark
@@ -15,11 +18,11 @@ import ch.bildspur.ledforest.util.forEachLED
 import processing.core.PVector
 
 class LedaScene(
-    project: Project, tubes: List<Tube>,
-    val idleScene: BaseScene,
-    val pulseScene: PulseScene,
-    val poseScene: PoseScene,
-    val poseProvider: PoseDataProvider
+        project: Project, tubes: List<Tube>,
+        val idleScene: BaseScene,
+        val pulseScene: PulseScene,
+        val poseScene: PoseScene,
+        val poseProvider: PoseDataProvider
 ) : BaseInteractionScene("Leda", project, tubes) {
 
     private val task = TimerTask(10, { update() })
@@ -37,8 +40,8 @@ class LedaScene(
     val poseState = SceneState(poseScene)
     val pulseState = SceneState(pulseScene)
 
-    val offState = TimedState("Off", 1000L, idleState)
-    val welcomeState = TimedState("Welcome", 1000L, poseState)
+    val offState = TimedState("Off", 250L, idleState)
+    val welcomeState = TimedState("Welcome", 2000L, poseState)
 
     val stateMachine = StateMachine(offState)
 
@@ -53,6 +56,29 @@ class LedaScene(
         idleState.onUpdate = {
             if (poseDetected.currentValue) StateResult(welcomeState)
             else StateResult()
+        }
+
+        welcomeState.onActivate = {
+            pulseScene.setup()
+
+            // todo: implement as settings
+            val pulse = Pulse()
+            pulse.duration.value = 2000f
+            pulse.distance.value = 6.5f
+            pulse.color.value = RGB("#ffffff")
+            pulse.width.value = 2f
+            pulse.expansionCurve.value = EasingMethod.EaseOutQuad
+
+            project.pulseScene.pulses.add(pulse.spawn())
+        }
+
+        welcomeState.onUpdate = {
+            pulseScene.update()
+            StateResult()
+        }
+
+        welcomeState.onDeactivate = {
+            pulseScene.stop()
         }
 
         poseState.onUpdate = {
