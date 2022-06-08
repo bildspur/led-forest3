@@ -1,6 +1,8 @@
 package ch.bildspur.ledforest.model.interaction
 
+import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.Sketch
+import ch.bildspur.ledforest.model.color.UniformLinearGradient
 import ch.bildspur.ledforest.model.image.ImageFlip
 import ch.bildspur.ledforest.model.image.ImageRotation
 import ch.bildspur.ledforest.pose.clients.PoseClientTypes
@@ -147,6 +149,27 @@ class PoseInteraction {
     @RangeSliderParameter("Hue Spectrum", 0.0, 360.0, 1.0, snap = true, roundInt = true)
     var hueSpectrum = DataModel(NumberRange(160.0, 320.0))
 
+    @SliderParameter("Linear Gradient Slider", 0.0, 1.0, 0.01)
+    var slider = DataModel(0.0f)
+
+    @ColorParameter("Linear Gradient Test")
+    var current = DataModel(RGB(0, 0, 0))
+
+    var gradient = UniformLinearGradient(
+            RGB("#FF0000"),
+            RGB("#FF7300"),
+            RGB("#FFF200"),
+            RGB("#01FFB6"),
+            RGB("#01F3FF"),
+            RGB("#0074FF"),
+    )
+
+    init {
+        slider.onChanged += {
+            current.value = gradient.color(it)
+        }
+    }
+
     @Expose
     @SliderParameter("Saturation", 0.0, 100.0, 1.0, snap = true, roundInt = true)
     var saturation = DataModel(100.0f)
@@ -154,8 +177,4 @@ class PoseInteraction {
     @Expose
     @SliderParameter("Brightness", 0.0, 100.0, 1.0, snap = true, roundInt = true)
     var brightness = DataModel(100.0f)
-
-    @Expose
-    @SliderParameter("LED Fading Speed", 0.1, 1.0, 0.1, snap = true)
-    var fadingSpeed = DataModel(0.1f)
 }

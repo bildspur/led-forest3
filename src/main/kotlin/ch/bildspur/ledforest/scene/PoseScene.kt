@@ -104,7 +104,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 
         for (reactor in reactors) {
             // get distance to led
-            val posePosition = reactor.position
+            val posePosition = reactor.position.copy()
 
             if (project.poseInteraction.zeroZ.value) {
                 posePosition.z = 0f
@@ -123,7 +123,11 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
                 factor = 1.0f - factor
             }
 
-            colorMixer.addColor(reactor.hue, reactor.saturation, reactor.brightness * factor, factor)
+            val rgb = config.gradient.color(reactor.position.z.limit(0.0f, 1.0f))
+            val hsv = rgb.toHSV()
+
+            colorMixer.addColor(hsv.h.toFloat(), hsv.s.toFloat(),
+                    reactor.brightness * factor, factor)
         }
 
         val mixedColor = colorMixer.mixedColor
