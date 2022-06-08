@@ -50,8 +50,9 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         reactors.clear()
         poses.forEach {
             // add hand reactors
-            createHandReactor(reactors, it.leftShoulder, it.leftElbow, it.smoothLeftWrist,  config.hueSpectrum.value.high.toFloat())
-            createHandReactor(reactors, it.rightShoulder, it.rightElbow, it.smoothRightWrist,  config.hueSpectrum.value.low.toFloat())
+            // createHandReactor(reactors, it.smoothLeftWrist,  config.hueSpectrum.value.high.toFloat())
+
+            createHandReactor(reactors, it.smoothRightWrist, config.hueSpectrum.value.low.toFloat())
         }
 
         // interaction tubes
@@ -62,8 +63,6 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 
     private fun createHandReactor(
             reactors: MutableList<Reactor>,
-            shoulder: PVector,
-            elbow: PVector,
             wrist: PVector,
             reactorHue: Float
     ) {
@@ -75,10 +74,6 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         val mappedPosition = project.interaction.fromInteractionToMappingSpace(
                 PVector.sub(wrist, project.leda.triggerOrigin.value)
         )
-
-        if (project.poseInteraction.zeroZ.value) {
-            mappedPosition.z = 0f
-        }
 
         reactors.add(
                 Reactor(
@@ -110,6 +105,11 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         for (reactor in reactors) {
             // get distance to led
             val posePosition = reactor.position
+
+            if (project.poseInteraction.zeroZ.value) {
+                posePosition.z = 0f
+            }
+
             val distance = posePosition.dist(ledPosition)
 
             // check if is relevant for interaction
@@ -119,7 +119,7 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
             val normDelta = 1f - distance / reactor.impactRadius
             var factor = EasingCurves.easeOutSine(normDelta)
 
-            if(config.invertDistanceRange.value) {
+            if (config.invertDistanceRange.value) {
                 factor = 1.0f - factor
             }
 
