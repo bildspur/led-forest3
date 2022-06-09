@@ -15,6 +15,7 @@ import ch.bildspur.ledforest.ui.util.TagItem
 import ch.bildspur.ledforest.ui.util.UITask
 import ch.bildspur.ledforest.util.FileWatcher
 import ch.bildspur.ledforest.util.OSValidator
+import ch.bildspur.ledforest.web.WebInterface
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.fx.PropertiesControl
 import ch.fhnw.afpars.ui.control.editor.shapes.RectangleShape
@@ -262,6 +263,10 @@ class PrimaryView {
 
             primaryStage.x = max(primaryStage.x, 0.0)
             primaryStage.y = max(primaryStage.y, 0.0)
+
+            // start webinterface
+            val web = WebInterface(project)
+            web.start()
 
             // start processing
             startProcessing()

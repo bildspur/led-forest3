@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEDA Interface</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<section>
+    <h1 class="Title">LEDA Controller</h1>
+    <div class="form__wrapper">
+        <form method="get" class="form">
+            <div class="interaction">
+                <label for="interaction">Interaction</label>
+                <input onclick="sendInteraction()" type="checkbox" name="interaction" id="interaction">
+            </div>
+            <div>
+                <label for="brightness">Brightness</label>
+                <input onchange="sendBrightness()"
+                       type="range"
+                       name="brightness"
+                       id="brightness"
+                       value="0"
+                       min="0"
+                       max="1"
+                       step="0.25"
+                >
+            </div>
+
+        </form>
+    </div>
+</section>
+
+
+<script type="text/javascript" defer>
+    const interaction = document.querySelector('#interaction')
+    const brightness = document.querySelector('#brightness')
+
+    fetch('/api/interaction')
+        .then(response => response.text())
+        .then(data => {
+            interaction.checked = data === "1"
+        });
+
+    fetch('/api/brightness')
+        .then(response => response.text())
+        .then(data => {
+            brightness.value = parseFloat(data)
+        });
+
+    const sendInteraction = () => {
+        console.log(interaction.checked)
+
+        let value = interaction.checked ? "1" : "0"
+        fetch(`/api/interaction?value=${value}`)
+    }
+    const sendBrightness = () => {
+        console.log(brightness.value)
+
+        fetch(`/api/brightness?value=${brightness.value}`)
+    }
+</script>
+</body>
+</html>
