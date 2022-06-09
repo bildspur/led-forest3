@@ -15,6 +15,7 @@ import ch.bildspur.ledforest.pose.PoseLandmark
 import ch.bildspur.ledforest.statemachine.*
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.Debouncer
+import ch.bildspur.ledforest.util.ExtendedRandom
 import ch.bildspur.ledforest.util.forEachLED
 import processing.core.PVector
 
@@ -40,11 +41,15 @@ class LedaScene(
     val idleState = SceneState(idleScene)
     val poseState = SceneState(poseScene)
     val pulseState = SceneState(pulseScene)
+    val randomPulseState = CustomState("RandomPulse")
 
     val offState = TimedState("Off", 250L, idleState)
     val welcomeState = TimedState("Welcome", 2000L, poseState)
 
     val stateMachine = StateMachine(offState)
+
+    val rnd = ExtendedRandom()
+    val easingChoices = listOf(EasingMethod.Linear, EasingMethod.EaseOutQuad, EasingMethod.EaseInQuad)
 
     init {
         stateMachine.onStateChanged += {
@@ -60,6 +65,7 @@ class LedaScene(
 
         idleState.onUpdate = {
             if (project.leda.enabledInteraction.value && poseDetected.currentValue) StateResult(welcomeState)
+            else if (project.leda.enableRandomPulses.value) StateResult(randomPulseState)
             else StateResult()
         }
 
@@ -108,6 +114,37 @@ class LedaScene(
         pulseState.onUpdate = {
             if (project.pulseScene.pulses.isEmpty()) StateResult(poseState)
             else StateResult()
+        }
+
+
+        // random pulse state
+        randomPulseState.onActivate = {
+            pulseScene.setup()
+        }
+        randomPulseState.onUpdate = {
+            if(rnd.randomBoolean(project.leda.pulseRandomFactor.value)) {
+                val pulse = Pulse()
+                pulse.location.value.x = rnd.randomFloat(-4f, 4f)
+                pulse.location.value.y = rnd.randomFloat(-4f, 4f)
+
+                pulse.duration.value = rnd.randomFloat(2000f, 4000f)
+                pulse.distance.value = 10f
+
+                val gs = project.leda.gradientSpectrum.value
+                pulse.color.value = project.poseInteraction.gradient.color(rnd.randomFloat(gs.low.toFloat(), gs.high.toFloat()))
+                pulse.width.value = rnd.randomFloat(2f, 4f)
+                pulse.expansionCurve.value = easingChoices[rnd.randomInt(max=easingChoices.size - 1)]
+
+                project.pulseScene.pulses.add(pulse.spawn())
+            }
+
+            pulseScene.update()
+
+            if (!project.leda.enableRandomPulses.value) StateResult(offState)
+            else StateResult()
+        }
+        randomPulseState.onDeactivate = {
+            pulseScene.stop()
         }
     }
 

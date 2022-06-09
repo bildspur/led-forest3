@@ -53,6 +53,10 @@
                 <label for="interaction">Interaction</label>
             </div>
             <div class="field">
+                <input class="switch" onclick="sendPulses()" type="checkbox" name="pulses" checked="checked" id="pulses">
+                <label for="pulses">Pulses</label>
+            </div>
+            <div class="field">
                 <input onchange="sendBrightness()"
                        class="slider"
                        type="range"
@@ -72,12 +76,19 @@
 
 <script type="text/javascript" defer>
     const interaction = document.querySelector('#interaction')
+    const pulses = document.querySelector('#pulses')
     const brightness = document.querySelector('#brightness')
 
     fetch('/api/interaction')
         .then(response => response.text())
         .then(data => {
             interaction.checked = data === "1"
+        });
+
+    fetch('/api/pulses')
+        .then(response => response.text())
+        .then(data => {
+            pulses.checked = data === "1"
         });
 
     fetch('/api/brightness')
@@ -91,6 +102,12 @@
 
         let value = interaction.checked ? "1" : "0"
         fetch(`/api/interaction?value=${value}`)
+    }
+    const sendPulses = () => {
+        console.log(pulses.checked)
+
+        let value = pulses.checked ? "1" : "0"
+        fetch(`/api/pulses?value=${value}`)
     }
     const sendBrightness = () => {
         console.log(brightness.value)

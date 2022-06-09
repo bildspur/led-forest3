@@ -20,6 +20,7 @@ class WebInterface(val project: DataModel<Project>) {
         .create()
 
     private val interactionRoute = "/api/interaction"
+    private val pulsesRoute = "/api/pulses"
     private val brightnessRoute = "/api/brightness"
 
     fun start() {
@@ -37,6 +38,15 @@ class WebInterface(val project: DataModel<Project>) {
                     }
 
                     val result = if (project.value.leda.enabledInteraction.value) "1" else "0"
+                    call.respondText(result)
+                }
+
+                get(pulsesRoute) {
+                    if (call.request.queryParameters.contains("value")) {
+                        project.value.leda.enableRandomPulses.value = call.request.queryParameters["value"] == "1"
+                    }
+
+                    val result = if (project.value.leda.enableRandomPulses.value) "1" else "0"
                     call.respondText(result)
                 }
 
