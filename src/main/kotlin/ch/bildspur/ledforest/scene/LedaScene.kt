@@ -18,11 +18,11 @@ import ch.bildspur.ledforest.util.forEachLED
 import processing.core.PVector
 
 class LedaScene(
-        project: Project, tubes: List<Tube>,
-        val idleScene: BaseScene,
-        val pulseScene: PulseScene,
-        val poseScene: PoseScene,
-        val poseProvider: PoseDataProvider
+    project: Project, tubes: List<Tube>,
+    val idleScene: BaseScene,
+    val pulseScene: PulseScene,
+    val poseScene: PoseScene,
+    val poseProvider: PoseDataProvider
 ) : BaseInteractionScene("Leda", project, tubes) {
 
     private val task = TimerTask(10, { update() })
@@ -54,7 +54,7 @@ class LedaScene(
         }
 
         idleState.onUpdate = {
-            if (poseDetected.currentValue) StateResult(welcomeState)
+            if (project.leda.enabledInteraction.value && poseDetected.currentValue) StateResult(welcomeState)
             else StateResult()
         }
 
@@ -94,7 +94,8 @@ class LedaScene(
                 }
             }
 
-            if (!poseDetected.currentValue) StateResult(offState)
+            if (!project.leda.enabledInteraction.value) StateResult(offState)
+            else if (!poseDetected.currentValue) StateResult(offState)
             else if (hasCollision) StateResult(pulseState)
             else StateResult()
         }

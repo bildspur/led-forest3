@@ -9,7 +9,7 @@ class XTouchMiniMapping : MidiMapping("X-TOUCH MINI") {
         midi.sendNoteOn(10, 22, 0)
         midi.sendNoteOn(10, 21, 0)
 
-        if (project.leda.enabled.value) {
+        if (project.leda.enabledInteraction.value) {
             midi.sendNoteOn(10, 22, 127)
         } else {
             midi.sendNoteOn(10, 21, 127)
@@ -26,19 +26,13 @@ class XTouchMiniMapping : MidiMapping("X-TOUCH MINI") {
 
         if (channel == 10 && pitch == 22) {
             // interaction
-            project.pulseScene.enabled.value = true
-            project.leda.enabled.value = true
-
-            project.cloudScene.enabled.value = false
+            project.leda.enabledInteraction.value = true
             midi.sendNoteOn(10, 22, 127)
         }
 
         if (channel == 10 && pitch == 21) {
             // idle
-            project.pulseScene.enabled.value = false
-            project.leda.enabled.value = false
-
-            project.cloudScene.enabled.value = true
+            project.leda.enabledInteraction.value = false
             midi.sendNoteOn(10, 21, 127)
         }
     }
@@ -47,7 +41,7 @@ class XTouchMiniMapping : MidiMapping("X-TOUCH MINI") {
         midi.sendNoteOn(10, 22, 0)
         midi.sendNoteOn(10, 21, 0)
 
-        if (project.leda.enabled.value) {
+        if (project.leda.enabledInteraction.value) {
             midi.sendNoteOn(10, 22, 127)
         } else {
             midi.sendNoteOn(10, 21, 127)
