@@ -1,7 +1,11 @@
 package ch.bildspur.ledforest.statemachine
 
+import ch.bildspur.event.Event
+
 class StateMachine(private val initialState: State) {
     private var activeState = initialState
+
+    val onStateChanged = Event<State>()
 
     fun setup() {
         activeState = initialState
@@ -16,6 +20,7 @@ class StateMachine(private val initialState: State) {
         // switch states
         activeState.deactivate()
         activeState = result.nextState
+        onStateChanged(activeState)
         activeState.activate()
     }
 

@@ -2,6 +2,7 @@ package ch.bildspur.ledforest.scene
 
 import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.controller.timer.TimerTask
+import ch.bildspur.ledforest.firelog.FireLog
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
@@ -46,6 +47,10 @@ class LedaScene(
     val stateMachine = StateMachine(offState)
 
     init {
+        stateMachine.onStateChanged += {
+            FireLog.log(eventType = "state-switch", params = buildMap { put("name", it.name) })
+        }
+
         // define state behaviour
         offState.onUpdate = {
             fadeLEDRing(ColorMode.color(0))
