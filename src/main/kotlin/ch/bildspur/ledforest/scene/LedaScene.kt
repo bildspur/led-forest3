@@ -125,14 +125,14 @@ class LedaScene(
             if(rnd.randomBoolean(project.leda.pulseRandomFactor.value)) {
                 val pulse = Pulse()
                 pulse.location.value.x = rnd.randomFloat(-4f, 4f)
-                pulse.location.value.y = rnd.randomFloat(-4f, 4f)
+                // pulse.location.value.y = rnd.randomFloat(-4f, 4f)
 
-                pulse.duration.value = rnd.randomFloat(2000f, 4000f)
+                pulse.duration.value = rnd.randomFloat(4000f, 8000f)
                 pulse.distance.value = 10f
 
                 val gs = project.leda.gradientSpectrum.value
                 pulse.color.value = project.poseInteraction.gradient.color(rnd.randomFloat(gs.low.toFloat(), gs.high.toFloat()))
-                pulse.width.value = rnd.randomFloat(2f, 4f)
+                pulse.width.value = rnd.randomFloat(3f, 4f)
                 pulse.expansionCurve.value = easingChoices[rnd.randomInt(max=easingChoices.size - 1)]
 
                 project.pulseScene.pulses.add(pulse.spawn())
