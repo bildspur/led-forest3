@@ -6,6 +6,7 @@ import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.util.ColorUtil
+import ch.bildspur.ledforest.util.forEachLED
 import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.windowedMappedInOut
 import ch.bildspur.math.pow
@@ -28,8 +29,14 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", proje
         project.pulseScene.pulseCount.value = "${pulses.size}"
 
         val currentTime = System.currentTimeMillis()
-        tubes.forEach {
-            it.leds.forEach { led -> applyToLED(led, currentTime, pulses) }
+        if (pulses.isNotEmpty()) {
+            tubes.forEach {
+                it.leds.forEach { led -> applyToLED(led, currentTime, pulses) }
+            }
+        } else {
+            tubes.forEachLED {
+                it.color.brightness = 0.0f
+            }
         }
 
         // cleanup
@@ -60,7 +67,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", proje
             val applyDist = pulseRadius - distance
 
             val width = pulse.width.value
-            val factor = windowedMappedInOut(
+            var factor = windowedMappedInOut(
                 (applyDist + (width * 0.5f)) / width,
                 pulse.attackCurve.value,
                 pulse.releaseCurve.value
@@ -68,6 +75,15 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", proje
 
             if (factor > 0f) {
                 val color = pulse.color.value.toHSV()
+
+                // applied dist is between -0.5 and 0.5 if w = 1.0
+                val hw = (width * 0.5f)
+
+                if (pulseRadius <= hw) {
+                    factor *= pulse.attackCurve.value.method(pulseRadius / hw)
+                } else if (pulseRadius >= pulse.distance.value - hw) {
+                    factor *= pulse.releaseCurve.value.method((pulse.distance.value - pulseRadius) / hw)
+                }
 
                 brightness += factor.map(0f, 1f, 0f, color.v / 100f)
                 huesAndWeights.add(ColorUtil.HueAndWeight(color.h.toFloat(), factor))

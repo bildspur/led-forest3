@@ -4,15 +4,11 @@ import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
 import ch.bildspur.model.DataModel
-import ch.bildspur.ui.properties.ColorParameter
-import ch.bildspur.ui.properties.EnumParameter
-import ch.bildspur.ui.properties.NumberParameter
-import ch.bildspur.ui.properties.StringParameter
+import ch.bildspur.ui.properties.*
 import com.google.gson.Gson
 import com.google.gson.annotations.Expose
 import processing.core.PVector
 import java.lang.Long.max
-import kotlin.math.min
 
 data class Pulse(
     // start parameter
@@ -25,6 +21,7 @@ data class Pulse(
     @Expose @NumberParameter("Duration (ms)") var duration: DataModel<Float> = DataModel(2000f),
     @Expose @NumberParameter("Distance (m)") var distance: DataModel<Float> = DataModel(10f),
     @Expose @EnumParameter("Expansion Curve") var expansionCurve: DataModel<EasingMethod> = DataModel(EasingMethod.Linear),
+    @Expose @BooleanParameter("Reversed") var reversed: DataModel<Boolean> = DataModel(false),
 
     // ring parameter
     @Expose @NumberParameter("Width") var width: DataModel<Float> = DataModel(1f),
@@ -50,6 +47,10 @@ data class Pulse(
      */
     fun getPulseRadius(timesStamp: Long): Float {
         val expansionProgress = expansionCurve.value.method(getProgress(timesStamp))
+
+        if (reversed.value)
+            return (1.0f - expansionProgress) * distance.value
+
         return expansionProgress * distance.value
     }
 
