@@ -52,6 +52,8 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
 
     private lateinit var iaBox: WireBox
 
+    var rendering = true
+
     init {
         // add pose shapes
         PoseLandmark.values().forEach {
@@ -109,6 +111,10 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
             return
         }
 
+        if (!rendering) {
+            return
+        }
+
         Platform.runLater {
             // update poses
             val pose = Sketch.instance.pose.poses.firstOrNull()
@@ -131,6 +137,8 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
 
             // update colliders
             colliderShapes.forEach { (c, s) ->
+                s.isVisible = project.value.leda.displayCollider.value
+
                 val mat = (s.material as PhongMaterial)
 
                 if (c.state == ColliderState.Active) {

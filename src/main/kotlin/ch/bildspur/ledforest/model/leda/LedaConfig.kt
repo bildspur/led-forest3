@@ -19,6 +19,10 @@ class LedaConfig {
     var enabledCollider = DataModel(true)
 
     @Expose
+    @BooleanParameter("Display Collider")
+    var displayCollider = DataModel(true)
+
+    @Expose
     @BooleanParameter("Enable Interaction")
     var enabledInteraction = DataModel(true)
 

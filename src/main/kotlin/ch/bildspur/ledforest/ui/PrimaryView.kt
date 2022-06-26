@@ -146,6 +146,7 @@ class PrimaryView {
             project.value.ui.selectedPreviewTab.value = tabPane.selectionModel.selectedIndex
 
             tubePreview.rendering = tabPane.selectionModel.selectedIndex == 1
+            interactionPreview.rendering = tabPane.selectionModel.selectedIndex == 2
         }
 
         root.center = tabPane
