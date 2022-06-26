@@ -69,7 +69,7 @@ class LedaScene(
         }
 
         idleState.onUpdate = {
-            ledRingAnimator.fadeAll(200)
+            ledRingAnimator.fadeAll(ColorMode.color(200))
             if (project.leda.enabledInteraction.value && poseDetected.currentValue) StateResult(welcomeState)
             else if (project.leda.enableRandomPulses.value) StateResult(randomPulseState)
             else StateResult()
