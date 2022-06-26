@@ -20,7 +20,7 @@ class LandmarkPulseCollider(
     @Expose @BooleanParameter("One Shot") var oneShot: DataModel<Boolean> = DataModel(true)
 ) : Collider() {
 
-    private val debouncer = Debouncer(100L, false)
+    private val debouncer = Debouncer(25L, false)
     private var currentState = ColliderState.Inactive
 
     val state: ColliderState
