@@ -6,6 +6,7 @@ import ch.bildspur.ledforest.ui.properties.PVectorParameter
 import ch.bildspur.ledforest.util.Debouncer
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.BooleanParameter
+import ch.bildspur.ui.properties.EnumParameter
 import ch.bildspur.ui.properties.NumberParameter
 import ch.bildspur.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
@@ -15,6 +16,7 @@ class LandmarkPulseCollider(
     @Expose @StringParameter("Name") var name: DataModel<String> = DataModel("Collider"),
     @Expose @PVectorParameter("Location") var location: DataModel<PVector> = DataModel(PVector()),
     @Expose @NumberParameter("Radius (m)") var radius: DataModel<Float> = DataModel(1.0f),
+    @Expose @EnumParameter("Trigger Logic") var triggerLogic: DataModel<TriggerLogic> = DataModel(TriggerLogic.OneOf),
     @Expose var triggeredBy: DataModel<MutableSet<PoseLandmark>> = DataModel(mutableSetOf()),
     @Expose var pulses: List<Pulse> = mutableListOf(),
     @Expose @BooleanParameter("One Shot") var oneShot: DataModel<Boolean> = DataModel(true)
