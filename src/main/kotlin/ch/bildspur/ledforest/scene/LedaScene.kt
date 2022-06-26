@@ -150,6 +150,7 @@ class LedaScene(
             pulseScene.update()
 
             if (!project.leda.enableRandomPulses.value) StateResult(offState)
+            else if (project.leda.enabledInteraction.value && poseDetected.currentValue) StateResult(welcomeState)
             else StateResult()
         }
         randomPulseState.onDeactivate = {

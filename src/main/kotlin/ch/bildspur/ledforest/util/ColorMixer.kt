@@ -13,6 +13,9 @@ class ColorMixer {
 
     private var applyCount = 0
 
+    val samples: Int
+        get() = applyCount
+
     fun init() {
         huesAndWeights.clear()
         totalSaturation = 0f
@@ -30,7 +33,8 @@ class ColorMixer {
 
     val mixedColor: HSV
         get() = HSV(
-                ColorUtil.mixHueWeighted(huesAndWeights).roundToInt(),
-                sqrt(totalSaturation / max(1, applyCount)).roundToInt(),
-                totalBrightness.limit(0f, 100f).roundToInt())
+            ColorUtil.mixHueWeighted(huesAndWeights).roundToInt(),
+            sqrt(totalSaturation / max(1, applyCount)).roundToInt(),
+            totalBrightness.limit(0f, 100f).roundToInt()
+        )
 }
