@@ -5,13 +5,10 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
-import ch.bildspur.ledforest.util.ColorUtil
+import ch.bildspur.ledforest.util.ColorMixer
 import ch.bildspur.ledforest.util.forEachLED
-import ch.bildspur.ledforest.util.limit
 import ch.bildspur.ledforest.util.windowedMappedInOut
-import ch.bildspur.math.pow
 import ch.bildspur.util.map
-import kotlin.math.sqrt
 
 class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", project, tubes) {
 
@@ -19,6 +16,8 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", proje
 
     override val timerTask: TimerTask
         get() = task
+
+    private val colorMixer = ColorMixer()
 
     override fun setup() {
         project.interaction.mappingSpace.fire()
@@ -54,11 +53,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", proje
     private fun applyToLED(led: LED, currentTime: Long, pulses: List<Pulse>) {
         val position = led.position
 
-        val huesAndWeights = mutableListOf<ColorUtil.HueAndWeight>()
-        var saturation = 0f
-        var brightness = 0f
-
-        var applyCount = 0
+        colorMixer.init()
 
         for (pulse in pulses) {
             val distance = position.dist(pulse.location.value)
@@ -85,15 +80,19 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", proje
                     factor *= pulse.releaseCurve.value.method((pulse.distance.value - pulseRadius) / hw)
                 }
 
-                brightness += factor.map(0f, 1f, 0f, color.v / 100f)
-                huesAndWeights.add(ColorUtil.HueAndWeight(color.h.toFloat(), factor))
-                saturation += pow(color.s.toFloat(), 2f)
-                applyCount++
+                val brightness = factor.map(0f, 1f, 0f, color.v.toFloat())
+
+                colorMixer.addColor(
+                    color.h.toFloat(),
+                    color.s.toFloat(),
+                    brightness, factor
+                )
             }
         }
 
-        led.color.hue = ColorUtil.mixHueWeighted(huesAndWeights)
-        led.color.saturation = sqrt(saturation / applyCount)
-        led.color.brightness = brightness.limit(0f, 1f) * 100f
+        val mixedColor = colorMixer.mixedColor
+        led.color.hue = mixedColor.h.toFloat()
+        led.color.saturation = mixedColor.s.toFloat()
+        led.color.brightness = mixedColor.v.toFloat()
     }
 }
