@@ -108,6 +108,20 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                 val detectedPoses = poseBuffer.filter { it.score >= project.value.poseInteraction.minScore.value }
                 var actualPoses = detectedPoses
 
+                // center xy
+                if (project.value.poseInteraction.centerPoseX.value || project.value.poseInteraction.centerPoseY.value) {
+                    actualPoses.forEach {
+                        val center = it.bodyCenter
+                        it.keypoints.forEach { kp ->
+                            if (project.value.poseInteraction.centerPoseX.value)
+                                kp.x -= center.x
+
+                            if (project.value.poseInteraction.centerPoseY.value)
+                                kp.y -= center.y
+                        }
+                    }
+                }
+
                 if (project.value.poseInteraction.useTracking.value) {
                     // run tracking
                     simpleTracker.maxDelta = project.value.poseInteraction.maxDelta.value
@@ -166,20 +180,6 @@ class PoseDataProvider(val sketch: PApplet, val project: DataModel<Project>) {
                             val result = poseClassifier.predict(it)
                             it.classification = result.label
                             // println("${System.currentTimeMillis()} Class: ${it.classification}")
-                        }
-                    }
-                }
-
-                // center xy
-                if (project.value.poseInteraction.centerPoseX.value || project.value.poseInteraction.centerPoseY.value) {
-                    actualPoses.forEach {
-                        val center = it.bodyCenter
-                        it.keypoints.forEach { kp ->
-                            if (project.value.poseInteraction.centerPoseX.value)
-                                kp.x -= center.x
-
-                            if (project.value.poseInteraction.centerPoseY.value)
-                                kp.y -= center.y
                         }
                     }
                 }
