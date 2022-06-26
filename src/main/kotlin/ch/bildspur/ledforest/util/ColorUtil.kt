@@ -20,7 +20,7 @@ object ColorUtil {
         if (hueSum < 0)
             hueSum += 360f
 
-        return hueSum
+        return hueSum.limit(0f, 360f)
     }
 
     data class HueAndWeight(val hue: Float, val weight: Float)
