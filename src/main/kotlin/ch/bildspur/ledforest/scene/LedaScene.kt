@@ -41,6 +41,7 @@ class LedaScene(
     val idleState = SceneState(idleScene)
     val poseState = SceneState(poseScene)
     val pulseState = SceneState(pulseScene)
+    val pulseInteractionState = SceneState(pulseScene)
     val randomPulseState = CustomState("RandomPulse")
 
     val offState = TimedState("Off", 250L, idleState)
@@ -70,6 +71,13 @@ class LedaScene(
         }
 
         welcomeState.onActivate = {
+            // check which scene should follow
+            welcomeState.nextState = if (project.leda.colliderSceneOnly.value) {
+                pulseInteractionState
+            } else {
+                poseState
+            }
+
             pulseScene.setup()
 
             // todo: implement as settings
@@ -92,18 +100,10 @@ class LedaScene(
             pulseScene.stop()
         }
 
+        // direct interaction scene
         poseState.onUpdate = {
             // check for collisions
-            var hasCollision = false
-            if (project.leda.enabledCollider.value) {
-                for (pose in poses) {
-                    for (collider in project.leda.landmarkColliders) {
-                        if (checkCollision(pose, collider)) {
-                            hasCollision = true
-                        }
-                    }
-                }
-            }
+            val hasCollision = updateCollisions()
 
             if (!project.leda.enabledInteraction.value) StateResult(offState)
             else if (!poseDetected.currentValue) StateResult(offState)
@@ -116,6 +116,15 @@ class LedaScene(
             else StateResult()
         }
 
+        // collider scene only
+        pulseInteractionState.onUpdate = {
+            // check for collisions
+            updateCollisions()
+
+            if (!project.leda.enabledInteraction.value) StateResult(offState)
+            else if (!poseDetected.currentValue) StateResult(offState)
+            else StateResult()
+        }
 
         // random pulse state
         randomPulseState.onActivate = {
@@ -183,6 +192,22 @@ class LedaScene(
         ledRing?.leds?.forEach {
             it.color.fade(target, easing)
         }
+    }
+
+    private fun updateCollisions(): Boolean {
+        // check for collisions
+        var hasCollision = false
+        if (project.leda.enabledCollider.value) {
+            for (pose in poses) {
+                for (collider in project.leda.landmarkColliders) {
+                    if (checkCollision(pose, collider)) {
+                        hasCollision = true
+                    }
+                }
+            }
+        }
+
+        return hasCollision
     }
 
     private fun checkCollision(pose: Pose, collider: LandmarkPulseCollider): Boolean {

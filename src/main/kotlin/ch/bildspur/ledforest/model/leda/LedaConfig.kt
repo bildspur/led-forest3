@@ -1,7 +1,6 @@
 package ch.bildspur.ledforest.model.leda
 
 import ch.bildspur.ledforest.Sketch
-import ch.bildspur.ledforest.model.math.PVector4
 import ch.bildspur.ledforest.pose.KeyPoint
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
 import ch.bildspur.model.DataModel
@@ -9,7 +8,6 @@ import ch.bildspur.model.NumberRange
 import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 import processing.core.PVector
-import kotlin.math.max
 
 class LedaConfig {
     @Expose
@@ -50,6 +48,10 @@ class LedaConfig {
     @Expose
     @NumberParameter("Interactor Limit")
     var interactorLimit = DataModel(1)
+
+    @Expose
+    @BooleanParameter("Collider Scene Only")
+    var colliderSceneOnly = DataModel(false)
 
     @Expose
     @PVectorParameter("Trigger Origin")
