@@ -26,16 +26,24 @@ class PoseInteraction {
     var isDebug = DataModel(false)
 
     @Expose
-    @BooleanParameter("Show Raw Poses")
+    @BooleanParameter("Show Raw Poses^")
     var showRawPoses = DataModel(false)
 
     @Expose
-    @BooleanParameter("Show Tracked Poses")
+    @BooleanParameter("Show Tracked Poses^")
     var showTrackedPoses = DataModel(false)
 
     @Expose
     @BooleanParameter("Show Reactors")
     var showReactors = DataModel(true)
+
+    @Expose
+    @BooleanParameter("X-Center Pose")
+    var centerPoseX = DataModel(false)
+
+    @Expose
+    @BooleanParameter("Y-Center Pose")
+    var centerPoseY = DataModel(false)
 
     @Expose
     @NumberParameter("Port")

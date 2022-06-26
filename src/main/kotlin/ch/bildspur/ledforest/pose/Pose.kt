@@ -78,6 +78,14 @@ class Pose(
     val leftEar: KeyPoint
         get() = keypoints[17]
 
+    val bodyCenter: KeyPoint
+        get() {
+            val centerHip = KeyPoint.lerp(leftHip, rightHip, 0.5f)
+            val centerShoulder = KeyPoint.lerp(leftShoulder, rightShoulder, 0.5f)
+
+            return KeyPoint.lerp(centerHip, centerShoulder, 0.5f)
+        }
+
     fun clone(): Pose {
         return Pose(
             id,
