@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.scene
 
 import ch.bildspur.color.RGB
+import ch.bildspur.ledforest.animator.LightAnimator
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.firelog.FireLog
 import ch.bildspur.ledforest.model.Project
@@ -35,6 +36,8 @@ class LedaScene(
 
     // scene variables
     private var ledRing: LEDRing? = null
+    private val ledRingAnimator = LightAnimator()
+
     private var poseDetected = Debouncer(500, false)
     private var poses = emptyList<Pose>()
 
@@ -60,18 +63,21 @@ class LedaScene(
 
         // define state behaviour
         offState.onUpdate = {
-            fadeLEDRing(ColorMode.color(0))
+            ledRingAnimator.fadeAll(ColorMode.color(0))
             tubes.forEachLED { it.color.fade(ColorMode.color(0), 0.01f) }
             StateResult()
         }
 
         idleState.onUpdate = {
+            ledRingAnimator.fadeAll(200)
             if (project.leda.enabledInteraction.value && poseDetected.currentValue) StateResult(welcomeState)
             else if (project.leda.enableRandomPulses.value) StateResult(randomPulseState)
             else StateResult()
         }
 
         welcomeState.onActivate = {
+            ledRingAnimator.fadeAll(ColorMode.color(50))
+
             // check which scene should follow
             welcomeState.nextState = if (project.leda.colliderSceneOnly.value) {
                 pulseInteractionState
@@ -102,6 +108,10 @@ class LedaScene(
         }
 
         // direct interaction scene
+        poseState.onActivate = {
+            ledRingAnimator.fadeAll(ColorMode.color(100))
+        }
+
         poseState.onUpdate = {
             // check for collisions
             val hasCollision = updateCollisions()
@@ -118,6 +128,10 @@ class LedaScene(
         }
 
         // collider scene only
+        pulseInteractionState.onActivate = {
+            ledRingAnimator.fadeAll(ColorMode.color(100))
+        }
+
         pulseInteractionState.onUpdate = {
             // check for collisions
             updateCollisions()
@@ -163,6 +177,7 @@ class LedaScene(
     override fun setup() {
         // try to find led ring
         ledRing = project.spatialLightElements.first { it is LEDRing } as LEDRing
+        ledRingAnimator.light = ledRing
 
         stateMachine.setup()
     }
@@ -177,11 +192,14 @@ class LedaScene(
         poses = poseProvider.poses.take(project.leda.interactorLimit.value)
         poseDetected.update(poses.isNotEmpty())
 
+        // update animation
+        ledRingAnimator.update()
+
         stateMachine.update()
     }
 
     override fun stop() {
-        fadeLEDRing(ColorMode.color(0))
+        ledRingAnimator.fadeAll(ColorMode.color(0))
         stateMachine.release()
     }
 
@@ -190,12 +208,6 @@ class LedaScene(
 
     override val isInteracting: Boolean
         get() = poseProvider.poses.isNotEmpty()
-
-    private fun fadeLEDRing(target: Int, easing: Float = 0.1f) {
-        ledRing?.leds?.forEach {
-            it.color.fade(target, easing)
-        }
-    }
 
     private fun updateCollisions(): Boolean {
         // check for collisions
