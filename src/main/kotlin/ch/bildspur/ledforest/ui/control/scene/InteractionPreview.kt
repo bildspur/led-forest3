@@ -93,7 +93,11 @@ class InteractionPreview(val project: DataModel<Project>) : Group() {
         thread(isDaemon = true, start = true) {
             Thread.sleep(5000)
             while (running) {
-                render()
+                try {
+                    render()
+                } catch (ex: Exception) {
+                    System.err.println("Error in interaction renderer: ${ex.message}")
+                }
                 Thread.sleep((1000.0 / refreshRate).toLong())
             }
         }
