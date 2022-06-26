@@ -16,7 +16,7 @@ class LandmarkPulseCollider(
     @Expose @StringParameter("Name") var name: DataModel<String> = DataModel("Collider"),
     @Expose @PVectorParameter("Location") var location: DataModel<PVector> = DataModel(PVector()),
     @Expose @NumberParameter("Radius (m)") var radius: DataModel<Float> = DataModel(1.0f),
-    @Expose @EnumParameter("Trigger Logic") var triggerLogic: DataModel<TriggerLogic> = DataModel(TriggerLogic.OneOf),
+    @Expose @EnumParameter("Trigger Logic") var triggerLogic: DataModel<TriggerLogic> = DataModel(TriggerLogic.Any),
     @Expose var triggeredBy: DataModel<MutableSet<PoseLandmark>> = DataModel(mutableSetOf()),
     @Expose var pulses: List<Pulse> = mutableListOf(),
     @Expose @BooleanParameter("One Shot") var oneShot: DataModel<Boolean> = DataModel(true)
@@ -28,9 +28,14 @@ class LandmarkPulseCollider(
     val state: ColliderState
         get() = currentState
 
-    override fun checkCollision(location: PVector, landmark: PoseLandmark): Boolean {
+    override fun checkCollision(collisionCandidates: List<CollisionCandidate>): Boolean {
+        val collisionHappened = when (triggerLogic.value) {
+            TriggerLogic.All -> collisionCandidates.all { collide(it) }
+            TriggerLogic.Any -> collisionCandidates.any { collide(it) }
+        }
+
         // very basic sphere collider
-        if (PVector.dist(this.location.value, location) <= radius.value && triggeredBy.value.contains(landmark)) {
+        if (collisionHappened) {
             if (debouncer.update(true)) {
                 if (oneShot.value && currentState == ColliderState.Active) {
                     return false
@@ -41,7 +46,6 @@ class LandmarkPulseCollider(
 
                 return true
             }
-            currentState
         } else {
             if (!debouncer.update(false)) {
                 currentState = ColliderState.Inactive
@@ -49,6 +53,11 @@ class LandmarkPulseCollider(
         }
 
         return false
+    }
+
+    private fun collide(candidate: CollisionCandidate): Boolean {
+        return PVector.dist(this.location.value, candidate.location) <= radius.value
+                && triggeredBy.value.contains(candidate.landmark)
     }
 
     override fun toString(): String {

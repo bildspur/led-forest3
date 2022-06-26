@@ -7,5 +7,5 @@ import processing.core.PVector
 abstract class Collider() {
 
     val onCollision = Event<Collision>()
-    abstract fun checkCollision(location: PVector, landmark: PoseLandmark) : Boolean
+    abstract fun checkCollision(collisionCandidates: List<CollisionCandidate>) : Boolean
 }

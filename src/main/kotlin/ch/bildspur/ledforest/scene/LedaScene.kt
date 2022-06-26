@@ -5,6 +5,7 @@ import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.firelog.FireLog
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.easing.EasingMethod
+import ch.bildspur.ledforest.model.leda.CollisionCandidate
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.model.light.LEDRing
 import ch.bildspur.ledforest.model.light.Tube
@@ -131,7 +132,7 @@ class LedaScene(
             pulseScene.setup()
         }
         randomPulseState.onUpdate = {
-            if(rnd.randomBoolean(project.leda.pulseRandomFactor.value)) {
+            if (rnd.randomBoolean(project.leda.pulseRandomFactor.value)) {
                 val pulse = Pulse()
                 pulse.location.value.x = rnd.randomFloat(-4f, 4f)
                 // pulse.location.value.y = rnd.randomFloat(-4f, 4f)
@@ -140,9 +141,10 @@ class LedaScene(
                 pulse.distance.value = 10f
 
                 val gs = project.leda.gradientSpectrum.value
-                pulse.color.value = project.poseInteraction.gradient.color(rnd.randomFloat(gs.low.toFloat(), gs.high.toFloat()))
+                pulse.color.value =
+                    project.poseInteraction.gradient.color(rnd.randomFloat(gs.low.toFloat(), gs.high.toFloat()))
                 pulse.width.value = rnd.randomFloat(3f, 4f)
-                pulse.expansionCurve.value = easingChoices[rnd.randomInt(max=easingChoices.size - 1)]
+                pulse.expansionCurve.value = easingChoices[rnd.randomInt(max = easingChoices.size - 1)]
 
                 project.pulseScene.pulses.add(pulse.spawn())
             }
@@ -216,19 +218,21 @@ class LedaScene(
 
         var hasCollision = false
 
-        for (landmarkType in collider.triggeredBy.value) {
+        val collisionCandidates = collider.triggeredBy.value.map { landmarkType ->
             val landmarkId = PoseLandmark.values().indexOf(landmarkType)
             val landmark = pose.keypoints[landmarkId]
 
             val score = landmark.score
-            if (score < project.leda.landmarkMinScore.value) continue
-
             val relativeLandmarkPosition = PVector.sub(origin, pose.keypoints[landmarkId])
-            if (collider.checkCollision(relativeLandmarkPosition, landmarkType)) {
-                hasCollision = true
-                collider.pulses.forEach {
-                    project.pulseScene.pulses.add(it.spawn())
-                }
+            Pair(CollisionCandidate(relativeLandmarkPosition, landmarkType), score)
+        }
+            .filter { it.second >= project.leda.landmarkMinScore.value }
+            .map { it.first }
+
+        if (collider.checkCollision(collisionCandidates)) {
+            hasCollision = true
+            collider.pulses.forEach {
+                project.pulseScene.pulses.add(it.spawn())
             }
         }
 
