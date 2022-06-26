@@ -8,13 +8,14 @@ import ch.bildspur.ledforest.model.light.TubeTag
 import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.util.*
 import ch.bildspur.math.mix
+import ch.bildspur.util.map
 import processing.core.PApplet
 import processing.core.PVector
 import java.lang.Integer.max
 import kotlin.math.sqrt
 
 class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataProvider) :
-        BaseInteractionScene("Pose", project, tubes) {
+    BaseInteractionScene("Pose", project, tubes) {
 
     private val task = TimerTask(0, { update() })
 
@@ -26,11 +27,11 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
     private val colorMixer = ColorMixer()
 
     data class Reactor(
-            val position: PVector,
-            val hue: Float,
-            val saturation: Float,
-            val brightness: Float,
-            val impactRadius: Float
+        val position: PVector,
+        val hue: Float,
+        val saturation: Float,
+        val brightness: Float,
+        val impactRadius: Float
     )
 
     override fun setup() {
@@ -62,9 +63,9 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
     }
 
     private fun createHandReactor(
-            reactors: MutableList<Reactor>,
-            wrist: PVector,
-            reactorHue: Float
+        reactors: MutableList<Reactor>,
+        wrist: PVector,
+        reactorHue: Float
     ) {
         // only do it if points are valid
         if (wrist.isInvalid()) return
@@ -72,15 +73,15 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
 
         // todo: move mapping into data-provider
         val mappedPosition = project.interaction.fromInteractionToMappingSpace(
-                PVector.sub(wrist, project.leda.triggerOrigin.value)
+            PVector.sub(wrist, project.leda.triggerOrigin.value)
         )
 
         reactors.add(
-                Reactor(
-                        mappedPosition,
-                        reactorHue, config.saturation.value, config.brightness.value,
-                        config.interactionDistanceRange.value.low.toFloat()
-                )
+            Reactor(
+                mappedPosition,
+                reactorHue, config.saturation.value, config.brightness.value,
+                config.interactionDistanceRange.value.low.toFloat()
+            )
         )
     }
 
@@ -123,11 +124,18 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
                 factor = 1.0f - factor
             }
 
-            val rgb = config.gradient.color(reactor.position.z.limit(0.0f, 1.0f))
+            val gradientLimit = config.gradientLimit.value
+            val rgb = config.gradient.color(
+                reactor.position.z
+                    .limit(0.0f, 1.0f)
+                    .map(0f, 1f, gradientLimit.low.toFloat(), gradientLimit.high.toFloat())
+            )
             val hsv = rgb.toHSV()
 
-            colorMixer.addColor(hsv.h.toFloat(), hsv.s.toFloat(),
-                    reactor.brightness * factor, factor)
+            colorMixer.addColor(
+                hsv.h.toFloat(), hsv.s.toFloat(),
+                reactor.brightness * factor, factor
+            )
         }
 
         val mixedColor = colorMixer.mixedColor

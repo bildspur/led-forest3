@@ -163,6 +163,10 @@ class PoseInteraction {
     @ColorParameter("Linear Gradient Test")
     var current = DataModel(RGB(0, 0, 0))
 
+    @Expose
+    @RangeSliderParameter("Gradient Limit", 0.0, 1.0, 0.01)
+    var gradientLimit = DataModel(NumberRange(0.0, 1.0))
+
     var gradient = UniformLinearGradient(
             RGB("#FF0000"),
             RGB("#FF7300"),
