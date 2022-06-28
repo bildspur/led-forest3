@@ -6,8 +6,10 @@ import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.util.ColorMixer
+import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
 import ch.bildspur.ledforest.util.windowedMappedInOut
+import ch.bildspur.math.mix
 import ch.bildspur.util.map
 
 class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", project, tubes) {
@@ -34,7 +36,7 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", proje
             }
         } else {
             tubes.forEachLED {
-                it.color.brightness = 0.0f
+                it.color.set(project.pulseScene.offColor.value.toPackedInt())
             }
         }
 
@@ -91,8 +93,13 @@ class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", proje
         }
 
         val mixedColor = colorMixer.mixedColor
-        led.color.hue = mixedColor.h.toFloat()
-        led.color.saturation = mixedColor.s.toFloat()
-        led.color.brightness = mixedColor.v.toFloat()
+
+        if(mixedColor.v.toFloat() <= project.pulseScene.offThreshold.value) {
+            led.color.set(project.pulseScene.offColor.value.toPackedInt())
+        } else {
+            led.color.hue = mixedColor.h.toFloat()
+            led.color.saturation = mixedColor.s.toFloat()
+            led.color.brightness = mixedColor.v.toFloat()
+        }
     }
 }

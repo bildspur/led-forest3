@@ -1,12 +1,11 @@
 package ch.bildspur.ledforest.model
 
 import ch.bildspur.color.HSV
+import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.model.pulse.Pulse
+import ch.bildspur.ledforest.ui.properties.SeparatorParameter
 import ch.bildspur.model.DataModel
-import ch.bildspur.ui.properties.ActionParameter
-import ch.bildspur.ui.properties.BooleanParameter
-import ch.bildspur.ui.properties.GroupParameter
-import ch.bildspur.ui.properties.StringParameter
+import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 import processing.core.PVector
 import java.util.concurrent.CopyOnWriteArrayList
@@ -24,6 +23,14 @@ class PulseSceneConfig {
     var visualize = DataModel(false)
 
     val pulses = CopyOnWriteArrayList<Pulse>()
+
+    @Expose
+    @SliderParameter("Off Threshold", 0.0, 100.0, 1.0, snap = true)
+    var offThreshold = DataModel(0)
+
+    @Expose
+    @ColorParameter("Off Color")
+    var offColor = DataModel(RGB(0.0, 0.0, 0.0, 1.0))
 
     @GroupParameter("Pulse")
     private var templatePulse = Pulse(DataModel(0L))

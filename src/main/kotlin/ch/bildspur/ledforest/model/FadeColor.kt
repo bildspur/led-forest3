@@ -43,6 +43,11 @@ class FadeColor() {
         current.z += delta.z * easingVector.z
     }
 
+    fun set(color: Int) {
+        this.current = colorToVector(color)
+        this.target = colorToVector(color)
+    }
+
     fun fade(t: Int, easing: Float) {
         easingVector = PVector(easing, easing, easing)
         this.target = colorToVector(t)
