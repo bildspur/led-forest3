@@ -3,6 +3,7 @@ package ch.bildspur.ledforest.model.leda
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.pose.KeyPoint
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
+import ch.bildspur.ledforest.web.BooleanWebEndpoint
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
 import ch.bildspur.ui.properties.*
@@ -24,6 +25,7 @@ class LedaConfig {
 
     @Expose
     @BooleanParameter("Enable Interaction")
+    @BooleanWebEndpoint("/interaction")
     var enabledInteraction = DataModel(true)
 
     @Expose

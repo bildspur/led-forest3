@@ -1,6 +1,10 @@
 package ch.bildspur.ledforest.web
 
+import ch.bildspur.ledforest.annotation.AnnotationReader
+import ch.bildspur.ledforest.annotation.AnnotationRegistryEntry
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.web.mapping.BaseDataMapper
+import ch.bildspur.ledforest.web.mapping.BooleanDataMapper
 import ch.bildspur.model.DataModel
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -19,12 +23,15 @@ class WebInterface(val project: DataModel<Project>) {
         .serializeSpecialFloatingPointValues()
         .create()
 
-    private val interactionRoute = "/api/interaction"
-    private val pulsesRoute = "/api/pulses"
-    private val brightnessRoute = "/api/brightness"
-    private val handInteractionRoute = "/api/hand-interaction"
+    var apiPrefix = "/api"
+    var webAnnotationRegistry = mutableListOf<AnnotationRegistryEntry<*, BaseDataMapper<*>>>(
+        AnnotationRegistryEntry(BooleanWebEndpoint::class.java, ::BooleanDataMapper)
+    )
 
     fun start() {
+        val reader = AnnotationReader(webAnnotationRegistry)
+        val annotationFields = reader.readAnnotations(project.value.leda)
+
         val server = embeddedServer(Netty, port = 8000) {
             routing {
                 static("/") {
@@ -33,42 +40,16 @@ class WebInterface(val project: DataModel<Project>) {
                     default("index.html")
                 }
 
-                get(interactionRoute) {
-                    if (call.request.queryParameters.contains("value")) {
-                        project.value.leda.enabledInteraction.value = call.request.queryParameters["value"] == "1"
-                    }
+                for(annotationField in annotationFields) {
+                    val mapper = annotationField.entry as BaseDataMapper<*>
 
-                    val result = if (project.value.leda.enabledInteraction.value) "1" else "0"
-                    call.respondText(result)
-                }
-
-                get(pulsesRoute) {
-                    if (call.request.queryParameters.contains("value")) {
-                        project.value.leda.enableRandomPulses.value = call.request.queryParameters["value"] == "1"
-                    }
-
-                    val result = if (project.value.leda.enableRandomPulses.value) "1" else "0"
-                    call.respondText(result)
-                }
-
-                get(brightnessRoute) {
-                    if (call.request.queryParameters.contains("value")) {
-                        val data = call.parameters["value"]?.toFloat()
-                        if (data != null) {
-                            project.value.light.luminosity.value = data
+                    get("${apiPrefix}${mapper.url}") {
+                        if (call.request.queryParameters.contains("value")) {
+                            mapper.set(call.request.queryParameters["value"].toString())
                         }
+
+                        call.respondText(mapper.get())
                     }
-
-                    call.respondText(project.value.light.luminosity.value.toString())
-                }
-
-                get(handInteractionRoute) {
-                    if (call.request.queryParameters.contains("value")) {
-                        project.value.leda.colliderSceneOnly.value = call.request.queryParameters["value"] != "1"
-                    }
-
-                    val result = if (!project.value.leda.colliderSceneOnly.value) "1" else "0"
-                    call.respondText(result)
                 }
             }
         }
