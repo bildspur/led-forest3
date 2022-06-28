@@ -41,6 +41,7 @@ class WebInterface(val project: DataModel<Project>) {
                 }
 
                 for(annotationField in annotationFields) {
+                    // todo: fix problem that mapper stores obj
                     val mapper = annotationField.entry as BaseDataMapper<*>
 
                     get("${apiPrefix}${mapper.url}") {
