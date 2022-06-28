@@ -22,6 +22,7 @@ class WebInterface(val project: DataModel<Project>) {
     private val interactionRoute = "/api/interaction"
     private val pulsesRoute = "/api/pulses"
     private val brightnessRoute = "/api/brightness"
+    private val handInteractionRoute = "/api/hand-interaction"
 
     fun start() {
         val server = embeddedServer(Netty, port = 8000) {
@@ -59,6 +60,15 @@ class WebInterface(val project: DataModel<Project>) {
                     }
 
                     call.respondText(project.value.light.luminosity.value.toString())
+                }
+
+                get(handInteractionRoute) {
+                    if (call.request.queryParameters.contains("value")) {
+                        project.value.leda.colliderSceneOnly.value = call.request.queryParameters["value"] != "1"
+                    }
+
+                    val result = if (!project.value.leda.colliderSceneOnly.value) "1" else "0"
+                    call.respondText(result)
                 }
             }
         }
