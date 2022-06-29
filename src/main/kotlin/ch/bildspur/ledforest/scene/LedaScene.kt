@@ -77,7 +77,7 @@ class LedaScene(
         }
 
         welcomeState.onActivate = {
-            ledRingAnimator.fadeAll(ColorMode.color(50))
+            ledRingAnimator.fadeAll(ColorMode.color(170, 50, 100))
 
             // check which scene should follow
             welcomeState.nextState = if (project.leda.colliderSceneOnly.value) {
@@ -117,7 +117,7 @@ class LedaScene(
 
         // direct interaction scene
         poseState.onActivate = {
-            ledRingAnimator.fadeAll(ColorMode.color(100))
+            ledRingAnimator.fadeAll(ColorMode.color(ColorMode.color(170, 100, 80)))
         }
 
         poseState.onUpdate = {
@@ -137,7 +137,7 @@ class LedaScene(
 
         // collider scene only
         pulseInteractionState.onActivate = {
-            ledRingAnimator.fadeAll(ColorMode.color(100))
+            ledRingAnimator.fadeAll(ColorMode.color(ColorMode.color(170, 100, 80)))
         }
 
         pulseInteractionState.onUpdate = {
