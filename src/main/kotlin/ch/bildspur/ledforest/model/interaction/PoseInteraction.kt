@@ -189,4 +189,12 @@ class PoseInteraction {
     @Expose
     @SliderParameter("Brightness", 0.0, 100.0, 1.0, snap = true, roundInt = true)
     var brightness = DataModel(100.0f)
+
+    @Expose
+    @SliderParameter("Off Threshold", 0.0, 100.0, 1.0, snap = true)
+    var offThreshold = DataModel(0)
+
+    @Expose
+    @ColorParameter("Off Color")
+    var offColor = DataModel(RGB(0.0, 0.0, 0.0, 1.0))
 }
