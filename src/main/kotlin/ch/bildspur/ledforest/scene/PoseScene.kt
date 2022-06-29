@@ -139,9 +139,14 @@ class PoseScene(project: Project, tubes: List<Tube>, val poseProvider: PoseDataP
         }
 
         val mixedColor = colorMixer.mixedColor
-        led.color.hue = mixedColor.h.toFloat()
-        led.color.saturation = mixedColor.s.toFloat()
-        led.color.brightness = mixedColor.v.toFloat()
+
+        if(mixedColor.v.toFloat() <= project.poseInteraction.offThreshold.value) {
+            led.color.set(project.poseInteraction.offColor.value.toPackedInt())
+        } else {
+            led.color.hue = mixedColor.h.toFloat()
+            led.color.saturation = mixedColor.s.toFloat()
+            led.color.brightness = mixedColor.v.toFloat()
+        }
     }
 
     private fun PVector.isInvalid(): Boolean {
