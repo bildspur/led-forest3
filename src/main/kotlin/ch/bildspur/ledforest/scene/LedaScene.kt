@@ -20,6 +20,7 @@ import ch.bildspur.ledforest.util.Debouncer
 import ch.bildspur.ledforest.util.ExtendedRandom
 import ch.bildspur.ledforest.util.forEachLED
 import processing.core.PVector
+import kotlin.math.max
 
 class LedaScene(
     project: Project, tubes: List<Tube>,
@@ -49,7 +50,7 @@ class LedaScene(
     val randomPulseState = CustomState("RandomPulse")
 
     val offState = TimedState("Off", 250L, idleState)
-    val welcomeState = TimedState("Welcome", 2000L, poseState)
+    val welcomeState = TimedState("Welcome", 1000L, poseState)
 
     val stateMachine = StateMachine(offState)
 
@@ -87,9 +88,16 @@ class LedaScene(
 
             pulseScene.setup()
 
+            // disable old pulses
+            val ts = System.currentTimeMillis()
+            project.pulseScene.pulses.forEach {
+                it.duration.value = max(500f, it.getProgress(ts) * it.duration.value)
+            }
+
+            // send welcome pulse
             // todo: implement as settings
             val pulse = Pulse()
-            pulse.duration.value = 2000f
+            pulse.duration.value = 1000f
             pulse.distance.value = 6.5f
             pulse.color.value = RGB("#ffffff")
             pulse.width.value = 2f
