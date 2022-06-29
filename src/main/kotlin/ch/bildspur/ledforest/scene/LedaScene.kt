@@ -180,6 +180,16 @@ class LedaScene(
         ledRingAnimator.light = ledRing
 
         stateMachine.setup()
+
+        project.leda.colliderSceneOnly.onChanged += {
+            if (poses.isNotEmpty()) {
+                if (it) {
+                    stateMachine.switch(pulseInteractionState)
+                } else {
+                    stateMachine.switch(poseState)
+                }
+            }
+        }
     }
 
     override fun update() {

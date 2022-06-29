@@ -18,8 +18,12 @@ class StateMachine(private val initialState: State) {
         if (result.nextState == null) return
 
         // switch states
+        switch(result.nextState)
+    }
+
+    fun switch(nextState: State) {
         activeState.deactivate()
-        activeState = result.nextState
+        activeState = nextState
         onStateChanged(activeState)
         activeState.activate()
     }
