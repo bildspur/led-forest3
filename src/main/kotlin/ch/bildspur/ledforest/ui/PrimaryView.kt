@@ -134,12 +134,19 @@ class PrimaryView {
         interactionPreview.subScene.heightProperty().bind(stackPaneInteraction.heightProperty())
         interactionPreview.subScene.widthProperty().bind(stackPaneInteraction.widthProperty())
 
+        val splitPane = SplitPane()
+
+        val tab3D = Tab("3D", stackPaneScene)
+        val tabInteraction = Tab("Interaction", stackPaneInteraction)
+        val tabSplit = Tab("Split", splitPane)
+
         tabPane.side = Side.BOTTOM
         tabPane.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
         tabPane.tabs.addAll(
             Tab("2D", tubeMap),
-            Tab("3D", stackPaneScene),
-            Tab("Interaction", stackPaneInteraction)
+            tab3D,
+            tabInteraction,
+            tabSplit,
         )
         tabPane.selectionModel.select(1)
         tabPane.selectionModel.selectedIndexProperty().addListener { _ ->
@@ -147,6 +154,19 @@ class PrimaryView {
 
             tubePreview.rendering = tabPane.selectionModel.selectedIndex == 1
             interactionPreview.rendering = tabPane.selectionModel.selectedIndex == 2
+
+            if (tabPane.selectionModel.selectedIndex == 3) {
+                tubePreview.rendering = true
+                interactionPreview.rendering = true
+
+                tab3D.content = null
+                tabInteraction.content = null
+                tabSplit.content = SplitPane(stackPaneScene, stackPaneInteraction)
+            } else {
+                tabSplit.content = null
+                tab3D.content = stackPaneScene
+                tabInteraction.content = stackPaneInteraction
+            }
         }
 
         root.center = tabPane
