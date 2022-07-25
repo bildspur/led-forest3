@@ -37,9 +37,9 @@ class TransformMatrix(translation : PVector,
                 0.0f, 0.0f, 0.0f, 1.0f
         )
 
-        rotationX.apply(rotationY)
-        rotationX.apply(rotationZ)
-        rotationMatrix.set(rotationX)
+        rotationZ.apply(rotationY)
+        rotationZ.apply(rotationX)
+        rotationMatrix.set(rotationZ)
 
         // translation
         translationMatrix.set(
