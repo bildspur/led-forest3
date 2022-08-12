@@ -70,14 +70,14 @@ class LedaScene(
         }
 
         idleState.onUpdate = {
-            ledRingAnimator.fadeAll(ColorMode.color(200))
+            ledRingAnimator.fadeAll(ColorMode.color(220))
             if (project.leda.enabledInteraction.value && poseDetected.currentValue) StateResult(welcomeState)
             else if (project.leda.enableRandomPulses.value) StateResult(randomPulseState)
             else StateResult()
         }
 
         welcomeState.onActivate = {
-            ledRingAnimator.fadeAll(ColorMode.color(170, 50, 100))
+            ledRingAnimator.fadeAll(ColorMode.color(255))
 
             // check which scene should follow
             welcomeState.nextState = if (project.leda.colliderSceneOnly.value) {
@@ -117,7 +117,7 @@ class LedaScene(
 
         // direct interaction scene
         poseState.onActivate = {
-            ledRingAnimator.fadeAll(ColorMode.color(ColorMode.color(170, 100, 80)))
+            ledRingAnimator.fadeAll(ColorMode.color(ColorMode.color(220)))
         }
 
         poseState.onUpdate = {
@@ -137,12 +137,16 @@ class LedaScene(
 
         // collider scene only
         pulseInteractionState.onActivate = {
-            ledRingAnimator.fadeAll(ColorMode.color(ColorMode.color(170, 100, 80)))
+            ledRingAnimator.fadeAll(ColorMode.color(ColorMode.color(200)))
         }
 
         pulseInteractionState.onUpdate = {
             // check for collisions
-            updateCollisions()
+            if (updateCollisions()) {
+                ledRingAnimator.fadeAll(ColorMode.color(ColorMode.color(255)))
+            } else {
+                ledRingAnimator.fadeAll(ColorMode.color(ColorMode.color(200)))
+            }
 
             if (!project.leda.enabledInteraction.value) StateResult(offState)
             else if (!poseDetected.currentValue) StateResult(offState)
