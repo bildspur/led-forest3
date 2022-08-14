@@ -130,4 +130,8 @@ class FadeColor() {
             (brightness / bmax).toDouble()
         )
     }
+
+    override fun toString(): String {
+        return "FadeColor (H=$hue S=$saturation B=$brightness)"
+    }
 }
