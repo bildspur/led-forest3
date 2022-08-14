@@ -32,9 +32,15 @@ class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: 
             val universe = indexToUniverses[it.key] ?: return@forEach
             val node = universesToNodes[universe] ?: return@forEach
 
+            val universeMaxBrightness = if(universe.overwriteGlobalBrightness.value) {
+                light.luminosity.value * universe.brightness.value
+            } else {
+                maxBrightness * universe.brightness.value
+            }
+
             universe.stageDmx(
                 it.value,
-                maxBrightness,
+                universeMaxBrightness,
                 light.response.value,
                 light.trace.value,
                 light.brightnessCutoff.value,

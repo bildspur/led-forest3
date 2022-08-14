@@ -5,8 +5,7 @@ import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
 import ch.bildspur.model.DataModel
-import ch.bildspur.ui.properties.ActionParameter
-import ch.bildspur.ui.properties.NumberParameter
+import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 import java.awt.Color
 import kotlin.math.abs
@@ -20,6 +19,15 @@ class Universe(id: Int = 0) {
     @NumberParameter("Id")
     @Expose
     var id = DataModel(id)
+
+    @SliderParameter("Brightness", 0.0, 1.0, 0.01)
+    @Expose
+    var brightness = DataModel(1.0f)
+
+    @ParameterInformation("Brightness is not affected by Global Brightness.")
+    @BooleanParameter("Overwrite Global Brightness")
+    @Expose
+    var overwriteGlobalBrightness = DataModel(false)
 
     @ActionParameter("LEDs", "Select")
     val markLEDs = {
