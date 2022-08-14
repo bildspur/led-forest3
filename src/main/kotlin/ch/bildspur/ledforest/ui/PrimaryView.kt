@@ -52,6 +52,8 @@ import java.nio.file.Paths
 import kotlin.concurrent.thread
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.round
+import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 
 
@@ -91,6 +93,9 @@ class PrimaryView {
 
     @FXML
     lateinit var statusLabel: Label
+
+    @FXML
+    lateinit var infoLabel: Label
 
     // quick settings
     @FXML
@@ -407,6 +412,15 @@ class PrimaryView {
             recreateTubeMap()
         }
 
+        // display brightness info
+        project.light.luminosity.onChanged += {
+            updateInfoLabel()
+        }
+        project.leda.enabledInteraction.onChanged += {
+            updateInfoLabel()
+        }
+        project.light.luminosity.fire()
+
         // add hot-reload support
         hotReloadWatcher.reset(Paths.get(appConfig.projectFile))
 
@@ -414,6 +428,13 @@ class PrimaryView {
         val index = project.ui.selectedPreviewTab.value
         if (index < tabPane.tabs.size)
             tabPane.selectionModel.select(index)
+    }
+
+    private fun updateInfoLabel() {
+        val luminosity = (project.value.light.luminosity.value * 100).roundToInt()
+        val interactionOn = if (project.value.leda.enabledInteraction.value) "Y" else "N"
+
+        infoLabel.text = "Lu: $luminosity% In: $interactionOn"
     }
 
     fun <T> createBidirectionalMapping(

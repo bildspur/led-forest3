@@ -118,6 +118,11 @@
     <bottom>
         <FlowPane prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #696969;"
                   BorderPane.alignment="CENTER">
+            <Label fx:id="infoLabel" text="Status" textFill="WHITE">
+                <FlowPane.margin>
+                    <Insets left="10.0" top="10.0"/>
+                </FlowPane.margin>
+            </Label>
             <Label fx:id="statusLabel" text="Status" textFill="WHITE">
                 <FlowPane.margin>
                     <Insets left="10.0" top="10.0"/>

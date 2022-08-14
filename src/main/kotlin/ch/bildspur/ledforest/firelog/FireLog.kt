@@ -69,7 +69,7 @@ object FireLog {
         "$databaseUrl/$EVENTS_COLLECTION/${event.app}/${event.view}/$eventId.json?$authParameter"
             .httpPut()
             .jsonBody(json)
-            .responseString { request, response, result ->
+            .responseString { _, response, result ->
                 if (response.isSuccessful)
                     return@responseString
 
@@ -98,7 +98,7 @@ object FireLog {
         "$databaseUrl/$PINGS_COLLECTION/${ping.app}/${ping.view}.json?$authParameter"
             .httpPut()
             .jsonBody(json)
-            .responseString { request, response, result ->
+            .responseString { _, response, result ->
                 if (response.isSuccessful)
                     return@responseString
 
