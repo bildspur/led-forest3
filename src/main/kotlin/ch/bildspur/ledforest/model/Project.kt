@@ -110,7 +110,7 @@ class Project {
             }
         }
 
-        println("mapping color activted")
+        println("mapping color activated")
     }
 
     @ArrowControlParameter("Translate All")
@@ -128,8 +128,12 @@ class Project {
     }
 
     @Expose
-    @GroupParameter("FireLog")
+    @GroupParameter("FireLog", expanded = false)
     var fireLog = FireLogConfig()
+
+    @Expose
+    @GroupParameter("Supabase", expanded = false)
+    var supabase = SupabaseConfig()
 
     @Expose
     var nodes = CopyOnWriteArrayList<DmxNode>()
