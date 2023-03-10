@@ -18,10 +18,7 @@ import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 import javafx.scene.input.KeyCode
-import processing.core.PApplet
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.math.max
-import kotlin.math.round
 
 /**
  * Created by cansik on 11.07.17.

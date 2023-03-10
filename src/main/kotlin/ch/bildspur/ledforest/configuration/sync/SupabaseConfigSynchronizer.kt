@@ -10,10 +10,13 @@ import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.realtime.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-class SupabaseConfigSynchronizer(val project: DataModel<Project>) {
+class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchronizer(project) {
     private val installationTableName = "installation"
     private val configurationTableName = "configuration"
     private val configurationUpdateChannelName = "#random"
@@ -129,5 +132,25 @@ class SupabaseConfigSynchronizer(val project: DataModel<Project>) {
         }
 
         print("account created!")
+    }
+
+    override fun start() {
+        val config = project.value.supabase
+
+        if (!config.enabled.value) return
+
+        GlobalScope.async {
+            kotlin.runCatching {
+                connect(config.projectUrl.value, config.projectSecret.value)
+                login(config.userEmail.value, config.userPassword.value)
+                useInstallation(config.installationName.value)
+
+                launch {
+                    setupRealtime()
+                }
+
+                println("Supabase has been setup")
+            }
+        }
     }
 }

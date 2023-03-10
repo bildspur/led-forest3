@@ -2,7 +2,8 @@ package ch.bildspur.ledforest.ui
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.ConfigurationController
-import ch.bildspur.ledforest.firelog.FireLog
+import ch.bildspur.ledforest.configuration.sync.ConfigSynchronizer
+import ch.bildspur.ledforest.configuration.sync.SupabaseConfigSynchronizer
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.*
@@ -52,7 +53,6 @@ import java.nio.file.Paths
 import kotlin.concurrent.thread
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.round
 import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 
@@ -293,6 +293,10 @@ class PrimaryView {
             // start webinterface
             val web = WebInterface(project)
             web.start()
+
+            // start sync
+            val synchronizer: ConfigSynchronizer = SupabaseConfigSynchronizer(project)
+            synchronizer.start()
 
             // start processing
             startProcessing()
