@@ -32,23 +32,11 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
         @SerialName("created_at") val createdAt: String
     )
 
-    @Serializable
-    data class Configuration(
-        val id: Int,
-        val installation: Int,
-        val interactive: Boolean,
-        val brightness: Float
-    )
-
     private lateinit var client: SupabaseClient
     private lateinit var activeInstallation: Installation
-    private lateinit var activateConfiguration: Configuration
 
     val installation: Installation
         get() = activeInstallation
-
-    val configuration: Configuration
-        get() = activateConfiguration
 
     fun connect(supabaseUrl: String, supabaseKey: String) {
         client = createSupabaseClient(
@@ -88,12 +76,11 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
     suspend fun updateConfiguration() {
         val result = client.postgrest[configurationTableName]
             .select {
-                Configuration::installation eq activeInstallation.id
+                eq(installationIdColumnName, activeInstallation.id)
             }
 
         val jsonObject = result.body.jsonArray[0] as JsonObject
         onUpdate(jsonObject)
-        activateConfiguration = result.decodeList<Configuration>().first()
     }
 
     suspend fun setupRealtime() {
@@ -111,7 +98,7 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
 
         val tableChangeFlow = channel.postgresChangeFlow<PostgresAction.Update>(schema = "public") {
             table = configurationTableName
-            filter = "id=eq.${activateConfiguration.id}"
+            filter = "$installationIdColumnName=eq.${installation.id}"
         }
 
         channel.join()
