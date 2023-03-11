@@ -21,7 +21,8 @@ import kotlinx.serialization.json.jsonArray
 class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchronizer(project) {
     private val installationTableName = "installation"
     private val configurationTableName = "configuration"
-    private val configurationUpdateChannelName = "#random"
+    private val configurationUpdateChannelName = "#config"
+    private val idColumnName = "id"
 
     @Serializable
     data class Installation(
@@ -99,7 +100,7 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
 
         val channel = client.realtime.createChannel(configurationUpdateChannelName) {
             presence {
-                //presence options
+                key = activeInstallation.name
             }
 
             broadcast {
@@ -107,7 +108,7 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
             }
         }
 
-        val changeFlow = channel.postgresChangeFlow<PostgresAction.Update>(schema = "public") {
+        val tableChangeFlow = channel.postgresChangeFlow<PostgresAction.Update>(schema = "public") {
             table = configurationTableName
             filter = "id=eq.${activateConfiguration.id}"
         }
@@ -116,11 +117,8 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
 
         println("connected to realtime database")
 
-        changeFlow.collect {
+        tableChangeFlow.collect {
             onUpdate(it.record)
-            val record = it.decodeRecord<Configuration>()
-            println(record)
-            activateConfiguration = record
         }
     }
 
@@ -140,8 +138,20 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
     }
 
     private fun onUpdate(result: JsonObject) {
-        result.entries.forEach {
-            updateValue(it.key, it.value.toString())
+        result.entries.filter { it.key != idColumnName && it.key != installationTableName }.forEach {
+            onValueReceived(it.key, it.value.toString())
+        }
+    }
+
+    override fun publishValue(key: String, value: Any?, data: String) {
+        GlobalScope.async {
+            kotlin.runCatching {
+                client.postgrest[configurationTableName].update({
+                    set(key, data)
+                }) {
+                    eq(installationTableName, activeInstallation.id)
+                }
+            }
         }
     }
 
