@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonArray
 
 class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchronizer(project) {
@@ -127,7 +128,8 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
 
     private fun onUpdate(result: JsonObject) {
         result.entries.filter { it.key != idColumnName && it.key != installationTableName }.forEach {
-            onValueReceived(it.key, it.value.toString())
+            val value = it.value as JsonPrimitive
+            onValueReceived(it.key, value.content)
         }
     }
 
@@ -149,17 +151,15 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
         if (!config.enabled.value) return
 
         GlobalScope.async {
-            kotlin.runCatching {
-                connect(config.projectUrl.value, config.projectSecret.value)
-                login(config.userEmail.value, config.userPassword.value)
-                useInstallation(config.installationName.value)
+            connect(config.projectUrl.value, config.projectSecret.value)
+            login(config.userEmail.value, config.userPassword.value)
+            useInstallation(config.installationName.value)
 
-                launch {
-                    setupRealtime()
-                }
-
-                println("Supabase has been setup")
+            launch {
+                setupRealtime()
             }
+
+            println("Supabase has been setup")
         }
     }
 }
