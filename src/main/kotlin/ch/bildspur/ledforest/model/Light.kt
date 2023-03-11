@@ -1,10 +1,10 @@
 package ch.bildspur.ledforest.model
 
+import ch.bildspur.ledforest.configuration.sync.SyncableAnnotation
 import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.BooleanParameter
 import ch.bildspur.ui.properties.EnumParameter
-import ch.bildspur.ui.properties.RangeSliderParameter
 import ch.bildspur.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose
 
@@ -18,6 +18,7 @@ class Light {
     var globalBrightness = DataModel(1f)
 
     @Expose
+    @SyncableAnnotation("brightness")
     @SliderParameter("Luminosity", 0.0, 1.0, 0.01)
     var luminosity = DataModel(1f)
 

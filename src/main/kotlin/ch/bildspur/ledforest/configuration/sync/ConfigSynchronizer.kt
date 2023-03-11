@@ -17,7 +17,8 @@ private val _dataModelValueProperty =
 data class SyncableProperty(
     val annotation: SyncableAnnotation,
     val property: KProperty<DataModel<*>>,
-    val instance: DataModel<*>
+    val instance: DataModel<*>,
+    var suppressed: Boolean = false
 ) {
     val modelType: KType
         get() = property.returnType.arguments[0].type!!
@@ -76,7 +77,9 @@ abstract class ConfigSynchronizer(val project: DataModel<Project>) {
             return
 
         Platform.runLater {
+            property.suppressed = true
             _dataModelValueProperty.setter.call(property.instance, value)
+            property.suppressed = false
         }
     }
 
@@ -90,6 +93,10 @@ abstract class ConfigSynchronizer(val project: DataModel<Project>) {
 
         if (!property.annotation.publish) {
             println("Property $key is not set to publish data.")
+            return
+        }
+
+        if(property.suppressed) {
             return
         }
 
