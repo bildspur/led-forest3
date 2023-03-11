@@ -317,7 +317,7 @@ class PrimaryView {
         project.onChanged += {
             sketch.project.value = project.value
         }
-        project.fire()
+        project.fireLatest()
 
         processingThread = thread {
             // run processing app
