@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.configuration.sync
 
+import ch.bildspur.ledforest.model.easing.EasingMethod
 import kotlin.reflect.KClass
 
 data class TypeMapping(
@@ -15,6 +16,7 @@ class ValueMapper {
         Float::class to TypeMapping({ it.toFloat() }),
         Double::class to TypeMapping({ it.toDouble() }),
         Boolean::class to TypeMapping({ it.toBoolean() }),
+        EasingMethod::class to TypeMapping({ EasingMethod.valueOf(it) }),
     )
 
     fun serialize(type: KClass<*>, data: Any?): String {

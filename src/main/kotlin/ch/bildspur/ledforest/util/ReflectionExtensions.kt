@@ -1,6 +1,6 @@
 package ch.bildspur.ledforest.util
 
-import ch.bildspur.ledforest.configuration.sync.SyncableAnnotation
+import ch.bildspur.ledforest.configuration.sync.ApiExposed
 import ch.bildspur.model.DataModel
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
@@ -13,7 +13,7 @@ import kotlin.reflect.typeOf
 
 fun KClass<*>.findAllPropertiesWithSyncableAnnotation(): List<KProperty<*>> {
     val properties = memberProperties.filter {
-        it.returnType.isSubtypeOf(typeOf<DataModel<*>>()) && it.hasAnnotation<SyncableAnnotation>()
+        it.returnType.isSubtypeOf(typeOf<DataModel<*>>()) && it.hasAnnotation<ApiExposed>()
     }
 
     val subProperties = memberProperties.filter {
@@ -29,7 +29,7 @@ data class RelativeKProperty(val property: KProperty<*>, val instance: Any?)
 
 fun KClass<*>.findAllPropertiesWithSyncableAnnotationRelative(instance: Any?): List<RelativeKProperty> {
     val properties = memberProperties.filter {
-        it.returnType.isSubtypeOf(typeOf<DataModel<*>>()) && it.hasAnnotation<SyncableAnnotation>()
+        it.returnType.isSubtypeOf(typeOf<DataModel<*>>()) && it.hasAnnotation<ApiExposed>()
     }.map {
         RelativeKProperty(it, it.getter.call(instance))
     }

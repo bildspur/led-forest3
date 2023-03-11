@@ -15,7 +15,7 @@ private val _dataModelValueProperty =
     DataModel::class.memberProperties.first { it.name == "value" } as KMutableProperty<*>
 
 data class SyncableProperty(
-    val annotation: SyncableAnnotation,
+    val annotation: ApiExposed,
     val property: KProperty<DataModel<*>>,
     val instance: DataModel<*>,
     var suppressed: Boolean = false
@@ -70,7 +70,15 @@ abstract class ConfigSynchronizer(val project: DataModel<Project>) {
         }
 
         // convert data value into format
-        val value = valueMapper.deserialize(property.modelType.jvmErasure, data)
+        var value: Any? = null
+        val type = property.modelType.jvmErasure
+
+        try {
+            value = valueMapper.deserialize(property.modelType.jvmErasure, data)
+        } catch (ex: Exception) {
+            println("Sync Error: Could not deserialize $key ($type) $data")
+            return
+        }
 
         // only update value if necessary
         if (property.instance.value == value)
@@ -96,12 +104,19 @@ abstract class ConfigSynchronizer(val project: DataModel<Project>) {
             return
         }
 
-        if(property.suppressed) {
+        if (property.suppressed) {
             return
         }
 
         val value = property.instance.value
-        val data = valueMapper.serialize(property.modelType.jvmErasure, value)
-        publishValue(key, value, data)
+        val type = property.modelType.jvmErasure
+
+        try {
+            val data = valueMapper.serialize(property.modelType.jvmErasure, value)
+            publishValue(key, value, data)
+        } catch (ex: Exception) {
+            println("Sync Error: Could not serialize $key ($type): $value")
+            return
+        }
     }
 }
