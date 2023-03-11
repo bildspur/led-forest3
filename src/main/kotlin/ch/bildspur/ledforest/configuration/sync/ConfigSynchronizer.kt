@@ -3,11 +3,13 @@ package ch.bildspur.ledforest.configuration.sync
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.util.findAllPropertiesWithSyncableAnnotationRelative
 import ch.bildspur.model.DataModel
+import javafx.application.Platform
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.KType
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.jvmErasure
 
 private val _dataModelValueProperty =
     DataModel::class.memberProperties.first { it.name == "value" } as KMutableProperty<*>
@@ -42,11 +44,21 @@ abstract class ConfigSynchronizer(val project: DataModel<Project>) {
 
     abstract fun start()
 
-    fun update(key: String, data: String) {
+    fun updateValue(key: String, data: String) {
         val property = syncableProperties[key] ?: return
 
         // convert data value into format
-        val value = valueMapper.deserialize(property.modelType, data)
-        _dataModelValueProperty.setter.call(property.instance, value)
+        val value = valueMapper.deserialize(property.modelType.jvmErasure, data)
+
+        Platform.runLater {
+            _dataModelValueProperty.setter.call(property.instance, value)
+        }
+    }
+
+    fun publishValue(key: String) {
+        val property = syncableProperties[key] ?: return
+
+        val text = valueMapper.serialize(property.modelType.jvmErasure, property.instance.value)
+        println("Value of $key: $text")
     }
 }

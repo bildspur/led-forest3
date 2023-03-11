@@ -15,6 +15,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonArray
 
 class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchronizer(project) {
     private val installationTableName = "installation"
@@ -87,6 +89,8 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
                 Configuration::installation eq activeInstallation.id
             }
 
+        val jsonObject = result.body.jsonArray[0] as JsonObject
+        onUpdate(jsonObject)
         activateConfiguration = result.decodeList<Configuration>().first()
     }
 
@@ -113,6 +117,7 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
         println("connected to realtime database")
 
         changeFlow.collect {
+            onUpdate(it.record)
             val record = it.decodeRecord<Configuration>()
             println(record)
             activateConfiguration = record
@@ -132,6 +137,12 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
         }
 
         print("account created!")
+    }
+
+    private fun onUpdate(result: JsonObject) {
+        result.entries.forEach {
+            updateValue(it.key, it.value.toString())
+        }
     }
 
     override fun start() {

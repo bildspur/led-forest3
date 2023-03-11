@@ -24,7 +24,7 @@ class LedaConfig {
     var displayCollider = DataModel(true)
 
     @Expose
-    @SyncableAnnotation("interaction")
+    @SyncableAnnotation("interactive")
     @BooleanParameter("Enable Interaction")
     var enabledInteraction = DataModel(true)
 

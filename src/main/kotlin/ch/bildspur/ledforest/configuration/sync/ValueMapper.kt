@@ -1,26 +1,24 @@
 package ch.bildspur.ledforest.configuration.sync
 
 import kotlin.reflect.KClass
-import kotlin.reflect.KType
-import kotlin.reflect.jvm.jvmErasure
 
-data class TypeMapping<T : Any>(
-    val serialize: (data: T) -> String,
-    val deserialize: (data: String) -> T,
+data class TypeMapping(
+    val serialize: (data: Any?) -> String,
+    val deserialize: (data: String) -> Any?,
 )
 
 class ValueMapper {
-    val mappers = mutableMapOf<KClass<*>, TypeMapping<*>>(
-        Boolean::class to TypeMapping({ if (it) "true" else "false" }, { it.toBoolean() })
+    val typeMappings = mutableMapOf<KClass<*>, TypeMapping>(
+        Boolean::class to TypeMapping({ if (it as Boolean) "true" else "false" }, { it.toBoolean() })
     )
 
-    fun serialize(type: KType, data: Any?): String {
-        val mapper = mappers[type.jvmErasure] ?: return ""
-        return mapper.serialize(data as Nothing)
+    fun serialize(type: KClass<*>, data: Any?): String {
+        val mapper = typeMappings[type] ?: return ""
+        return mapper.serialize(data)
     }
 
-    fun deserialize(type: KType, data: String): Any? {
-        val mapper = mappers[type.jvmErasure] ?: return null
+    fun deserialize(type: KClass<*>, data: String): Any? {
+        val mapper = typeMappings[type] ?: return null
         return mapper.deserialize(data)
     }
 }
