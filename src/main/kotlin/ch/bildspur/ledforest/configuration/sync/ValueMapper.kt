@@ -3,13 +3,18 @@ package ch.bildspur.ledforest.configuration.sync
 import kotlin.reflect.KClass
 
 data class TypeMapping(
-    val serialize: (data: Any?) -> String,
     val deserialize: (data: String) -> Any?,
+    val serialize: (data: Any?) -> String = { it.toString() }
 )
 
 class ValueMapper {
     val typeMappings = mutableMapOf<KClass<*>, TypeMapping>(
-        Boolean::class to TypeMapping({ if (it as Boolean) "true" else "false" }, { it.toBoolean() })
+        String::class to TypeMapping({ it }),
+        Int::class to TypeMapping({ it.toInt() }),
+        Long::class to TypeMapping({ it.toLong() }),
+        Float::class to TypeMapping({ it.toFloat() }),
+        Double::class to TypeMapping({ it.toDouble() }),
+        Boolean::class to TypeMapping({ it.toBoolean() }),
     )
 
     fun serialize(type: KClass<*>, data: Any?): String {

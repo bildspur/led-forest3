@@ -23,6 +23,7 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
     private val configurationTableName = "configuration"
     private val configurationUpdateChannelName = "#config"
     private val idColumnName = "id"
+    private val installationIdColumnName = "installation"
 
     @Serializable
     data class Installation(
@@ -149,7 +150,7 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
                 client.postgrest[configurationTableName].update({
                     set(key, data)
                 }) {
-                    eq(installationTableName, activeInstallation.id)
+                    eq(installationIdColumnName, activeInstallation.id)
                 }
             }
         }
