@@ -35,7 +35,6 @@ class Light {
     var brightnessCutoff = DataModel(0.0f)
 
     @Expose
-    @ApiExposed("brightnessCurve")
     @EnumParameter("Brightness Curve")
     var brightnessCurve = DataModel(EasingMethod.Linear)
 }
