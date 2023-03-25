@@ -30,7 +30,9 @@ class WebConfigurationSynchronizer(project: DataModel<Project>) : ConfigSynchron
 
             routing {
                 get("/") {
-                    call.respond(FreeMarkerContent("index.ftl", mapOf("syncableProperties" to syncableProperties)))
+                    call.respond(
+                        FreeMarkerContent("index.ftl", mapOf("syncableProperties" to syncableProperties))
+                    )
                 }
             }
         })
@@ -38,7 +40,5 @@ class WebConfigurationSynchronizer(project: DataModel<Project>) : ConfigSynchron
         server.start()
     }
 
-    override fun publishValue(key: String, value: Any?, data: String) {
-
-    }
+    override fun publishValue(key: String, value: Any?, data: String) {}
 }

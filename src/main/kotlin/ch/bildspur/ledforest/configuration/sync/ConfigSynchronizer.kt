@@ -4,6 +4,7 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.util.findAllPropertiesWithSyncableAnnotationRelative
 import ch.bildspur.model.DataModel
 import javafx.application.Platform
+import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.KType
@@ -22,6 +23,9 @@ data class SyncableProperty(
 ) {
     val modelType: KType
         get() = property.returnType.arguments[0].type!!
+
+    val dataType: KClass<*>
+        get() = modelType.jvmErasure
 }
 
 abstract class ConfigSynchronizer(val project: DataModel<Project>) {
