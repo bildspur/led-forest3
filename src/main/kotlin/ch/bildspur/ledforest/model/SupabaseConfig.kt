@@ -19,8 +19,8 @@ class SupabaseConfig {
     var projectSecret = DataModel("")
 
     @Expose
-    @StringParameter("Installation Name")
-    var installationName = DataModel("")
+    @StringParameter("Installation Key")
+    var installationKey = DataModel("")
 
     @Expose
     @StringParameter("User Email")
@@ -29,4 +29,7 @@ class SupabaseConfig {
     @Expose
     @StringParameter("User Password")
     var userPassword = DataModel("")
+
+    @StringParameter("Installation Name", isEditable = false)
+    var installationName = DataModel("")
 }

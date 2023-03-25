@@ -10,6 +10,7 @@ import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.realtime.*
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -21,16 +22,20 @@ import kotlinx.serialization.json.jsonArray
 
 class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchronizer(project) {
     private val installationTableName = "installation"
-    private val configurationTableName = "configuration"
     private val configurationUpdateChannelName = "#config"
+
     private val idColumnName = "id"
     private val installationIdColumnName = "installation"
 
     @Serializable
     data class Installation(
         val id: Int,
+        val key: String,
         val name: String,
-        @SerialName("created_at") val createdAt: String
+        val active: Boolean,
+        @SerialName("config_table") val configTable: String,
+        @SerialName("created_at") val createdAt: String,
+        @SerialName("last_ping") val lastPing: String,
     )
 
     private lateinit var client: SupabaseClient
@@ -64,10 +69,10 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
         }
     }
 
-    suspend fun useInstallation(installationName: String) {
+    suspend fun useInstallation(installationKey: String) {
         val result = client.postgrest[installationTableName]
             .select {
-                Installation::name eq installationName
+                Installation::key eq installationKey
             }
 
         activeInstallation = result.decodeList<Installation>().first()
@@ -75,7 +80,7 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
     }
 
     suspend fun updateConfiguration() {
-        val result = client.postgrest[configurationTableName]
+        val result = client.postgrest[installation.configTable]
             .select {
                 eq(installationIdColumnName, activeInstallation.id)
             }
@@ -89,7 +94,7 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
 
         val channel = client.realtime.createChannel(configurationUpdateChannelName) {
             presence {
-                key = activeInstallation.name
+                key = activeInstallation.key
             }
 
             broadcast {
@@ -98,7 +103,7 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
         }
 
         val tableChangeFlow = channel.postgresChangeFlow<PostgresAction.Update>(schema = "public") {
-            table = configurationTableName
+            table = installation.configTable
             filter = "$installationIdColumnName=eq.${installation.id}"
         }
 
@@ -136,7 +141,7 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
     override fun publishValue(key: String, value: Any?, data: String) {
         GlobalScope.async {
             kotlin.runCatching {
-                client.postgrest[configurationTableName].update({
+                client.postgrest[installation.configTable].update({
                     set(key, data)
                 }) {
                     eq(installationIdColumnName, activeInstallation.id)
@@ -150,12 +155,18 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
 
         if (!config.enabled.value) return
 
-        GlobalScope.async {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
+            println("Handle $exception in CoroutineExceptionHandler")
+        }
+
+        GlobalScope.async(coroutineExceptionHandler) {
             connect(config.projectUrl.value, config.projectSecret.value)
             login(config.userEmail.value, config.userPassword.value)
-            useInstallation(config.installationName.value)
+            useInstallation(config.installationKey.value)
 
-            launch {
+            config.installationName.value = activeInstallation.name
+
+            launch(coroutineExceptionHandler) {
                 setupRealtime()
             }
 
