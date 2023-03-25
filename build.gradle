@@ -9,7 +9,7 @@ plugins {
 }
 
 group 'ch.bildspur'
-version '3.1'
+version '4.0'
 
 import org.gradle.internal.os.OperatingSystem
 
@@ -112,8 +112,9 @@ dependencies {
     */
 
     // web
-    implementation("io.ktor:ktor-server-core:2.0.2")
-    implementation("io.ktor:ktor-server-netty:2.0.2")
+    implementation("io.ktor:ktor-server-core:2.2.4")
+    implementation("io.ktor:ktor-server-netty:2.2.4")
+    implementation("io.ktor:ktor-server-freemarker:2.2.4")
 
     // fuel
     implementation "com.github.kittinunf.fuel:fuel:2.3.1"
