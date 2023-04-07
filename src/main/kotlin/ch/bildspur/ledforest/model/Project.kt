@@ -7,7 +7,7 @@ import ch.bildspur.ledforest.model.interaction.LeapInteraction
 import ch.bildspur.ledforest.model.interaction.PoseInteraction
 import ch.bildspur.ledforest.model.interaction.RealSenseInteraction
 import ch.bildspur.ledforest.model.leda.LedaConfig
-import ch.bildspur.ledforest.model.leda.LedaPlaybackConfig
+import ch.bildspur.ledforest.model.leda.LedaScenePlayerConfig
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.LightElement
 import ch.bildspur.ledforest.model.light.SpatialLightElement
@@ -167,7 +167,7 @@ class Project {
     var leda = LedaConfig()
 
     @Expose
-    var ledaPlayback = LedaPlaybackConfig()
+    var ledaScenePlayer = LedaScenePlayerConfig()
 
     @Expose
     var visualisation = Visualisation()

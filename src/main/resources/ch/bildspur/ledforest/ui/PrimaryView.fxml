@@ -66,18 +66,23 @@
                         <MenuItem id="pulseMenuItem" mnemonicParsing="false"
                                   onAction="#onShowPulseSceneSettings"
                                   text="Pulse Scene"/>
+                        <MenuItem id="testMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowTestScene"
+                                  text="Test"/>
+                    </items>
+                </Menu>
+
+                <Menu mnemonicParsing="false" text="Leda">
+                    <items>
                         <MenuItem id="ledaMenuItem" mnemonicParsing="false"
                                   onAction="#onShowLedaSceneSettings"
                                   text="Leda Scene"/>
                         <MenuItem id="ledaPlaybackMenuItem" mnemonicParsing="false"
                                   onAction="#onShowLedaPlaybackSettings"
-                                  text="Leda Playback"/>
+                                  text="Leda Scene Player"/>
                         <MenuItem id="ledaMenuItem" mnemonicParsing="false"
                                   onAction="#onShowLedaColliderEditor"
                                   text="Leda Colliders"/>
-                        <MenuItem id="testMenuItem" mnemonicParsing="false"
-                                  onAction="#onShowTestScene"
-                                  text="Test"/>
                     </items>
                 </Menu>
 

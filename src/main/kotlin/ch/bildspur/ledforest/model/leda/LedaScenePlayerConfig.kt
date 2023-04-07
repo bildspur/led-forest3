@@ -4,7 +4,7 @@ import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.BooleanParameter
 import com.google.gson.annotations.Expose
 
-class LedaPlaybackConfig {
+class LedaScenePlayerConfig {
     @Expose
     @BooleanParameter("Enabled")
     var enabled = DataModel(false)

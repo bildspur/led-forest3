@@ -28,6 +28,7 @@ class LedaScene(
     val idleScene: BaseScene,
     val pulseScene: PulseScene,
     val poseScene: PoseScene,
+    val scenePlayer: LedaScenePlayer,
     val poseProvider: PoseDataProvider
 ) : BaseInteractionScene("Leda", project, tubes) {
 
@@ -47,6 +48,7 @@ class LedaScene(
     val idleState = SceneState(idleScene)
     val poseState = SceneState(poseScene)
     val pulseState = SceneState(pulseScene)
+    val scenePlayerState = SceneState(scenePlayer)
     val pulseInteractionState = SceneState(pulseScene)
     val randomPulseState = CustomState("RandomPulse")
 
@@ -73,8 +75,14 @@ class LedaScene(
         idleState.onUpdate = {
             ledRingAnimator.fadeAll(ColorMode.color(0, 0, 80))
             if (project.leda.enabledInteraction.value && poseDetected.currentValue) StateResult(welcomeState)
+            else if (project.ledaScenePlayer.enabled.value) StateResult(scenePlayerState)
             else if (project.leda.enableRandomPulses.value) StateResult(randomPulseState)
             else StateResult()
+        }
+
+        scenePlayerState.onUpdate = {
+            if (project.ledaScenePlayer.enabled.value) StateResult()
+            else StateResult(idleState)
         }
 
         welcomeState.onActivate = {
@@ -126,6 +134,7 @@ class LedaScene(
             val hasCollision = updateCollisions()
 
             if (!project.leda.enabledInteraction.value) StateResult(offState)
+            else if (project.ledaScenePlayer.enabled.value) StateResult(scenePlayerState)
             else if (!poseDetected.currentValue) StateResult(offState)
             else if (hasCollision) StateResult(pulseState)
             else StateResult()
@@ -150,6 +159,7 @@ class LedaScene(
             }
 
             if (!project.leda.enabledInteraction.value) StateResult(offState)
+            else if (project.ledaScenePlayer.enabled.value) StateResult(scenePlayerState)
             else if (!poseDetected.currentValue) StateResult(offState)
             else StateResult()
         }
@@ -179,6 +189,7 @@ class LedaScene(
             pulseScene.update()
 
             if (!project.leda.enableRandomPulses.value) StateResult(offState)
+            else if (project.ledaScenePlayer.enabled.value) StateResult(scenePlayerState)
             else if (project.leda.enabledInteraction.value && poseDetected.currentValue) StateResult(welcomeState)
             else StateResult()
         }

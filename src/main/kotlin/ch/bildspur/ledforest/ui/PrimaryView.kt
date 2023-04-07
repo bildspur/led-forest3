@@ -436,9 +436,9 @@ class PrimaryView {
 
     private fun updateInfoLabel() {
         val luminosity = (project.value.light.luminosity.value * 100).roundToInt()
-        val interactionOn = if (project.value.leda.enabledInteraction.value) "Y" else "N"
+        val interactionOn = if (project.value.leda.enabledInteraction.value) "On" else "Off"
 
-        infoLabel.text = "Lu: $luminosity% In: $interactionOn"
+        infoLabel.text = "Brightness: $luminosity%\tInteraction: $interactionOn"
     }
 
     fun <T> createBidirectionalMapping(
@@ -681,7 +681,7 @@ class PrimaryView {
     }
 
     fun onShowLedaPlaybackSettings() {
-        initSettingsView(project.value.ledaPlayback, "Leda Playback")
+        initSettingsView(project.value.ledaScenePlayer, "Leda Scene Player")
     }
 
     fun onShowLedaColliderEditor() {
