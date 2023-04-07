@@ -11,4 +11,8 @@ abstract class BaseScene(val name: String, val project: Project, val tubes: List
     abstract fun update()
     abstract fun stop()
     abstract fun dispose()
+
+    override fun toString(): String {
+        return name
+    }
 }
