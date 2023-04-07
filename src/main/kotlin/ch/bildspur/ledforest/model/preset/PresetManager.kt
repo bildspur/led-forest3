@@ -57,10 +57,10 @@ abstract class PresetManager {
         removePresetButton.graphic = FontIcon("bi-file-earmark-x")
 
         property.children.addAll(
-                createPresetButton,
-                updatePresetButton,
-                applyPresetButton,
-                removePresetButton
+            createPresetButton,
+            updatePresetButton,
+            applyPresetButton,
+            removePresetButton
         )
     }
 
@@ -122,6 +122,12 @@ abstract class PresetManager {
 
         val gson = ConfigurationController().gsonBuilder.create()
         val obj = gson.fromJson(jsonString, this.javaClass)
+        transferDataModelValues(obj, this)
+    }
+
+    fun applyPreset(preset: Preset) {
+        val gson = ConfigurationController().gsonBuilder.create()
+        val obj = gson.fromJson(preset.data, this.javaClass)
         transferDataModelValues(obj, this)
     }
 
