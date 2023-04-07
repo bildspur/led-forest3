@@ -10,14 +10,12 @@ import ch.bildspur.ui.properties.RangeSliderParameter
 import ch.bildspur.ui.properties.SelectableListParameter
 import com.google.gson.annotations.Expose
 import javafx.application.Platform
-import kotlin.math.max
 
 class LedaScenePlayerConfig {
     @Expose
     @BooleanParameter("Enabled")
     var enabled = DataModel(false)
 
-    @Expose
     @NumberParameter("Scene Index")
     var sceneIndex = DataModel(0)
 
@@ -44,7 +42,8 @@ class LedaScenePlayerConfig {
         }
 
         scenes.onChanged += {
-            sceneIndex.value = max(0, scenes.selectedIndex)
+            if (scenes.selectedIndex >= 0)
+                sceneIndex.value = scenes.selectedIndex
         }
     }
 }

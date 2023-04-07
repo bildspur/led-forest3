@@ -46,7 +46,7 @@ class LedaScenePlayer(project: Project, tubes: List<Tube>, vararg val scenes: Ba
                 playNextScene()
             }
         } else {
-            if (activeScene != project.ledaScenePlayer.scenes.selectedItem) {
+            if (activeScene != scenes[project.ledaScenePlayer.sceneIndex.value]) {
                 switchScene(scenes[project.ledaScenePlayer.sceneIndex.value])
             }
         }
