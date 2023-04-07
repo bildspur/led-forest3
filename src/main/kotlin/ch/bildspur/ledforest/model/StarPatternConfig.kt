@@ -33,6 +33,10 @@ class StarPatternConfig : PresetManager() {
     var overwriteColor = DataModel(false)
 
     @Expose
+    @BooleanParameter("Apply Per Element")
+    var applyPerElement = DataModel(false)
+
+    @Expose
     @ColorParameter("Color")
     var color = DataModel(RGB(1.0, 0.0, 0.0, 1.0))
 
