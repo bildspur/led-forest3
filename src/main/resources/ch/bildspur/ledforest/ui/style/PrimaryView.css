@@ -42,6 +42,10 @@
     -fx-graphic: url("../images/Leda16.png");
 }
 
+#ledaPlaybackMenuItem > .label {
+    -fx-graphic: url("../images/LedaPlayback16.png");
+}
+
 #starPatternMenuItem > .label {
     -fx-graphic: url("../images/Star16.png");
 }

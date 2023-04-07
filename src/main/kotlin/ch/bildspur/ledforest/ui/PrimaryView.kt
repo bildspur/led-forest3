@@ -680,6 +680,10 @@ class PrimaryView {
         initSettingsView(project.value.leda, "Leda")
     }
 
+    fun onShowLedaPlaybackSettings() {
+        initSettingsView(project.value.ledaPlayback, "Leda Playback")
+    }
+
     fun onShowLedaColliderEditor() {
         val editor = LedaColliderEditor(project.value)
         editor.show()
@@ -690,7 +694,7 @@ class PrimaryView {
     }
 
     fun onShowLightSettings() {
-        initSettingsView(project.value.light, "Art-Net")
+        initSettingsView(project.value.light, "Light")
     }
 
     fun onShowstarPatternSettings() {

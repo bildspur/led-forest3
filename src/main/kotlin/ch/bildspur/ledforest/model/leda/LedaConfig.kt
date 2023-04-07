@@ -1,9 +1,11 @@
 package ch.bildspur.ledforest.model.leda
 
+import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.sync.ApiExposed
 import ch.bildspur.ledforest.pose.KeyPoint
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
+import ch.bildspur.ledforest.ui.properties.SeparatorParameter
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
 import ch.bildspur.ui.properties.*
@@ -14,6 +16,20 @@ class LedaConfig {
     @Expose
     @BooleanParameter("Enabled")
     var enabled = DataModel(false)
+
+    @SeparatorParameter("Spot Lights")
+    private var spotSep = Any()
+
+    @Expose
+    @ColorParameter("Spot Color")
+    var spotColor = DataModel(RGB(1.0, 1.0, 1.0, 1.0))
+
+    @Expose
+    @SliderParameter("Spot Brightness", 0.0, 1.0, 0.01)
+    var spotBrightness = DataModel(1.0f)
+
+    @SeparatorParameter("Interaction")
+    private var interactionSep = Any()
 
     @Expose
     @BooleanParameter("Enable Collider")

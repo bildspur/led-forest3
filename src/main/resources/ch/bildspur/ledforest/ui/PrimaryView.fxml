@@ -33,7 +33,7 @@
                                   onAction="#onShowMapSettings"
                                   text="2D Map"/>
                         <MenuItem id="lightMenuItem" mnemonicParsing="false" onAction="#onShowLightSettings"
-                                  text="Art-Net"/>
+                                  text="Light"/>
                         <MenuItem id="audioMenuItem" mnemonicParsing="false"
                                   onAction="#onShowAudioSettings"
                                   text="Audio"/>
@@ -69,6 +69,9 @@
                         <MenuItem id="ledaMenuItem" mnemonicParsing="false"
                                   onAction="#onShowLedaSceneSettings"
                                   text="Leda Scene"/>
+                        <MenuItem id="ledaPlaybackMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowLedaPlaybackSettings"
+                                  text="Leda Playback"/>
                         <MenuItem id="ledaMenuItem" mnemonicParsing="false"
                                   onAction="#onShowLedaColliderEditor"
                                   text="Leda Colliders"/>

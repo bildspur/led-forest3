@@ -9,6 +9,7 @@ import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.ledforest.model.leda.CollisionCandidate
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.model.light.LEDRing
+import ch.bildspur.ledforest.model.light.LEDSpot
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.pose.Pose
@@ -189,11 +190,10 @@ class LedaScene(
     override fun setup() {
         // try to find led ring
         val rings = project.spatialLightElements.filterIsInstance<LEDRing>()
-        if (rings.isEmpty())
-            return
-
-        ledRing = rings[0]
-        ledRingAnimator.light = ledRing
+        if (rings.isNotEmpty()) {
+            ledRing = rings[0]
+            ledRingAnimator.light = ledRing
+        }
 
         stateMachine.setup()
 
@@ -206,6 +206,10 @@ class LedaScene(
                 }
             }
         }
+
+        project.leda.spotColor.onChanged += { updateSpotLights() }
+        project.leda.spotBrightness.onChanged += { updateSpotLights() }
+        updateSpotLights()
     }
 
     override fun update() {
@@ -275,5 +279,17 @@ class LedaScene(
         }
 
         return hasCollision
+    }
+
+    private fun updateSpotLights() {
+        val lights = project.spatialLightElements.filterIsInstance<LEDSpot>()
+        val color = project.leda.spotColor.value.toHSL()
+        val brightness = project.leda.spotBrightness.value
+
+        lights.forEachLED {
+            it.color.fadeH(color.h.toFloat(), 0.05f)
+            it.color.fadeS(color.s.toFloat(), 0.05f)
+            it.color.fadeB(color.l.toFloat() * brightness, 0.05f)
+        }
     }
 }
