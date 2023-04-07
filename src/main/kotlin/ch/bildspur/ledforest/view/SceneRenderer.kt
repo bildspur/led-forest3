@@ -30,14 +30,6 @@ class SceneRenderer(
     val rodShapes = mutableMapOf<Tube, PShape>()
 
     override fun setup() {
-        project.visualisation.ledWidth.onChanged += {
-            rodShapes.clear()
-        }
-
-        project.visualisation.ledDetail.onChanged += {
-            rodShapes.clear()
-        }
-
         // initially create rods
         project.tubes.forEach {
             getOrCreateRod(it)
@@ -121,7 +113,7 @@ class SceneRenderer(
 
     private fun renderTube(tube: Tube) {
         // led size
-        val ledHeight = tube.ledLength
+        val ledHeight = tube.ledSize.z
         val tubeLength = tube.ledCount.value * ledHeight
 
         // delta
@@ -157,9 +149,9 @@ class SceneRenderer(
                 g.shape(getOrCreateRod(tube))
             else
                 g.box(
-                    project.visualisation.ledWidth.value,
-                    project.visualisation.ledWidth.value,
-                    tube.ledLength
+                    tube.ledSize.x,
+                    tube.ledSize.y,
+                    tube.ledSize.z
                 )
 
             g.popMatrix()
@@ -182,7 +174,7 @@ class SceneRenderer(
         g.noFill()
         g.stroke(ColorMode.color(280f, 80f, 100f))
         g.pushMatrix()
-        val originBoxWidth = project.visualisation.ledWidth.value * 3f
+        val originBoxWidth = tube.ledSize.x * 3f
         g.translate(0f, 0f, originBoxWidth * 0.5f)
         g.box(originBoxWidth)
         g.popMatrix()
@@ -194,7 +186,7 @@ class SceneRenderer(
             val brightness = if (tube.isSelected.value) 100f else 60f
             g.stroke(ColorMode.color(hue, 80f, brightness))
 
-            val cageWidth = project.visualisation.ledWidth.value * 2f
+            val cageWidth = tube.ledSize.x * 2f
             val cageHeight = tube.length.value + cageWidth
 
             g.translate(0f, 0f, cageHeight * 0.5f + delta)
@@ -208,9 +200,9 @@ class SceneRenderer(
         if (rodShapes.containsKey(tube)) return rodShapes[tube]!!
 
         val rodShape = g.createRod(
-            project.visualisation.ledWidth.value,
-            tube.ledLength,
-            project.visualisation.ledDetail.value
+            tube.ledSize.x,
+            tube.ledSize.z,
+            10
         )
         rodShape.disableStyle()
 

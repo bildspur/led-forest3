@@ -48,7 +48,7 @@ abstract class SpatialLightElement(
         hookPositionListener()
     }
 
-    abstract val ledLength: Float
+    abstract val ledSize: PVector
 
     init {
         hookPositionListener()

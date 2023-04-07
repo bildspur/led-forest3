@@ -578,7 +578,7 @@ class PrimaryView {
         // show selection dialog
         val dialog = ChoiceDialog(
             "Tube",
-            listOf("Tube", "Generic", "Ring", "Universe", "Node")
+            listOf("Tube", "Generic", "Ring", "Spot", "Universe", "Node")
         )
         dialog.title = "Add Element"
         dialog.headerText = "Add a new element to the scene."
@@ -591,6 +591,7 @@ class PrimaryView {
                 "Tube" -> project.value.tubes.add(Tube())
                 "Generic" -> project.value.lights.add(GenericLightElement())
                 "Ring" -> project.value.lights.add(LEDRing())
+                "Spot" -> project.value.lights.add(LEDSpot())
                 "Universe" -> project.value.nodes.first().universes.add(Universe())
                 "Node" -> project.value.nodes.add(DmxNode())
             }

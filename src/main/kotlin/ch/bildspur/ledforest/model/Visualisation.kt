@@ -56,14 +56,6 @@ class Visualisation {
     var globalScaleFactor = DataModel(50.0f)
 
     @Expose
-    @SliderParameter("LED Width", 0.01, 0.1, 0.01)
-    var ledWidth = DataModel(0.03f)
-
-    @Expose
-    @SliderParameter("LED Detail", 2.0, 10.0)
-    var ledDetail = DataModel(5)
-
-    @Expose
     @BooleanParameter("Display Floor")
     var displayFloor = DataModel(false)
 

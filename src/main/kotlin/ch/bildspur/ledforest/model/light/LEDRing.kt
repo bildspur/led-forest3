@@ -29,8 +29,8 @@ class LEDRing : SpatialLightElement(initialLEDCount = 10), PostProcessable {
         hookDiameterListener()
     }
 
-    override val ledLength: Float
-        get() = 0.03f
+    override val ledSize: PVector
+        get() = PVector(0.06f, 0.06f,0.06f)
 
     override fun ledPositionByIndex(index: Int): PVector {
         // this can happen because light element is initialized first

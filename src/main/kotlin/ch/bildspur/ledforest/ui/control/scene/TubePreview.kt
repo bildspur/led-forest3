@@ -7,7 +7,10 @@ import ch.bildspur.model.DataModel
 import javafx.scene.Group
 import javafx.scene.paint.Color
 import javafx.scene.paint.PhongMaterial
-import javafx.scene.shape.*
+import javafx.scene.shape.Box
+import javafx.scene.shape.DrawMode
+import javafx.scene.shape.Shape3D
+import javafx.scene.shape.Sphere
 import javafx.scene.transform.Translate
 
 
@@ -22,8 +25,8 @@ class TubePreview(project: DataModel<Project>) : Base3DScene<Any>(project) {
             element.recalculateLEDPosition()
 
             element.leds.forEach { led ->
-                val width = project.value.visualisation.ledWidth.value.toDouble()
-                val ledShape = Box(width * 2, width * 2, element.ledLength.toDouble())
+                val size = element.ledSize
+                val ledShape = Box(size.x.toDouble(), size.y.toDouble(), size.z.toDouble())
 
                 val pos = led.position.toTranslate()
                 ledShape.transforms.add(pos)

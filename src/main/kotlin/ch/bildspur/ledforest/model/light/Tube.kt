@@ -33,8 +33,8 @@ class Tube : SpatialLightElement(initialLEDCount = 24) {
         return SpaceInformation.calculateLEDPosition(index, this)
     }
 
-    override val ledLength: Float
-        get() = length.value / ledCount.value
+    override val ledSize: PVector
+        get() = PVector(0.06f, 0.06f,length.value / ledCount.value)
 
     private fun hookTubeEvents() {
         length.onChanged += {

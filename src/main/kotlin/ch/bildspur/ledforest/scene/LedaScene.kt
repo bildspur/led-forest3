@@ -188,7 +188,11 @@ class LedaScene(
 
     override fun setup() {
         // try to find led ring
-        ledRing = project.spatialLightElements.first { it is LEDRing } as LEDRing
+        val rings = project.spatialLightElements.filterIsInstance<LEDRing>()
+        if (rings.isEmpty())
+            return
+
+        ledRing = rings[0]
         ledRingAnimator.light = ledRing
 
         stateMachine.setup()
