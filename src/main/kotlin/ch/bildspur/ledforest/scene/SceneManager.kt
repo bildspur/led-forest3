@@ -6,6 +6,9 @@ import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.firelog.FireLog
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.scene.pulse.CenterPulseScene
+import ch.bildspur.ledforest.scene.pulse.PulseScene
+import ch.bildspur.ledforest.scene.pulse.RandomPulseScene
 import ch.bildspur.ledforest.view.IRenderer
 
 class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tube>) : IRenderer {

@@ -15,6 +15,7 @@ import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.pose.PoseLandmark
+import ch.bildspur.ledforest.scene.pulse.PulseScene
 import ch.bildspur.ledforest.statemachine.*
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.Debouncer

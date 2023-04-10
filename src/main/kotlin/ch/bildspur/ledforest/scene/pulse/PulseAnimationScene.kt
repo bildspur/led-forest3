@@ -1,8 +1,9 @@
-package ch.bildspur.ledforest.scene
+package ch.bildspur.ledforest.scene.pulse
 
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.scene.BaseScene
 
 abstract class PulseAnimationScene(name: String, val pulseScene: PulseScene, project: Project, tubes: List<Tube>) :
     BaseScene(name, project, tubes) {

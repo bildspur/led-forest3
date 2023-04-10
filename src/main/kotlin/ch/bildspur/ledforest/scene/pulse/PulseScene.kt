@@ -1,15 +1,14 @@
-package ch.bildspur.ledforest.scene
+package ch.bildspur.ledforest.scene.pulse
 
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
+import ch.bildspur.ledforest.scene.BaseScene
 import ch.bildspur.ledforest.util.ColorMixer
-import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
 import ch.bildspur.ledforest.util.windowedMappedInOut
-import ch.bildspur.math.mix
 import ch.bildspur.util.map
 
 class PulseScene(project: Project, tubes: List<Tube>) : BaseScene("Pulse", project, tubes) {

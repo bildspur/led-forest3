@@ -1,4 +1,4 @@
-package ch.bildspur.ledforest.scene
+package ch.bildspur.ledforest.scene.pulse
 
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.easing.EasingMethod
@@ -6,19 +6,15 @@ import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.util.ExtendedRandom
 
-class RandomPulseScene(pulseScene: PulseScene, project: Project, tubes: List<Tube>) :
-    PulseAnimationScene("Random Pulse", pulseScene, project, tubes) {
+class CenterPulseScene (pulseScene: PulseScene, project: Project, tubes: List<Tube>) :
+    PulseAnimationScene("Center Pulse", pulseScene, project, tubes) {
 
     private val rnd = ExtendedRandom()
     private val easingChoices = listOf(EasingMethod.Linear, EasingMethod.EaseOutQuad, EasingMethod.EaseInQuad)
     override fun animatePulses() {
-        if (!rnd.randomBoolean(project.leda.pulseRandomFactor.value)) {
-            return
-        }
-
         val pulse = Pulse()
-        pulse.location.value.x = rnd.randomFloat(-4f, 4f)
-        // pulse.location.value.y = rnd.randomFloat(-4f, 4f)
+        pulse.location.value.x = 0f
+        pulse.location.value.y = 0f
 
         pulse.duration.value = rnd.randomFloat(4000f, 8000f)
         pulse.distance.value = 10f
