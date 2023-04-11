@@ -22,7 +22,6 @@ class ArtNetRecorder {
     @NumberParameter("Sample Time", unit = "ms")
     var sampleTime = DataModel(33)
 
-    @Expose
     @PathParameter("Output File", mode = FileChooserDialogMode.Save, extensions= arrayOf("*.artnet"))
     var outputPath = DataModel(Path("recording.artnet"))
 

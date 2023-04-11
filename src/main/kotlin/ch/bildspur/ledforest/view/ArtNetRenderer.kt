@@ -32,11 +32,17 @@ class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: 
         val light = project.light
         val maxBrightness = light.globalBrightness.value * light.luminosity.value
 
+        // recording
+        recordingTimer.duration = project.light.recorder.sampleTime.value.toLong()
+        var record = project.light.recorder.isRecording.value
+        if (!recordingTimer.elapsed())
+            record = false
+
         elements.groupBy { it.universe.value }.forEach {
             val universe = indexToUniverses[it.key] ?: return@forEach
             val node = universesToNodes[universe] ?: return@forEach
 
-            val universeMaxBrightness = if(universe.overwriteGlobalBrightness.value) {
+            val universeMaxBrightness = if (universe.overwriteGlobalBrightness.value) {
                 light.luminosity.value * universe.brightness.value
             } else {
                 maxBrightness * universe.brightness.value
@@ -52,12 +58,8 @@ class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: 
             )
             artnet.send(node, universe.id.value, universe.dmxData)
 
-            if (project.light.recorder.isRecording.value) {
-                recordingTimer.duration = project.light.recorder.sampleTime.value.toLong()
-
-                if (recordingTimer.elapsed()) {
-                    recordArtNet(universe.id.value, universe.dmxData)
-                }
+            if (record) {
+                recordArtNet(universe.id.value, universe.dmxData)
             }
         }
     }
