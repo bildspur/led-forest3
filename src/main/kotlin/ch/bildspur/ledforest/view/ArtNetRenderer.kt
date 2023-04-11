@@ -2,14 +2,18 @@ package ch.bildspur.ledforest.view
 
 import ch.bildspur.artnet.ArtNetNode
 import ch.bildspur.ledforest.artnet.ArtNetClient
+import ch.bildspur.ledforest.artnet.recorder.ArtNetSample
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.DmxNode
 import ch.bildspur.ledforest.model.light.Universe
+import ch.bildspur.timer.ElapsedTimer
 
 class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: List<DmxNode>) : IRenderer {
     lateinit var universesToNodes: Map<Universe, ArtNetNode>
     lateinit var indexToUniverses: Map<Int, Universe>
+
+    private val recordingTimer = ElapsedTimer(33)
 
     private val task = TimerTask(15, { render() }, "ArtNetRenderer")
     override val timerTask: TimerTask
@@ -47,7 +51,20 @@ class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: 
                 light.brightnessCurve.value
             )
             artnet.send(node, universe.id.value, universe.dmxData)
+
+            if (project.light.recorder.isRecording.value) {
+                recordingTimer.duration = project.light.recorder.sampleTime.value.toLong()
+
+                if (recordingTimer.elapsed()) {
+                    recordArtNet(universe.id.value, universe.dmxData)
+                }
+            }
         }
+    }
+
+    private fun recordArtNet(universe: Int, data: ByteArray) {
+        val sample = ArtNetSample(System.currentTimeMillis(), 0, universe, 0, data)
+        project.light.recorder.addSample(sample)
     }
 
     fun buildUniverseIndex() {

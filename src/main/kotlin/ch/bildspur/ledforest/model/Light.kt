@@ -5,6 +5,7 @@ import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.BooleanParameter
 import ch.bildspur.ui.properties.EnumParameter
+import ch.bildspur.ui.properties.GroupParameter
 import ch.bildspur.ui.properties.SliderParameter
 import com.google.gson.annotations.Expose
 
@@ -37,4 +38,8 @@ class Light {
     @Expose
     @EnumParameter("Brightness Curve")
     var brightnessCurve = DataModel(EasingMethod.Linear)
+
+    @Expose
+    @GroupParameter("ArtNet Recorder", expanded = false)
+    var recorder = ArtNetRecorder()
 }
