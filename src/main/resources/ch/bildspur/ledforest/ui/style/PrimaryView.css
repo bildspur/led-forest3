@@ -18,6 +18,10 @@
     -fx-graphic: url("../images/ArtnetIcon16.png");
 }
 
+#graphMenuItem > .label {
+    -fx-graphic: url("../images/Graph16.png");
+}
+
 #interactionMenuItem > .label {
     -fx-graphic: url("../images/InteractionIcon16.png");
 }

@@ -158,6 +158,9 @@ class Project {
     var starPattern = StarPatternConfig()
 
     @Expose
+    var graphScene = GraphSceneConfig()
+
+    @Expose
     var cloudScene = CloudSceneConfig()
 
     @Expose

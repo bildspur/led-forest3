@@ -66,6 +66,9 @@
                         <MenuItem id="pulseMenuItem" mnemonicParsing="false"
                                   onAction="#onShowPulseSceneSettings"
                                   text="Pulse Scene"/>
+                        <MenuItem id="graphMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowGraphScene"
+                                  text="Graph Scene"/>
                         <MenuItem id="testMenuItem" mnemonicParsing="false"
                                   onAction="#onShowTestScene"
                                   text="Test"/>

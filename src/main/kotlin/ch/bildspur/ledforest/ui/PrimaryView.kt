@@ -586,13 +586,22 @@ class PrimaryView {
 
         val result = dialog.showAndWait()
 
+        val selectedItem = elementTreeView.selectionModel.selectedItem.value!!
+
         result.ifPresent { elementName ->
             when (elementName) {
-                "Tube" -> project.value.tubes.add(Tube())
-                "Generic" -> project.value.lights.add(GenericLightElement())
-                "Ring" -> project.value.lights.add(LEDRing())
-                "Spot" -> project.value.lights.add(LEDSpot())
-                "Universe" -> project.value.nodes.first().universes.add(Universe())
+                "Tube" -> project.value.tubes.add(prepareLightElement(Tube(), selectedItem.item))
+                "Generic" -> project.value.lights.add(prepareLightElement(GenericLightElement(), selectedItem.item))
+                "Ring" -> project.value.lights.add(prepareLightElement(LEDRing(), selectedItem.item))
+                "Spot" -> project.value.lights.add(prepareLightElement(LEDSpot(), selectedItem.item))
+                "Universe" -> {
+                    val node = if (selectedItem.item is DmxNode) {
+                        selectedItem.item
+                    } else {
+                        project.value.nodes.first()
+                    }
+                    node.universes.add(Universe())
+                }
                 "Node" -> project.value.nodes.add(DmxNode())
             }
 
@@ -600,6 +609,13 @@ class PrimaryView {
             rebuildRenderer()
             updateUI()
         }
+    }
+
+    private fun <T : LightElement> prepareLightElement(element: T, item: Any?): T {
+        if (item is Universe) {
+            element.universe.value = item.id.value
+        }
+        return element
     }
 
     fun removeElement() {
@@ -610,6 +626,7 @@ class PrimaryView {
                     if (it.universes.contains(selectedItem as Universe))
                         it.universes.remove(selectedItem as Universe)
                 }
+
                 is Tube -> project.value.tubes.remove(selectedItem as Tube)
                 is LightElement -> project.value.lights.remove(selectedItem)
             }
@@ -674,6 +691,10 @@ class PrimaryView {
 
     fun onShowPulseSceneSettings() {
         initSettingsView(project.value.pulseScene, "Pulse")
+    }
+
+    fun onShowGraphScene() {
+        initSettingsView(project.value.graphScene, "Graph")
     }
 
     fun onShowLedaSceneSettings() {
