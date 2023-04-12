@@ -4,10 +4,7 @@ import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.model.preset.PresetManager
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
-import ch.bildspur.ui.properties.BooleanParameter
-import ch.bildspur.ui.properties.ColorParameter
-import ch.bildspur.ui.properties.RangeSliderParameter
-import ch.bildspur.ui.properties.SliderParameter
+import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 
 class StarPatternConfig : PresetManager() {
@@ -33,8 +30,8 @@ class StarPatternConfig : PresetManager() {
     var overwriteColor = DataModel(false)
 
     @Expose
-    @BooleanParameter("Apply Per Element")
-    var applyPerElement = DataModel(false)
+    @EnumParameter("Element Group")
+    var elementGroup = DataModel(LightGroup.LED)
 
     @Expose
     @ColorParameter("Color")

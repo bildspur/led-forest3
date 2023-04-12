@@ -65,7 +65,7 @@ class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPat
     override fun update() {
         val config = project.starPattern
 
-        iaTubes.colorizeEach(perElement = project.starPattern.applyPerElement.value) {
+        iaTubes.colorizeEach(group = project.starPattern.elementGroup.value) {
             val ledBrightness = ColorMode.brightness(it.color.color)
 
             if (ledBrightness > mapToBrightness(10f)) {

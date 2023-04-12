@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.util
 
+import ch.bildspur.ledforest.model.LightGroup
 import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.LightElement
 
@@ -9,12 +10,28 @@ fun List<LightElement>.forEachLED(block: (led: LED) -> Unit) {
     }
 }
 
-fun List<LightElement>.colorizeEach(perElement: Boolean = false, block: (led: LED) -> Unit) {
-    if (perElement) {
+fun List<LightElement>.colorizeEach(group: LightGroup = LightGroup.LED, block: (led: LED) -> Unit) {
+    if (group == LightGroup.Universe) {
+        val centerLedPerUniverse = this.groupBy { it.universe.value }
+            .map { it.key to it.value.center()?.leds?.center() }
+            .associate { it }
+
+        // apply block
+        centerLedPerUniverse.forEach { block(it.value!!) }
+
+        this.forEach { e ->
+            val templateLed = centerLedPerUniverse[e.universe.value]!!
+
+            e.leds.forEach {
+                it.color.target.set(templateLed.color.target)
+                it.color.current.set(templateLed.color.current)
+            }
+        }
+    } else if (group == LightGroup.Element) {
         this.forEach { e ->
             if (e.leds.isEmpty()) return@forEach
 
-            val centerLed = e.leds[e.leds.size / 2]
+            val centerLed = e.leds.center()!!
             block(centerLed)
 
             e.leds.forEach {

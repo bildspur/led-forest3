@@ -1,15 +1,12 @@
 package ch.bildspur.ledforest.util
 
-import ch.bildspur.ledforest.configuration.ConfigurationController
 import ch.bildspur.ledforest.model.easing.EasingMethod
-import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.math.Float2
+import ch.bildspur.math.Float3
 import ch.bildspur.model.NumberRange
 import com.google.gson.Gson
 import processing.core.*
 import processing.core.PConstants.QUAD_STRIP
-import java.lang.Math.sin
-import java.util.*
 import kotlin.math.PI
 
 
@@ -220,4 +217,22 @@ fun windowedMappedInOut(x: Float, inMapping: EasingMethod, outMapping: EasingMet
 inline fun <reified T : Any> T.deepCopy(obj: T): T {
     val json = Gson().toJson(obj)
     return Gson().fromJson(json, T::class.java)
+}
+
+fun Float2.distance(p2: Float2): Double {
+    return Math.sqrt(Math.pow(p2.x - this.x.toDouble(), 2.0) + Math.pow(p2.y - this.y.toDouble(), 2.0))
+}
+
+fun Float3.distance(p2: Float3): Double {
+    return Math.sqrt(
+        Math.pow(p2.x - this.x.toDouble(), 2.0)
+                + Math.pow(p2.y - this.y.toDouble(), 2.0)
+                + Math.pow(p2.z - this.z.toDouble(), 2.0)
+    )
+}
+
+fun <T> List<T>.center(): T? {
+    if (this.isEmpty())
+        return null
+    return this[this.size / 2]
 }
