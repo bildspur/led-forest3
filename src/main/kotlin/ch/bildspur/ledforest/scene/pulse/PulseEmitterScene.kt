@@ -29,6 +29,7 @@ class PulseEmitterScene(pulseScene: PulseScene, project: Project, tubes: List<Tu
             when (project.pulseEmitter.spawnRhythm.value) {
                 PulseSpawnRhythm.Regular -> spawnRegular()
                 PulseSpawnRhythm.Random -> spawnRandom()
+                PulseSpawnRhythm.Burst -> spawnBurst()
             }
         }
     }
@@ -38,9 +39,9 @@ class PulseEmitterScene(pulseScene: PulseScene, project: Project, tubes: List<Tu
         val interval = (project.pulseEmitter.spawnInterval.value * 1000.0 / rate).roundToInt()
 
         repeat((0 until rate).count()) {
-            val delay = interval * rate
+            val delay = interval * it
             val pulse = createPulse()
-            pulse.delay.value = delay
+            pulse.delay.value += delay
             project.pulseScene.pulses.add(pulse.spawn())
         }
     }
@@ -50,7 +51,15 @@ class PulseEmitterScene(pulseScene: PulseScene, project: Project, tubes: List<Tu
         repeat((0 until rate).count()) {
             val delay = rnd.randomFloat(0f, project.pulseEmitter.spawnInterval.value * 1000.0f).roundToInt()
             val pulse = createPulse()
-            pulse.delay.value = delay
+            pulse.delay.value += delay
+            project.pulseScene.pulses.add(pulse.spawn())
+        }
+    }
+
+    private fun spawnBurst() {
+        val rate = project.pulseEmitter.spawnRate.value
+        repeat((0 until rate).count()) {
+            val pulse = createPulse()
             project.pulseScene.pulses.add(pulse.spawn())
         }
     }
@@ -72,13 +81,24 @@ class PulseEmitterScene(pulseScene: PulseScene, project: Project, tubes: List<Tu
             pulse.location.value.z = rnd.randomFloat(config.locationRangeZ.value)
 
         // duration
-        pulse.duration.value = rnd.randomFloat(4000f, 8000f)
+        pulse.duration.value = config.pulseDuration.value * 1000f
+        if (config.randomizePulseDuration.value)
+            pulse.duration.value = rnd.randomFloat(config.pulseDurationRange.value) * 1000f
+
+        // delay
+        pulse.delay.value = (config.pulseDelay.value * 1000f).roundToInt()
+        if (config.randomizePulseDelay.value)
+            pulse.delay.value = (rnd.randomFloat(config.pulseDelayRange.value) * 1000f).roundToInt()
 
         // distance
-        pulse.distance.value = 10f
+        pulse.distance.value = config.pulseDistance.value
+        if (config.randomizePulseDistance.value)
+            pulse.distance.value = rnd.randomFloat(config.pulseDistanceRange.value)
 
         // width
-        pulse.width.value = rnd.randomFloat(3f, 4f)
+        pulse.width.value = config.pulseWidth.value
+        if (config.randomizePulseWidth.value)
+            pulse.width.value = rnd.randomFloat(config.pulseWidthRange.value)
 
         // color
         val gs = config.gradientSpectrum.value
@@ -86,7 +106,9 @@ class PulseEmitterScene(pulseScene: PulseScene, project: Project, tubes: List<Tu
             project.poseInteraction.gradient.color(rnd.randomFloat(gs.low.toFloat(), gs.high.toFloat()))
 
         // expansion curve
-        pulse.expansionCurve.value = easingChoices[rnd.randomInt(max = easingChoices.size - 1)]
+        pulse.expansionCurve.value = config.expansionCurve.value
+        if (config.randomizeExpansionCurve.value)
+            pulse.expansionCurve.value = easingChoices[rnd.randomInt(max = easingChoices.size - 1)]
 
         return pulse
     }
