@@ -108,7 +108,7 @@ abstract class PresetManager {
         }
     }
 
-    private fun createPresetJson(): String {
+    fun createPresetJson(): String {
         val configController = ConfigurationController()
         val json = configController.gson.toJsonTree(this) as JsonObject
 

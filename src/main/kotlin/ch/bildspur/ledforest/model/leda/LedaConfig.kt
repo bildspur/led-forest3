@@ -7,7 +7,6 @@ import ch.bildspur.ledforest.pose.KeyPoint
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
 import ch.bildspur.ledforest.ui.properties.SeparatorParameter
 import ch.bildspur.model.DataModel
-import ch.bildspur.model.NumberRange
 import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 import processing.core.PVector
@@ -47,14 +46,6 @@ class LedaConfig {
     @Expose
     @BooleanParameter("Enable Random Pulses")
     var enableRandomPulses = DataModel(false)
-
-    @Expose
-    @SliderParameter("Pulse Random Factor", 0.0, 1.0, 0.01)
-    var pulseRandomFactor = DataModel(0.02f)
-
-    @Expose
-    @RangeSliderParameter("Gradient Spectrum", 0.0, 1.0, 0.01)
-    var gradientSpectrum = DataModel(NumberRange(0.0, 0.25))
 
     @StringParameter("State", isEditable = false)
     var currentState = DataModel("-")

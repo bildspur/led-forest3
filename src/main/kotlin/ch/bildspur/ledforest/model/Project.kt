@@ -167,6 +167,9 @@ class Project {
     var pulseScene = PulseSceneConfig()
 
     @Expose
+    var pulseEmitter = PulseEmitterConfig()
+
+    @Expose
     var leda = LedaConfig()
 
     @Expose

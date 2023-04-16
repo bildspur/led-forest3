@@ -5,10 +5,14 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.scene.BaseScene
 
-abstract class PulseAnimationScene(name: String, val pulseScene: PulseScene, project: Project, tubes: List<Tube>) :
+abstract class PulseAnimationScene(
+    name: String, val pulseScene: PulseScene,
+    project: Project, tubes: List<Tube>,
+    timerInterval: Long = 10
+) :
     BaseScene(name, project, tubes) {
 
-    private val task = TimerTask(10, { update() })
+    private val task = TimerTask(timerInterval, { update() })
     override val timerTask: TimerTask
         get() = task
 

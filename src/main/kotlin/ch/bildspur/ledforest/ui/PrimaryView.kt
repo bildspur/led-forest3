@@ -693,6 +693,10 @@ class PrimaryView {
         initSettingsView(project.value.pulseScene, "Pulse")
     }
 
+    fun onShowPulseEmitterSceneSettings() {
+        initSettingsView(project.value.pulseEmitter, "Pulse Emitter")
+    }
+
     fun onShowGraphScene() {
         initSettingsView(project.value.graphScene, "Graph")
     }

@@ -6,9 +6,8 @@ import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.firelog.FireLog
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.Tube
-import ch.bildspur.ledforest.scene.pulse.CenterPulseScene
+import ch.bildspur.ledforest.scene.pulse.PulseEmitterScene
 import ch.bildspur.ledforest.scene.pulse.PulseScene
-import ch.bildspur.ledforest.scene.pulse.RandomPulseScene
 import ch.bildspur.ledforest.view.IRenderer
 
 class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tube>) : IRenderer {
@@ -21,10 +20,14 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
     val strobeScene = StrobeScene(project, tubes)
 
     val pulseScene = PulseScene(project, tubes)
-    val randomPulseScene = RandomPulseScene(pulseScene, project, tubes)
-    val centerPulseScene = CenterPulseScene(pulseScene, project, tubes)
+    val pulseEmitterScene = PulseEmitterScene(pulseScene, project, tubes)
+    // val centerPulseScene = CenterPulseScene(pulseScene, project, tubes)
 
-    val scenePlayer = LedaScenePlayer(project, tubes, starScene, randomPulseScene, centerPulseScene)
+    val starSceneFlicker = PresetScene(starScene, "flicker", project.starPattern)
+    val starSceneBlueNoise = PresetScene(starScene, "blue-noise", project.starPattern)
+
+    val scenePlayer = LedaScenePlayer(project, tubes,
+        starScene, pulseEmitterScene, starSceneFlicker, starSceneBlueNoise)
     val ledaScene = LedaScene(project, tubes, starScene, pulseScene, poseScene, scenePlayer, sketch.pose)
 
     val testScene = TestScene(project, tubes)

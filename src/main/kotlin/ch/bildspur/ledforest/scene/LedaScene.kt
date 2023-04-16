@@ -15,11 +15,14 @@ import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.pose.Pose
 import ch.bildspur.ledforest.pose.PoseDataProvider
 import ch.bildspur.ledforest.pose.PoseLandmark
+import ch.bildspur.ledforest.scene.pulse.PulseEmitterScene
 import ch.bildspur.ledforest.scene.pulse.PulseScene
-import ch.bildspur.ledforest.statemachine.*
+import ch.bildspur.ledforest.statemachine.SceneState
+import ch.bildspur.ledforest.statemachine.StateMachine
+import ch.bildspur.ledforest.statemachine.StateResult
+import ch.bildspur.ledforest.statemachine.TimedState
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.Debouncer
-import ch.bildspur.ledforest.util.ExtendedRandom
 import ch.bildspur.ledforest.util.forEachLED
 import processing.core.PVector
 import kotlin.math.max
@@ -45,21 +48,20 @@ class LedaScene(
     private var poseDetected = Debouncer(500, false)
     private var poses = emptyList<Pose>()
 
+    private var randomPulseScene = PulseEmitterScene(pulseScene, project, tubes, "Random Pulse")
+
     // states
     val idleState = SceneState(idleScene)
     val poseState = SceneState(poseScene)
     val pulseState = SceneState(pulseScene)
     val scenePlayerState = SceneState(scenePlayer)
     val pulseInteractionState = SceneState(pulseScene)
-    val randomPulseState = CustomState("RandomPulse")
+    val randomPulseState = SceneState(randomPulseScene)
 
     val offState = TimedState("Off", 250L, idleState)
     val welcomeState = TimedState("Welcome", 1000L, poseState)
 
     val stateMachine = StateMachine(offState)
-
-    val rnd = ExtendedRandom()
-    val easingChoices = listOf(EasingMethod.Linear, EasingMethod.EaseOutQuad, EasingMethod.EaseInQuad)
 
     init {
         stateMachine.onStateChanged += {
@@ -166,36 +168,11 @@ class LedaScene(
         }
 
         // random pulse state
-        randomPulseState.onActivate = {
-            pulseScene.setup()
-        }
         randomPulseState.onUpdate = {
-            if (rnd.randomBoolean(project.leda.pulseRandomFactor.value)) {
-                val pulse = Pulse()
-                pulse.location.value.x = rnd.randomFloat(-4f, 4f)
-                // pulse.location.value.y = rnd.randomFloat(-4f, 4f)
-
-                pulse.duration.value = rnd.randomFloat(4000f, 8000f)
-                pulse.distance.value = 10f
-
-                val gs = project.leda.gradientSpectrum.value
-                pulse.color.value =
-                    project.poseInteraction.gradient.color(rnd.randomFloat(gs.low.toFloat(), gs.high.toFloat()))
-                pulse.width.value = rnd.randomFloat(3f, 4f)
-                pulse.expansionCurve.value = easingChoices[rnd.randomInt(max = easingChoices.size - 1)]
-
-                project.pulseScene.pulses.add(pulse.spawn())
-            }
-
-            pulseScene.update()
-
             if (!project.leda.enableRandomPulses.value) StateResult(offState)
             else if (project.ledaScenePlayer.enabled.value) StateResult(scenePlayerState)
             else if (project.leda.enabledInteraction.value && poseDetected.currentValue) StateResult(welcomeState)
             else StateResult()
-        }
-        randomPulseState.onDeactivate = {
-            pulseScene.stop()
         }
     }
 
