@@ -2,7 +2,6 @@ package ch.bildspur.ledforest.model.leda
 
 import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.Sketch
-import ch.bildspur.ledforest.configuration.sync.ApiExposed
 import ch.bildspur.ledforest.pose.KeyPoint
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
 import ch.bildspur.ledforest.ui.properties.SeparatorParameter
@@ -39,7 +38,6 @@ class LedaConfig {
     var displayCollider = DataModel(true)
 
     @Expose
-    @ApiExposed("interactive")
     @BooleanParameter("Enable Interaction")
     var enabledInteraction = DataModel(true)
 

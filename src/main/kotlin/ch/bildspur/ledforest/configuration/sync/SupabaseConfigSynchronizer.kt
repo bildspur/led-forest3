@@ -14,11 +14,14 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonArray
+import kotlin.concurrent.thread
 
 class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchronizer(project) {
     private val installationTableName = "installation"
@@ -27,6 +30,13 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
     private val idColumnName = "id"
     private val installationIdColumnName = "installation"
 
+    private val pingThread = thread(start = false, isDaemon = true) {
+        while (project.value.supabase.enabled.value) {
+            sendPing()
+            Thread.sleep(project.value.supabase.pingInterval.value * 1000)
+        }
+    }
+
     @Serializable
     data class Installation(
         val id: Int,
@@ -34,8 +44,8 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
         val name: String,
         val active: Boolean,
         @SerialName("config_table") val configTable: String,
-        @SerialName("created_at") val createdAt: String,
-        @SerialName("last_ping") val lastPing: String,
+        @SerialName("created_at") val createdAt: Instant,
+        @SerialName("last_ping") val lastPing: Instant,
     )
 
     private lateinit var client: SupabaseClient
@@ -170,7 +180,24 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
                 setupRealtime()
             }
 
+            if (config.pingsEnabled.value) {
+                pingThread.start()
+            }
+
             println("Supabase has been setup")
+        }
+    }
+
+    fun sendPing() {
+        GlobalScope.async {
+            client.postgrest[installationTableName]
+                .update(
+                    {
+                        Installation::lastPing setTo Clock.System.now()
+                    }
+                ) {
+                    Installation::id eq installation.id
+                }
         }
     }
 }

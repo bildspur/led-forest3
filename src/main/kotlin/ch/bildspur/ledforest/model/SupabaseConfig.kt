@@ -2,6 +2,7 @@ package ch.bildspur.ledforest.model
 
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.properties.BooleanParameter
+import ch.bildspur.ui.properties.NumberParameter
 import ch.bildspur.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
 
@@ -32,4 +33,12 @@ class SupabaseConfig {
 
     @StringParameter("Installation Name", isEditable = false)
     var installationName = DataModel("")
+
+    @Expose
+    @BooleanParameter("Enable Pings", useToggleSwitch = true)
+    var pingsEnabled = DataModel(false)
+
+    @Expose
+    @NumberParameter("Ping Interval (s)")
+    var pingInterval = DataModel(60L)
 }

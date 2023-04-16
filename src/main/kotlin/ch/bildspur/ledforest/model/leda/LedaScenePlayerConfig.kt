@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.model.leda
 
+import ch.bildspur.ledforest.configuration.sync.ApiExposed
 import ch.bildspur.ledforest.scene.BaseScene
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
@@ -16,6 +17,7 @@ class LedaScenePlayerConfig {
     @BooleanParameter("Enabled")
     var enabled = DataModel(false)
 
+    @ApiExposed("scene_index")
     @NumberParameter("Scene Index")
     var sceneIndex = DataModel(0)
 
@@ -23,6 +25,7 @@ class LedaScenePlayerConfig {
     var scenes = SelectableDataModel<BaseScene>()
 
     @Expose
+    @ApiExposed("auto_play")
     @BooleanParameter("Is Playing")
     var isPlaying = DataModel(false)
 
@@ -36,8 +39,12 @@ class LedaScenePlayerConfig {
 
     init {
         sceneIndex.onChanged += {
-            Platform.runLater {
-                scenes.selectedIndex = it
+            if (0 <= it && it < scenes.size) {
+                Platform.runLater {
+                    scenes.selectedIndex = it
+                }
+            } else {
+                sceneIndex.value = 0
             }
         }
 
