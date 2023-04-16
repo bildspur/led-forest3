@@ -10,11 +10,11 @@ import com.google.gson.annotations.Expose
 class StarPatternConfig : PresetManager() {
 
     @Expose
-    @SliderParameter("Rnd On Factor", 0.0, 1.0, 0.05, snap = true)
+    @SliderParameter("Rnd On Factor", 0.0, 1.0, 0.001, snap = true)
     var randomOnFactor = DataModel(0.95f)
 
     @Expose
-    @SliderParameter("Rnd Off Factor", 0.0, 1.0, 0.05, snap = true)
+    @SliderParameter("Rnd Off Factor", 0.0, 1.0, 0.001, snap = true)
     var randomOffFactor = DataModel(0.8f)
 
     @Expose
