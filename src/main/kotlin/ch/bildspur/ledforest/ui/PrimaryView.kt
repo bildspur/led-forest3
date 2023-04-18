@@ -586,7 +586,7 @@ class PrimaryView {
 
         val result = dialog.showAndWait()
 
-        val selectedItem = elementTreeView.selectionModel.selectedItem.value!!
+        val selectedItem = elementTreeView.selectionModel.selectedItem.value
 
         result.ifPresent { elementName ->
             when (elementName) {
