@@ -2,6 +2,7 @@ package ch.bildspur.ledforest.model.leda
 
 import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.Sketch
+import ch.bildspur.ledforest.configuration.sync.ApiExposed
 import ch.bildspur.ledforest.pose.KeyPoint
 import ch.bildspur.ledforest.ui.properties.PVectorParameter
 import ch.bildspur.ledforest.ui.properties.SeparatorParameter
@@ -19,6 +20,7 @@ class LedaConfig {
     private var generalSpotSep = Any()
 
     @Expose
+    @ApiExposed("general_spot_color")
     @ColorParameter("General Spot Color")
     var generalSpotColor = DataModel(RGB(1.0, 1.0, 1.0, 1.0))
 
@@ -30,6 +32,7 @@ class LedaConfig {
     private var accentSpotSep = Any()
 
     @Expose
+    @ApiExposed("accent_spot_color")
     @ColorParameter("Accent Spot Color")
     var accentSpotColor = DataModel(RGB(1.0, 1.0, 1.0, 1.0))
 

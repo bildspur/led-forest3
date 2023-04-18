@@ -1,6 +1,9 @@
 package ch.bildspur.ledforest.configuration.sync
 
+import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.model.easing.EasingMethod
+import ch.bildspur.ledforest.util.parseRgbHex
+import ch.bildspur.ledforest.util.toRgbHexString
 import kotlin.reflect.KClass
 
 data class TypeMapping(
@@ -17,6 +20,7 @@ class ValueMapper {
         Double::class to TypeMapping({ it.toDouble() }),
         Boolean::class to TypeMapping({ it.toBoolean() }),
         EasingMethod::class to TypeMapping({ EasingMethod.valueOf(it) }),
+        RGB::class to TypeMapping({ RGB.parseRgbHex(it) }, { (it as RGB).toRgbHexString() })
     )
 
     fun serialize(type: KClass<*>, data: Any?): String {
