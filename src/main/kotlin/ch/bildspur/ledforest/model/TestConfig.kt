@@ -29,6 +29,10 @@ class TestConfig {
     var color = DataModel(RGB(1.0, 0.0, 0.0, 1.0))
 
     @Expose
+    @BooleanParameter("Color Direction")
+    var colorDirection = DataModel(false)
+
+    @Expose
     @BooleanParameter("Solo Mode")
     var soloMode = DataModel(false)
 }

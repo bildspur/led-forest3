@@ -3,10 +3,10 @@ package ch.bildspur.ledforest.scene
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
-import ch.bildspur.ledforest.model.light.LightElement
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.util.ColorMode
 import ch.bildspur.ledforest.util.forEachLED
+import ch.bildspur.util.map
 
 class TestScene(project: Project, tubes: List<Tube>) : BaseScene("Test", project, tubes) {
     private val task = TimerTask(0, { update() })
@@ -38,11 +38,19 @@ class TestScene(project: Project, tubes: List<Tube>) : BaseScene("Test", project
             val color = project.test.color.value.toHSV()
 
             project.tubes.forEach { t ->
-                t.leds.forEach {
+                t.leds.forEachIndexed { index, led ->
                     if (t.isSelected.value) {
-                        it.color.fade(ColorMode.color(color.h, color.s, 100), project.test.fade.value)
+                        var hue = color.h
+                        var saturation = color.s
+
+                        if (project.test.colorDirection.value) {
+                            hue = index.map(0, t.leds.size,  0, 250)
+                            saturation = 100
+                        }
+
+                        led.color.fade(ColorMode.color(hue, saturation, 100), project.test.fade.value)
                     } else {
-                        it.color.fade(ColorMode.color(color.h, color.s, 0), project.test.fade.value)
+                        led.color.fade(ColorMode.color(color.h, color.s, 0), project.test.fade.value)
                     }
                 }
             }
