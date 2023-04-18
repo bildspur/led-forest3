@@ -1,7 +1,10 @@
 package ch.bildspur.ledforest.model.light
 
 import ch.bildspur.ledforest.configuration.PostProcessable
+import ch.bildspur.model.DataModel
 import ch.bildspur.processing.TransformMatrix
+import ch.bildspur.ui.properties.EnumParameter
+import com.google.gson.annotations.Expose
 import processing.core.PVector
 
 class LEDSpot : SpatialLightElement(initialLEDCount = 1), PostProcessable {
@@ -10,7 +13,11 @@ class LEDSpot : SpatialLightElement(initialLEDCount = 1), PostProcessable {
     }
 
     override val ledSize: PVector
-        get() = PVector(0.25f, 0.25f,0.3f)
+        get() = PVector(0.25f, 0.25f, 0.3f)
+
+    @Expose
+    @EnumParameter("Tag")
+    var tag = DataModel(LEDSpotTag.General)
 
     override fun ledPositionByIndex(index: Int): PVector {
         val ledPos = PVector(0f, 0f, 0f)

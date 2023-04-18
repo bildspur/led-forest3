@@ -15,16 +15,27 @@ class LedaConfig {
     @BooleanParameter("Enabled")
     var enabled = DataModel(false)
 
-    @SeparatorParameter("Spot Lights")
-    private var spotSep = Any()
+    @SeparatorParameter("General Spot Lights")
+    private var generalSpotSep = Any()
 
     @Expose
-    @ColorParameter("Spot Color")
-    var spotColor = DataModel(RGB(1.0, 1.0, 1.0, 1.0))
+    @ColorParameter("General Spot Color")
+    var generalSpotColor = DataModel(RGB(1.0, 1.0, 1.0, 1.0))
 
     @Expose
-    @SliderParameter("Spot Brightness", 0.0, 1.0, 0.01)
-    var spotBrightness = DataModel(1.0f)
+    @SliderParameter("General Spot Brightness", 0.0, 1.0, 0.01)
+    var generalSpotBrightness = DataModel(1.0f)
+
+    @SeparatorParameter("Accent Spot Lights")
+    private var accentSpotSep = Any()
+
+    @Expose
+    @ColorParameter("Accent Spot Color")
+    var accentSpotColor = DataModel(RGB(1.0, 1.0, 1.0, 1.0))
+
+    @Expose
+    @SliderParameter("Accent Spot Brightness", 0.0, 1.0, 0.01)
+    var accentSpotBrightness = DataModel(1.0f)
 
     @SeparatorParameter("Interaction")
     private var interactionSep = Any()

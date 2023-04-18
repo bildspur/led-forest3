@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.scene
 
+import ch.bildspur.color.HSL
 import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.animator.LightAnimator
 import ch.bildspur.ledforest.controller.timer.TimerTask
@@ -10,6 +11,7 @@ import ch.bildspur.ledforest.model.leda.CollisionCandidate
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.model.light.LEDRing
 import ch.bildspur.ledforest.model.light.LEDSpot
+import ch.bildspur.ledforest.model.light.LEDSpotTag
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.pulse.Pulse
 import ch.bildspur.ledforest.pose.Pose
@@ -28,7 +30,8 @@ import processing.core.PVector
 import kotlin.math.max
 
 class LedaScene(
-    project: Project, tubes: List<Tube>,
+    project: Project,
+    tubes: List<Tube>,
     val idleScene: BaseScene,
     val pulseScene: PulseScene,
     val poseScene: PoseScene,
@@ -196,16 +199,51 @@ class LedaScene(
             }
         }
 
-        project.leda.spotColor.onChanged += { updateSpotLights() }
-        project.leda.spotBrightness.onChanged += { updateSpotLights() }
-        updateSpotLights()
+        // general spots
+        project.leda.generalSpotColor.onChanged += {
+            updateSpotLights(
+                project.leda.generalSpotColor.value.toHSL(),
+                project.leda.generalSpotBrightness.value,
+                LEDSpotTag.General
+            )
+        }
+        project.leda.generalSpotBrightness.onChanged += {
+            updateSpotLights(
+                project.leda.generalSpotColor.value.toHSL(),
+                project.leda.generalSpotBrightness.value,
+                LEDSpotTag.General
+            )
+        }
+
+        // accent spots
+        project.leda.accentSpotColor.onChanged += {
+            updateSpotLights(
+                project.leda.accentSpotColor.value.toHSL(), project.leda.accentSpotBrightness.value, LEDSpotTag.Accent
+            )
+        }
+        project.leda.accentSpotBrightness.onChanged += {
+            updateSpotLights(
+                project.leda.accentSpotColor.value.toHSL(), project.leda.accentSpotBrightness.value, LEDSpotTag.Accent
+            )
+        }
+
+        updateSpotLights(
+            project.leda.generalSpotColor.value.toHSL(),
+            project.leda.generalSpotBrightness.value,
+            LEDSpotTag.General
+        )
+
+        updateSpotLights(
+            project.leda.accentSpotColor.value.toHSL(),
+            project.leda.accentSpotBrightness.value,
+            LEDSpotTag.Accent
+        )
     }
 
     override fun update() {
         project.leda.currentState.value = stateMachine.activeStateName
 
-        if (!poseProvider.isRunning.get())
-            return
+        if (!poseProvider.isRunning.get()) return
 
         // receive poses
         poses = poseProvider.poses.take(project.leda.interactorLimit.value)
@@ -256,9 +294,7 @@ class LedaScene(
             val score = landmark.score
             val relativeLandmarkPosition = PVector.sub(origin, pose.keypoints[landmarkId])
             Pair(CollisionCandidate(relativeLandmarkPosition, landmarkType), score)
-        }
-            .filter { it.second >= project.leda.landmarkMinScore.value }
-            .map { it.first }
+        }.filter { it.second >= project.leda.landmarkMinScore.value }.map { it.first }
 
         if (collider.checkCollision(collisionCandidates)) {
             hasCollision = true
@@ -270,10 +306,8 @@ class LedaScene(
         return hasCollision
     }
 
-    private fun updateSpotLights() {
-        val lights = project.spatialLightElements.filterIsInstance<LEDSpot>()
-        val color = project.leda.spotColor.value.toHSL()
-        val brightness = project.leda.spotBrightness.value
+    private fun updateSpotLights(color: HSL, brightness: Float, spotTag: LEDSpotTag) {
+        val lights = project.spatialLightElements.filterIsInstance<LEDSpot>().filter { it.tag.value == spotTag }
 
         lights.forEachLED {
             it.color.fadeH(color.h.toFloat(), 0.05f)
