@@ -29,22 +29,38 @@ class Universe(id: Int = 0) {
     @Expose
     var overwriteGlobalBrightness = DataModel(false)
 
+    @ActionParameter("LEDs", "Auto Address")
+    val runAutoAddressing = {
+        val tubes = Sketch.instance.project.value.tubes
+            .filter { it.universe.value == this.id.value }
+
+        if (tubes.isNotEmpty()) {
+            tubes[0].addressStart.value = 0
+            (1 until tubes.size - 1).forEach { index ->
+                val prevTube = tubes[index - 1]
+                val tube = tubes[index]
+
+                tube.addressStart.value = prevTube.endAddress + LED.LED_ADDRESS_SIZE
+            }
+        }
+    }
+
     @ActionParameter("LEDs", "Select")
     val markLEDs = {
         Sketch.instance.project.value.tubes
-                .filter { it.universe.value == this.id.value }
-                .forEachLED {
-                    it.color.fade(ColorMode.color(250, 0, 100), 0.1f)
-                }
+            .filter { it.universe.value == this.id.value }
+            .forEachLED {
+                it.color.fade(ColorMode.color(250, 0, 100), 0.1f)
+            }
     }
 
     @ActionParameter("LEDs", "Deselect")
     val deselectLEDs = {
         Sketch.instance.project.value.tubes
-                .filter { it.universe.value == this.id.value }
-                .forEachLED {
-                    it.color.fadeB(0f, 0.1f)
-                }
+            .filter { it.universe.value == this.id.value }
+            .forEachLED {
+                it.color.fadeB(0f, 0.1f)
+            }
     }
 
     var dmxData: ByteArray
@@ -55,12 +71,12 @@ class Universe(id: Int = 0) {
     }
 
     fun stageDmx(
-            elements: List<LightElement>,
-            luminosity: Float,
-            response: Float,
-            trace: Float,
-            brightnessCutoff: Float,
-            brightnessCurve: EasingMethod
+        elements: List<LightElement>,
+        luminosity: Float,
+        response: Float,
+        trace: Float,
+        brightnessCutoff: Float,
+        brightnessCurve: EasingMethod
     ): ByteArray {
         val data = ByteArray(dmxData.size)
 
@@ -71,23 +87,23 @@ class Universe(id: Int = 0) {
 
                 // red
                 data[led.address] = calculateValue(
-                        c.red.toFloat(),
-                        dmxData[led.address].toInt() and 0xFF,
-                        luminosity, response, trace
+                    c.red.toFloat(),
+                    dmxData[led.address].toInt() and 0xFF,
+                    luminosity, response, trace
                 )
 
                 // green
                 data[led.address + 1] = calculateValue(
-                        c.green.toFloat(),
-                        dmxData[led.address + 1].toInt() and 0xFF,
-                        luminosity, response, trace
+                    c.green.toFloat(),
+                    dmxData[led.address + 1].toInt() and 0xFF,
+                    luminosity, response, trace
                 )
 
                 // blue
                 data[led.address + 2] = calculateValue(
-                        c.blue.toFloat(),
-                        dmxData[led.address + 2].toInt() and 0xFF,
-                        luminosity, response, trace
+                    c.blue.toFloat(),
+                    dmxData[led.address + 2].toInt() and 0xFF,
+                    luminosity, response, trace
                 )
             }
         }
