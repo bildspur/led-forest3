@@ -2,6 +2,7 @@ package ch.bildspur.ledforest.model.leda
 
 import ch.bildspur.ledforest.configuration.PostProcessable
 import ch.bildspur.ledforest.configuration.sync.ApiExposed
+import ch.bildspur.ledforest.model.scene.SceneLink
 import ch.bildspur.ledforest.scene.BaseScene
 import ch.bildspur.ledforest.ui.SceneSelectorDialog
 import ch.bildspur.model.DataModel
@@ -22,8 +23,19 @@ class LedaScenePlayerConfig : PostProcessable {
     @NumberParameter("Scene Index")
     var sceneIndex = DataModel(0)
 
+    @Expose
     @SelectableListParameter("Scenes")
-    var scenes = SelectableDataModel<BaseScene>()
+    var scenes = SelectableDataModel<SceneLink>()
+
+    fun getActiveScene(): BaseScene? {
+        if (sceneIndex.value < scenes.count()) {
+            val scene = scenes.value[sceneIndex.value].resolve()
+            if (scene != null)
+                return scene
+        }
+
+        return null
+    }
 
     @ActionParameter("Scenes", "Edit")
     private val showEditScenesMenu = {

@@ -4,7 +4,7 @@ import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.preset.PresetManager
 
 class PresetScene(val scene: BaseScene, val presetName: String, val sceneConfig: PresetManager) :
-    BaseScene("${scene.name}-${presetName}", scene.project, scene.tubes) {
+    BaseScene("${scene.name} $presetName", scene.project, scene.tubes) {
     override val timerTask: TimerTask
         get() = scene.timerTask
 

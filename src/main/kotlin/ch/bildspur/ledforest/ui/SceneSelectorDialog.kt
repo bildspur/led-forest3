@@ -1,6 +1,6 @@
 package ch.bildspur.ledforest.ui
 
-import ch.bildspur.ledforest.scene.BaseScene
+import ch.bildspur.ledforest.model.scene.SceneLink
 import ch.bildspur.ledforest.scene.SceneRegistry
 import ch.bildspur.model.ListDataModel
 import javafx.collections.FXCollections
@@ -16,10 +16,10 @@ import org.controlsfx.control.CheckListView
 import tornadofx.add
 
 
-class SceneSelectorDialog(val scenes: ListDataModel<BaseScene>) : Stage() {
+class SceneSelectorDialog(val scenes: ListDataModel<SceneLink>) : Stage() {
     private val root = BorderPane()
 
-    private val items = FXCollections.observableArrayList<BaseScene>()
+    private val items = FXCollections.observableArrayList<SceneLink>()
     private val listView = CheckListView(items)
 
     init {
@@ -29,7 +29,7 @@ class SceneSelectorDialog(val scenes: ListDataModel<BaseScene>) : Stage() {
         this.scene = scene
 
         // add all items and check already selected
-        items.addAll(SceneRegistry.listOfActs())
+        items.addAll(SceneRegistry.listOfActs().map { it.asLink() })
         val selectedSceneNames = scenes.map { it.name }.toSet()
         items.filter { it.name in selectedSceneNames }.forEach { listView.checkModel.check(it) }
 

@@ -26,10 +26,7 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
     val starSceneFlicker = PresetScene(starScene, "flicker", project.starPattern)
     val starSceneBlueNoise = PresetScene(starScene, "blue-noise", project.starPattern)
 
-    val scenePlayer = LedaScenePlayer(
-        project, tubes,
-        starScene, pulseEmitterScene, starSceneFlicker, starSceneBlueNoise
-    )
+    val scenePlayer = LedaScenePlayer(project, tubes)
     val ledaScene = LedaScene(project, tubes, starScene, pulseScene, poseScene, scenePlayer, sketch.pose)
 
     val testScene = TestScene(project, tubes)
@@ -48,6 +45,9 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
         SceneRegistry.clear()
         SceneRegistry.registerScene(starScene, project.starPattern)
         SceneRegistry.registerScene(pulseEmitterScene, project.pulseEmitter)
+        SceneRegistry.registerScene(cloudScene, project.cloudScene)
+        SceneRegistry.registerScene(strobeScene)
+        SceneRegistry.registerScene(testScene)
     }
 
     override fun setup() {

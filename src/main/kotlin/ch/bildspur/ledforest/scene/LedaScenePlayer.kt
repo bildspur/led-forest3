@@ -10,7 +10,7 @@ import ch.bildspur.timer.ElapsedTimer
 import kotlin.math.max
 import kotlin.math.roundToLong
 
-class LedaScenePlayer(project: Project, tubes: List<Tube>, vararg val scenes: BaseScene) :
+class LedaScenePlayer(project: Project, tubes: List<Tube>) :
     BaseScene("LedaScenePlayer", project, tubes) {
     private val task = TimerTask(10, { update() })
     private val random = ExtendedRandom()
@@ -18,15 +18,11 @@ class LedaScenePlayer(project: Project, tubes: List<Tube>, vararg val scenes: Ba
     override val timerTask: TimerTask
         get() = task
 
-    var activeScene: BaseScene = scenes[project.ledaScenePlayer.sceneIndex.value]
+    var activeScene: BaseScene? = project.ledaScenePlayer.getActiveScene()
 
     private val timer = ElapsedTimer()
 
     override fun setup() {
-        project.ledaScenePlayer.scenes.clear()
-        scenes.forEach {
-            project.ledaScenePlayer.scenes.add(it)
-        }
         project.ledaScenePlayer.scenes.selectedIndex = max(0, project.ledaScenePlayer.sceneIndex.value)
 
         // set all tube leds to black
@@ -34,39 +30,43 @@ class LedaScenePlayer(project: Project, tubes: List<Tube>, vararg val scenes: Ba
             it.color.fade(ColorMode.color(0), 0.05f)
         }
 
-        activeScene.setup()
+        activeScene?.setup()
         resetPlaybackTimer()
     }
 
     override fun update() {
-        activeScene.update()
+        activeScene?.update()
 
         if (project.ledaScenePlayer.isPlaying.value) {
             if (timer.elapsed()) {
                 playNextScene()
             }
         } else {
-            if (activeScene != scenes[project.ledaScenePlayer.sceneIndex.value]) {
-                switchScene(scenes[project.ledaScenePlayer.sceneIndex.value])
+            val newActive = project.ledaScenePlayer.getActiveScene()
+            if (newActive != null && newActive != activeScene) {
+                switchScene(newActive)
             }
         }
     }
 
     override fun stop() {
-        activeScene.stop()
+        activeScene?.stop()
     }
 
     override fun dispose() {
     }
 
     private fun playNextScene() {
+        if (project.ledaScenePlayer.scenes.isEmpty()) return
+
         val nextIndex = if (project.ledaScenePlayer.randomOrder.value) {
-            random.randomInt(0, scenes.count())
+            random.randomInt(0, project.ledaScenePlayer.scenes.count())
         } else {
-            (project.ledaScenePlayer.sceneIndex.value + 1) % scenes.count()
+            (project.ledaScenePlayer.sceneIndex.value + 1) % project.ledaScenePlayer.scenes.count()
         }
 
-        val nextScene = scenes[nextIndex]
+        val nextScene = project.ledaScenePlayer.scenes.value[nextIndex].resolve() ?: return
+
         println("Switching to scene: ${nextScene.name}")
         project.ledaScenePlayer.sceneIndex.value = nextIndex
         switchScene(nextScene)
@@ -84,8 +84,8 @@ class LedaScenePlayer(project: Project, tubes: List<Tube>, vararg val scenes: Ba
     }
 
     private fun switchScene(scene: BaseScene) {
-        activeScene.stop()
+        activeScene?.stop()
         activeScene = scene
-        activeScene.setup()
+        activeScene?.setup()
     }
 }

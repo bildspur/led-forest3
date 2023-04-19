@@ -6,6 +6,8 @@ import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.leda.LandmarkPulseCollider
 import ch.bildspur.ledforest.model.light.*
 import ch.bildspur.ledforest.pose.KeyPoint
+import ch.bildspur.ledforest.scene.BaseScene
+import ch.bildspur.ledforest.scene.SceneRegistry
 import ch.bildspur.ledforest.util.RuntimeTypeAdapterFactory
 import ch.bildspur.model.DataModel
 import com.github.salomonbrys.kotson.fromJson
@@ -39,12 +41,18 @@ class ConfigurationController {
         .setPrettyPrinting()
         .excludeFieldsWithoutExposeAnnotation()
         .registerTypeAdapter(DataModel::class.java, DataModelInstanceCreator())
+
         .registerTypeAdapter(PVector::class.java, PVectorSerializer())
         .registerTypeAdapter(PVector::class.java, PVectorDeserializer())
+
         .registerTypeAdapter(KeyPoint::class.java, KeyPointSerializer())
         .registerTypeAdapter(KeyPoint::class.java, KeyPointDeserializer())
+
+        .registerTypeHierarchyAdapter(BaseScene::class.java, BaseSceneDeserializer())
+
         .registerTypeAdapter(Tube::class.java, TubeInstanceCreator())
         .registerTypeAdapter(LandmarkPulseCollider::class.java, LandmarkPulseColliderInstanceCreator())
+
         .registerTypeAdapterFactory(PostProcessingEnabler())
         .registerTypeAdapterFactory(createLightElementRuntimeFactory())
 
@@ -122,6 +130,14 @@ class ConfigurationController {
             obj.addProperty("score", src.score)
             obj.addProperty("velocity", src.velocity)
             return obj
+        }
+    }
+
+    private inner class BaseSceneDeserializer : JsonDeserializer<BaseScene> {
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): BaseScene? {
+            val sceneName = json["name"].asString
+            val scene = SceneRegistry[sceneName] ?: return null
+            return scene.scene
         }
     }
 
