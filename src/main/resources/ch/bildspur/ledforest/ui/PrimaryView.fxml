@@ -55,27 +55,8 @@
                     </items>
                 </Menu>
 
-                <Menu mnemonicParsing="false" text="Scenes">
-                    <items>
-                        <MenuItem id="starPatternMenuItem" mnemonicParsing="false"
-                                  onAction="#onShowstarPatternSettings"
-                                  text="Star Pattern"/>
-                        <MenuItem id="cloudSceneMenuItem" mnemonicParsing="false"
-                                  onAction="#onShowCloudSceneSettings"
-                                  text="Cloud Scene"/>
-                        <MenuItem id="pulseMenuItem" mnemonicParsing="false"
-                                  onAction="#onShowPulseSceneSettings"
-                                  text="Pulse Scene"/>
-                        <MenuItem id="pulseMenuItem" mnemonicParsing="false"
-                                  onAction="#onShowPulseEmitterSceneSettings"
-                                  text="Pulse Emitter"/>
-                        <MenuItem id="graphMenuItem" mnemonicParsing="false"
-                                  onAction="#onShowGraphScene"
-                                  text="Graph Scene"/>
-                        <MenuItem id="testMenuItem" mnemonicParsing="false"
-                                  onAction="#onShowTestScene"
-                                  text="Test"/>
-                    </items>
+                <Menu fx:id="scenesMenu" mnemonicParsing="false" text="Scenes">
+                    <items></items>
                 </Menu>
 
                 <Menu mnemonicParsing="false" text="Leda">
@@ -86,6 +67,9 @@
                         <MenuItem id="ledaPlaybackMenuItem" mnemonicParsing="false"
                                   onAction="#onShowLedaPlaybackSettings"
                                   text="Leda Scene Player"/>
+                        <MenuItem id="pulseMenuItem" mnemonicParsing="false"
+                                  onAction="#onShowPulseSceneSettings"
+                                  text="Pulse Scene"/>
                         <MenuItem id="ledaMenuItem" mnemonicParsing="false"
                                   onAction="#onShowLedaColliderEditor"
                                   text="Leda Colliders"/>

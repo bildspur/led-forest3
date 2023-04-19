@@ -58,6 +58,7 @@ import kotlin.system.exitProcess
 
 
 class PrimaryView {
+    lateinit var scenesMenu: Menu
     lateinit var primaryStage: Stage
 
     @FXML
@@ -121,9 +122,6 @@ class PrimaryView {
 
     var hasUnsavedChanges = DataModel(false)
 
-    init {
-    }
-
     fun setupView() {
         // setup center maps and scenes
         interactionPreview = InteractionPreview(project)
@@ -143,7 +141,6 @@ class PrimaryView {
 
         val tab3D = Tab("3D", stackPaneScene)
         val tabInteraction = Tab("Interaction", stackPaneInteraction)
-        val tabSplit = Tab("Split", splitPane)
 
         tabPane.side = Side.BOTTOM
         tabPane.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
@@ -151,7 +148,6 @@ class PrimaryView {
             Tab("2D", tubeMap),
             tab3D,
             tabInteraction,
-            tabSplit,
         )
         tabPane.selectionModel.select(1)
         tabPane.selectionModel.selectedIndexProperty().addListener { _ ->
@@ -166,13 +162,18 @@ class PrimaryView {
 
                 tab3D.content = null
                 tabInteraction.content = null
-                tabSplit.content = SplitPane(stackPaneScene, stackPaneInteraction)
             } else {
-                tabSplit.content = null
                 tab3D.content = stackPaneScene
                 tabInteraction.content = stackPaneInteraction
             }
         }
+
+        // setup scenes menu
+        addSceneMenuItem("Star", {project.value.starPattern}, "Star16.png")
+        addSceneMenuItem("Cloud", {project.value.cloudScene}, "Cloud16.png")
+        addSceneMenuItem("Pulse Emitter", {project.value.pulseEmitter}, "Pulse16.png")
+        addSceneMenuItem("Graph", {project.value.graphScene}, "Graph16.png")
+        addSceneMenuItem("Test", {project.value.test}, "Lab16.png")
 
         root.center = tabPane
 
@@ -602,6 +603,7 @@ class PrimaryView {
                     }
                     node.universes.add(Universe())
                 }
+
                 "Node" -> project.value.nodes.add(DmxNode())
             }
 
@@ -609,6 +611,21 @@ class PrimaryView {
             rebuildRenderer()
             updateUI()
         }
+    }
+
+    private fun addSceneMenuItem(title: String, configFunction: () -> Any, iconName: String = "") {
+        val item = MenuItem(title)
+        item.setOnAction {
+            val config = configFunction()
+            initSettingsView(config, title)
+        }
+
+        if (iconName.isNotEmpty()) {
+            val icon = Image(javaClass.getResourceAsStream("images/$iconName"))
+            item.graphic = ImageView(icon)
+        }
+
+        scenesMenu.items.add(item)
     }
 
     private fun <T : LightElement> prepareLightElement(element: T, item: Any?): T {

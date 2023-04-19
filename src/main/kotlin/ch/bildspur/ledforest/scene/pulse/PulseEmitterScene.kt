@@ -11,7 +11,7 @@ import ch.bildspur.timer.ElapsedTimer
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
-class PulseEmitterScene(pulseScene: PulseScene, project: Project, tubes: List<Tube>, name: String = "Pulse Emitter") :
+class PulseEmitterScene(pulseScene: PulseScene, project: Project, tubes: List<Tube>, name: String = "PulseEmitter") :
     PulseAnimationScene(name, pulseScene, project, tubes) {
 
     private val rnd = ExtendedRandom()
