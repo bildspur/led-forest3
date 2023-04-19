@@ -1,26 +1,95 @@
 package ch.bildspur.ledforest.scene
 
+import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
+import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
+import ch.bildspur.ledforest.model.mapping.Projection2D
+import ch.bildspur.ledforest.util.colorizeEach
+import ch.bildspur.math.Float2
+import ch.bildspur.math.Float3
+import ch.bildspur.util.map
+import org.bytedeco.javacpp.indexer.UByteRawIndexer
+import org.bytedeco.javacv.FFmpegFrameGrabber
+import org.bytedeco.javacv.OpenCVFrameConverter.ToMat
+import processing.core.PVector
+import java.nio.file.Files
+
 
 class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", project, tubes) {
 
     private val task = TimerTask(10, { update() })
+    private var frameGrabber: FFmpegFrameGrabber? = null
+    private val converterToMat = ToMat()
 
     override val timerTask: TimerTask
         get() = task
 
     override fun setup() {
-
+        if (Files.exists(project.videoScene.videoPath.value)) {
+            frameGrabber = FFmpegFrameGrabber(project.videoScene.videoPath.value.toString())
+            frameGrabber?.start()
+        }
     }
 
     override fun update() {
+        val grabber = frameGrabber ?: return
+        val frame = grabber.grab()
+        val texture = converterToMat.convertToMat(frame)
 
+        if (texture == null) {
+            grabber.setVideoTimestamp(0)
+            return
+        }
+
+        val textureIndexer = texture.createIndexer<UByteRawIndexer>()
+
+        val space = PVector.mult(project.interaction.mappingSpace.value, 0.5f)
+
+        tubes.colorizeEach(project.videoScene.lightGroup.value) {
+            mapLed(it, textureIndexer, space)
+        }
+
+        textureIndexer.release()
+        texture.release()
+    }
+
+    private fun mapLed(led: LED, textureIndexer: UByteRawIndexer, space: PVector) {
+        val width = textureIndexer.size(1)
+        val height = textureIndexer.size(0)
+
+        val normalizedUV = generateUV(led.position, space)
+        val u = (normalizedUV.x * width).toLong()
+        val v = (normalizedUV.y * height).toLong()
+
+        val bgr = IntArray(3)
+        textureIndexer.get(v, u, bgr)
+
+        val rgb = RGB(bgr[2], bgr[1], bgr[0])
+        led.color.set(rgb.toPackedInt())
+    }
+
+    private fun generateUV(p: PVector, space: PVector): Float2 {
+        val pn = Float3(
+            p.x.map(-space.x, space.x, 0f, 1f),
+            p.y.map(-space.y, space.y, 0f, 1f),
+            p.z.map(-space.z, space.z, 0f, 1f)
+        )
+
+        return when (project.videoScene.projection.value) {
+            Projection2D.XY -> Float2(pn.x, pn.y)
+            Projection2D.XZ -> Float2(pn.x, pn.z)
+            Projection2D.YX -> Float2(pn.y, pn.x)
+            Projection2D.YZ -> Float2(pn.y, pn.z)
+            Projection2D.ZX -> Float2(pn.z, pn.x)
+            Projection2D.ZY -> Float2(pn.z, pn.y)
+        }
     }
 
     override fun stop() {
-
+        frameGrabber?.close()
+        frameGrabber?.release()
     }
 
     override fun dispose() {

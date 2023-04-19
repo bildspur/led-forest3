@@ -18,6 +18,7 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
     val poseScene = PoseScene(project, tubes, sketch.pose)
     val blackScene = BlackScene(project, tubes)
     val strobeScene = StrobeScene(project, tubes)
+    val videoScene = VideoScene(project, tubes)
 
     val pulseScene = PulseScene(project, tubes)
     val pulseEmitterScene = PulseEmitterScene(pulseScene, project, tubes)
@@ -43,7 +44,8 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
         SceneRegistry.registerScene(pulseEmitterScene, project.pulseEmitter)
         SceneRegistry.registerScene(cloudScene, project.cloudScene)
         SceneRegistry.registerScene(strobeScene)
-        SceneRegistry.registerScene(testScene)
+        SceneRegistry.registerScene(testScene, project.test)
+        SceneRegistry.registerScene(videoScene, project.videoScene)
     }
 
     override fun setup() {

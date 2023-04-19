@@ -48,6 +48,9 @@ class ConfigurationController {
         .registerTypeAdapter(KeyPoint::class.java, KeyPointSerializer())
         .registerTypeAdapter(KeyPoint::class.java, KeyPointDeserializer())
 
+        .registerTypeHierarchyAdapter(Path::class.java, PathSerializer())
+        .registerTypeHierarchyAdapter(Path::class.java, PathDeserializer())
+
         .registerTypeHierarchyAdapter(BaseScene::class.java, BaseSceneDeserializer())
 
         .registerTypeAdapter(Tube::class.java, TubeInstanceCreator())
@@ -87,6 +90,21 @@ class ConfigurationController {
     inline fun <reified T : Any> saveData(configFile: Path, config: T) {
         val content = gson.toJson(config)
         Files.write(configFile, content.toByteArray())
+    }
+
+    private inner class PathSerializer : JsonSerializer<Path> {
+        override fun serialize(src: Path, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            val obj = JsonObject()
+            obj.addProperty("path", src.toString())
+            return obj
+        }
+    }
+
+    private inner class PathDeserializer : JsonDeserializer<Path> {
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Path {
+            val path = json["path"].asString
+            return Paths.get(path)
+        }
     }
 
     private inner class PVectorDeserializer : JsonDeserializer<PVector> {
