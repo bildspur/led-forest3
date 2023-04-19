@@ -56,7 +56,7 @@ class ArtNetRenderer(val project: Project, val artnet: ArtNetClient, val nodes: 
                 light.brightnessCutoff.value,
                 light.brightnessCurve.value
             )
-            
+
             artnet.send(node, universe.id.value, universe.dmxData)
 
             if (record) {

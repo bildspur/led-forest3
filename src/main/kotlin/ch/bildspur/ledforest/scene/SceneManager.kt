@@ -21,10 +21,6 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
 
     val pulseScene = PulseScene(project, tubes)
     val pulseEmitterScene = PulseEmitterScene(pulseScene, project, tubes)
-    // val centerPulseScene = CenterPulseScene(pulseScene, project, tubes)
-
-    val starSceneFlicker = PresetScene(starScene, "flicker", project.starPattern)
-    val starSceneBlueNoise = PresetScene(starScene, "blue-noise", project.starPattern)
 
     val scenePlayer = LedaScenePlayer(project, tubes)
     val ledaScene = LedaScene(project, tubes, starScene, pulseScene, poseScene, scenePlayer, sketch.pose)
