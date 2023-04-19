@@ -744,7 +744,7 @@ class PrimaryView {
         alert.title = "About"
         alert.headerText = "${Sketch.NAME} - ${Sketch.VERSION}"
         alert.contentText =
-            "Developed by Florian Bruggisser 2018.\nUpdated in 2020 & 2022\nwww.bildspur.ch\n\nURI: ${Sketch.URI_NAME}"
+            "Developed by Florian Bruggisser 2018.\nUpdated in 2020, 2022, 2023\nwww.bildspur.ch\n\nURI: ${Sketch.URI_NAME}"
         alert.showAndWait()
     }
 

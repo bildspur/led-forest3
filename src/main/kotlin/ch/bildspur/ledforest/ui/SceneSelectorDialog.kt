@@ -25,7 +25,7 @@ class SceneSelectorDialog(val scenes: ListDataModel<SceneLink>) : Stage() {
     init {
         title = "Scene Selector"
 
-        scene = Scene(root, 200.0, 400.0)
+        scene = Scene(root, 300.0, 500.0)
         this.scene = scene
 
         // add all items and check already selected
