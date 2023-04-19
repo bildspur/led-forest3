@@ -161,6 +161,9 @@ class Project {
     var graphScene = GraphSceneConfig()
 
     @Expose
+    var videoScene = VideoSceneConfig()
+
+    @Expose
     var cloudScene = CloudSceneConfig()
 
     @Expose

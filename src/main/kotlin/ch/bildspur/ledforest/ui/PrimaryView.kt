@@ -173,6 +173,7 @@ class PrimaryView {
         addSceneMenuItem("Cloud", {project.value.cloudScene}, "Cloud16.png")
         addSceneMenuItem("Pulse Emitter", {project.value.pulseEmitter}, "Pulse16.png")
         addSceneMenuItem("Graph", {project.value.graphScene}, "Graph16.png")
+        addSceneMenuItem("Video", {project.value.graphScene}, "Video16.png")
         addSceneMenuItem("Test", {project.value.test}, "Lab16.png")
 
         root.center = tabPane
