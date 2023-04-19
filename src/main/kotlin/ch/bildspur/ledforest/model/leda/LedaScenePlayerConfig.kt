@@ -1,28 +1,38 @@
 package ch.bildspur.ledforest.model.leda
 
+import ch.bildspur.ledforest.configuration.PostProcessable
 import ch.bildspur.ledforest.configuration.sync.ApiExposed
 import ch.bildspur.ledforest.scene.BaseScene
+import ch.bildspur.ledforest.ui.SceneSelectorDialog
 import ch.bildspur.model.DataModel
 import ch.bildspur.model.NumberRange
 import ch.bildspur.model.SelectableDataModel
-import ch.bildspur.ui.properties.BooleanParameter
-import ch.bildspur.ui.properties.NumberParameter
-import ch.bildspur.ui.properties.RangeSliderParameter
-import ch.bildspur.ui.properties.SelectableListParameter
+import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 import javafx.application.Platform
+import javafx.stage.Modality
 
-class LedaScenePlayerConfig {
+class LedaScenePlayerConfig : PostProcessable {
     @Expose
     @BooleanParameter("Enabled")
     var enabled = DataModel(false)
 
+    @Expose
     @ApiExposed("scene_index")
     @NumberParameter("Scene Index")
     var sceneIndex = DataModel(0)
 
     @SelectableListParameter("Scenes")
     var scenes = SelectableDataModel<BaseScene>()
+
+    @ActionParameter("Scenes", "Edit")
+    private val showEditScenesMenu = {
+        Platform.runLater {
+            val dialog = SceneSelectorDialog(scenes)
+            dialog.initModality(Modality.APPLICATION_MODAL)
+            dialog.show()
+        }
+    }
 
     @Expose
     @ApiExposed("auto_play")
@@ -37,7 +47,7 @@ class LedaScenePlayerConfig {
     @BooleanParameter("Random Order")
     var randomOrder = DataModel(false)
 
-    init {
+    private fun setupEventHandlers() {
         sceneIndex.onChanged += {
             if (0 <= it && it < scenes.size) {
                 Platform.runLater {
@@ -52,5 +62,9 @@ class LedaScenePlayerConfig {
             if (scenes.selectedIndex >= 0)
                 sceneIndex.value = scenes.selectedIndex
         }
+    }
+
+    override fun gsonPostProcess() {
+        setupEventHandlers()
     }
 }
