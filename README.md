@@ -1,4 +1,4 @@
-# LED Forest 3 [![Build Status](https://travis-ci.org/bildspur/led-forest3.svg?branch=master)](https://travis-ci.org/bildspur/led-forest3)
+# LED Forest 3 [![Build](https://github.com/cansik/led-forest3/actions/workflows/gradle.yml/badge.svg)](https://github.com/cansik/led-forest3/actions/workflows/gradle.yml)
 Version 3 of the LED light installation which looks like a forest.
 
 ![Editor](readme/editor.png)
