@@ -9,31 +9,53 @@ import ch.bildspur.ledforest.model.mapping.Projection2D
 import ch.bildspur.ledforest.util.colorizeEach
 import ch.bildspur.math.Float2
 import ch.bildspur.math.Float3
+import ch.bildspur.timer.ElapsedTimer
 import ch.bildspur.util.map
 import org.bytedeco.javacpp.indexer.UByteRawIndexer
 import org.bytedeco.javacv.FFmpegFrameGrabber
 import org.bytedeco.javacv.OpenCVFrameConverter.ToMat
 import processing.core.PVector
 import java.nio.file.Files
+import kotlin.math.max
+import kotlin.math.roundToLong
 
 
 class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", project, tubes) {
 
-    private val task = TimerTask(10, { update() })
+    private val task = TimerTask(1, { update() })
     private var frameGrabber: FFmpegFrameGrabber? = null
     private val converterToMat = ToMat()
 
+    private val fpsTimer = ElapsedTimer(33, fireOnStart = true)
+
     override val timerTask: TimerTask
         get() = task
+
+    init {
+        project.videoScene.videoPath.onChanged += {
+            restartVideo()
+        }
+
+        project.videoScene.fps.onChanged += {
+            updateFPS()
+        }
+
+        project.videoScene.useVideoFPS.onChanged += {
+            updateFPS()
+        }
+    }
 
     override fun setup() {
         if (Files.exists(project.videoScene.videoPath.value)) {
             frameGrabber = FFmpegFrameGrabber(project.videoScene.videoPath.value.toString())
             frameGrabber?.start()
+            updateFPS()
         }
     }
 
     override fun update() {
+        if (!fpsTimer.elapsed()) return
+
         val grabber = frameGrabber ?: return
         val frame = grabber.grab()
         val texture = converterToMat.convertToMat(frame)
@@ -67,7 +89,13 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         textureIndexer.get(v, u, bgr)
 
         val rgb = RGB(bgr[2], bgr[1], bgr[0])
-        led.color.set(rgb.toPackedInt())
+
+        if (project.videoScene.fadeLEDs.value) {
+            led.color.fade(rgb.toPackedInt(), project.videoScene.fadeSpeed.value)
+        } else {
+            // set led color
+            led.color.set(rgb.toPackedInt())
+        }
     }
 
     private fun generateUV(p: PVector, space: PVector): Float2 {
@@ -96,5 +124,21 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
 
     }
 
+    private fun restartVideo() {
+        this.stop()
+        this.setup()
+    }
 
+    private fun updateFPS() {
+        // set correct fps
+        val videoFPS = frameGrabber?.videoFrameRate
+        val fps = if (project.videoScene.useVideoFPS.value && videoFPS != null) {
+            videoFPS
+        } else {
+            project.videoScene.fps.value
+        }
+
+        fpsTimer.duration = (1000.0 / max(1.0, fps)).roundToLong()
+        fpsTimer.reset()
+    }
 }
