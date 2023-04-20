@@ -11,7 +11,7 @@ import kotlin.io.path.Path
 
 class VideoSceneConfig : PresetManager() {
     @Expose
-    @PathParameter("Video", "Select a video", FileChooserDialogMode.Open)
+    @PathParameter("Video", "Select a video", FileChooserDialogMode.Open, extensions = ["*.mp4", "*.mov"])
     var videoPath = DataModel(Path(""))
 
     @Expose

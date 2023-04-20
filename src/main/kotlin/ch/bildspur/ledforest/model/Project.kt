@@ -16,10 +16,12 @@ import ch.bildspur.ledforest.ui.control.tubemap.shape.TubeShape
 import ch.bildspur.ledforest.ui.properties.ArrowControlParameter
 import ch.bildspur.ledforest.util.forEachLED
 import ch.bildspur.model.DataModel
+import ch.bildspur.ui.fx.utils.FileChooserDialogMode
 import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
 import javafx.scene.input.KeyCode
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.io.path.Path
 
 /**
  * Created by cansik on 11.07.17.
@@ -45,6 +47,10 @@ class Project {
     }
 
     @LabelParameter("Global Settings")
+
+    @Expose
+    @PathParameter("Asset directory", mode = FileChooserDialogMode.OpenDirectory)
+    var assetDirectory = DataModel(Path("assets"))
 
     @ColorParameter("Solid LED Color")
     var solidLEDColor = DataModel(RGB(1.0, 0.0, 0.0, 1.0))
