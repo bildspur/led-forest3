@@ -15,6 +15,10 @@ class VideoSceneConfig : PresetManager() {
     var videoPath = DataModel(Path(""))
 
     @Expose
+    @BooleanParameter("Asset Path", useToggleSwitch = true)
+    var isAssetPath = DataModel(false)
+
+    @Expose
     @BooleanParameter("Use Video FPS", useToggleSwitch = true)
     var useVideoFPS = DataModel(true)
 

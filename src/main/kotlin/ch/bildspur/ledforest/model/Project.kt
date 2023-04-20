@@ -35,6 +35,16 @@ class Project {
     var activeScene = DataModel("-")
 
     @Expose
+    @NumberParameter("Target FPS")
+    var targetFPS = DataModel(40.0)
+
+    @StringParameter("Current FPS", isEditable = false)
+    var currentFPS = DataModel("")
+
+    @StringParameter("Current Latency", isEditable = false)
+    var currentLatency = DataModel("")
+
+    @Expose
     @BooleanParameter("Scene Manager Enabled")
     var isSceneManagerEnabled = DataModel(true)
 

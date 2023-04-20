@@ -16,6 +16,7 @@ import org.bytedeco.javacv.FFmpegFrameGrabber
 import org.bytedeco.javacv.OpenCVFrameConverter.ToMat
 import processing.core.PVector
 import java.nio.file.Files
+import java.nio.file.Paths
 import kotlin.math.max
 import kotlin.math.roundToLong
 
@@ -46,10 +47,18 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
     }
 
     override fun setup() {
-        if (Files.exists(project.videoScene.videoPath.value)) {
-            frameGrabber = FFmpegFrameGrabber(project.videoScene.videoPath.value.toString())
+        val videoPath = if (project.videoScene.isAssetPath.value) {
+            Paths.get(project.assetDirectory.value.toString(), project.videoScene.videoPath.value.toString())
+        } else {
+            project.videoScene.videoPath.value
+        }
+
+        if (Files.exists(videoPath)) {
+            frameGrabber = FFmpegFrameGrabber(videoPath.toString())
             frameGrabber?.start()
             updateFPS()
+        } else {
+            System.err.println("Could not find video at path ${videoPath}.")
         }
     }
 
@@ -118,6 +127,7 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
     override fun stop() {
         frameGrabber?.close()
         frameGrabber?.release()
+        frameGrabber = null
     }
 
     override fun dispose() {

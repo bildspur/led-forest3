@@ -2,10 +2,10 @@ package ch.bildspur.ledforest
 
 import ch.bildspur.event.Event
 import ch.bildspur.ledforest.artnet.ArtNetClient
-import ch.bildspur.ledforest.controller.midi.MidiController
 import ch.bildspur.ledforest.controller.OscController
 import ch.bildspur.ledforest.controller.PeasyController
 import ch.bildspur.ledforest.controller.RemoteController
+import ch.bildspur.ledforest.controller.midi.MidiController
 import ch.bildspur.ledforest.controller.timer.Timer
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.leap.LeapDataProvider
@@ -20,6 +20,8 @@ import ch.bildspur.ledforest.view.SceneRenderer
 import ch.bildspur.ledforest.view.SoundRenderer
 import ch.bildspur.model.DataModel
 import ch.bildspur.postfx.builder.PostFX
+import ch.bildspur.timer.ElapsedTimer
+import ch.bildspur.util.round
 import ddf.minim.Minim
 import processing.core.PApplet
 import processing.core.PConstants
@@ -137,6 +139,8 @@ class Sketch : PApplet() {
     val minim = Minim(this)
 
     lateinit var fx: PostFX
+
+    val fpsTracker = FPSTracker()
 
     init {
     }
@@ -279,6 +283,14 @@ class Sketch : PApplet() {
     }
 
     fun backgroundRenderer() {
+        val limiter = FPSLimiter(project.value.targetFPS.value)
+        project.value.targetFPS.onChanged += {
+            limiter.targetFPS = it
+        }
+        project.value.targetFPS.fireLatest()
+
+        val reportTimer = ElapsedTimer(100)
+
         while (running) {
             // reset renderer if needed
             if (isResetRendererProposed)
@@ -286,7 +298,18 @@ class Sketch : PApplet() {
 
             updateLEDColors()
             timer.update()
-            Thread.sleep(25)
+
+            // limiter.limit()
+
+            val sleepTime = (1000.0 / project.value.targetFPS.value).toLong()
+            Thread.sleep(sleepTime)
+
+            fpsTracker.update()
+
+            if (reportTimer.elapsed()) {
+                project.value.currentFPS.value = "${fpsTracker.fps.round(2)}"
+                project.value.currentLatency.value = "${fpsTracker.latency}"
+            }
         }
     }
 

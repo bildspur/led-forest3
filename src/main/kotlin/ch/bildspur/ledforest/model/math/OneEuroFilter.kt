@@ -1,6 +1,7 @@
 package ch.bildspur.ledforest.model.math
 
 import kotlin.math.abs
+import kotlin.math.max
 
 class OneEuroFilter(
         var tPrev: Float = 0.0f,
@@ -21,7 +22,7 @@ class OneEuroFilter(
     }
 
     fun filter(t: Float, x: Float): Float {
-        val te = t - tPrev
+        val te = max(1f, t - tPrev)
 
         // filtered derivative of the signal
         val ad = smoothingFactor(te, dCutoff)

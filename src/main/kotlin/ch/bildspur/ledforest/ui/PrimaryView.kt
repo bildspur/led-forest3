@@ -46,6 +46,7 @@ import javafx.scene.shape.Rectangle
 import javafx.stage.*
 import jfxtras.styles.jmetro.JMetro
 import jfxtras.styles.jmetro.Style
+import org.kordamp.ikonli.javafx.FontIcon
 import processing.core.PApplet
 import processing.core.PVector
 import java.nio.file.Files
@@ -58,7 +59,17 @@ import kotlin.system.exitProcess
 
 
 class PrimaryView {
+    @FXML
+    lateinit var interactiveLabel: Label
+
+    @FXML
+    lateinit var brightnessValueLabel: Label
+
+    @FXML
+    lateinit var brightnessBar: ProgressBar
+    @FXML
     lateinit var scenesMenu: Menu
+    @FXML
     lateinit var primaryStage: Stage
 
     @FXML
@@ -94,9 +105,6 @@ class PrimaryView {
 
     @FXML
     lateinit var statusLabel: Label
-
-    @FXML
-    lateinit var infoLabel: Label
 
     // quick settings
     @FXML
@@ -438,9 +446,15 @@ class PrimaryView {
 
     private fun updateInfoLabel() {
         val luminosity = (project.value.light.luminosity.value * 100).roundToInt()
-        val interactionOn = if (project.value.leda.enabledInteraction.value) "On" else "Off"
 
-        infoLabel.text = "Brightness: $luminosity%\tInteraction: $interactionOn"
+        interactiveLabel.graphic = if (project.value.leda.enabledInteraction.value) {
+            FontIcon("bi-person-check-fill")
+        } else {
+            FontIcon("bi-person-x")
+        }
+
+        brightnessBar.progress = project.value.light.luminosity.value.toDouble()
+        brightnessValueLabel.text = "$luminosity%"
     }
 
     fun <T> createBidirectionalMapping(
