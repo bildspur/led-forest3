@@ -130,17 +130,6 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
         client.close()
     }
 
-    suspend fun createUser(authToken: String, userEmail: String, userPassword: String) {
-        client.gotrue.importAuthToken(authToken)
-        client.gotrue.admin.createUserWithEmail {
-            email = userEmail
-            password = userPassword
-            autoConfirm = true
-        }
-
-        print("account created!")
-    }
-
     private fun onUpdate(result: JsonObject) {
         result.entries.filter { it.key != idColumnName && it.key != installationTableName }.forEach {
             val value = it.value as JsonPrimitive
