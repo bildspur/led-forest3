@@ -38,8 +38,9 @@ class LedaScenePlayer(project: Project, tubes: List<Tube>) :
         activeScene?.update()
 
         if (project.ledaScenePlayer.isPlaying.value) {
-            if (timer.elapsed()) {
-                playNextScene()
+            val noSceneSelected = activeScene == null
+            if (timer.elapsed() || noSceneSelected) {
+                playNextScene(noSceneSelected)
             }
         } else {
             val newActive = project.ledaScenePlayer.getActiveScene()
@@ -56,10 +57,12 @@ class LedaScenePlayer(project: Project, tubes: List<Tube>) :
     override fun dispose() {
     }
 
-    private fun playNextScene() {
+    private fun playNextScene(keepSceneIndex: Boolean = false) {
         if (project.ledaScenePlayer.scenes.isEmpty()) return
 
-        val nextIndex = if (project.ledaScenePlayer.randomOrder.value) {
+        val nextIndex = if (keepSceneIndex) {
+            project.ledaScenePlayer.sceneIndex.value
+        } else if (project.ledaScenePlayer.randomOrder.value) {
             random.randomInt(0, project.ledaScenePlayer.scenes.count())
         } else {
             (project.ledaScenePlayer.sceneIndex.value + 1) % project.ledaScenePlayer.scenes.count()
