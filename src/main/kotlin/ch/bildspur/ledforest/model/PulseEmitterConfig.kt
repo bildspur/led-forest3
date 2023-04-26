@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.model
 
+import ch.bildspur.color.RGB
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.model.easing.EasingMethod
 import ch.bildspur.ledforest.model.preset.PresetManager
@@ -16,6 +17,17 @@ class PulseEmitterConfig : PresetManager() {
     private var clearPulses = {
         Sketch.instance.project.value.pulseScene.pulses.clear()
     }
+
+    @SeparatorParameter("Scene")
+    private var sceneSep = Any()
+
+    @Expose
+    @SliderParameter("Off Threshold", 0.0, 100.0, 1.0, snap = true)
+    var offThreshold = DataModel(0)
+
+    @Expose
+    @ColorParameter("Off Color")
+    var offColor = DataModel(RGB(0.0, 0.0, 0.0, 1.0))
 
     @SeparatorParameter("Spawn")
     private var pulseSep = Any()

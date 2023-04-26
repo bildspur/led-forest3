@@ -19,6 +19,14 @@ class PulseEmitterScene(pulseScene: PulseScene, project: Project, tubes: List<Tu
 
     private val spawnTimer = ElapsedTimer(fireOnStart = true)
 
+    init {
+        // bind bidirectional settings
+        project.pulseEmitter.offColor.bindBidirectional(project.pulseScene.offColor)
+        project.pulseScene.offColor.fireLatest()
+        project.pulseEmitter.offThreshold.bindBidirectional(project.pulseScene.offThreshold)
+        project.pulseScene.offThreshold.fireLatest()
+    }
+
     override fun animatePulses() {
         spawnTimer.duration = (project.pulseEmitter.spawnInterval.value * 1000.0).roundToLong()
 
