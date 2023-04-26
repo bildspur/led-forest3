@@ -38,6 +38,14 @@ class VideoSceneConfig : PresetManager() {
     var projection = DataModel(Projection2D.XY)
 
     @Expose
+    @BooleanParameter("Flip U", useToggleSwitch = true)
+    var flipU = DataModel(false)
+
+    @Expose
+    @BooleanParameter("Flip V", useToggleSwitch = true)
+    var flipV = DataModel(false)
+
+    @Expose
     @BooleanParameter("Fade LEDs", useToggleSwitch = true)
     var fadeLEDs = DataModel(false)
 

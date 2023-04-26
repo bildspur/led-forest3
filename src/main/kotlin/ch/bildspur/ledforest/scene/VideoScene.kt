@@ -91,6 +91,14 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         val height = textureIndexer.size(0)
 
         val normalizedUV = generateUV(led.position, space)
+
+        if (project.videoScene.flipU.value)
+            normalizedUV.x = 1.0f - normalizedUV.x
+
+        // always flip v
+        if (!project.videoScene.flipV.value)
+            normalizedUV.y = 1.0f - normalizedUV.y
+
         val u = (normalizedUV.x * width).toLong()
         val v = (normalizedUV.y * height).toLong()
 
