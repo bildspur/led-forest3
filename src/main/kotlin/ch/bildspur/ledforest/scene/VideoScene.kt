@@ -66,7 +66,12 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         if (!fpsTimer.elapsed()) return
 
         val grabber = frameGrabber ?: return
-        val frame = grabber.grab()
+        val frame = try {
+            grabber.grab()
+        } catch (ex: Exception) {
+            println("Video: Could not grab frame!")
+            return
+        }
         val texture = converterToMat.convertToMat(frame)
 
         if (texture == null) {
