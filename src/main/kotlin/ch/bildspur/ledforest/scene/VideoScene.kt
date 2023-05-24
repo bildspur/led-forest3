@@ -29,6 +29,7 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
 
     private val task = TimerTask(1, { update() })
     private var frameGrabber: FFmpegFrameGrabber? = null
+    private var videoStartTime = 0L
     private val converterToMat = ToMat()
 
     private val fpsTimer = ElapsedTimer(33, fireOnStart = true)
@@ -69,6 +70,7 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         if (Files.exists(videoPath)) {
             frameGrabber = FFmpegFrameGrabber(videoPath.toString())
             frameGrabber?.start()
+            videoStartTime = System.currentTimeMillis()
             updateFPS()
         } else {
             System.err.println("Could not find video at path ${videoPath}.")
@@ -79,7 +81,12 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         if (!fpsTimer.elapsed()) return
 
         val grabber = frameGrabber ?: return
+
+        // calculate current video time
+        val currentTimeStamp = System.currentTimeMillis() - videoStartTime
+
         val frame = try {
+            grabber.setVideoTimestamp(currentTimeStamp * 1000)
             grabber.grab()
         } catch (ex: Exception) {
             println("Video: Could not grab frame!")
@@ -89,6 +96,7 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
 
         if (texture == null) {
             grabber.setVideoTimestamp(0)
+            videoStartTime = System.currentTimeMillis()
             return
         }
 
