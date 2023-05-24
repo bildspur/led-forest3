@@ -19,16 +19,22 @@ class VideoSceneConfig : PresetManager() {
     var isAssetPath = DataModel(false)
 
     @Expose
-    @BooleanParameter("Debug Preview", useToggleSwitch = true)
-    var showDebugPreview = DataModel(false)
-
-    @Expose
     @BooleanParameter("Use Video FPS", useToggleSwitch = true)
     var useVideoFPS = DataModel(true)
 
     @Expose
     @NumberParameter("FPS")
     var fps = DataModel(30.0)
+
+    @SeparatorParameter("Debug")
+    private val debugSep = Any()
+
+    @Expose
+    @BooleanParameter("Debug Preview", useToggleSwitch = true)
+    var showDebugPreview = DataModel(false)
+
+    @BooleanParameter("Request Save Mapping", useToggleSwitch = true)
+    var saveMappingRequested = DataModel(false)
 
     @SeparatorParameter("Mapping")
     private val mappingSep = Any()

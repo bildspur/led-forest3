@@ -3,6 +3,8 @@ package ch.bildspur.ledforest.scene
 import ch.bildspur.color.RGB
 import ch.bildspur.event.Event
 import ch.bildspur.ledforest.controller.timer.TimerTask
+import ch.bildspur.ledforest.cv.height
+import ch.bildspur.ledforest.cv.width
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
@@ -19,8 +21,13 @@ import org.bytedeco.javacv.FFmpegFrameGrabber
 import org.bytedeco.javacv.OpenCVFrameConverter.ToMat
 import org.bytedeco.opencv.opencv_core.Mat
 import processing.core.PVector
+import java.awt.Graphics2D
+import java.awt.image.BufferedImage
+import java.awt.image.BufferedImage.TYPE_3BYTE_BGR
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
+import javax.imageio.ImageIO
 import kotlin.math.max
 import kotlin.math.roundToLong
 
@@ -33,6 +40,9 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
     private val converterToMat = ToMat()
 
     private val fpsTimer = ElapsedTimer(33, fireOnStart = true)
+
+    private var mappingFrame = BufferedImage(512, 512, TYPE_3BYTE_BGR)
+    private var mappingGraphics: Graphics2D? = null
 
     override val timerTask: TimerTask
         get() = task
@@ -102,12 +112,20 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
 
         onFrame(texture);
 
+        if (project.videoScene.saveMappingRequested.value)
+            initializeMappingFrame(texture)
+
         val textureIndexer = texture.createIndexer<UByteRawIndexer>()
 
         val space = PVector.mult(project.interaction.mappingSpace.value, 0.5f)
 
         tubes.colorizeEach(project.videoScene.lightGroup.value) {
             mapLed(it, textureIndexer, space)
+        }
+
+        if (project.videoScene.saveMappingRequested.value) {
+            saveMappingFrame()
+            project.videoScene.saveMappingRequested.value = false
         }
 
         textureIndexer.release()
@@ -129,6 +147,9 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
 
         val u = (normalizedUV.x * width).toLong()
         val v = (normalizedUV.y * height).toLong()
+
+        if (project.videoScene.saveMappingRequested.value)
+            drawUVMapping(u.toInt(), v.toInt())
 
         val bgr = IntArray(3)
         textureIndexer.get(v, u, bgr)
@@ -186,5 +207,27 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
 
         fpsTimer.duration = (1000.0 / max(1.0, fps)).roundToLong()
         fpsTimer.reset()
+    }
+
+    private fun initializeMappingFrame(texture: Mat) {
+        if (mappingFrame.width != texture.width() || mappingFrame.height != texture.height()) {
+            mappingFrame = BufferedImage(texture.width(), texture.height(), TYPE_3BYTE_BGR)
+        }
+
+        // create context and clear image
+        mappingGraphics = mappingFrame.createGraphics()
+        mappingGraphics?.color = java.awt.Color.BLACK
+        mappingGraphics?.clearRect(0, 0, mappingFrame.width, mappingFrame.height)
+    }
+
+    private fun drawUVMapping(u: Int, v: Int) {
+        mappingGraphics?.color = java.awt.Color.GREEN
+        mappingGraphics?.drawOval(u, v, 2, 2)
+    }
+
+    private fun saveMappingFrame() {
+        val outputFile = File("mapping.png")
+        ImageIO.write(mappingFrame, "png", outputFile)
+        println("Mapping frame has been saved!")
     }
 }
