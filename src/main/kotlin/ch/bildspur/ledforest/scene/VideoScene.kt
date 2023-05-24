@@ -1,19 +1,23 @@
 package ch.bildspur.ledforest.scene
 
 import ch.bildspur.color.RGB
+import ch.bildspur.event.Event
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.mapping.Projection2D
+import ch.bildspur.ledforest.ui.VideoPreview
 import ch.bildspur.ledforest.util.colorizeEach
 import ch.bildspur.math.Float2
 import ch.bildspur.math.Float3
 import ch.bildspur.timer.ElapsedTimer
 import ch.bildspur.util.map
+import javafx.application.Platform
 import org.bytedeco.javacpp.indexer.UByteRawIndexer
 import org.bytedeco.javacv.FFmpegFrameGrabber
 import org.bytedeco.javacv.OpenCVFrameConverter.ToMat
+import org.bytedeco.opencv.opencv_core.Mat
 import processing.core.PVector
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -32,6 +36,8 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
     override val timerTask: TimerTask
         get() = task
 
+    val onFrame = Event<Mat>()
+
     init {
         project.videoScene.videoPath.onChanged += {
             restartVideo()
@@ -43,6 +49,13 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
 
         project.videoScene.useVideoFPS.onChanged += {
             updateFPS()
+        }
+
+        if (project.videoScene.showDebugPreview.value) {
+            Platform.runLater {
+                val preview = VideoPreview(this)
+                preview.show()
+            }
         }
     }
 
@@ -78,6 +91,8 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
             grabber.setVideoTimestamp(0)
             return
         }
+
+        onFrame(texture);
 
         val textureIndexer = texture.createIndexer<UByteRawIndexer>()
 
