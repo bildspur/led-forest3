@@ -28,7 +28,10 @@ class LedaConfig {
     @SliderParameter("General Spot Brightness", 0.0, 1.0, 0.01)
     var generalSpotBrightness = DataModel(1.0f)
 
-    @GroupParameter("Show", expanded = false)
+    @SeparatorParameter("Show")
+    private var showSep = Any()
+
+    @GroupParameter("Config", expanded = false)
     var ledaShow = LedaShowConfig()
 
     @SeparatorParameter("Accent Spot Lights")
