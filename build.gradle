@@ -14,7 +14,7 @@ version '3.1'
 import org.gradle.internal.os.OperatingSystem
 
 def applicationMainClass = "ch.bildspur.ledforest.Main"
-def supabaseVersion = "0.8.4-dev-2"
+def supabaseVersion = "0.9.5"
 
 // find jvm args
 def defaultJvmArgs = ''

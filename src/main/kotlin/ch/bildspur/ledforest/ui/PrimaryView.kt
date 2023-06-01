@@ -2,7 +2,6 @@ package ch.bildspur.ledforest.ui
 
 import ch.bildspur.ledforest.Sketch
 import ch.bildspur.ledforest.configuration.ConfigurationController
-import ch.bildspur.ledforest.configuration.sync.ConfigSynchronizer
 import ch.bildspur.ledforest.configuration.sync.SupabaseConfigSynchronizer
 import ch.bildspur.ledforest.model.AppConfig
 import ch.bildspur.ledforest.model.Project
@@ -67,8 +66,10 @@ class PrimaryView {
 
     @FXML
     lateinit var brightnessBar: ProgressBar
+
     @FXML
     lateinit var scenesMenu: Menu
+
     @FXML
     lateinit var primaryStage: Stage
 
@@ -177,12 +178,12 @@ class PrimaryView {
         }
 
         // setup scenes menu
-        addSceneMenuItem("Star", {project.value.starPattern}, "Star16.png")
-        addSceneMenuItem("Cloud", {project.value.cloudScene}, "Cloud16.png")
-        addSceneMenuItem("Pulse Emitter", {project.value.pulseEmitter}, "Pulse16.png")
-        addSceneMenuItem("Graph", {project.value.graphScene}, "Graph16.png")
-        addSceneMenuItem("Video", {project.value.videoScene}, "Video16.png")
-        addSceneMenuItem("Test", {project.value.test}, "Lab16.png")
+        addSceneMenuItem("Star", { project.value.starPattern }, "Star16.png")
+        addSceneMenuItem("Cloud", { project.value.cloudScene }, "Cloud16.png")
+        addSceneMenuItem("Pulse Emitter", { project.value.pulseEmitter }, "Pulse16.png")
+        addSceneMenuItem("Graph", { project.value.graphScene }, "Graph16.png")
+        addSceneMenuItem("Video", { project.value.videoScene }, "Video16.png")
+        addSceneMenuItem("Test", { project.value.test }, "Lab16.png")
 
         root.center = tabPane
 
@@ -305,7 +306,17 @@ class PrimaryView {
             web.start()
 
             // start sync
-            val synchronizer: ConfigSynchronizer = SupabaseConfigSynchronizer(project)
+            val synchronizer = SupabaseConfigSynchronizer(project)
+            synchronizer.onVideoTriggerReceived += {
+                if (project.value.supabase.installationKey.value == it.appKey) {
+                    // on video trigger
+                    val show = project.value.leda.ledaShow
+
+                    show.triggerRequested.value = true
+                    show.videoName.value = it.videoName
+                    show.startTimeStamp.value = it.videoStartTimeStamp
+                }
+            }
             synchronizer.start()
 
             // start processing

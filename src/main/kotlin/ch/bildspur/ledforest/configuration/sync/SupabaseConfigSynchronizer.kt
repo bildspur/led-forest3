@@ -1,5 +1,6 @@
 package ch.bildspur.ledforest.configuration.sync
 
+import ch.bildspur.event.Event
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.model.DataModel
 import io.github.jan.supabase.SupabaseClient
@@ -14,8 +15,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlinx.datetime.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
@@ -26,6 +26,7 @@ import kotlin.concurrent.thread
 class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchronizer(project) {
     private val installationTableName = "installation"
     private val configurationUpdateChannelName = "#config"
+    private val eventsChannelName = "#events"
 
     private val idColumnName = "id"
     private val installationIdColumnName = "installation"
@@ -48,8 +49,13 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
         @SerialName("last_ping") val lastPing: Instant,
     )
 
+    @Serializable
+    data class TriggerVideoMessage(val appKey: String, val videoName: String, val videoStartTimeStamp: Instant)
+
     private lateinit var client: SupabaseClient
     private lateinit var activeInstallation: Installation
+
+    val onVideoTriggerReceived = Event<TriggerVideoMessage>()
 
     val installation: Installation
         get() = activeInstallation
@@ -95,14 +101,14 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
                 eq(installationIdColumnName, activeInstallation.id)
             }
 
-        val jsonObject = result.body.jsonArray[0] as JsonObject
+        val jsonObject = result.body!!.jsonArray[0] as JsonObject
         onUpdate(jsonObject)
     }
 
     suspend fun setupRealtime() {
         client.realtime.connect()
 
-        val channel = client.realtime.createChannel(configurationUpdateChannelName) {
+        val configChannel = client.realtime.createChannel(configurationUpdateChannelName) {
             presence {
                 key = activeInstallation.key
             }
@@ -112,18 +118,49 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
             }
         }
 
-        val tableChangeFlow = channel.postgresChangeFlow<PostgresAction.Update>(schema = "public") {
+        val tableChangeFlow = configChannel.postgresChangeFlow<PostgresAction.Update>(schema = "public") {
             table = installation.configTable
             filter = "$installationIdColumnName=eq.${installation.id}"
         }
 
-        channel.join()
+        configChannel.join()
 
         println("connected to realtime database")
 
-        tableChangeFlow.collect {
-            onUpdate(it.record)
+        GlobalScope.async {
+            tableChangeFlow.collect {
+                onUpdate(it.record)
+            }
         }
+
+        // events channel
+        val eventsChannel = client.realtime.createChannel(eventsChannelName) {
+            presence {
+                key = activeInstallation.key
+            }
+
+            broadcast {
+                //broadcast options
+            }
+        }
+
+        val broadcastFlow = eventsChannel.broadcastFlow<TriggerVideoMessage>(event = "trigger-video")
+
+        GlobalScope.async {
+            broadcastFlow.collect {
+                // correct iso datetime to local datetime intent
+                val msg = TriggerVideoMessage(
+                    it.appKey,
+                    it.videoName,
+                    it.videoStartTimeStamp.toLocalDateTime(TimeZone.currentSystemDefault()).toInstant(TimeZone.UTC)
+                )
+                onVideoTriggerReceived(msg)
+            }
+        }
+
+        eventsChannel.join()
+
+        println("connected to realtime events")
     }
 
     suspend fun disconnect() {
