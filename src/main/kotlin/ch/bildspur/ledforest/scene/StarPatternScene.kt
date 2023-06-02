@@ -65,18 +65,18 @@ class StarPatternScene(project: Project, tubes: List<Tube>) : BaseScene("StarPat
     override fun update() {
         val config = project.starPattern
 
-        iaTubes.colorizeEach(group = project.starPattern.elementGroup.value) {
-            val ledBrightness = ColorMode.brightness(it.color.color)
+        iaTubes.colorizeEach(group = project.starPattern.elementGroup.value) { _, led ->
+            val ledBrightness = ColorMode.brightness(led.color.color)
 
             if (ledBrightness > mapToBrightness(10f)) {
                 //led is ON
                 if (Sketch.instance.random(0f, 1f) > config.randomOffFactor.value) {
-                    it.color.fadeB(mapToBrightness(0f), config.fadeSpeed.value)
+                    led.color.fadeB(mapToBrightness(0f), config.fadeSpeed.value)
                 }
             } else {
                 //led is OFF
                 if (Sketch.instance.random(0f, 1f) > config.randomOnFactor.value) {
-                    it.color.fadeB(
+                    led.color.fadeB(
                         Sketch.instance.random(mapToBrightness(50f), mapToBrightness(100f)),
                         config.fadeSpeed.value
                     )

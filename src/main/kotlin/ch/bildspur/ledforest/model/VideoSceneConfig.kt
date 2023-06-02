@@ -33,7 +33,7 @@ class VideoSceneConfig : PresetManager() {
     @BooleanParameter("Debug Preview", useToggleSwitch = true)
     var showDebugPreview = DataModel(false)
 
-    @BooleanParameter("Request Save Mapping", useToggleSwitch = true)
+    @BooleanParameter("Request Mapping", useToggleSwitch = true)
     var saveMappingRequested = DataModel(false)
 
     @SeparatorParameter("Mapping")
@@ -54,6 +54,10 @@ class VideoSceneConfig : PresetManager() {
     @Expose
     @BooleanParameter("Flip V", useToggleSwitch = true)
     var flipV = DataModel(false)
+
+    @Expose
+    @BooleanParameter("Swap UV", useToggleSwitch = true)
+    var swapUV = DataModel(false)
 
     @Expose
     @BooleanParameter("Fade LEDs", useToggleSwitch = true)

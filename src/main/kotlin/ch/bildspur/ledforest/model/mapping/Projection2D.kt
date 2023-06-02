@@ -6,5 +6,6 @@ enum class Projection2D {
     YX,
     YZ,
     ZX,
-    ZY
+    ZY,
+    LED
 }

@@ -7,6 +7,8 @@ import ch.bildspur.ledforest.cv.height
 import ch.bildspur.ledforest.cv.width
 import ch.bildspur.ledforest.model.Project
 import ch.bildspur.ledforest.model.light.LED
+import ch.bildspur.ledforest.model.light.LightElement
+import ch.bildspur.ledforest.model.light.SpatialLightElement
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.mapping.Projection2D
 import ch.bildspur.ledforest.ui.VideoPreview
@@ -121,8 +123,8 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
 
         val space = PVector.mult(project.interaction.mappingSpace.value, 0.5f)
 
-        tubes.colorizeEach(project.videoScene.lightGroup.value) {
-            mapLed(it, textureIndexer, space)
+        tubes.colorizeEach(project.videoScene.lightGroup.value) { element, led ->
+            mapLed(element, led, textureIndexer, space)
         }
 
         if (project.videoScene.saveMappingRequested.value) {
@@ -134,11 +136,11 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         texture.release()
     }
 
-    private fun mapLed(led: LED, textureIndexer: UByteRawIndexer, space: PVector) {
+    private fun mapLed(element: LightElement, led: LED, textureIndexer: UByteRawIndexer, space: PVector) {
         val width = textureIndexer.size(1)
         val height = textureIndexer.size(0)
 
-        val normalizedUV = generateUV(led.position, space)
+        val normalizedUV = generateUV(element, led, space)
 
         if (project.videoScene.flipU.value)
             normalizedUV.x = 1.0f - normalizedUV.x
@@ -146,6 +148,12 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         // always flip v
         if (!project.videoScene.flipV.value)
             normalizedUV.y = 1.0f - normalizedUV.y
+
+        if (project.videoScene.swapUV.value) {
+            val nx = normalizedUV.x
+            normalizedUV.x = normalizedUV.y
+            normalizedUV.y = nx
+        }
 
         val u = (normalizedUV.x * width).toLong()
         val v = (normalizedUV.y * height).toLong()
@@ -166,7 +174,8 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         }
     }
 
-    private fun generateUV(p: PVector, space: PVector): Float2 {
+    private fun generateUV(element: LightElement, led: LED, space: PVector): Float2 {
+        val p = led.position
         val pn = Float3(
             p.x.map(-space.x, space.x, 0f, 1f),
             p.y.map(-space.y, space.y, 0f, 1f),
@@ -180,7 +189,19 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
             Projection2D.YZ -> Float2(pn.y, pn.z)
             Projection2D.ZX -> Float2(pn.z, pn.x)
             Projection2D.ZY -> Float2(pn.z, pn.y)
+            Projection2D.LED -> generateLEDIndexUV(element, led)
         }
+    }
+
+    private fun generateLEDIndexUV(element: LightElement, led: LED): Float2 {
+        val totalLeds = element.ledCount.value
+        val inverted = if (element is SpatialLightElement) element.invert.value else false
+        var value = (led.address.toFloat()) / max(LED.LED_ADDRESS_SIZE, (totalLeds - 1) * LED.LED_ADDRESS_SIZE)
+
+        if (inverted)
+            value = 1.0f - value
+
+        return Float2(value, 0.5f)
     }
 
     override fun stop() {
