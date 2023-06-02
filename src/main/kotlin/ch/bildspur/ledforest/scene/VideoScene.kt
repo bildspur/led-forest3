@@ -195,8 +195,10 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
 
     private fun generateLEDIndexUV(element: LightElement, led: LED): Float2 {
         val totalLeds = element.ledCount.value
+
+        val ledAddress = (led.address - element.leds[0].address).toFloat()
         val inverted = if (element is SpatialLightElement) element.invert.value else false
-        var value = (led.address.toFloat()) / max(LED.LED_ADDRESS_SIZE, (totalLeds - 1) * LED.LED_ADDRESS_SIZE)
+        var value = ledAddress / max(LED.LED_ADDRESS_SIZE, (totalLeds - 1) * LED.LED_ADDRESS_SIZE)
 
         if (inverted)
             value = 1.0f - value
