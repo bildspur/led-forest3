@@ -312,7 +312,7 @@ class PrimaryView {
                     // on video trigger
                     val show = project.value.leda.ledaShow
 
-                    show.triggerRequested.value = true
+                    show.showTrigger.value = true
                     show.videoName.value = it.videoName
                     show.startTimeStamp.value = it.videoStartTimeStamp
                 }

@@ -23,8 +23,10 @@ class SceneManager(val sketch: Sketch, val project: Project, val tubes: List<Tub
     val pulseScene = PulseScene(project, tubes)
     val pulseEmitterScene = PulseEmitterScene(pulseScene, project, tubes)
 
+    val showScene = LedaShowScene(project, tubes)
+
     val scenePlayer = LedaScenePlayer(project, tubes)
-    val ledaScene = LedaScene(project, tubes, starScene, pulseScene, poseScene, scenePlayer, sketch.pose)
+    val ledaScene = LedaScene(project, tubes, starScene, pulseScene, poseScene, scenePlayer, sketch.pose, showScene)
 
     val testScene = TestScene(project, tubes)
 

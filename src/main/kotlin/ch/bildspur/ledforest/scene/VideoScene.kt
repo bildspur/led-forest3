@@ -36,8 +36,8 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
 
     private val task = TimerTask(1, { update() })
     private var frameGrabber: FFmpegFrameGrabber? = null
-    private var videoStartTime = 0L
     private val converterToMat = ToMat()
+    var videoStartTime = 0L
 
     private val fpsTimer = ElapsedTimer(33, fireOnStart = true)
 
@@ -48,6 +48,7 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         get() = task
 
     val onFrame = Event<Mat>()
+    val onVideoEnded = Event<VideoScene>()
 
     init {
         project.videoScene.videoPath.onChanged += {
@@ -107,6 +108,7 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         if (texture == null) {
             grabber.setVideoTimestamp(0)
             videoStartTime = System.currentTimeMillis()
+            onVideoEnded(this)
             return
         }
 

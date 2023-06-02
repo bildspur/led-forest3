@@ -36,7 +36,8 @@ class LedaScene(
     val pulseScene: PulseScene,
     val poseScene: PoseScene,
     val scenePlayer: LedaScenePlayer,
-    val poseProvider: PoseDataProvider
+    val poseProvider: PoseDataProvider,
+    val showScene: LedaShowScene,
 ) : BaseInteractionScene("Leda", project, tubes) {
 
     private val task = TimerTask(10, { update() })
@@ -60,6 +61,7 @@ class LedaScene(
     val scenePlayerState = SceneState(scenePlayer)
     val pulseInteractionState = SceneState(pulseScene)
     val randomPulseState = SceneState(randomPulseScene)
+    val showState = SceneState(showScene)
 
     val offState = TimedState("Off", 250L, idleState)
     val welcomeState = TimedState("Welcome", 1000L, poseState)
@@ -81,13 +83,20 @@ class LedaScene(
         idleState.onUpdate = {
             ledRingAnimator.fadeAll(ColorMode.color(0, 0, 80))
             if (project.leda.enabledInteraction.value && poseDetected.currentValue) StateResult(welcomeState)
+            else if (project.leda.ledaShow.showRequested) StateResult(showState)
             else if (project.ledaScenePlayer.enabled.value) StateResult(scenePlayerState)
             else if (project.leda.enableRandomPulses.value) StateResult(randomPulseState)
             else StateResult()
         }
 
         scenePlayerState.onUpdate = {
-            if (project.ledaScenePlayer.enabled.value) StateResult()
+            if (project.leda.ledaShow.showRequested) StateResult(showState)
+            else if (project.ledaScenePlayer.enabled.value) StateResult()
+            else StateResult(idleState)
+        }
+
+        showState.onUpdate = {
+            if (project.leda.ledaShow.isShowRunning) StateResult()
             else StateResult(idleState)
         }
 
