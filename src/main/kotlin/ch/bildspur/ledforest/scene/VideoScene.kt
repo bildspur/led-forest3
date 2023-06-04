@@ -1,7 +1,6 @@
 package ch.bildspur.ledforest.scene
 
 import ch.bildspur.color.RGB
-import ch.bildspur.event.Event
 import ch.bildspur.ledforest.controller.timer.TimerTask
 import ch.bildspur.ledforest.cv.height
 import ch.bildspur.ledforest.cv.width
@@ -11,13 +10,11 @@ import ch.bildspur.ledforest.model.light.LightElement
 import ch.bildspur.ledforest.model.light.SpatialLightElement
 import ch.bildspur.ledforest.model.light.Tube
 import ch.bildspur.ledforest.model.mapping.Projection2D
-import ch.bildspur.ledforest.ui.VideoPreview
 import ch.bildspur.ledforest.util.colorizeEach
 import ch.bildspur.math.Float2
 import ch.bildspur.math.Float3
 import ch.bildspur.timer.ElapsedTimer
 import ch.bildspur.util.map
-import javafx.application.Platform
 import org.bytedeco.javacpp.indexer.UByteRawIndexer
 import org.bytedeco.javacv.FFmpegFrameGrabber
 import org.bytedeco.javacv.OpenCVFrameConverter.ToMat
@@ -39,7 +36,6 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
     private val task = TimerTask(1, { update() })
     private var frameGrabber: FFmpegFrameGrabber? = null
     private val converterToMat = ToMat()
-    var videoStartTime = 0L
 
     private val fpsTimer = ElapsedTimer(33, fireOnStart = true)
 
@@ -48,9 +44,6 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
 
     override val timerTask: TimerTask
         get() = task
-
-    val onFrame = Event<Mat>()
-    val onVideoEnded = Event<VideoScene>()
 
     init {
         project.videoScene.videoPath.onChanged += {
@@ -64,13 +57,6 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         project.videoScene.useVideoFPS.onChanged += {
             updateFPS()
         }
-
-        if (project.videoScene.showDebugPreview.value) {
-            Platform.runLater {
-                val preview = VideoPreview(this)
-                preview.show()
-            }
-        }
     }
 
     override fun setup() {
@@ -83,7 +69,7 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         if (Files.exists(videoPath)) {
             frameGrabber = FFmpegFrameGrabber(videoPath.toString())
             frameGrabber?.start()
-            videoStartTime = System.currentTimeMillis()
+            project.videoScene.videoStartTime.value = System.currentTimeMillis()
             updateFPS()
         } else {
             System.err.println("Could not find video at path ${videoPath}.")
@@ -96,7 +82,7 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
         val grabber = frameGrabber ?: return
 
         // calculate current video time
-        val currentTimeStamp = System.currentTimeMillis() - videoStartTime
+        val currentTimeStamp = System.currentTimeMillis() - project.videoScene.videoStartTime.value
 
         val frame = try {
             grabber.setVideoTimestamp(currentTimeStamp * 1000)
@@ -109,12 +95,12 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
 
         if (texture == null) {
             grabber.setVideoTimestamp(0)
-            videoStartTime = System.currentTimeMillis()
-            onVideoEnded(this)
+            project.videoScene.videoStartTime.value = System.currentTimeMillis()
+            project.videoScene.onVideoEnded(this)
             return
         }
 
-        onFrame(texture);
+        project.videoScene.onFrame(texture);
 
         if (project.videoScene.saveMappingRequested.value)
             initializeMappingFrame(texture)

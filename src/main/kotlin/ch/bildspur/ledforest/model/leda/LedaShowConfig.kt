@@ -5,6 +5,9 @@ import ch.bildspur.ui.properties.BooleanParameter
 import ch.bildspur.ui.properties.StringParameter
 import com.google.gson.annotations.Expose
 import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 
 class LedaShowConfig {
 
@@ -28,7 +31,8 @@ class LedaShowConfig {
 
     init {
         startTimeStamp.onChanged += {
-            startTimeStampPreview.value = it.toString()
+            startTimeStampPreview.value = it.toLocalDateTime(TimeZone.currentSystemDefault())
+                .toInstant(TimeZone.UTC).toString()
         }
     }
 

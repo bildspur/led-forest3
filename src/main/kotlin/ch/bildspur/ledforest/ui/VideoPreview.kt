@@ -1,7 +1,7 @@
 package ch.bildspur.ledforest.ui
 
 import ch.bildspur.ledforest.cv.*
-import ch.bildspur.ledforest.scene.VideoScene
+import ch.bildspur.ledforest.model.VideoSceneConfig
 import javafx.application.Platform
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Cursor
@@ -19,12 +19,12 @@ import java.awt.image.BufferedImage
 import java.awt.image.BufferedImage.TYPE_3BYTE_BGR
 import kotlin.io.path.name
 
-class VideoPreview(val videoScene: VideoScene) : Stage() {
+class VideoPreview(val videoSceneConfig: VideoSceneConfig) : Stage() {
     private val root = BorderPane()
     private val canvas = Canvas(512.0, 512.0);
 
     init {
-        title = "Video Preview: ${videoScene.project.videoScene.videoPath.value.name}"
+        title = "Video Preview: ${videoSceneConfig.videoPath.value.name}"
 
         scene = Scene(root, 512.0, 512.0)
         this.scene = scene
@@ -41,7 +41,7 @@ class VideoPreview(val videoScene: VideoScene) : Stage() {
         var inputFrame = BufferedImage(512, 512, TYPE_3BYTE_BGR)
 
         // add on frame event
-        videoScene.onFrame += {
+        videoSceneConfig.onFrame += {
             if (inputFrame.width != it.width() || inputFrame.height != it.height()) {
                 inputFrame = BufferedImage(it.width(), it.height(), TYPE_3BYTE_BGR)
             }
@@ -69,6 +69,6 @@ class VideoPreview(val videoScene: VideoScene) : Stage() {
 
     override fun close() {
         super.close()
-        videoScene.onFrame.clear()
+        videoSceneConfig.onFrame.clear()
     }
 }

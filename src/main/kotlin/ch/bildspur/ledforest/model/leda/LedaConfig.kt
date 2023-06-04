@@ -31,6 +31,7 @@ class LedaConfig {
     @SeparatorParameter("Show")
     private var showSep = Any()
 
+    @Expose
     @GroupParameter("Config", expanded = false)
     var ledaShow = LedaShowConfig()
 

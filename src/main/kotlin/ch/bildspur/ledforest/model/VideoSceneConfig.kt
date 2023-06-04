@@ -1,12 +1,17 @@
 package ch.bildspur.ledforest.model
 
+import ch.bildspur.event.Event
 import ch.bildspur.ledforest.model.mapping.Projection2D
 import ch.bildspur.ledforest.model.preset.PresetManager
+import ch.bildspur.ledforest.scene.VideoScene
+import ch.bildspur.ledforest.ui.VideoPreview
 import ch.bildspur.ledforest.ui.properties.SeparatorParameter
 import ch.bildspur.model.DataModel
 import ch.bildspur.ui.fx.utils.FileChooserDialogMode
 import ch.bildspur.ui.properties.*
 import com.google.gson.annotations.Expose
+import javafx.application.Platform
+import org.bytedeco.opencv.opencv_core.Mat
 import kotlin.io.path.Path
 
 class VideoSceneConfig : PresetManager() {
@@ -29,9 +34,13 @@ class VideoSceneConfig : PresetManager() {
     @SeparatorParameter("Debug")
     private val debugSep = Any()
 
-    @Expose
-    @BooleanParameter("Debug Preview", useToggleSwitch = true)
-    var showDebugPreview = DataModel(false)
+    @ActionParameter("Preview", "Open")
+    private var displayPreview = {
+        Platform.runLater {
+            val preview = VideoPreview(this)
+            preview.show()
+        }
+    }
 
     @BooleanParameter("Request Mapping", useToggleSwitch = true)
     var saveMappingRequested = DataModel(false)
@@ -66,4 +75,9 @@ class VideoSceneConfig : PresetManager() {
     @Expose
     @SliderParameter("Fade Speed", 0.001, 1.0, 0.001, snap = true)
     var fadeSpeed = DataModel(0.5f)
+
+    val videoStartTime = DataModel(0L)
+
+    val onFrame = Event<Mat>()
+    val onVideoEnded = Event<VideoScene>()
 }

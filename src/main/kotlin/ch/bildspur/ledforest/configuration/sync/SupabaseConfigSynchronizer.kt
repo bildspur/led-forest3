@@ -15,7 +15,8 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
@@ -148,13 +149,7 @@ class SupabaseConfigSynchronizer(project: DataModel<Project>) : ConfigSynchroniz
 
         GlobalScope.async {
             broadcastFlow.collect {
-                // correct iso datetime to local datetime intent
-                val msg = TriggerVideoMessage(
-                    it.appKey,
-                    it.videoName,
-                    it.videoStartTimeStamp.toLocalDateTime(TimeZone.currentSystemDefault()).toInstant(TimeZone.UTC)
-                )
-                onVideoTriggerReceived(msg)
+                onVideoTriggerReceived(it)
             }
         }
 
