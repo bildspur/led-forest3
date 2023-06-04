@@ -48,14 +48,8 @@ wrapper {
     distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-bin.zip"
 }
 
-compileJava {
-    sourceCompatibility = 11
-    targetCompatibility = 11
-}
-
-compileKotlin {
-    sourceCompatibility = 11
-    targetCompatibility = 11
+kotlin {
+    jvmToolchain(17)
 }
 
 javafx {
