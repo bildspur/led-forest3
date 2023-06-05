@@ -18,6 +18,7 @@ import ch.bildspur.util.map
 import org.bytedeco.javacpp.indexer.UByteRawIndexer
 import org.bytedeco.javacv.FFmpegFrameGrabber
 import org.bytedeco.javacv.OpenCVFrameConverter.ToMat
+import org.bytedeco.opencv.global.opencv_core.convertScaleAbs
 import org.bytedeco.opencv.opencv_core.Mat
 import processing.core.PVector
 import java.awt.Graphics2D
@@ -98,6 +99,14 @@ class VideoScene(project: Project, tubes: List<Tube>) : BaseScene("Video", proje
             project.videoScene.videoStartTime.value = System.currentTimeMillis()
             project.videoScene.onVideoEnded(this)
             return
+        }
+
+        if (project.videoScene.colorCorrection.value) {
+            convertScaleAbs(
+                texture, texture,
+                project.videoScene.contrast.value.toDouble(),
+                project.videoScene.brightness.value.toDouble()
+            )
         }
 
         project.videoScene.onFrame(texture);

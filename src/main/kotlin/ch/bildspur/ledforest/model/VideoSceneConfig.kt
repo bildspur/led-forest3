@@ -76,6 +76,21 @@ class VideoSceneConfig : PresetManager() {
     @SliderParameter("Fade Speed", 0.001, 1.0, 0.001, snap = true)
     var fadeSpeed = DataModel(0.5f)
 
+    @SeparatorParameter("Color")
+    private val colorSep = Any()
+
+    @Expose
+    @BooleanParameter("Color Correction", useToggleSwitch = true)
+    var colorCorrection = DataModel(false)
+
+    @Expose
+    @SliderParameter("Contrast", 0.0, 2.0, 0.001, snap = true)
+    var contrast = DataModel(1.0f)
+
+    @Expose
+    @SliderParameter("Brightness", -127.0, 127.0, 0.001, snap = true)
+    var brightness = DataModel(0)
+
     val videoStartTime = DataModel(0L)
 
     val onFrame = Event<Mat>()
