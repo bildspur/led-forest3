@@ -45,6 +45,7 @@ import javafx.scene.shape.Rectangle
 import javafx.stage.*
 import jfxtras.styles.jmetro.JMetro
 import jfxtras.styles.jmetro.Style
+import kotlinx.datetime.Clock
 import org.kordamp.ikonli.javafx.FontIcon
 import processing.core.PApplet
 import processing.core.PVector
@@ -315,6 +316,7 @@ class PrimaryView {
                     show.showTrigger.value = true
                     show.videoName.value = it.videoName
                     show.startTimeStamp.value = it.videoStartTimeStamp
+                    show.triggeredTimeStamp.value = Clock.System.now()
                 }
             }
             synchronizer.start()
