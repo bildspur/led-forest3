@@ -60,17 +60,21 @@ class LedaScenePlayer(project: Project, tubes: List<Tube>) :
     private fun playNextScene(keepSceneIndex: Boolean = false) {
         if (project.ledaScenePlayer.scenes.isEmpty()) return
 
-        val nextIndex = if (keepSceneIndex) {
+        var nextIndex = if (keepSceneIndex) {
             project.ledaScenePlayer.sceneIndex.value
         } else if (project.ledaScenePlayer.randomOrder.value) {
-            random.randomInt(0, project.ledaScenePlayer.scenes.count())
+            // randomInt returns a value including lower and upper bound
+            random.randomInt(0, project.ledaScenePlayer.scenes.count() - 1)
         } else {
             (project.ledaScenePlayer.sceneIndex.value + 1) % project.ledaScenePlayer.scenes.count()
         }
 
+        // always limit next index to not run into errors
+        nextIndex %= project.ledaScenePlayer.scenes.value.size
+
         val nextScene = project.ledaScenePlayer.scenes.value[nextIndex].resolve() ?: return
 
-        println("Switching to scene: ${nextScene.name}")
+        println("Switching to scene: ${nextScene.name} ($nextIndex)")
         project.ledaScenePlayer.sceneIndex.value = nextIndex
         switchScene(nextScene)
 
